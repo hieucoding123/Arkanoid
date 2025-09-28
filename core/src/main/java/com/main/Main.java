@@ -2,12 +2,11 @@ package com.main;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.Ball;
-import entity.Brick;
+import entity.BricksMap;
 import entity.Paddle;
 
 import java.util.ArrayList;
@@ -17,16 +16,16 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     Ball ball;
     Paddle paddle;
-    ArrayList<Brick> bricks;
+    Texture bgTex;
+    BricksMap bricksMap;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        paddle = new Paddle(100, 100, 96, 16, batch, "paddle.png");
-        ball = new Ball(0, 0, 20, 20, batch, "ball2.png");
-        bricks = new ArrayList<>();
-        bricks.add(new Brick(300, 300, 45, 21, batch, "white_brick.png"));
-        bricks.add(new Brick(385, 300, 45, 21, batch, "green_brick.png"));
+        bgTex = new Texture("background.png");
+        paddle = new Paddle(100, 100, 96, 16, "paddle.png");
+        ball = new Ball(24, 0, 20, 20, "ball2.png");
+        bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {
 
@@ -40,11 +39,10 @@ public class Main extends ApplicationAdapter {
         batch.begin();
 
         // Rendering
-        ball.draw();
-        paddle.draw();
-        for (Brick brick : bricks) {
-            brick.draw();
-        }
+        batch.draw(bgTex, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        ball.draw(batch);
+        paddle.draw(batch);
+        bricksMap.draw(batch);
 
         batch.end();
     }
@@ -58,10 +56,9 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+        bgTex.dispose();
         ball.dispose();
         paddle.dispose();
-        for (Brick brick : bricks) {
-            brick.dispose();
-        }
+        bricksMap.dispose();
     }
 }

@@ -9,19 +9,17 @@ public class GameObject {
     private int width;
     private int height;
 
-    SpriteBatch batch;
     Texture texture;
 
-    public GameObject(int x, int y, int w, int h, SpriteBatch batch, String path) {
+    public GameObject(int x, int y, int w, int h, String path) {
         this.x = x;
         this.y = y;
         this.width = w;
         this.height = h;
-        this.batch = batch;
         this.texture = new Texture(path);
     }
 
-    public void draw() {
+    public void draw(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
     }
     public void dispose() {
