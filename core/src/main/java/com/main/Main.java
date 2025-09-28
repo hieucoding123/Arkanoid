@@ -5,11 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import entity.TextureManager;
 import entity.Ball;
 import entity.BricksMap;
 import entity.Paddle;
-
-import java.util.ArrayList;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -21,10 +20,11 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        TextureManager.loadTextures();
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(100, 100, 96, 16, "paddle.png");
-        ball = new Ball(24, 0, 20, 20, "ball2.png");
+        paddle = new Paddle(100, 100, 96, 16, TextureManager.paddleTexture);
+        ball = new Ball(24, 0, 20, 20, TextureManager.ballTexture);
         bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {
@@ -57,8 +57,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         bgTex.dispose();
-        ball.dispose();
-        paddle.dispose();
-        bricksMap.dispose();
+        TextureManager.dispose();
     }
 }

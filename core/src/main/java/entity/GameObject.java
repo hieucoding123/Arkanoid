@@ -11,18 +11,15 @@ public class GameObject {
 
     Texture texture;
 
-    public GameObject(int x, int y, int w, int h, String path) {
+    public GameObject(int x, int y, int w, int h, Texture texture) {
         this.x = x;
         this.y = y;
         this.width = w;
         this.height = h;
-        this.texture = new Texture(path);
+        this.texture = texture;
     }
 
     public void draw(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
-    }
-    public void dispose() {
-        texture.dispose();
     }
 }

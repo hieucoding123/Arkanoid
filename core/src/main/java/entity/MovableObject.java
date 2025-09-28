@@ -1,9 +1,11 @@
 package entity;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class MovableObject extends GameObject {
     private int speed;
-    public MovableObject(int x, int y, int w, int h, String path) {
-        super(x, y, w, h, path);
+    public MovableObject(int x, int y, int w, int h, Texture texture) {
+        super(x, y, w, h, texture);
     }
 
     public void update() {

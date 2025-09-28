@@ -1,8 +1,6 @@
 package entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,11 +24,11 @@ public class BricksMap {
             for (int i = 0; i < rows; i++) {
                 String[] line = br.readLine().split(" ");
                 for (int j = 0; j < cols; j++) {
-                    int k = Integer.parseInt(line[j]);
-                    if (k == 1)
-                        bricks.add(new Brick(xBeginCoord + j*74,
-                                            yBeginCoord - i*30,
-                                            "green_brick.png"));
+                    int color = Integer.parseInt(line[j]);
+                    if (color >= 0) {
+                        bricks.add(new Brick(xBeginCoord + j * 74, yBeginCoord - i * 30,
+                            TextureManager.brickTextures.get(color)));
+                    }
                 }
             }
             br.close();
@@ -44,11 +42,6 @@ public class BricksMap {
     public void draw(SpriteBatch batch) {
         for (Brick brick : bricks) {
             brick.draw(batch);
-        }
-    }
-    public void dispose() {
-        for (Brick brick : bricks) {
-            brick.dispose();
         }
     }
 }
