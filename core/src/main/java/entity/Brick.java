@@ -18,4 +18,6 @@ public class Brick extends GameObject {
     public void destroy() {
         isDestroyed = true;
     }
+    public static int getWidth () { return WIDTH;   }
+    public static int getHeight () { return HEIGHT; }
 }

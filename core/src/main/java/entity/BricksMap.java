@@ -26,7 +26,9 @@ public class BricksMap {
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
                     if (color >= 0) {
-                        bricks.add(new Brick(xBeginCoord + j * 74, yBeginCoord - i * 30,
+                        bricks.add(new Brick(
+                            xBeginCoord + j * Brick.getWidth(),
+                            yBeginCoord - i * Brick.getHeight(),
                             TextureManager.brickTextures.get(color)));
                     }
                 }
