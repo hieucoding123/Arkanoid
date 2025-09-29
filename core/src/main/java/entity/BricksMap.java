@@ -15,6 +15,10 @@ public class BricksMap {
 
     private ArrayList<Brick> bricks;
 
+    /**
+     * Initialize brick map with map file.
+     * @param path map file path
+     */
     public BricksMap(String path) {
         bricks = new ArrayList<>();
         try {
@@ -38,9 +42,18 @@ public class BricksMap {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Update bricks(remove, add, ...).
+     */
     public void update() {
         bricks.removeIf(brick -> brick.isDestroyed());
     }
+
+    /**
+     * Draw bricks on game sceen.
+     * @param batch game drawing programming
+     */
     public void draw(SpriteBatch batch) {
         for (Brick brick : bricks) {
             brick.draw(batch);

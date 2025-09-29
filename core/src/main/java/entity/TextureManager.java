@@ -9,6 +9,9 @@ public class TextureManager {
     public static Texture ballTexture;
     public static Texture paddleTexture;
 
+    /**
+     * Load textures.
+     */
     public static void loadTextures() {
         brickTextures.add(new Texture("greenBrick.png"));
         brickTextures.add(new Texture("whiteBrick.png"));
@@ -16,6 +19,9 @@ public class TextureManager {
         paddleTexture = new Texture("paddle.png");
     }
 
+    /**
+     * Free texture memory.
+     */
     public static void dispose() {
         for (Texture texture: brickTextures) {
             texture.dispose();

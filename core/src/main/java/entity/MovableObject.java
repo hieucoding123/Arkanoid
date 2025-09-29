@@ -8,6 +8,9 @@ public class MovableObject extends GameObject {
         super(x, y, w, h, texture);
     }
 
+    /**
+     * Update on object.
+     */
     public void update() {
 
     }
