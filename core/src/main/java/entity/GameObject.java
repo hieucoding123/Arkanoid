@@ -4,13 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public class GameObject {
+public abstract class GameObject {
     protected float x;
     protected float y;
     protected float width;
     protected float height;
 
-    Texture texture;
+    private final Texture texture;
 
     /**
      * Initialize game object.

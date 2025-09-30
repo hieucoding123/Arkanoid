@@ -2,7 +2,7 @@ package entity;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class MovableObject extends GameObject {
+public abstract class MovableObject extends GameObject {
     protected float dx;
     protected float dy;
 
