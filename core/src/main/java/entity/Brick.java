@@ -3,13 +3,12 @@ package entity;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Brick extends GameObject {
-    private final static int WIDTH = 74;
-    private final static int HEIGHT = 30;
-
+    public final static int width = 74;
+    public final static int height = 30;
     private boolean isDestroyed;
 
     public Brick(int x, int y, Texture texture) {
-        super(x, y, WIDTH, HEIGHT, texture);
+        super(x, y, width, height, texture);
         isDestroyed = false;
     }
     public boolean isDestroyed() {
@@ -18,8 +17,6 @@ public class Brick extends GameObject {
     public void destroy() {
         isDestroyed = true;
     }
-    public static int getWidth () { return WIDTH;   }
-    public static int getHeight () { return HEIGHT; }
 
     public void takeHit() {
         this.destroy();

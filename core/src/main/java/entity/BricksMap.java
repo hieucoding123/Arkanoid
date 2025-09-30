@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BricksMap {
-    private final int rows = 12;
-    private final int cols = 8;
-    private final int xBeginCoord = 24;
-    private final int yBeginCoord = 656;
+    public final int rows = 12;
+    public final int cols = 8;
+    public final int xBeginCoord = 24;
+    public final int yBeginCoord = 656;
 
-    private ArrayList<Brick> bricks;
+    private final ArrayList<Brick> bricks;
 
     /**
      * Initialize brick map with map file.
@@ -31,8 +31,8 @@ public class BricksMap {
                     int color = Integer.parseInt(line[j]);
                     if (color >= 0) {
                         bricks.add(new Brick(
-                            xBeginCoord + j * Brick.getWidth(),
-                            yBeginCoord - i * Brick.getHeight(),
+                            xBeginCoord + j * Brick.width,
+                            yBeginCoord - i * Brick.height,
                             TextureManager.brickTextures.get(color)));
                     }
                 }
@@ -47,11 +47,11 @@ public class BricksMap {
      * Update bricks(remove, add, ...).
      */
     public void update() {
-        bricks.removeIf(brick -> brick.isDestroyed());
+        bricks.removeIf(Brick::isDestroyed);
     }
 
     /**
-     * Draw bricks on game sceen.
+     * Draw bricks on game screen.
      * @param batch game drawing programming
      */
     public void draw(SpriteBatch batch) {
