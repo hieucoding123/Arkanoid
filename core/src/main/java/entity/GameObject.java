@@ -52,13 +52,61 @@ public abstract class GameObject {
      *Bounding box to check for collisions.
      */
     public Rectangle getBounds() {
-        return new Rectangle(x, y, this.orgWidth * this.scale, this.orgHeight * this.scale);
+        return new Rectangle(x, y, this.getWidth(), this.getHeight());
     }
     /**
      * Draw object on game screen.
      * @param batch game drawing programming
      */
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y, this.orgWidth * this.scale, this.orgHeight * this.scale);
+        batch.draw(texture, x, y, this.getWidth(), this.getHeight());
+    }
+
+    /**
+     * Get x coordinate.
+     * @return x coordinate
+     */
+    public float getX() {
+        return x;
+    }
+
+    /**
+     * Set x coordinate of object.
+     * @param x x coordinate
+     */
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    /**
+     * Get y coordinate.
+     * @return y coordinate
+     */
+    public float getY() {
+        return y;
+    }
+
+    /**
+     * Set y coordinate of object.
+     * @param y y coordinate
+     */
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getWidth() {
+        return this.orgWidth *  this.scale;
+    }
+
+    public float getHeight() {
+        return this.orgHeight * this.scale;
+    }
+
+    /**
+     * set scale of object.
+     * @param scale scale of object
+     */
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 }
