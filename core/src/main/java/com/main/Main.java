@@ -24,7 +24,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
         paddle = new Paddle(100, 100, 96, 16, TextureManager.paddleTexture);
-        ball = new Ball(24, 0, 20, 20, TextureManager.ballTexture);
+        ball = new Ball(24, 0, 20, 20, TextureManager.ballTexture, 0);
         bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {

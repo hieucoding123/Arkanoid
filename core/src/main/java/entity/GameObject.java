@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameObject {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    protected float x;
+    protected float y;
+    protected float width;
+    protected float height;
 
     Texture texture;
 
@@ -19,7 +19,7 @@ public class GameObject {
      * @param h height of the rectangle containing the object
      * @param texture texture contains image of object
      */
-    public GameObject(int x, int y, int w, int h, Texture texture) {
+    public GameObject(float x, float y, float w, float h, Texture texture) {
         this.x = x;
         this.y = y;
         this.width = w;
