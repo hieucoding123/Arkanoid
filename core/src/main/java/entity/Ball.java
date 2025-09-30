@@ -2,6 +2,7 @@ package entity;
 
 import com.badlogic.gdx.graphics.Texture;
 
+
 public class Ball extends MovableObject {
     private float speed;
     private float directionX;
@@ -26,6 +27,6 @@ public class Ball extends MovableObject {
     }
 
     public boolean checkCollision(GameObject other) {
-        return false;
+        return this.getBounds().overlaps(other.getBounds());
     }
 }

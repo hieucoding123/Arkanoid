@@ -2,6 +2,7 @@ package entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class GameObject {
     protected float x;
@@ -27,6 +28,12 @@ public class GameObject {
         this.texture = texture;
     }
 
+    /**
+     *Bounding box to check for collisions.
+     */
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
     /**
      * Draw object on game screen.
      * @param batch game drawing programming
