@@ -20,4 +20,8 @@ public class Brick extends GameObject {
     }
     public static int getWidth () { return WIDTH;   }
     public static int getHeight () { return HEIGHT; }
+
+    public void takeHit() {
+        this.destroy();
+    }
 }
