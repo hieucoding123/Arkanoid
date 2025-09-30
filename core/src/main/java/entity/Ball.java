@@ -18,7 +18,6 @@ public class Ball extends MovableObject {
     public void updateVelocity() {
         this.dx = speed * directionX;
         this.dy = speed * directionY;
-        updateVelocity();
     }
 
 
