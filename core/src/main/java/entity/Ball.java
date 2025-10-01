@@ -29,8 +29,26 @@ public class Ball extends MovableObject {
         this.dy = speed * directionY;
     }
 
-
     public void bounceOff(GameObject other) {
+        if (!this.checkCollision(other)) {
+            return;
+        }
 
+        float overlapX = (this.dx > 0) ? (this.getX() + this.getWidth() - other.getX())
+            : (other.getX() + other.getWidth() - this.getX());
+        float overlapY = (this.dy > 0) ? (this.getY() + this.getHeight() - other.getY())
+            : (other.getY() + other.getHeight() - this.getY());
+
+        if (overlapX < overlapY) {
+            directionX *= -1;
+        } else {
+            directionY *= -1;
+        }
+
+        updateVelocity();
+    }
+
+    public void update() {
+        super.update();
     }
 }
