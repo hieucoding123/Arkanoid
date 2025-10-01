@@ -8,8 +8,16 @@ public class Ball extends MovableObject {
     private float directionX;
     private float directionY;
 
-    public Ball(float x, float y, float w, float h, Texture texture, float speed) {
-        super(x, y, w, h, texture);
+    public Ball(float x, float y, Texture texture, float speed) {
+        super(x, y, texture);
+        this.speed = speed;
+        this.directionX = 1;
+        this.directionY = -1;
+        updateVelocity();
+    }
+
+    public Ball(float x, float y, float scale, Texture texture, float speed) {
+        super(x, y, scale, texture);
         this.speed = speed;
         this.directionX = 1;
         this.directionY = -1;

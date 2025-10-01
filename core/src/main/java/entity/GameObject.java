@@ -21,13 +21,13 @@ public abstract class GameObject {
      * @param h height of the rectangle containing the object
      * @param texture texture contains image of object
      */
-    public GameObject(float x, float y, float w, float h, Texture texture) {
+    public GameObject(float x, float y, Texture texture) {
         this.scale = 1;
         this.x = x;
         this.y = y;
-        this.orgWidth = w;
-        this.orgHeight = h;
         this.texture = texture;
+        this.orgWidth = this.texture.getWidth();
+        this.orgHeight = this.texture.getHeight();
     }
 
     /**
@@ -39,13 +39,13 @@ public abstract class GameObject {
      * @param scale scale of object
      * @param texture texture contains image of object
      */
-    public GameObject(float x, float y, float w, float h, float scale, Texture texture) {
+    public GameObject(float x, float y, float scale, Texture texture) {
         this.x = x;
         this.y = y;
-        this.orgWidth = w;
-        this.orgHeight = h;
         this.scale = scale;
         this.texture = texture;
+        this.orgWidth = this.texture.getWidth();
+        this.orgHeight = this.texture.getHeight();
     }
 
     /**

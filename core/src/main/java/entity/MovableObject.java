@@ -6,8 +6,14 @@ public abstract class MovableObject extends GameObject {
     protected float dx;
     protected float dy;
 
-    public MovableObject(float x, float y, float w, float h, Texture texture) {
-        super(x, y, w, h, texture);
+    public MovableObject(float x, float y, Texture texture) {
+        super(x, y, texture);
+        this.dx = 0;
+        this.dy = 0;
+    }
+
+    public MovableObject(float x, float y, float scale, Texture texture) {
+        super(x, y, scale, texture);
         this.dx = 0;
         this.dy = 0;
     }
