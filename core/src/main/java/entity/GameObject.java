@@ -54,6 +54,15 @@ public abstract class GameObject {
     public Rectangle getBounds() {
         return new Rectangle(x, y, this.getWidth(), this.getHeight());
     }
+
+    /**
+     * Check collision with other object.
+     * @param other other object
+     * @return true if collided
+     */
+    public boolean checkCollision(GameObject other) {
+        return this.getBounds().overlaps(other.getBounds());
+    }
     /**
      * Draw object on game screen.
      * @param batch game drawing programming
