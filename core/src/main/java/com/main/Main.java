@@ -9,6 +9,8 @@ import entity.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
+    public static int SCREEN_WIDTH;
+    public static int SCREEN_HEIGHT;
     private SpriteBatch batch;
     Ball ball;
     Paddle paddle;
@@ -24,6 +26,8 @@ public class Main extends ApplicationAdapter {
         ball = new Ball(24, 0, TextureManager.ballTexture, 1);
         ball.setVelocity(0, 1);
         bricksMap = new BricksMap(74, 35, 5, "/map1.txt");
+        SCREEN_WIDTH = Gdx.graphics.getWidth(); //Bo sung kich thuoc man hinh
+        SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }
     public void handleInput() {
 

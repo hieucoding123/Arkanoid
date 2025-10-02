@@ -1,6 +1,8 @@
 package entity;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
+import com.main.Main;
 
 
 public class Ball extends MovableObject {
@@ -48,7 +50,33 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    void bounceScreen() {
+        if (this.getX() <= 0 || this.getX() + this.getWidth() >= Main.SCREEN_WIDTH) {
+            directionX *= -1;
+            updateVelocity();
+        }
+
+        if (this.getY() + this.getHeight() >= Main.SCREEN_HEIGHT) {
+            directionY *= -1;
+            updateVelocity();
+        }
+
+        if (this.getY() <= 0) {
+            //resetPosition();
+            directionY *= -1;
+            updateVelocity();
+        }
+    }
+
+    public void resetPosition() {
+        //this.x = (paddle.getX() + paddle.getWidth()) / 2 - (this.getWidth() / 2);
+        //this.y = paddle.getY() + paddle.getHeight();
+        this.x = Main.SCREEN_WIDTH / 2f- this.getWidth() / 2f;
+        this.y = 100; // Testing reset
+    }
+
     public void update() {
         super.update();
+        bounceScreen();
     }
 }
