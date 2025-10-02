@@ -48,6 +48,9 @@ public class BricksMap {
      * Update bricks(remove, add, ...).
      */
     public void update() {
+        for (Brick brick : bricks) {
+            brick.update();
+        }
         bricks.removeIf(Brick::isDestroyed);
     }
 

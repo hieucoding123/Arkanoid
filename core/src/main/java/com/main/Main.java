@@ -38,7 +38,7 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.bricks) {
             if (ball.checkCollision(brick)) {
                 ball.bounceOff(brick);
-                brick.destroy();
+                brick.takeHit();
                 break;
             }
         }
