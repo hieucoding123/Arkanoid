@@ -13,8 +13,8 @@ public class TextureManager {
      * Load textures.
      */
     public static void loadTextures() {
-        brickTextures.add(new Texture("greenBrick.png"));
-        brickTextures.add(new Texture("whiteBrick.png"));
+        brickTextures.add(new Texture("brick_blue.png"));
+        brickTextures.add(new Texture("brick_cyan.png"));
         ballTexture = new Texture("ball.png");
         paddleTexture = new Texture("paddle.png");
     }
