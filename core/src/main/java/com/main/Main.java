@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
         paddle = new Paddle(100, 100, TextureManager.paddleTexture);
         ball = new Ball(24, 0, TextureManager.ballTexture, 1);
         ball.setVelocity(0, 1);
-        bricksMap = new BricksMap(74, 35, 5, "/map1.txt");
+        bricksMap = new BricksMap("/map1.txt");
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Bo sung kich thuoc man hinh
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }

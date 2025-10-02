@@ -12,6 +12,8 @@ public class BricksMap {
     public final int cols = 8;
     public final int xBeginCoord = 24;
     public final int yBeginCoord = 656;
+    public final int brickW = 75;
+    public final int brickH = 35;
 
     public final ArrayList<Brick> bricks;
 
@@ -19,7 +21,7 @@ public class BricksMap {
      * Initialize brick map with map file.
      * @param path map file path
      */
-    public BricksMap(float brickW, float brickH, float scale, String path) {
+    public BricksMap(String path) {
         bricks = new ArrayList<>();
         try {
             InputStream is = getClass().getResourceAsStream(path);
@@ -33,7 +35,7 @@ public class BricksMap {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
-                            scale,
+                            1,
                             TextureManager.brickTextures.get(color)));
                     }
                 }
