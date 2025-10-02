@@ -13,7 +13,7 @@ public class BricksMap {
     public final int xBeginCoord = 24;
     public final int yBeginCoord = 656;
 
-    private final ArrayList<Brick> bricks;
+    public final ArrayList<Brick> bricks;
 
     /**
      * Initialize brick map with map file.
