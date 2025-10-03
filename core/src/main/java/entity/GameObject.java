@@ -17,8 +17,6 @@ public abstract class GameObject {
      * Initialize game object.
      * @param x x coordinate of the object
      * @param y y coordinate of the object
-     * @param w width of the rectangle containing the object
-     * @param h height of the rectangle containing the object
      * @param texture texture contains image of object
      */
     public GameObject(float x, float y, Texture texture) {
@@ -34,8 +32,6 @@ public abstract class GameObject {
      * Initialize game object.
      * @param x x coordinate of the object
      * @param y y coordinate of the object
-     * @param w width of the rectangle containing the object
-     * @param h height of the rectangle containing the object
      * @param scale scale of object
      * @param texture texture contains image of object
      */

@@ -1,6 +1,5 @@
 package entity;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Main;
 
@@ -10,6 +9,13 @@ public class Ball extends MovableObject {
     private float directionX;
     private float directionY;
 
+    /**
+     * Constructor for ball.
+     * @param x x coordinate of ball
+     * @param y y coordinate of ball
+     * @param texture ball texture
+     * @param speed ball speed
+     */
     public Ball(float x, float y, Texture texture, float speed) {
         super(x, y, texture);
         this.speed = speed;
@@ -18,6 +24,14 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    /**
+     * Constructor for ball.
+     * @param x x coordinate of ball
+     * @param y y coordinate of ball
+     * @param scale ball scale
+     * @param texture ball texture
+     * @param speed ball speed
+     */
     public Ball(float x, float y, float scale, Texture texture, float speed) {
         super(x, y, scale, texture);
         this.speed = speed;
@@ -26,11 +40,18 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    /**
+     * Update ball velocity.
+     */
     public void updateVelocity() {
         this.dx = speed * directionX;
         this.dy = speed * directionY;
     }
 
+    /**
+     * Bouncing physics with other object.
+     * @param other other object
+     */
     public void bounceOff(GameObject other) {
         if (!this.checkCollision(other)) {
             return;
@@ -50,6 +71,9 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    /**
+     * Bouncing physics with screen.
+     */
     void bounceScreen() {
         if (this.getX() <= 0 || this.getX() + this.getWidth() >= Main.SCREEN_WIDTH) {
             directionX *= -1;
@@ -68,6 +92,9 @@ public class Ball extends MovableObject {
         }
     }
 
+    /**
+     * Reset ball position if fell out of screen
+     */
     public void resetPosition() {
         //this.x = (paddle.getX() + paddle.getWidth()) / 2 - (this.getWidth() / 2);
         //this.y = paddle.getY() + paddle.getHeight();
@@ -75,6 +102,9 @@ public class Ball extends MovableObject {
         this.y = 100; // Testing reset
     }
 
+    /**
+     * Update ball coordinate and movement.
+     */
     public void update() {
         super.update();
         bounceScreen();
