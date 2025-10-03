@@ -10,6 +10,7 @@ public abstract class GameObject {
     protected float orgWidth;       // original width
     protected float orgHeight;      // original height
     protected float scale;
+    private boolean isDestroyed;
 
     private final Texture texture;
 
@@ -26,6 +27,7 @@ public abstract class GameObject {
         this.texture = texture;
         this.orgWidth = this.texture.getWidth();
         this.orgHeight = this.texture.getHeight();
+        this.setDestroyed(false);
     }
 
     /**
@@ -42,6 +44,7 @@ public abstract class GameObject {
         this.texture = texture;
         this.orgWidth = this.texture.getWidth();
         this.orgHeight = this.texture.getHeight();
+        this.setDestroyed(false);
     }
 
     /**
@@ -113,5 +116,21 @@ public abstract class GameObject {
      */
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    /**
+     * Set destroyed state of object.
+     * @param isDestroyed destroyed state
+     */
+    public void setDestroyed(boolean isDestroyed) {
+        this.isDestroyed = isDestroyed;
+    }
+
+    /**
+     * Check if object is destroyed.
+     * @return true if object is destroyed
+     */
+    public boolean isDestroyed() {
+        return this.isDestroyed;
     }
 }
