@@ -8,7 +8,7 @@ public class TextureManager {
     public static ArrayList<Texture> brickTextures = new ArrayList<>();
     public static Texture ballTexture;
     public static Texture paddleTexture;
-
+    public static Texture threeBallsTextures;
     /**
      * Load textures.
      */
@@ -17,6 +17,7 @@ public class TextureManager {
         brickTextures.add(new Texture("brick_cyan.png"));
         ballTexture = new Texture("ball.png");
         paddleTexture = new Texture("paddle.png");
+        threeBallsTextures = new Texture("threeBalls.png");
     }
 
     /**
@@ -28,5 +29,6 @@ public class TextureManager {
         }
         ballTexture.dispose();
         paddleTexture.dispose();
+        threeBallsTextures.dispose();
     }
 }

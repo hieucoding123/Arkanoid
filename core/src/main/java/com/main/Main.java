@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
 
+import java.util.ArrayList;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
     private SpriteBatch batch;
-    Ball ball;
+    public static ArrayList<Ball> balls;
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
@@ -23,8 +25,10 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
         paddle = new Paddle(100, 100, TextureManager.paddleTexture);
-        ball = new Ball(24, 0, TextureManager.ballTexture, 1);
-        ball.setVelocity(0, 1);
+
+        balls = new ArrayList<>();
+        balls.add(new Ball(24, 6, TextureManager.ballTexture, 2));
+
         bricksMap = new BricksMap("/map1.txt");
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Bo sung kich thuoc man hinh
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
@@ -34,12 +38,25 @@ public class Main extends ApplicationAdapter {
     }
     public void update() {
         bricksMap.update();
-        ball.update();
-        for (Brick brick : bricksMap.bricks) {
-            if (ball.checkCollision(brick)) {
-                ball.bounceOff(brick);
-                brick.takeHit();
-                break;
+        EffectItem.updateEffectItems(paddle);
+        balls.removeIf(Ball::isDestroyed);
+
+        for (Ball ball : balls) {
+            ball.update();
+            for (Brick brick : bricksMap.bricks) {
+                if (ball.checkCollision(brick)) {
+                    if (Math.random() < 0.3) {      // create new effect with probability
+                        EffectItem.addEffectItem(
+                            new ThreeBallsEffect(
+                                brick.getX(),
+                                brick.getY(),
+                                -1)
+                        );
+                    }
+                    ball.bounceOff(brick);
+                    brick.takeHit();
+                    break;
+                }
             }
         }
     }
@@ -50,9 +67,12 @@ public class Main extends ApplicationAdapter {
 
         // Rendering
         batch.draw(bgTex, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        ball.draw(batch);
+        for (Ball ball : balls) {
+            ball.draw(batch);
+        }
         paddle.draw(batch);
         bricksMap.draw(batch);
+        EffectItem.drawEffectItems(batch);
 
         batch.end();
     }
