@@ -1,7 +1,7 @@
 package entity;
 
 import com.badlogic.gdx.graphics.Texture;
-
+import com.badlogic.gdx.Gdx;
 
 public class Ball extends MovableObject {
     private float speed;
@@ -12,15 +12,13 @@ public class Ball extends MovableObject {
         super(x, y, w, h, texture);
         this.speed = speed;
         this.directionX = 1;
-        this.directionY = -1;
-        updateVelocity();
+        this.directionY = 1;
     }
 
     public void updateVelocity() {
         this.dx = speed * directionX;
         this.dy = speed * directionY;
     }
-
 
     public void bounceOff(GameObject other) {
 

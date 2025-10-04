@@ -28,7 +28,7 @@ public class Main extends ApplicationAdapter {
         //Paddle start in mid
         paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 100, 96, 16, TextureManager.paddleTexture);
         //Ball start with paddle
-        ball = new Ball(paddle.getX() + paddle.getWidth() / 2f - 10, paddle.getY() + paddle.getHeight(), 20, 20, TextureManager.ballTexture, 0);
+        ball = new Ball(paddle.getX() + paddle.getWidth() / 2f - 10, paddle.getY() + paddle.getHeight(), 20, 20, TextureManager.ballTexture, 3.0f);
         bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {
@@ -65,8 +65,8 @@ public class Main extends ApplicationAdapter {
         //Apply the change of paddle velocity
         paddle.update();
 
-        if (ballstuck == true) {
-            ball.setX(paddle.getX() + (paddle.getWidth() / 2f) - (ball.getWidth() / 2f));
+        if (ballstuck) {
+            ball.setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
             ball.setY(paddle.getY() + paddle.getHeight());
         } else {
             ball.update();
