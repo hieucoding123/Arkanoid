@@ -65,4 +65,8 @@ public class BricksMap {
             brick.draw(batch);
         }
     }
+
+    public ArrayList<Brick> getBricks() {
+        return this.bricks;
+    }
 }
