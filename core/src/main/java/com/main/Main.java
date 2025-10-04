@@ -18,7 +18,7 @@ public class Main extends ApplicationAdapter {
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
-    boolean ballstuck = true;       //Ball stuck the paddle or not, true is stuck
+    boolean flowPaddle = true;      // Ball follow paddle
 
     @Override
     public void create() {
@@ -38,32 +38,11 @@ public class Main extends ApplicationAdapter {
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }
     public void handleInput() {
-        float paddleSpeed = 5.0f;
-        //Edit Velocity of paddle
-        //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            if (paddle.getX() > 0) { // Check LEFT
-                paddle.setVelocity(-paddleSpeed, 0);
-            } else {
-                paddle.setVelocity(0, 0);
-            }
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            if (paddle.getX() < Gdx.graphics.getWidth() - paddle.getWidth()) { //Check RIGHT
-                paddle.setVelocity(paddleSpeed, 0);
-            } else {
-                paddle.setVelocity(0, 0);
-            }
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle.setVelocity(0, 0);
-        }
+        paddle.handleInput();
 
         //New state of the ball
-        if (ballstuck && Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            ballstuck = false;
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            flowPaddle = false;             // pulled ball up
             balls.get(0).updateVelocity();
         }
     }
@@ -77,47 +56,41 @@ public class Main extends ApplicationAdapter {
             ball.reverseY();
         }
         if (ball.getY() <= 0) {
-            ballstuck = true;
-            ball.reset();
+            ball.setDestroyed(true);    // drop out of screen
         }
+        // collision with paddle
+        if (ball.checkCollision(paddle))
+            ball.bounceOff(paddle);
 
-        //collision with paddle
-        float ballY = ball.getY();
-        float paddleY = paddle.getY() + paddle.getHeight();
-        if (ballY - paddleY <= 3) {
-            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
-            float ballCenter = ball.getX() + ball.getWidth() / 2f;
-            float hitPosition = ballCenter - paddleCenter;
-
-            float normalizedPosition = hitPosition / (paddle.getWidth() / 2f);
-            float maxBounceAngle = (float) Math.PI / 3f;
-            float newAngle = (float) Math.PI / 2f - (normalizedPosition * maxBounceAngle);
-
-            ball.setAngle(newAngle);
-        }
         //collision with bricks
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
+                ball.bounceOff(brick);
                 brick.takeHit();
-                ball.reverseY();
                 break;
             }
         }
-
     }
 
     public void update() {
         paddle.update();
-
-        if (ballstuck) {
+        bricksMap.update();
+        // Create and reset ball if no ball exists
+        if (balls.isEmpty()) {
+            balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
+                                paddle.getY() + paddle.getHeight(),
+                                TextureManager.ballTexture, 3.0f));
+            flowPaddle = true;
+        }
+        if (flowPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
-        } else {
-            balls.get(0).update();
         }
-
-        bricksMap.update();
-        checkCollision(balls.get(0));
+        for (Ball ball : balls) {
+            ball.update();
+            checkCollision(ball);
+        }
+        balls.removeIf(Ball::isDestroyed);
     }
 
     public void draw() {
@@ -131,7 +104,6 @@ public class Main extends ApplicationAdapter {
         }
         paddle.draw(batch);
         bricksMap.draw(batch);
-        EffectItem.drawEffectItems(batch);
 
         batch.end();
     }
