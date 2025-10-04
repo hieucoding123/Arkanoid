@@ -28,10 +28,35 @@ public class Main extends ApplicationAdapter {
         bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {
-
+        float paddleSpeed = 5.0f;
+        //Edit Velocity of paddle
+        //Press LEFT
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+            if (paddle.getX() > 0) { // Check LEFT
+                paddle.setVelocity(-paddleSpeed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
+            }
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+            if (paddle.getX() < Gdx.graphics.getWidth() - paddle.getWidth()) { //Check RIGHT
+                paddle.setVelocity(paddleSpeed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
+            }
+        }
+        //IF NO PRESS KEEP IT STAND
+        else {
+            paddle.setVelocity(0, 0);
+        }
     }
     public void update() {
+        //Apply the change of paddle velocity
+        paddle.update();
 
+        ball.update();
+        bricksMap.update();
     }
 
     public void draw() {
