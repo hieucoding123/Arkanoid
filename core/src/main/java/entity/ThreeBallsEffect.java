@@ -15,8 +15,18 @@ public class ThreeBallsEffect extends EffectItem {
 
     @Override
     public void applyEffect() {
-        Main.balls.add(new Ball(24, 6, TextureManager.ballTexture, 1));
-        Main.balls.add(new Ball(300, 50, TextureManager.ballTexture, 1));
-        Main.balls.add(new Ball(600, 100, TextureManager.ballTexture, 1));
+        Ball ball1 = new Ball((float) (Math.random() * Main.SCREEN_WIDTH),
+                                    140, TextureManager.ballTexture, 3.0f);
+        ball1.updateVelocity();
+        Ball ball2 = new Ball((float) (Math.random() * Main.SCREEN_WIDTH),
+                                    140, TextureManager.ballTexture, 3.0f);
+        ball2.updateVelocity();
+        Ball ball3 = new Ball((float) (Math.random() * Main.SCREEN_WIDTH),
+                                    140, TextureManager.ballTexture, 3.0f);
+        ball3.updateVelocity();
+
+        Main.balls.add(ball1);
+        Main.balls.add(ball2);
+        Main.balls.add(ball3);
     }
 }
