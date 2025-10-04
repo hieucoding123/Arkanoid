@@ -18,6 +18,7 @@ public class Main extends ApplicationAdapter {
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
+    boolean ballstuck = true;       //Ball stuck the paddle or not, true is stuck
 
     @Override
     public void create() {
@@ -27,38 +28,96 @@ public class Main extends ApplicationAdapter {
         paddle = new Paddle(100, 100, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
-        balls.add(new Ball(24, 6, TextureManager.ballTexture, 2));
+        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
+                            paddle.getY() + paddle.getHeight(),
+                            TextureManager.ballTexture,
+                            3.0f));
 
         bricksMap = new BricksMap("/map1.txt");
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Bo sung kich thuoc man hinh
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }
     public void handleInput() {
-
-    }
-    public void update() {
-        bricksMap.update();
-        EffectItem.updateEffectItems(paddle);
-        balls.removeIf(Ball::isDestroyed);
-
-        for (Ball ball : balls) {
-            ball.update();
-            for (Brick brick : bricksMap.bricks) {
-                if (ball.checkCollision(brick)) {
-                    if (Math.random() < 0.3) {      // create new effect with probability
-                        EffectItem.addEffectItem(
-                            new ThreeBallsEffect(
-                                brick.getX(),
-                                brick.getY(),
-                                -1)
-                        );
-                    }
-                    ball.bounceOff(brick);
-                    brick.takeHit();
-                    break;
-                }
+        float paddleSpeed = 5.0f;
+        //Edit Velocity of paddle
+        //Press LEFT
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+            if (paddle.getX() > 0) { // Check LEFT
+                paddle.setVelocity(-paddleSpeed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
             }
         }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+            if (paddle.getX() < Gdx.graphics.getWidth() - paddle.getWidth()) { //Check RIGHT
+                paddle.setVelocity(paddleSpeed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
+            }
+        }
+        //IF NO PRESS KEEP IT STAND
+        else {
+            paddle.setVelocity(0, 0);
+        }
+
+        //New state of the ball
+        if (ballstuck && Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            ballstuck = false;
+            balls.get(0).updateVelocity();
+        }
+    }
+
+    public void checkCollision(Ball ball) {
+        //collision with the wall
+        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= Gdx.graphics.getWidth()) {
+            ball.reverseX();
+        }
+        if (ball.getY() + ball.getHeight() >= Gdx.graphics.getHeight()) {
+            ball.reverseY();
+        }
+        if (ball.getY() <= 0) {
+            ballstuck = true;
+            ball.reset();
+        }
+
+        //collision with paddle
+        float ballY = ball.getY();
+        float paddleY = paddle.getY() + paddle.getHeight();
+        if (ballY - paddleY <= 3) {
+            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+            float ballCenter = ball.getX() + ball.getWidth() / 2f;
+            float hitPosition = ballCenter - paddleCenter;
+
+            float normalizedPosition = hitPosition / (paddle.getWidth() / 2f);
+            float maxBounceAngle = (float) Math.PI / 3f;
+            float newAngle = (float) Math.PI / 2f - (normalizedPosition * maxBounceAngle);
+
+            ball.setAngle(newAngle);
+        }
+        //collision with bricks
+        for (Brick brick : bricksMap.getBricks()) {
+            if (ball.checkCollision(brick)) {
+                brick.takeHit();
+                ball.reverseY();
+                break;
+            }
+        }
+
+    }
+
+    public void update() {
+        paddle.update();
+
+        if (ballstuck) {
+            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
+            balls.get(0).setY(paddle.getY() + paddle.getHeight());
+        } else {
+            balls.get(0).update();
+        }
+
+        bricksMap.update();
+        checkCollision(balls.get(0));
     }
 
     public void draw() {

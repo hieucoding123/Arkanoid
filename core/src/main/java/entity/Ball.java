@@ -7,8 +7,29 @@ public class Ball extends MovableObject {
     private float speed;
     private float angle;
 
-    public Ball(float x, float y, float w, float h, Texture texture, float speed) {
-        super(x, y, w, h, texture);
+    /**
+     * Constructor for ball.
+     * @param x x coordinate of ball
+     * @param y y coordinate of ball
+     * @param texture ball texture
+     * @param speed ball speed
+     */
+    public Ball(float x, float y, Texture texture, float speed) {
+        super(x, y, texture);
+        this.speed = speed;
+        setRandomAngle();
+    }
+
+    /**
+     * Constructor for ball.
+     * @param x x coordinate of ball
+     * @param y y coordinate of ball
+     * @param scale ball scale
+     * @param texture ball texture
+     * @param speed ball speed
+     */
+    public Ball(float x, float y, float scale, Texture texture, float speed) {
+        super(x, y, scale, texture);
         this.speed = speed;
         setRandomAngle();
     }
