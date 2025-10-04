@@ -61,6 +61,36 @@ public class Main extends ApplicationAdapter {
             ball.updateVelocity();
         }
     }
+
+    public void checkCollision() {
+        //collision with the wall
+        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= Gdx.graphics.getWidth()) {
+            ball.reverseX();
+        }
+        if (ball.getY() + ball.getHeight() >= Gdx.graphics.getHeight()) {
+            ball.reverseY();
+        }
+        if (ball.getY() <= 0) {
+            ballstuck = true;
+            ball.reset();
+        }
+
+        //collision with paddle
+        float ballY = ball.getY();
+        float paddleY = paddle.getY() + paddle.getHeight();
+        if (ballY - paddleY <= 3) {
+            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+            float ballCenter = ball.getX() + ball.getWidth() / 2f;
+            float hitPosition = ballCenter - paddleCenter;
+
+            float normalizedPosition = hitPosition / (paddle.getWidth() / 2f);
+            float maxBounceAngle = (float)Math.PI / 3f;
+            float newAngle = (float)Math.PI / 2f - (normalizedPosition * maxBounceAngle);
+
+            ball.setAngle(newAngle);
+        }
+    }
+
     public void update() {
         //Apply the change of paddle velocity
         paddle.update();
@@ -73,6 +103,7 @@ public class Main extends ApplicationAdapter {
         }
 
         bricksMap.update();
+        checkCollision();
     }
 
     public void draw() {
