@@ -17,14 +17,18 @@ public class Main extends ApplicationAdapter {
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
+    boolean ballstuck = true; //Ball stuck the paddle or not, true is stuck
 
     @Override
+    //Create BEFORE START
     public void create() {
         TextureManager.loadTextures();
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(100, 100, 96, 16, TextureManager.paddleTexture);
-        ball = new Ball(24, 0, 20, 20, TextureManager.ballTexture, 0);
+        //Paddle start in mid
+        paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 100, 96, 16, TextureManager.paddleTexture);
+        //Ball start with paddle
+        ball = new Ball(paddle.getX() + paddle.getWidth() / 2f - 10, paddle.getY() + paddle.getHeight(), 20, 20, TextureManager.ballTexture, 0);
         bricksMap = new BricksMap("/map1.txt");
     }
     public void handleInput() {
@@ -50,12 +54,24 @@ public class Main extends ApplicationAdapter {
         else {
             paddle.setVelocity(0, 0);
         }
+
+        //New state of the ball
+        if (ballstuck && Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            ballstuck = false;
+            ball.updateVelocity();
+        }
     }
     public void update() {
         //Apply the change of paddle velocity
         paddle.update();
 
-        ball.update();
+        if (ballstuck == true) {
+            ball.setX(paddle.getX() + (paddle.getWidth() / 2f) - (ball.getWidth() / 2f));
+            ball.setY(paddle.getY() + paddle.getHeight());
+        } else {
+            ball.update();
+        }
+
         bricksMap.update();
     }
 
