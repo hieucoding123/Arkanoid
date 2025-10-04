@@ -24,14 +24,11 @@ public class Ball extends MovableObject {
 
 
     public void reverseX() {
-        // Để phản xạ qua trục Y (tường trái/phải), góc mới = PI - góc cũ
         this.angle = (float)Math.PI - this.angle;
         updateVelocity();
     }
 
-
     public void reverseY() {
-        // Để phản xạ qua trục X (tường trên/dưới), góc mới = -góc cũ
         this.angle = -this.angle;
         updateVelocity();
     }
