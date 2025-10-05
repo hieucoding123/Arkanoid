@@ -41,19 +41,11 @@ public class Main extends ApplicationAdapter {
     public void handleInput() {
         //Press LEFT
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            if (paddle.getX() > 0) { // Check LEFT
-                paddle.setVelocity(-paddle.speed, 0);
-            } else {
-                paddle.setVelocity(0, 0);
-            }
+            paddle.moveLeft();
         }
         //Press RIGHT
         else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            if (paddle.getX() < Gdx.graphics.getWidth() - paddle.getWidth()) { //Check RIGHT
-                paddle.setVelocity(paddle.speed, 0);
-            } else {
-                paddle.setVelocity(0, 0);
-            }
+            paddle.moveRight();
         }
         //IF NO PRESS KEEP IT STAND
         else {

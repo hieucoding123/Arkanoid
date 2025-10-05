@@ -1,5 +1,6 @@
 package entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public abstract class MovableObject extends GameObject {
