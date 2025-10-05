@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
         TextureManager.loadTextures();
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(100, 100, TextureManager.paddleTexture);
+        paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 100, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
@@ -95,27 +95,35 @@ public class Main extends ApplicationAdapter {
         }
 
         //collision with bricks
-//        for (Brick brick : bricksMap.getBricks()) {
-//            if (ball.checkCollision(brick)) {
-//                brick.takeHit();
-//
-//                float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-//                float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-//                //
-//                if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-//                    ball.reverseY();
-//                }
-//
-//                break;
-//            }
-//        }
+        for (Brick brick : bricksMap.getBricks()) {
+            if (ball.checkCollision(brick)) {
+                brick.takeHit();
+
+                float ballCenterX = ball.getX() + ball.getWidth() / 2f;
+                float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+                //Bottom and top collision
+                if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+                    ball.reverseY();
+                }
+                //Left and right collision
+                else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
+                    ball.reverseX();
+                }
+                //Corner collision
+                else {
+                    ball.reverseY();
+                    ball.reverseX();
+                }
+                break;
+            }
+        }
     }
 
     public void update() {
         paddle.update();
         bricksMap.update();
         // Create and reset ball if no ball exists
-        if (balls.isEmpty()) {
+        if (balls.get(0).getY() <= 0) {
             balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
                                 paddle.getY() + paddle.getHeight(),
                                 TextureManager.ballTexture, 3.0f));
