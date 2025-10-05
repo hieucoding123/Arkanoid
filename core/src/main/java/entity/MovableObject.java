@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 public abstract class MovableObject extends GameObject {
     protected float dx;
     protected float dy;
-    protected float speed;
+    public float speed;
     /**
      * Constructor for MoveableObject.
      * @param x x coordinate

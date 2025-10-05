@@ -34,11 +34,32 @@ public class Main extends ApplicationAdapter {
                             3.0f));
 
         bricksMap = new BricksMap("/map1.txt");
-        SCREEN_WIDTH = Gdx.graphics.getWidth(); //Bo sung kich thuoc man hinh
+        SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }
+
     public void handleInput() {
-        paddle.handleInput();
+        //Press LEFT
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+            if (paddle.getX() > 0) { // Check LEFT
+                paddle.setVelocity(-paddle.speed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
+            }
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+            if (paddle.getX() < Gdx.graphics.getWidth() - paddle.getWidth()) { //Check RIGHT
+                paddle.setVelocity(paddle.speed, 0);
+            } else {
+                paddle.setVelocity(0, 0);
+            }
+        }
+        //IF NO PRESS KEEP IT STAND
+        else {
+            paddle.setVelocity(0, 0);
+        }
+
 
         //New state of the ball
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
@@ -58,18 +79,36 @@ public class Main extends ApplicationAdapter {
         if (ball.getY() <= 0) {
             ball.setDestroyed(true);    // drop out of screen
         }
-        // collision with paddle
-        if (ball.checkCollision(paddle))
-            ball.bounceOff(paddle);
+        //collision with paddle
+        float ballY = ball.getY();
+        float paddleY = paddle.getY() + paddle.getHeight();
+        if (ballY - paddleY <= 3) {
+            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+            float ballCenter = ball.getX() + ball.getWidth() / 2f;
+            float hitPosition = ballCenter - paddleCenter;
+
+            float normalizedPosition = hitPosition / (paddle.getWidth() / 2f);
+            float maxBounceAngle = (float)Math.PI / 3f;
+            float newAngle = (float)Math.PI / 2f - (normalizedPosition * maxBounceAngle);
+
+            ball.setAngle(newAngle);
+        }
 
         //collision with bricks
-        for (Brick brick : bricksMap.getBricks()) {
-            if (ball.checkCollision(brick)) {
-                ball.bounceOff(brick);
-                brick.takeHit();
-                break;
-            }
-        }
+//        for (Brick brick : bricksMap.getBricks()) {
+//            if (ball.checkCollision(brick)) {
+//                brick.takeHit();
+//
+//                float ballCenterX = ball.getX() + ball.getWidth() / 2f;
+//                float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+//                //
+//                if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+//                    ball.reverseY();
+//                }
+//
+//                break;
+//            }
+//        }
     }
 
     public void update() {

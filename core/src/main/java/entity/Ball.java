@@ -76,16 +76,4 @@ public class Ball extends MovableObject {
         this.dx = 0;
         this.dy = 0;
     }
-
-    public void bounceOff(GameObject other) {
-        float paddleCenter = other.getX() + other.getWidth() / 2f;
-        float ballCenter = this.getX() + this.getWidth() / 2f;
-        float hitPosition = ballCenter - paddleCenter;
-
-        float normalizedPosition = hitPosition / (other.getWidth() / 2f);
-        float maxBounceAngle = (float) Math.PI / 3f;
-        float newAngle = (float) Math.PI / 2f - (normalizedPosition * maxBounceAngle);
-
-        this.setAngle(newAngle);
-    }
 }
