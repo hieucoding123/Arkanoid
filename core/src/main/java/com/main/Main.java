@@ -114,7 +114,7 @@ public class Main extends ApplicationAdapter {
         paddle.update();
         bricksMap.update();
         // Create and reset ball if no ball exists
-        if (balls.get(0).getY() <= 0) {
+        if (balls.isEmpty()) {
             balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
                                 paddle.getY() + paddle.getHeight(),
                                 TextureManager.ballTexture, 3.0f));
