@@ -20,6 +20,10 @@ public class Ball extends MovableObject {
         setRandomAngle();
     }
 
+    public float getdy() {
+        return this.dy;
+    }
+
     /**
      * Constructor for ball.
      * @param x x coordinate of ball
@@ -42,7 +46,6 @@ public class Ball extends MovableObject {
         this.dx = speed * (float)Math.cos(angle);
         this.dy = speed * (float)Math.sin(angle);
     }
-
 
     public void reverseX() {
         this.angle = (float)Math.PI - this.angle;
@@ -68,12 +71,4 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
-
-    public void reset() {
-        this.x = (Gdx.graphics.getWidth() / 2f) - (this.getWidth() / 2f);
-        this.y = 120;
-        setRandomAngle();
-        this.dx = 0;
-        this.dy = 0;
-    }
 }

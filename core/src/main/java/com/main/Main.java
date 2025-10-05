@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
         TextureManager.loadTextures();
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 100, TextureManager.paddleTexture);
+        paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 70, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
@@ -60,7 +60,6 @@ public class Main extends ApplicationAdapter {
             paddle.setVelocity(0, 0);
         }
 
-
         //New state of the ball
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
             flowPaddle = false;             // pulled ball up
@@ -80,9 +79,11 @@ public class Main extends ApplicationAdapter {
             ball.setDestroyed(true);    // drop out of screen
         }
         //collision with paddle
-        float ballY = ball.getY();
-        float paddleY = paddle.getY() + paddle.getHeight();
-        if (ballY - paddleY <= 3) {
+        if (ball.getdy() < 0 &&
+            ball.getX() < paddle.getX() + paddle.getWidth() &&
+            ball.getX() + ball.getWidth() > paddle.getX() &&
+            ball.getY() <= paddle.getY() + paddle.getHeight() &&
+            ball.getY() >= paddle.getY()) {
             float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
             float ballCenter = ball.getX() + ball.getWidth() / 2f;
             float hitPosition = ballCenter - paddleCenter;
@@ -123,10 +124,12 @@ public class Main extends ApplicationAdapter {
         paddle.update();
         bricksMap.update();
         // Create and reset ball if no ball exists
-        if (balls.get(0).getY() <= 0) {
+        if (balls.isEmpty()) {
             balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
                                 paddle.getY() + paddle.getHeight(),
                                 TextureManager.ballTexture, 3.0f));
+            paddle.setX(Gdx.graphics.getWidth() / 2f - 48);
+            paddle.setY(70);
             flowPaddle = true;
         }
         if (flowPaddle) {       // follow paddle
