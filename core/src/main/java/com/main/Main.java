@@ -23,9 +23,11 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         TextureManager.loadTextures();
+        SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
+        SCREEN_HEIGHT = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(Gdx.graphics.getWidth() / 2f - 48, 70, TextureManager.paddleTexture);
+        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 70, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
@@ -34,8 +36,6 @@ public class Main extends ApplicationAdapter {
                             2.0f));
 
         bricksMap = new BricksMap("/map1.txt");
-        SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
-        SCREEN_HEIGHT = Gdx.graphics.getHeight();
     }
 
     public void handleInput() {
@@ -61,10 +61,10 @@ public class Main extends ApplicationAdapter {
 
     public void checkCollision(Ball ball) {
         //collision with the wall
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= Gdx.graphics.getWidth()) {
+        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= SCREEN_WIDTH) {
             ball.reverseX();
         }
-        if (ball.getY() + ball.getHeight() >= Gdx.graphics.getHeight()) {
+        if (ball.getY() + ball.getHeight() >= SCREEN_HEIGHT) {
             ball.reverseY();
         }
         if (ball.getY() <= 0) {
@@ -120,7 +120,7 @@ public class Main extends ApplicationAdapter {
             balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
                                 paddle.getY() + paddle.getHeight(),
                                 TextureManager.ballTexture, 3.0f));
-            paddle.setX(Gdx.graphics.getWidth() / 2f - 48);
+            paddle.setX(SCREEN_WIDTH / 2f - 48);
             paddle.setY(70);
             flowPaddle = true;
         }
@@ -141,7 +141,7 @@ public class Main extends ApplicationAdapter {
         batch.begin();
 
         // Rendering
-        batch.draw(bgTex, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(bgTex, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         for (Ball ball : balls) {
             ball.draw(batch);
         }
