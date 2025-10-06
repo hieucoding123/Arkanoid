@@ -12,7 +12,6 @@ public class ExpandEffect extends EffectItem {
 
     public ExpandEffect(float x, float y, float dy, Texture texture, Paddle paddle) {
         super(x, y, dy, texture);
-        this.dy = -3.0f;
         this.paddle = paddle;
     }
 
@@ -33,6 +32,5 @@ public class ExpandEffect extends EffectItem {
             setScale(1.0f);
             setDestroyed(true);
         }
-
     }
 }

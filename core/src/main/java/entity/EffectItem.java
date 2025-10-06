@@ -46,7 +46,6 @@ public abstract class EffectItem extends MovableObject{
             effectItem.update();
             if (paddle.checkCollision(effectItem)) {
                 effectItem.applyEffect();
-                effectItem.setDestroyed(true);
             }
         }
         EffectItem.items.removeIf(EffectItem::isDestroyed);

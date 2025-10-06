@@ -28,5 +28,7 @@ public class ThreeBallsEffect extends EffectItem {
         Main.balls.add(ball1);
         Main.balls.add(ball2);
         Main.balls.add(ball3);
+
+        this.setDestroyed(true);
     }
 }
