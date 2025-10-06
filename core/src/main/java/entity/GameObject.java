@@ -110,9 +110,6 @@ public abstract class GameObject {
         return this.orgHeight * this.scale;
     }
 
-    public void setWidth(float width) { this.orgWidth = width; }
-
-    public void setHeight(float height) { this.orgHeight = height; }
     /**
      * set scale of object.
      * @param scale scale of object

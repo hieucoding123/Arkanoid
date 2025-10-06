@@ -23,14 +23,14 @@ public class ExpandEffect extends EffectItem {
 
         applied = true;
         effectStartTime = System.currentTimeMillis();
-        paddle.setWidth(paddle.getWidth() * 1.5f);
+        paddle.setScale(1.5f);
     }
 
     public void update() {
         super.update();
 
         if (applied && (System.currentTimeMillis() - effectStartTime > EFFECT_DURATION)) {
-            paddle.setWidth(paddle.getWidth() / 1.5f);
+            setScale(1.0f);
             setDestroyed(true);
         }
 
