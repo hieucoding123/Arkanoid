@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
                             paddle.getY() + paddle.getHeight(),
                             TextureManager.ballTexture,
-                            3.0f));
+                            2.0f));
 
         bricksMap = new BricksMap("/map1.txt");
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
@@ -127,6 +127,7 @@ public class Main extends ApplicationAdapter {
         if (flowPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
+            balls.get(0).setAngle((float)Math.PI / 2f);
         }
         for (Ball ball : balls) {
             ball.update();

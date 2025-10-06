@@ -7,7 +7,7 @@ import com.main.Main;
 public class Paddle extends MovableObject {
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
-        this.speed = 3.0f;
+        this.speed = 2.5f;
     }
 
     public Paddle(float x, float y, float scale, Texture texture) {
