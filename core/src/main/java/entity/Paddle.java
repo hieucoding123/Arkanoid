@@ -17,15 +17,15 @@ public class Paddle extends MovableObject {
 
     public void moveRight() {
         x += speed;
-        if (x + getWidth() > Main.SCREEN_WIDTH) {
-            x = Main.SCREEN_WIDTH - getWidth();
+        if (x + getWidth() > Main.SCREEN_WIDTH - Main.padding_left_right) {
+            x = Main.SCREEN_WIDTH - Main.padding_left_right - getWidth();
         }
     }
 
     public void moveLeft() {
         x -= speed;
-        if (x < 0) {
-            x = 0;
+        if (x < Main.padding_left_right) {
+            x = Main.padding_left_right;
         }
     }
 }

@@ -13,12 +13,15 @@ import java.util.ArrayList;
 public class Main extends ApplicationAdapter {
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
+    public static int padding_left_right;
+    public static int padding_top;
     private SpriteBatch batch;
     public static ArrayList<Ball> balls;
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
     boolean flowPaddle = true;      // Ball follow paddle
+
 
     @Override
     public void create() {
@@ -36,15 +39,17 @@ public class Main extends ApplicationAdapter {
                             2.0f));
 
         bricksMap = new BricksMap("/map1.txt");
+        padding_left_right = bricksMap.xBeginCoord;
+        padding_top = bricksMap.yBeginCoord + bricksMap.brickH;
     }
 
     public void handleInput() {
         //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))) {
             paddle.moveLeft();
         }
         //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D))) {
             paddle.moveRight();
         }
         //IF NO PRESS KEEP IT STAND
@@ -61,10 +66,10 @@ public class Main extends ApplicationAdapter {
 
     public void checkCollision(Ball ball) {
         //collision with the wall
-        if (ball.getX() <= 0 || ball.getX() + ball.getWidth() >= SCREEN_WIDTH) {
+        if (ball.getX() <= padding_left_right || ball.getX() + ball.getWidth() >= SCREEN_WIDTH - padding_left_right) {
             ball.reverseX();
         }
-        if (ball.getY() + ball.getHeight() >= SCREEN_HEIGHT) {
+        if (ball.getY() + ball.getHeight() >= padding_top) {
             ball.reverseY();
         }
         if (ball.getY() <= 0) {
@@ -91,7 +96,11 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
-
+//                if (Math.random() < 0.5) {
+//                    EffectItem.addEffectItem(new ThreeBallsEffect(
+//                        brick.getX(), brick.getY(), -1
+//                    ));
+//                }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;
                 //Bottom and top collision
@@ -114,6 +123,7 @@ public class Main extends ApplicationAdapter {
 
     public void update() {
         paddle.update();
+//        EffectItem.updateEffectItems(paddle);
         bricksMap.update();
         // Create and reset ball if no ball exists
         if (balls.isEmpty()) {
@@ -147,7 +157,7 @@ public class Main extends ApplicationAdapter {
         }
         paddle.draw(batch);
         bricksMap.draw(batch);
-
+//        EffectItem.drawEffectItems(batch);
         batch.end();
     }
     @Override
