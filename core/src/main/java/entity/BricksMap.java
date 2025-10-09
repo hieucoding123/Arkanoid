@@ -69,4 +69,8 @@ public class BricksMap {
     public ArrayList<Brick> getBricks() {
         return this.bricks;
     }
+
+    public int getsize() {
+        return bricks.size();
+    }
 }

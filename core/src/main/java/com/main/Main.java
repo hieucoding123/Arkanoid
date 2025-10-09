@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
-
 import java.util.ArrayList;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -21,7 +20,7 @@ public class Main extends ApplicationAdapter {
     Texture bgTex;
     BricksMap bricksMap;
     boolean flowPaddle = true;      // Ball follow paddle
-
+    boolean Press_M = false;
 
     @Override
     public void create() {
@@ -37,13 +36,17 @@ public class Main extends ApplicationAdapter {
                             paddle.getY() + paddle.getHeight(),
                             TextureManager.ballTexture,
                             2.0f));
-
-        bricksMap = new BricksMap("/map1.txt");
+        Level_game.loadLevels();
+        bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
         padding_top = bricksMap.yBeginCoord + bricksMap.brickH;
     }
 
     public void handleInput() {
+        //Press M to change map (it for test)
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.M)) {
+            Press_M = true;
+        }
         //Press LEFT
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))) {
             paddle.moveLeft();
@@ -91,7 +94,6 @@ public class Main extends ApplicationAdapter {
 
             ball.setAngle(newAngle);
         }
-
         //collision with bricks
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
@@ -121,18 +123,29 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+    public void reset() {
+        balls.clear();
+        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
+            paddle.getY() + paddle.getHeight(),
+            TextureManager.ballTexture, 3.0f));
+        paddle.setX(SCREEN_WIDTH / 2f - 48);
+        paddle.setY(70);
+        flowPaddle = true;
+    }
+
     public void update() {
         paddle.update();
 //        EffectItem.updateEffectItems(paddle);
+        if (Press_M || bricksMap.getsize() == 0) {
+            Level_game.nextLevel();
+            bricksMap = Level_game.getCurrentLevel();
+            reset();
+            Press_M = false;
+        }
         bricksMap.update();
         // Create and reset ball if no ball exists
         if (balls.isEmpty()) {
-            balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
-                                paddle.getY() + paddle.getHeight(),
-                                TextureManager.ballTexture, 3.0f));
-            paddle.setX(SCREEN_WIDTH / 2f - 48);
-            paddle.setY(70);
-            flowPaddle = true;
+            reset();
         }
         if (flowPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
