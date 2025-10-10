@@ -75,6 +75,11 @@ public class Main extends ApplicationAdapter {
             flowPaddle = false;             // pulled ball up
             balls.get(0).updateVelocity();
         }
+
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            setGameState(GameState.MAIN_MENU);
+        }
+
     }
 
     public void checkCollision(Ball ball) {
