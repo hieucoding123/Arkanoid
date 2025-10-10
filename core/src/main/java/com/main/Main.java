@@ -24,6 +24,7 @@ public class Main extends ApplicationAdapter {
     BricksMap bricksMap;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
+    public static int cnt_threeball ;
 
     private UI ui;
     private SettingsUI settingsUI;
@@ -34,9 +35,10 @@ public class Main extends ApplicationAdapter {
         TextureManager.loadTextures();
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
+        cnt_threeball = 0;
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 70, TextureManager.paddleTexture);
+        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 30, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
@@ -117,11 +119,13 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
-//                if (Math.random() < 0.5) {
-//                    EffectItem.addEffectItem(new ThreeBallsEffect(
-//                        brick.getX(), brick.getY(), -1
-//                    ));
-//                }
+                //Three ball effect
+                if (Math.random() < 0.1 && cnt_threeball <= 2) {
+                    cnt_threeball++;
+                    EffectItem.addEffectItem(new ThreeBallsEffect(
+                        brick.getX(), brick.getY(), -1
+                    ));
+                }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;
                 //Bottom and top collision
@@ -154,8 +158,9 @@ public class Main extends ApplicationAdapter {
 
     public void update() {
         paddle.update();
-//        EffectItem.updateEffectItems(paddle);
+        EffectItem.updateEffectItems(paddle);
         if (Press_M || bricksMap.getsize() == 0) {
+            cnt_threeball = 0;
             Level_game.nextLevel();
             bricksMap = Level_game.getCurrentLevel();
             reset();
@@ -189,7 +194,7 @@ public class Main extends ApplicationAdapter {
         }
         paddle.draw(batch);
         bricksMap.draw(batch);
-//        EffectItem.drawEffectItems(batch);
+        EffectItem.drawEffectItems(batch);
         batch.end();
     }
     @Override

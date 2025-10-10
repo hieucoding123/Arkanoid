@@ -24,20 +24,6 @@ public class Ball extends MovableObject {
         return this.dy;
     }
 
-    /**
-     * Constructor for ball.
-     * @param x x coordinate of ball
-     * @param y y coordinate of ball
-     * @param scale ball scale
-     * @param texture ball texture
-     * @param speed ball speed
-     */
-    public Ball(float x, float y, float scale, Texture texture, float speed) {
-        super(x, y, scale, texture);
-        this.speed = speed;
-        setRandomAngle();
-    }
-
     private void setRandomAngle() {
         this.angle = (float) (Math.random() * (Math.PI / 2) + (Math.PI / 4));
     }
@@ -60,10 +46,6 @@ public class Ball extends MovableObject {
     public void setAngle(float angleInRadians) {
         this.angle = angleInRadians;
         updateVelocity();
-    }
-
-    public float getAngle() {
-        return this.angle;
     }
 
     public void setSpeed(float newSpeed) {
