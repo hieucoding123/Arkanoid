@@ -67,7 +67,10 @@ public abstract class GameObject {
      * @param batch game drawing programming
      */
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y, this.getWidth(), this.getHeight());
+        float drawWidth = this.orgWidth * this.scale;
+        float drawHeight = this.orgHeight * this.scale;
+
+        batch.draw(texture, x, y, drawWidth, drawHeight);
     }
 
     /**

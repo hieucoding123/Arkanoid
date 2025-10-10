@@ -5,8 +5,7 @@ import entity.EffectItem;
 import entity.Paddle;
 
 public class ExpandEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 3000f;
-    private boolean applied = false;
+    private static final float EFFECT_DURATION = 5.0f;
     private Paddle paddle;
 
     public ExpandEffect(float x, float y, float dy, Texture texture, Paddle paddle) {
@@ -15,21 +14,10 @@ public class ExpandEffect extends EffectItem {
     }
 
     public void applyEffect() {
-        if (paddle == null || applied) {
-            return;
+        if (paddle != null) {
+            paddle.activateExpand(EFFECT_DURATION);
         }
 
-        applied = true;
-        startTime = System.currentTimeMillis();
-        paddle.setScale(1.5f);
-    }
-
-    public void update() {
-        super.update();
-
-        if (applied && (System.currentTimeMillis() - this.startTime > EFFECT_DURATION)) {
-            paddle.setScale(1.0f);
-            this.setDestroyed(true);
-        }
+        this.setDestroyed(true);
     }
 }

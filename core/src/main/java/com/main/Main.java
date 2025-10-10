@@ -120,7 +120,7 @@ public class Main extends ApplicationAdapter {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
                 //Three ball effect
-                if (Math.random() < 0.1 && cnt_threeball <= 2) {
+                if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
                     cnt_threeball++;
                     EffectItem.addEffectItem(new ThreeBallsEffect(
                         brick.getX(), brick.getY(), -1
