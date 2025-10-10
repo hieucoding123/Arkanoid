@@ -31,11 +31,17 @@ public class BricksMap {
                 String[] line = br.readLine().split(" ");
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
-                    if (color >= 0) {
+                    if (color == 1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
                             1,
+                            TextureManager.brickTextures.get(color)));
+                    } else if (color == 0) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            2,
                             TextureManager.brickTextures.get(color)));
                     }
                 }
