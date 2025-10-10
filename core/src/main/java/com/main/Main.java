@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
+import ui.UI;
+
 import java.util.ArrayList;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -21,6 +23,9 @@ public class Main extends ApplicationAdapter {
     BricksMap bricksMap;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
+
+    private UI ui;
+    public static GameState gameState;
 
     @Override
     public void create() {
@@ -40,6 +45,11 @@ public class Main extends ApplicationAdapter {
         bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
         padding_top = bricksMap.yBeginCoord + bricksMap.brickH;
+
+        ui = new UI(this);
+        ui.create();
+
+        gameState = GameState.MAIN_MENU;
     }
 
     public void handleInput() {
@@ -175,15 +185,34 @@ public class Main extends ApplicationAdapter {
     }
     @Override
     public void render() {
-        handleInput();
-        update();
-        draw();
+        switch (gameState){
+            case MAIN_MENU:
+                ui.render();
+                break;
+            case PLAYING:
+                handleInput();
+                update();
+                draw();
+                break;
+        }
     }
+
+    public void setGameState(GameState newGameState) {
+        gameState = newGameState;
+        if (gameState == GameState.PLAYING) {
+            Gdx.input.setInputProcessor(null); // Set input processor to null for gameplay
+        } else {
+            Gdx.input.setInputProcessor(ui.getStage()); // Set input processor to the UI stage
+        }
+    }
+
 
     @Override
     public void dispose() {
         batch.dispose();
         bgTex.dispose();
         TextureManager.dispose();
+        ui.dispose();
     }
 }
+
