@@ -1,7 +1,6 @@
 package entity;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
 
 public class Ball extends MovableObject {
     private float speed;
@@ -18,10 +17,6 @@ public class Ball extends MovableObject {
         super(x, y, texture);
         this.speed = speed;
         setRandomAngle();
-    }
-
-    public float getdy() {
-        return this.dy;
     }
 
     /**
