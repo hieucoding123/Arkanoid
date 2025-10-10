@@ -57,6 +57,12 @@ public class UI extends ApplicationAdapter {
         mainTable.add(placeholder).padBottom(50);
         mainTable.row();
 
+        Label.LabelStyle Leaderboardtext = new Label.LabelStyle(font, Color.YELLOW);
+        Label Leaderboard = new Label("Leaderboard", Leaderboardtext);
+        Leaderboard.setFontScale(0.9f);
+        mainTable.add(Leaderboard).pad(90);
+        mainTable.row();
+
         Button button = new Button(skin);
         mainTable.add(button).center().width(320).height(100);
 
