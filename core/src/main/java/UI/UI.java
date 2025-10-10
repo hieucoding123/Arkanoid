@@ -18,12 +18,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-
-
 import static com.badlogic.gdx.Gdx.gl;
 
 public class UI extends ApplicationAdapter {
@@ -49,12 +43,10 @@ public class UI extends ApplicationAdapter {
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
 
-
-
         mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
 
         Button button = new Button(skin);
-        mainTable.add(button).center().width(80).height(42);
+        mainTable.add(button).center().width(320).height(100);
 
         button.addListener(new ClickListener() {
             @Override
