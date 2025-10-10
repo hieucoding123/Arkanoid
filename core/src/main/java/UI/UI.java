@@ -6,11 +6,14 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -26,6 +29,7 @@ public class UI extends ApplicationAdapter {
     private Skin skin;
     private Main main;
     private Texture bg;
+    private BitmapFont font;
 
     public UI(Main main) {
         this.main = main;
@@ -37,6 +41,9 @@ public class UI extends ApplicationAdapter {
         skin = new Skin(Gdx.files.internal("ui/buttontest.json"));
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
+        font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
+        font.getData().setScale(1);
+
         Gdx.input.setInputProcessor(stage);
 
         Table mainTable = new Table();
@@ -44,6 +51,11 @@ public class UI extends ApplicationAdapter {
         stage.addActor(mainTable);
 
         mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
+
+        Label.LabelStyle placeholderstyle = new Label.LabelStyle(font, Color.WHITE);
+        Label placeholder = new Label("Welcome to Arkanoid!", placeholderstyle);
+        mainTable.add(placeholder).padBottom(50);
+        mainTable.row();
 
         Button button = new Button(skin);
         mainTable.add(button).center().width(320).height(100);
