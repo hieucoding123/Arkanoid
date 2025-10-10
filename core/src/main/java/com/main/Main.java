@@ -82,16 +82,6 @@ public class Main extends ApplicationAdapter {
     }
 
     public void checkCollision(Ball ball) {
-        //collision with the wall
-        if (ball.getX() <= padding_left_right || ball.getX() + ball.getWidth() >= SCREEN_WIDTH - padding_left_right) {
-            ball.reverseX();
-        }
-        if (ball.getY() + ball.getHeight() >= padding_top) {
-            ball.reverseY();
-        }
-        if (ball.getY() <= 0) {
-            ball.setDestroyed(true);    // drop out of screen
-        }
         //collision with paddle
         if (ball.getdy() < 0 &&
             ball.getX() < paddle.getX() + paddle.getWidth() &&
@@ -107,6 +97,16 @@ public class Main extends ApplicationAdapter {
             float newAngle = (float)Math.PI / 2f - (normalizedPosition * maxBounceAngle);
 
             ball.setAngle(newAngle);
+        }
+        //collision with the wall
+        else if (ball.getX() <= padding_left_right || ball.getX() + ball.getWidth() >= SCREEN_WIDTH - padding_left_right) {
+            ball.reverseX();
+        }
+        if (ball.getY() + ball.getHeight() >= padding_top) {
+            ball.reverseY();
+        }
+        if (ball.getY() <= 0) {
+            ball.setDestroyed(true);    // drop out of screen
         }
         //collision with bricks
         for (Brick brick : bricksMap.getBricks()) {
