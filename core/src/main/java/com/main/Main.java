@@ -194,7 +194,6 @@ public class Main extends ApplicationAdapter {
                 ui.render();
                 break;
             case PLAYING:
-
                 handleInput();
                 update();
                 draw();
