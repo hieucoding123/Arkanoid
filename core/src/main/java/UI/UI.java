@@ -5,12 +5,15 @@ package ui;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
@@ -22,6 +25,7 @@ public class UI extends ApplicationAdapter {
     private Stage stage;
     private Skin skin;
     private Main main;
+    private Texture bg;
 
     public UI(Main main) {
         this.main = main;
@@ -29,16 +33,20 @@ public class UI extends ApplicationAdapter {
 
     @Override
     public void create() {
+        bg = new Texture(Gdx.files.internal("ui/bg.png"));
         skin = new Skin(Gdx.files.internal("ui/buttontest.json"));
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
         Gdx.input.setInputProcessor(stage);
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
 
+        mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
+
         Button button = new Button(skin);
-        mainTable.add(button).center().width(300).height(300);
+        mainTable.add(button).center().width(320).height(100);
 
         button.addListener(new ClickListener() {
             @Override
@@ -68,6 +76,7 @@ public class UI extends ApplicationAdapter {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        bg.dispose();
     }
 
     public Stage getStage() {
