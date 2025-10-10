@@ -46,33 +46,80 @@ public class UI extends ApplicationAdapter {
 
         Gdx.input.setInputProcessor(stage);
 
+        //Table
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
 
+        //Background
         mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
 
-        Label.LabelStyle placeholderstyle = new Label.LabelStyle(font, Color.WHITE);
-        Label placeholder = new Label("Welcome to Arkanoid!", placeholderstyle);
-        mainTable.add(placeholder).padBottom(50);
+        //Label Styles
+        Label.LabelStyle MenuText = new Label.LabelStyle(font, Color.WHITE);
+        Label.LabelStyle LBStyle = new Label.LabelStyle(font, Color.YELLOW);
+
+        // --- Title Label ---
+        Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
+        titleLabel.setFontScale(1f);
+        mainTable.add(titleLabel).padBottom(40).padTop(30);
         mainTable.row();
 
-        Label.LabelStyle Leaderboardtext = new Label.LabelStyle(font, Color.YELLOW);
-        Label Leaderboard = new Label("Leaderboard", Leaderboardtext);
-        Leaderboard.setFontScale(0.9f);
-        mainTable.add(Leaderboard).pad(90);
-        mainTable.row();
+        //Button Table
+        Table buttonTable = new Table();
 
-        Button button = new Button(skin);
-        mainTable.add(button).center().width(320).height(100);
-
-        button.addListener(new ClickListener() {
+        //Play Button
+        Button playButton = new Button(skin);
+        playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.PLAYING);
 
             }
         });
+
+        //Setting Button
+        Label settingsLabel = new Label("Settings", MenuText);
+        settingsLabel.setFontScale(0.8f);
+        settingsLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Settings Clicked");
+            }
+        });
+
+        //Leaderboard Button
+        Label LBLabel = new Label("Leaderboard", LBStyle);
+        LBLabel.setFontScale(0.8f);
+        LBLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("LB Clicked");
+            }
+        });
+
+        //Quit Button
+        Label quitLabel = new Label("Quit", MenuText);
+        quitLabel.setFontScale(0.8f);
+        quitLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+        //Arrange the Buttons in the buttonTable
+        buttonTable.add(playButton).width(120).height(50).padBottom(40);
+        buttonTable.row();
+        buttonTable.add(LBLabel).padBottom(50);
+        buttonTable.row();
+        buttonTable.add(settingsLabel).padBottom(50);
+        buttonTable.row();
+        buttonTable.add(quitLabel).padBottom(50);
+
+        //Add to main table
+        mainTable.add(buttonTable);
+
+
     }
 
     @Override
