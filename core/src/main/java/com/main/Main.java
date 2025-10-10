@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
+import ui.SettingsUI;
 import ui.UI;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Main extends ApplicationAdapter {
     boolean Press_M = false;
 
     private UI ui;
+    private SettingsUI settingsUI;
     public static GameState gameState;
 
     @Override
@@ -48,6 +50,9 @@ public class Main extends ApplicationAdapter {
 
         ui = new UI(this);
         ui.create();
+
+        settingsUI = new SettingsUI(this);
+        settingsUI.create();
 
         gameState = GameState.MAIN_MENU;
     }
@@ -193,6 +198,9 @@ public class Main extends ApplicationAdapter {
             case MAIN_MENU:
                 ui.render();
                 break;
+            case SETTINGS:
+                settingsUI.render();
+                break;
             case PLAYING:
                 handleInput();
                 update();
@@ -204,9 +212,11 @@ public class Main extends ApplicationAdapter {
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
         if (gameState == GameState.PLAYING) {
-            Gdx.input.setInputProcessor(null); // Set input processor to null for gameplay
-        } else {
-            Gdx.input.setInputProcessor(ui.getStage()); // Set input processor to the UI stage
+            Gdx.input.setInputProcessor(null);
+        } else if (gameState == GameState.MAIN_MENU) {
+            Gdx.input.setInputProcessor(ui.getStage());
+        } else if (gameState == GameState.SETTINGS) {
+            Gdx.input.setInputProcessor(settingsUI.getStage());
         }
     }
 
@@ -217,6 +227,7 @@ public class Main extends ApplicationAdapter {
         bgTex.dispose();
         TextureManager.dispose();
         ui.dispose();
+        settingsUI.dispose();
     }
 }
 

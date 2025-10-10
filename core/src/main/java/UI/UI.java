@@ -1,5 +1,3 @@
-// Arkanoid/core/src/main/java/ui/UI.java
-
 package ui;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -83,6 +81,7 @@ public class UI extends ApplicationAdapter {
         settingsLabel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.SETTINGS);
                 System.out.println("Settings Clicked");
             }
         });
