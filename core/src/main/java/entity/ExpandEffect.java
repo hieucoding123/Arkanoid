@@ -5,7 +5,7 @@ import entity.EffectItem;
 import entity.Paddle;
 
 public class ExpandEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 10000f;
+    private static final float EFFECT_DURATION = 3000f;
     private boolean applied = false;
     private Paddle paddle;
 
@@ -29,7 +29,7 @@ public class ExpandEffect extends EffectItem {
 
         if (applied && (System.currentTimeMillis() - this.startTime > EFFECT_DURATION)) {
             paddle.setScale(1.0f);
-            setDestroyed(true);
+            this.setDestroyed(true);
         }
     }
 }

@@ -1,0 +1,30 @@
+
+buttontest.png
+size: 256, 256
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+buttondown
+  rotate: false
+  xy: 1, 81
+  size: 155, 78
+  split: 0, 0, 0, 0
+  orig: 155, 78
+  offset: 0, 0
+  index: -1
+buttonhover
+  rotate: false
+  xy: 1, 1
+  size: 155, 78
+  split: 0, 0, 0, 0
+  orig: 155, 78
+  offset: 0, 0
+  index: -1
+buttonup
+  rotate: false
+  xy: 1, 161
+  size: 155, 78
+  split: 0, 0, 0, 0
+  orig: 155, 78
+  offset: 0, 0
+  index: -1

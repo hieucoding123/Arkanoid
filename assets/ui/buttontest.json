@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: buttonup
+		down: buttondown
+		over: buttonhover
+		focused: buttonhover
+	}
+}
+}
