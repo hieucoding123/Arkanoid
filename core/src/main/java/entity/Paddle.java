@@ -6,7 +6,7 @@ import com.main.Main;
 
 public class Paddle extends MovableObject {
     private long expandEnd = 0;
-    private float originalWidth;
+
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
         this.speed = 2.5f;
@@ -14,14 +14,13 @@ public class Paddle extends MovableObject {
 
     public void activateExpand(float duration) {
         this.expandEnd = System.currentTimeMillis() + (long)(duration * 1000);
-        this.setScale(1.5f);
+        this.setScale(1.5f, 1.0f);
     }
 
     public void update() {
         super.update();
-
         if (expandEnd > 0 && System.currentTimeMillis() > expandEnd) {
-            this.setScale(1.0f);
+            this.setScale(1.0f, 1.0f);
             this.expandEnd = 0;
         }
     }

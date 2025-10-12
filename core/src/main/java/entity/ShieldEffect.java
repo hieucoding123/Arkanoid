@@ -8,6 +8,7 @@ public class ShieldEffect extends EffectItem {
     @Override
     public void applyEffect() {
         shield = true;
+        this.setDestroyed(true);
     }
 
     public static boolean isShield() {

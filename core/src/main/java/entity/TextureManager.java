@@ -12,6 +12,7 @@ public class TextureManager {
     public static Texture expandpaddleTexture;
     public static Texture shieldTexture;
     public static Texture lineTexture;
+    public static Texture BALLTexture;
     /**
      * Load textures.
      */
@@ -24,6 +25,7 @@ public class TextureManager {
         expandpaddleTexture = new Texture("expandpaddle.png");
         shieldTexture = new Texture("shield.png");
         lineTexture = new  Texture("yellow_line.png");
+        BALLTexture = new Texture("BallEffect.png");
     }
 
     /**
@@ -39,5 +41,6 @@ public class TextureManager {
         expandpaddleTexture.dispose();
         shieldTexture.dispose();
         lineTexture.dispose();
+        BALLTexture.dispose();
     }
 }

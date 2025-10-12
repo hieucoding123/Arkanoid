@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 public class Ball extends MovableObject {
     private float speed;
     private float angle;
+    private static long BigEnd = 0;
+    private float originalWidth;
 
     /**
      * Constructor for ball.
@@ -53,4 +55,24 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    public void activateBig(float duration) {
+        BigEnd = System.currentTimeMillis() + (long)(duration * 1000);
+        this.setScale(1.5f, 1.5f);
+    }
+
+    public void update() {
+        super.update();
+        if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
+            this.setScale(1.0f, 1.0f);
+            BigEnd = 0;
+        }
+    }
+
+    public static boolean isBig() {
+        if (System.currentTimeMillis() <= BigEnd) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

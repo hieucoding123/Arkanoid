@@ -41,7 +41,7 @@ public class Main extends ApplicationAdapter {
         paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
-        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
+        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
                             paddle.getY() + paddle.getHeight(),
                             TextureManager.ballTexture,
                             2.0f));
@@ -91,20 +91,19 @@ public class Main extends ApplicationAdapter {
     public void callEffect(Brick  brick) {
         if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
             cnt_threeball++;
-            EffectItem.addEffectItem(new ThreeBallsEffect(
-                brick.getX(), brick.getY(), -1
-            ));
+            EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
 
         }
         else if (Math.random() < 0.5) {
-            EffectItem.addEffectItem(new ExpandEffect(
-                brick.getX(), brick.getY(), -1, paddle
-            ));
+            EffectItem.addEffectItem(new ExpandEffect(brick.getX(), brick.getY(), -1, paddle));
         }
         else  if (Math.random() < 0.5) {
-            EffectItem.addEffectItem(new ShieldEffect(
-                brick.getX(), brick.getY(), -1
-            ));
+            EffectItem.addEffectItem(new ShieldEffect(brick.getX(), brick.getY(), -1));
+        }
+        else {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+            }
         }
     }
 
@@ -144,6 +143,7 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
+                if (Ball.isBig()) brick.setHitPoints(0);
                 if (Brick.gethitPoints(brick) == 0) {
                     callEffect(brick);
                 }
@@ -169,11 +169,11 @@ public class Main extends ApplicationAdapter {
 
     public void reset() {
         balls.clear();
-        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
+        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture, 3.0f));
-        paddle.setX(SCREEN_WIDTH / 2f - 48);
-        paddle.setY(70);
+        paddle.setX(SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
+        paddle.setY(20);
         flowPaddle = true;
     }
 
@@ -193,7 +193,7 @@ public class Main extends ApplicationAdapter {
             reset();
         }
         if (flowPaddle) {       // follow paddle
-            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
+            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
@@ -259,4 +259,4 @@ public class Main extends ApplicationAdapter {
         settingsUI.dispose();
     }
 }
-
+// Một lỗi của expandpaddle là khi mở rộng paddle lúc gần cạnh tường thì nó sẽ bị tràn ra ngoài Screen

@@ -5,7 +5,7 @@ import entity.EffectItem;
 import entity.Paddle;
 
 public class ExpandEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 3.0f;
+    private static final float EFFECT_DURATION = 5.0f;
     private Paddle paddle;
 
     public ExpandEffect(float x, float y, float dy, Paddle paddle) {

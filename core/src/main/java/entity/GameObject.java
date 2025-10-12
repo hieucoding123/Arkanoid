@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class GameObject {
     protected float x;
     protected float y;
+    protected float scaleWidth;
+    protected float scaleHeight;
     protected float orgWidth;       // original width
     protected float orgHeight;      // original height
     protected float scale;
@@ -21,7 +23,8 @@ public abstract class GameObject {
      * @param texture texture contains image of object
      */
     public GameObject(float x, float y, Texture texture) {
-        this.scale = 1;
+        this.scaleWidth = 1;
+        this.scaleHeight = 1;
         this.x = x;
         this.y = y;
         this.texture = texture;
@@ -34,13 +37,15 @@ public abstract class GameObject {
      * Initialize game object.
      * @param x x coordinate of the object
      * @param y y coordinate of the object
-     * @param scale scale of object
+     * @param scaleWidth scale width of object
+     * @param scaleHeight scale height of object
      * @param texture texture contains image of object
      */
-    public GameObject(float x, float y, float scale, Texture texture) {
+    public GameObject(float x, float y, float scaleWidth, float scaleHeight, Texture texture) {
         this.x = x;
         this.y = y;
-        this.scale = scale;
+        this.scaleWidth = scaleWidth;
+        this.scaleHeight = scaleHeight;
         this.texture = texture;
         this.orgWidth = this.texture.getWidth();
         this.orgHeight = this.texture.getHeight();
@@ -67,8 +72,8 @@ public abstract class GameObject {
      * @param batch game drawing programming
      */
     public void draw(SpriteBatch batch) {
-        float drawWidth = this.orgWidth * this.scale;
-        float drawHeight = this.orgHeight;
+        float drawWidth = this.orgWidth * this.scaleWidth;
+        float drawHeight = this.orgHeight *  this.scaleHeight;
 
         batch.draw(texture, x, y, drawWidth, drawHeight);
     }
@@ -106,19 +111,21 @@ public abstract class GameObject {
     }
 
     public float getWidth() {
-        return this.orgWidth *  this.scale;
+        return this.orgWidth *  this.scaleWidth;
     }
 
     public float getHeight() {
-        return this.orgHeight;
+        return this.orgHeight * this.scaleHeight;
     }
 
     /**
      * set scale of object.
-     * @param scale scale of object
+     * @param scaleWidth scale width of object
+     * @param scaleHeight scale height of object
      */
-    public void setScale(float scale) {
-        this.scale = scale;
+    public void setScale(float scaleWidth, float scaleHeight) {
+        this.scaleWidth = scaleWidth;
+        this.scaleHeight = scaleHeight;
     }
 
     /**
