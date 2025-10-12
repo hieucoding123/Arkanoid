@@ -97,12 +97,17 @@ public class Main extends ApplicationAdapter {
         else if (Math.random() < 0.5) {
             EffectItem.addEffectItem(new ExpandEffect(brick.getX(), brick.getY(), -1, paddle));
         }
-        else  if (Math.random() < 0.5) {
+        else if (Math.random() < 0.5) {
             EffectItem.addEffectItem(new ShieldEffect(brick.getX(), brick.getY(), -1));
+        }
+        else if (Math.random() < 0.5) {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+            }
         }
         else {
             for (Ball ball : balls) {
-                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1, ball));
             }
         }
     }

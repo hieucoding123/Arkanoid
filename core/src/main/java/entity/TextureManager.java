@@ -13,6 +13,7 @@ public class TextureManager {
     public static Texture shieldTexture;
     public static Texture lineTexture;
     public static Texture BALLTexture;
+    public static Texture SlowBallTexture;
     /**
      * Load textures.
      */
@@ -26,6 +27,7 @@ public class TextureManager {
         shieldTexture = new Texture("shield.png");
         lineTexture = new  Texture("yellow_line.png");
         BALLTexture = new Texture("BallEffect.png");
+        SlowBallTexture = new Texture("Slow.png");
     }
 
     /**
@@ -42,5 +44,6 @@ public class TextureManager {
         shieldTexture.dispose();
         lineTexture.dispose();
         BALLTexture.dispose();
+        SlowBallTexture.dispose();
     }
 }

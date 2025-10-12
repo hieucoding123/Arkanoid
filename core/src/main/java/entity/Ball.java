@@ -7,6 +7,7 @@ public class Ball extends MovableObject {
     private float speed;
     private float angle;
     private static long BigEnd = 0;
+    private static long SlowEnd = 0;
     private float originalWidth;
 
     /**
@@ -60,11 +61,20 @@ public class Ball extends MovableObject {
         this.setScale(1.5f, 1.5f);
     }
 
+    public void activateSlow(float duration) {
+        SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
+        this.setSpeed(1.0f);
+    }
+
     public void update() {
         super.update();
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
             this.setScale(1.0f, 1.0f);
             BigEnd = 0;
+        }
+        if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
+            this.setSpeed(2.0f);
+            SlowEnd = 0;
         }
     }
 
