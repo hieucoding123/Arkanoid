@@ -10,6 +10,8 @@ public class TextureManager {
     public static Texture paddleTexture;
     public static Texture threeBallsTextures;
     public static Texture expandpaddleTexture;
+    public static Texture shieldTexture;
+    public static Texture lineTexture;
     /**
      * Load textures.
      */
@@ -20,6 +22,8 @@ public class TextureManager {
         paddleTexture = new Texture("paddle.png");
         threeBallsTextures = new Texture("threeBalls.png");
         expandpaddleTexture = new Texture("expandpaddle.png");
+        shieldTexture = new Texture("shield.png");
+        lineTexture = new  Texture("yellow_line.png");
     }
 
     /**
@@ -33,5 +37,7 @@ public class TextureManager {
         paddleTexture.dispose();
         threeBallsTextures.dispose();
         expandpaddleTexture.dispose();
+        shieldTexture.dispose();
+        lineTexture.dispose();
     }
 }

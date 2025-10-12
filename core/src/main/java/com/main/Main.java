@@ -38,7 +38,7 @@ public class Main extends ApplicationAdapter {
         cnt_threeball = 0;
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 30, TextureManager.paddleTexture);
+        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
@@ -101,6 +101,11 @@ public class Main extends ApplicationAdapter {
                 brick.getX(), brick.getY(), -1, paddle
             ));
         }
+        else  if (Math.random() < 0.5) {
+            EffectItem.addEffectItem(new ShieldEffect(
+                brick.getX(), brick.getY(), -1
+            ));
+        }
     }
 
     public void checkCollision(Ball ball) {
@@ -128,7 +133,12 @@ public class Main extends ApplicationAdapter {
             ball.reverseY();
         }
         if (ball.getY() <= 0) {
-            ball.setDestroyed(true);    // drop out of screen
+            if (ShieldEffect.isShield()) {
+                ShieldEffect.setShield();
+                ball.reverseY();
+            } else {
+                ball.setDestroyed(true); // drop out of screen
+            }
         }
         //collision with bricks
         for (Brick brick : bricksMap.getBricks()) {
@@ -206,6 +216,9 @@ public class Main extends ApplicationAdapter {
         paddle.draw(batch);
         bricksMap.draw(batch);
         EffectItem.drawEffectItems(batch);
+        if (ShieldEffect.isShield()) {
+            batch.draw(TextureManager.lineTexture, padding_left_right, 0, SCREEN_WIDTH - 2 * padding_left_right, 5);
+        }
         batch.end();
     }
     @Override
