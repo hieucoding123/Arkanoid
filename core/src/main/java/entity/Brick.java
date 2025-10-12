@@ -23,4 +23,8 @@ public class Brick extends GameObject {
     public void takeHit() {
         this.hitPoints--;
     }
+
+    public static int gethitPoints(Brick brick) {
+        return brick.hitPoints;
+    }
 }

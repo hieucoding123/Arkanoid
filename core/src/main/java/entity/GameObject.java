@@ -68,7 +68,7 @@ public abstract class GameObject {
      */
     public void draw(SpriteBatch batch) {
         float drawWidth = this.orgWidth * this.scale;
-        float drawHeight = this.orgHeight * this.scale;
+        float drawHeight = this.orgHeight;
 
         batch.draw(texture, x, y, drawWidth, drawHeight);
     }
@@ -110,7 +110,7 @@ public abstract class GameObject {
     }
 
     public float getHeight() {
-        return this.orgHeight * this.scale;
+        return this.orgHeight;
     }
 
     /**

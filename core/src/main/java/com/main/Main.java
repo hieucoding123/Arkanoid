@@ -88,6 +88,21 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+    public void callEffect(Brick  brick) {
+        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
+            cnt_threeball++;
+            EffectItem.addEffectItem(new ThreeBallsEffect(
+                brick.getX(), brick.getY(), -1
+            ));
+
+        }
+        else if (Math.random() < 0.5) {
+            EffectItem.addEffectItem(new ExpandEffect(
+                brick.getX(), brick.getY(), -1, paddle
+            ));
+        }
+    }
+
     public void checkCollision(Ball ball) {
         //collision with paddle
         if (ball.getdy() < 0 &&
@@ -119,12 +134,8 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
-                //Three ball effect
-                if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
-                    cnt_threeball++;
-                    EffectItem.addEffectItem(new ThreeBallsEffect(
-                        brick.getX(), brick.getY(), -1
-                    ));
+                if (Brick.gethitPoints(brick) == 0) {
+                    callEffect(brick);
                 }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;

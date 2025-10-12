@@ -9,6 +9,7 @@ public class TextureManager {
     public static Texture ballTexture;
     public static Texture paddleTexture;
     public static Texture threeBallsTextures;
+    public static Texture expandpaddleTexture;
     /**
      * Load textures.
      */
@@ -18,6 +19,7 @@ public class TextureManager {
         ballTexture = new Texture("ball.png");
         paddleTexture = new Texture("paddle.png");
         threeBallsTextures = new Texture("threeBalls.png");
+        expandpaddleTexture = new Texture("expandpaddle.png");
     }
 
     /**
@@ -30,5 +32,6 @@ public class TextureManager {
         ballTexture.dispose();
         paddleTexture.dispose();
         threeBallsTextures.dispose();
+        expandpaddleTexture.dispose();
     }
 }
