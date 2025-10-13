@@ -114,7 +114,7 @@ public class Main extends ApplicationAdapter {
 
     public void checkCollision(Ball ball) {
         //collision with paddle
-        if (ball.getdy() < 0 &&
+        if (ball.getDy() < 0 &&
             ball.getX() < paddle.getX() + paddle.getWidth() &&
             ball.getX() + ball.getWidth() > paddle.getX() &&
             ball.getY() <= paddle.getY() + paddle.getHeight() &&

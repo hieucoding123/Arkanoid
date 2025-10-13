@@ -23,9 +23,9 @@ public class Ball extends MovableObject {
         setRandomAngle();
     }
 
-    public float getdy() {
-        return this.dy;
-    }
+//    public float getdy() {
+//        return this.dy;
+//    }
 
     private void setRandomAngle() {
         this.angle = (float) (Math.random() * (Math.PI / 2) + (Math.PI / 4));
