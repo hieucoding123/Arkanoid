@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 import static com.badlogic.gdx.Gdx.gl;
 
@@ -32,7 +34,6 @@ public class SettingsUI extends ApplicationAdapter {
         skin = new Skin();
         skin.add("default-font", font);
 
-        // Create a texture for the slider background and knob
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -42,15 +43,19 @@ public class SettingsUI extends ApplicationAdapter {
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
         skin.add("default", labelStyle);
 
-        // Title Label Style
-        Label.LabelStyle titleLabelSyle = new Label.LabelStyle(font, Color.WHITE);
-        titleLabelSyle.font.getData().setScale(2.0f);
-        skin.add("title", titleLabelSyle);
+        // Title Label Style (with new font instance)
+        BitmapFont titleFont = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
+        titleFont.getData().setScale(2.0f);
+        Label.LabelStyle titleLabelStyle = new Label.LabelStyle(titleFont, Color.WHITE);
+        skin.add("title", titleLabelStyle);
 
         // Slider Style
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
-        sliderStyle.knob = skin.newDrawable("white", Color.GRAY);
+        Drawable knobDrawable = skin.newDrawable("white", Color.GRAY);
+        knobDrawable.setMinWidth(20f);
+        knobDrawable.setMinHeight(20f);
+        sliderStyle.knob = knobDrawable;
         skin.add("default-horizontal", sliderStyle);
 
         // TextButton Style
@@ -77,6 +82,17 @@ public class SettingsUI extends ApplicationAdapter {
         table.add(musicSlider).width(300);
         table.row().padTop(20);
 
+        musicSlider.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float stageX = event.getStageX();
+                float stageY = event.getStageY();
+                System.out.println("Slider clicked at Stage coordinates: (" + stageX + ", " + stageY + ")");
+                System.out.println("Slider's bottom-left corner is at: (" + musicSlider.getX() + ", " + musicSlider.getY() + ")");
+                return true;
+            }
+        });
+
         // SFX Slider
         Label sfxLabel = new Label("SFX", skin);
         table.add(sfxLabel).padRight(20);
@@ -92,7 +108,7 @@ public class SettingsUI extends ApplicationAdapter {
                 main.setGameState(GameState.MAIN_MENU);
             }
         });
-        table.add(backButton).colspan(2).width(200).height(80);
+        table.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(50).padRight(50);
     }
 
 
