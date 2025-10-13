@@ -50,4 +50,28 @@ public abstract class MovableObject extends GameObject {
         this.x += dx;
         this.y += dy;
     }
+
+    public float getDy() {
+        return this.dy;
+    }
+
+    public float getDx() {
+        return this.dx;
+    }
+
+    public float getSpeed() {
+        return this.speed;
+    }
+
+    public void setDy(float dy) {
+        this.dy = dy;
+    }
+
+    public void setDx(float dx) {
+        this.dx = dx;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
 }

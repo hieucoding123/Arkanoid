@@ -24,6 +24,7 @@ public class Main extends ApplicationAdapter {
     Paddle paddle;
     Texture bgTex;
     BricksMap bricksMap;
+    ScoreManager scoreMng;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
     public static int cnt_threeball ;
@@ -66,6 +67,8 @@ public class Main extends ApplicationAdapter {
         settingsUI.create();
 
         gameState = GameState.MAIN_MENU;
+
+        scoreMng = new ScoreManager();
     }
 
     public void handleInput() {
@@ -122,7 +125,7 @@ public class Main extends ApplicationAdapter {
 
     public void checkCollision(Ball ball) {
         //collision with paddle
-        if (ball.getdy() < 0 &&
+        if (ball.getDy() < 0 &&
             ball.getX() < paddle.getX() + paddle.getWidth() &&
             ball.getX() + ball.getWidth() > paddle.getX() &&
             ball.getY() <= paddle.getY() + paddle.getHeight() &&
@@ -159,6 +162,7 @@ public class Main extends ApplicationAdapter {
                 if (Ball.isBig()) brick.setHitPoints(0);
                 if (Brick.gethitPoints(brick) == 0) {
                     callEffect(brick);
+                    scoreMng.addScore();
                 }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;
@@ -208,6 +212,7 @@ public class Main extends ApplicationAdapter {
         if (Press_M || bricksMap.getsize() == 0) {
             cnt_threeball = 0;
             Level_game.nextLevel();
+            scoreMng.clearedLevel();
             bricksMap = Level_game.getCurrentLevel();
             reset();
             Press_M = false;
