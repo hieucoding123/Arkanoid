@@ -17,8 +17,8 @@ public abstract class EffectItem extends MovableObject{
         items.add(this);
     }
 
-    public EffectItem(float x, float y, float dy, float scale, Texture texture) {
-        super(x, y, scale, texture);
+    public EffectItem(float x, float y, float dy, float scaleWidth, float scaleHeight, Texture texture) {
+        super(x, y, scaleWidth, scaleHeight, texture);
         this.dx = 0;
         this.dy = dy;           // can only drop down
         this.startTime = System.currentTimeMillis();

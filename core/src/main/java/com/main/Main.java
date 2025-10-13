@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
+import ui.SettingsUI;
 import ui.UI;
 
 import java.util.ArrayList;
@@ -23,8 +24,10 @@ public class Main extends ApplicationAdapter {
     BricksMap bricksMap;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
+    public static int cnt_threeball ;
 
     private UI ui;
+    private SettingsUI settingsUI;
     public static GameState gameState;
 
     @Override
@@ -32,12 +35,13 @@ public class Main extends ApplicationAdapter {
         TextureManager.loadTextures();
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
+        cnt_threeball = 0;
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 70, TextureManager.paddleTexture);
+        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
-        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 10,
+        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
                             paddle.getY() + paddle.getHeight(),
                             TextureManager.ballTexture,
                             2.0f));
@@ -48,6 +52,9 @@ public class Main extends ApplicationAdapter {
 
         ui = new UI(this);
         ui.create();
+
+        settingsUI = new SettingsUI(this);
+        settingsUI.create();
 
         gameState = GameState.MAIN_MENU;
     }
@@ -81,6 +88,30 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+    public void callEffect(Brick  brick) {
+        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
+            cnt_threeball++;
+            EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
+
+        }
+        else if (Math.random() < 0.5) {
+            EffectItem.addEffectItem(new ExpandEffect(brick.getX(), brick.getY(), -1, paddle));
+        }
+        else if (Math.random() < 0.5) {
+            EffectItem.addEffectItem(new ShieldEffect(brick.getX(), brick.getY(), -1));
+        }
+        else if (Math.random() < 0.5) {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+            }
+        }
+        else {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1, ball));
+            }
+        }
+    }
+
     public void checkCollision(Ball ball) {
         //collision with paddle
         if (ball.getDy() < 0 &&
@@ -106,17 +137,21 @@ public class Main extends ApplicationAdapter {
             ball.reverseY();
         }
         if (ball.getY() <= 0) {
-            ball.setDestroyed(true);    // drop out of screen
+            if (ShieldEffect.isShield()) {
+                ShieldEffect.setShield();
+                ball.reverseY();
+            } else {
+                ball.setDestroyed(true); // drop out of screen
+            }
         }
         //collision with bricks
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
-//                if (Math.random() < 0.5) {
-//                    EffectItem.addEffectItem(new ThreeBallsEffect(
-//                        brick.getX(), brick.getY(), -1
-//                    ));
-//                }
+                if (Ball.isBig()) brick.setHitPoints(0);
+                if (Brick.gethitPoints(brick) == 0) {
+                    callEffect(brick);
+                }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;
                 //Bottom and top collision
@@ -139,18 +174,19 @@ public class Main extends ApplicationAdapter {
 
     public void reset() {
         balls.clear();
-        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 10,
+        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture, 3.0f));
-        paddle.setX(SCREEN_WIDTH / 2f - 48);
-        paddle.setY(70);
+        paddle.setX(SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
+        paddle.setY(20);
         flowPaddle = true;
     }
 
     public void update() {
         paddle.update();
-//        EffectItem.updateEffectItems(paddle);
+        EffectItem.updateEffectItems(paddle);
         if (Press_M || bricksMap.getsize() == 0) {
+            cnt_threeball = 0;
             Level_game.nextLevel();
             bricksMap = Level_game.getCurrentLevel();
             reset();
@@ -162,7 +198,7 @@ public class Main extends ApplicationAdapter {
             reset();
         }
         if (flowPaddle) {       // follow paddle
-            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - 10);
+            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
@@ -184,7 +220,10 @@ public class Main extends ApplicationAdapter {
         }
         paddle.draw(batch);
         bricksMap.draw(batch);
-//        EffectItem.drawEffectItems(batch);
+        EffectItem.drawEffectItems(batch);
+        if (ShieldEffect.isShield()) {
+            batch.draw(TextureManager.lineTexture, padding_left_right, 0, SCREEN_WIDTH - 2 * padding_left_right, 5);
+        }
         batch.end();
     }
     @Override
@@ -192,6 +231,9 @@ public class Main extends ApplicationAdapter {
         switch (gameState){
             case MAIN_MENU:
                 ui.render();
+                break;
+            case SETTINGS:
+                settingsUI.render();
                 break;
             case PLAYING:
                 handleInput();
@@ -204,9 +246,11 @@ public class Main extends ApplicationAdapter {
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
         if (gameState == GameState.PLAYING) {
-            Gdx.input.setInputProcessor(null); // Set input processor to null for gameplay
-        } else {
-            Gdx.input.setInputProcessor(ui.getStage()); // Set input processor to the UI stage
+            Gdx.input.setInputProcessor(null);
+        } else if (gameState == GameState.MAIN_MENU) {
+            Gdx.input.setInputProcessor(ui.getStage());
+        } else if (gameState == GameState.SETTINGS) {
+            Gdx.input.setInputProcessor(settingsUI.getStage());
         }
     }
 
@@ -217,6 +261,7 @@ public class Main extends ApplicationAdapter {
         bgTex.dispose();
         TextureManager.dispose();
         ui.dispose();
+        settingsUI.dispose();
     }
 }
-
+// Một lỗi của expandpaddle là khi mở rộng paddle lúc gần cạnh tường thì nó sẽ bị tràn ra ngoài Screen

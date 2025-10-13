@@ -11,8 +11,8 @@ public class Brick extends GameObject {
         this.setDestroyed(this.hitPoints <= 0);
     }
 
-    public Brick(float x, float y, float scale, int hitPoints, Texture texture) {
-        super(x, y, scale, texture);
+    public Brick(float x, float y, float scaleWidth, float scaleHeight, int hitPoints, Texture texture) {
+        super(x, y, scaleWidth, scaleHeight, texture);
         this.hitPoints = hitPoints;
         this.setDestroyed(this.hitPoints <= 0);
     }
@@ -22,5 +22,13 @@ public class Brick extends GameObject {
 
     public void takeHit() {
         this.hitPoints--;
+    }
+
+    public static int gethitPoints(Brick brick) {
+        return brick.hitPoints;
+    }
+
+    public void  setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
     }
 }

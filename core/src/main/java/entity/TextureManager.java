@@ -9,6 +9,11 @@ public class TextureManager {
     public static Texture ballTexture;
     public static Texture paddleTexture;
     public static Texture threeBallsTextures;
+    public static Texture expandpaddleTexture;
+    public static Texture shieldTexture;
+    public static Texture lineTexture;
+    public static Texture BALLTexture;
+    public static Texture SlowBallTexture;
     /**
      * Load textures.
      */
@@ -18,6 +23,11 @@ public class TextureManager {
         ballTexture = new Texture("ball.png");
         paddleTexture = new Texture("paddle.png");
         threeBallsTextures = new Texture("threeBalls.png");
+        expandpaddleTexture = new Texture("expandpaddle.png");
+        shieldTexture = new Texture("shield.png");
+        lineTexture = new  Texture("yellow_line.png");
+        BALLTexture = new Texture("BallEffect.png");
+        SlowBallTexture = new Texture("Slow.png");
     }
 
     /**
@@ -30,5 +40,10 @@ public class TextureManager {
         ballTexture.dispose();
         paddleTexture.dispose();
         threeBallsTextures.dispose();
+        expandpaddleTexture.dispose();
+        shieldTexture.dispose();
+        lineTexture.dispose();
+        BALLTexture.dispose();
+        SlowBallTexture.dispose();
     }
 }
