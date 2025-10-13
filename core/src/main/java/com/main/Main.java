@@ -42,9 +42,9 @@ public class Main extends ApplicationAdapter {
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
-                            paddle.getY() + paddle.getHeight(),
-                            TextureManager.ballTexture,
-                            2.0f));
+            paddle.getY() + paddle.getHeight(),
+            TextureManager.ballTexture,
+            2.0f));
         Level_game.loadLevels();
         bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
@@ -114,7 +114,7 @@ public class Main extends ApplicationAdapter {
 
     public void checkCollision(Ball ball) {
         //collision with paddle
-        if (ball.getDy() < 0 &&
+        if (ball.getdy() < 0 &&
             ball.getX() < paddle.getX() + paddle.getWidth() &&
             ball.getX() + ball.getWidth() > paddle.getX() &&
             ball.getY() <= paddle.getY() + paddle.getHeight() &&
