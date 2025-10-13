@@ -10,6 +10,8 @@ import ui.SettingsUI;
 import ui.UI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -25,6 +27,7 @@ public class Main extends ApplicationAdapter {
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
     public static int cnt_threeball ;
+    Map<String, Integer> ListEffect = new HashMap<String, Integer>();
 
     private UI ui;
     private SettingsUI settingsUI;
@@ -49,6 +52,12 @@ public class Main extends ApplicationAdapter {
         bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
         padding_top = bricksMap.yBeginCoord + bricksMap.brickH;
+
+        //Get List Effect
+        ListEffect.put("BigballEffect", -1);
+        ListEffect.put("ExpandEffect", -1);
+        ListEffect.put("ShieldEffect", -1);
+        ListEffect.put("SlowBallEffect", -1);
 
         ui = new UI(this);
         ui.create();
@@ -92,7 +101,6 @@ public class Main extends ApplicationAdapter {
         if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
             cnt_threeball++;
             EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
-
         }
         else if (Math.random() < 0.5) {
             EffectItem.addEffectItem(new ExpandEffect(brick.getX(), brick.getY(), -1, paddle));
@@ -182,6 +190,18 @@ public class Main extends ApplicationAdapter {
         flowPaddle = true;
     }
 
+    public void updateTimeEffect() {
+        if (Paddle.getTimeExpandEffect() >= 0) ListEffect.put("ExpandEffect", (int) Paddle.getTimeExpandEffect());
+        else ListEffect.put("ExpandEffect", -1);
+        if (Ball.getTimeBigWEffect() >= 0)  ListEffect.put("BigBallEffect", (int) Ball.getTimeBigWEffect());
+        else ListEffect.put("BigBallEffect", -1);
+        if (Ball.getTimeSlowEffect() >= 0)  ListEffect.put("SlowBallEffect", (int) Ball.getTimeSlowEffect());
+        else ListEffect.put("SlowBallEffect", -1);
+        if (ShieldEffect.isShield()) {
+            ListEffect.put("ShieldEffect", 1);
+        } else ListEffect.put("ShieldEffect", -1);
+    }
+
     public void update() {
         paddle.update();
         EffectItem.updateEffectItems(paddle);
@@ -206,6 +226,7 @@ public class Main extends ApplicationAdapter {
             ball.update();
             checkCollision(ball);
         }
+        updateTimeEffect();
         balls.removeIf(Ball::isDestroyed);
     }
 

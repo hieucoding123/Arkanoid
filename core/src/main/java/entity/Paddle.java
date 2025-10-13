@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.main.Main;
 
 public class Paddle extends MovableObject {
-    private long expandEnd = 0;
+    private static long expandEnd = 0;
 
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
@@ -23,6 +23,10 @@ public class Paddle extends MovableObject {
             this.setScale(1.0f, 1.0f);
             this.expandEnd = 0;
         }
+    }
+
+    public static long getTimeExpandEffect() {
+        return expandEnd -  System.currentTimeMillis();
     }
 
     public void moveRight() {

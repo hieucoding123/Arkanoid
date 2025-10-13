@@ -85,4 +85,12 @@ public class Ball extends MovableObject {
             return false;
         }
     }
+
+    public static long getTimeBigWEffect() {
+        return BigEnd - System.currentTimeMillis();
+    }
+
+    public static long getTimeSlowEffect() {
+        return SlowEnd - System.currentTimeMillis();
+    }
 }
