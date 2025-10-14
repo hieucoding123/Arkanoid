@@ -1,5 +1,8 @@
 package com.main;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +18,8 @@ import java.util.Map;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
+    private OrthographicCamera camera;
+    private Viewport viewport;
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
     public static int padding_left_right;
@@ -42,13 +47,18 @@ public class Main extends ApplicationAdapter {
         cnt_threeball = 0;
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
-        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
+        paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture,
             2.0f));
+
+        camera = new OrthographicCamera();
+        // Tạo viewport với kích thước ảo là 800x1000 và liên kết nó với camera
+        viewport = new FitViewport(800, 1000, camera);
+
         Level_game.loadLevels();
         bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
@@ -72,12 +82,26 @@ public class Main extends ApplicationAdapter {
     }
 
     public void handleInput() {
+        //Press to end(For test)
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.X)) {
+            System.exit(0);
+        }
         //Press M to change map (it for test)
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.M)) {
             Press_M = true;
         }
+        //Resize screen
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
+            if (Gdx.graphics.isFullscreen()) {
+                // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)
+                Gdx.graphics.setWindowedMode(800, 1000);
+            } else {
+                // Nếu đang ở cửa sổ, chuyển sang toàn màn hình
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+        }
         //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))) {
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))) {
             paddle.moveLeft();
         }
         //Press RIGHT
@@ -190,7 +214,7 @@ public class Main extends ApplicationAdapter {
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture, 3.0f));
         paddle.setX(SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
-        paddle.setY(20);
+        paddle.setY(50);
         flowPaddle = true;
     }
 
@@ -235,8 +259,15 @@ public class Main extends ApplicationAdapter {
         balls.removeIf(Ball::isDestroyed);
     }
 
+    @Override
+    public void resize(int width, int height) {
+        // Cập nhật viewport với kích thước cửa sổ mới
+        viewport.update(width, height, true);
+    }
+
     public void draw() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+//        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        ScreenUtils.clear(0, 0, 0, 1);
         batch.begin();
 
         // Rendering
@@ -264,6 +295,9 @@ public class Main extends ApplicationAdapter {
             case PLAYING:
                 handleInput();
                 update();
+                viewport.apply();
+                ScreenUtils.clear(0, 0, 0, 1);
+                batch.setProjectionMatrix(camera.combined);
                 draw();
                 break;
         }

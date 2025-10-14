@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BricksMap {
-    public final int rows = 12;
-    public final int cols = 8;
-    public final int xBeginCoord = 24;
-    public final int yBeginCoord = 656;
+    public final int rows = 15;
+    public final int cols = 10;
+    public final int xBeginCoord = 25;
+    public final int yBeginCoord = 820;
     public final int brickW = 75;
     public final int brickH = 35;
 
