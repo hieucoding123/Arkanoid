@@ -4,10 +4,16 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Brick extends GameObject {
     private int hitPoints;
+    private boolean explosion;
+    private int row;
+    private int col;
 
-    public Brick(float x, float y, int hitPoints, Texture texture) {
+    public Brick(float x, float y, int hitPoints, boolean explosion, int row, int col, Texture texture) {
         super(x, y, texture);
         this.hitPoints = hitPoints;
+        this.explosion = explosion;
+        this.row = row;
+        this.col = col;
         this.setDestroyed(this.hitPoints <= 0);
     }
 
@@ -30,5 +36,17 @@ public class Brick extends GameObject {
 
     public void  setHitPoints(int hitPoints) {
         this.hitPoints = hitPoints;
+    }
+
+    public boolean getExplosion() {
+        return explosion;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

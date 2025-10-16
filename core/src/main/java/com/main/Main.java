@@ -188,6 +188,9 @@ public class Main extends ApplicationAdapter {
                 if (Brick.gethitPoints(brick) == 0) {
                     callEffect(brick);
                     scoreMng.addScore();
+                    if (brick.getExplosion()) {
+                        bricksMap.bfs_explosion(brick.getRow(), brick.getCol(), scoreMng);
+                    }
                 }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                 float ballCenterY = ball.getY() + ball.getHeight() / 2f;
