@@ -1,11 +1,13 @@
-package entity;
+package entity.Effect;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import entity.MovableObject;
+import entity.Paddle;
 
 import java.util.ArrayList;
 
-public abstract class EffectItem extends MovableObject{
+public abstract class EffectItem extends MovableObject {
     private static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
     protected long startTime;
 

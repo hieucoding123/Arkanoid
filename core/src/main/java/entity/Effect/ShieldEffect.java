@@ -1,4 +1,6 @@
-package entity;
+package entity.Effect;
+
+import entity.TextureManager;
 
 public class ShieldEffect extends EffectItem {
     private static boolean shield = false;

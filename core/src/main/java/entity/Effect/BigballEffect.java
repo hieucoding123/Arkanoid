@@ -1,6 +1,9 @@
-package entity;
+package entity.Effect;
 
-public class BigballEffect extends EffectItem{
+import entity.Ball;
+import entity.TextureManager;
+
+public class BigballEffect extends EffectItem {
     private static final float EFFECT_DURATION = 10.0f;
     private Ball ball;
 

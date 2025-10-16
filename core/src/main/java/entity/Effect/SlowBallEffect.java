@@ -1,4 +1,7 @@
-package entity;
+package entity.Effect;
+
+import entity.Ball;
+import entity.TextureManager;
 
 public class SlowBallEffect extends EffectItem {
     private static final float EFFECT_DURATION = 20.0f;

@@ -1,7 +1,8 @@
-package entity;
+package entity.Effect;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.main.Main;
+import entity.Ball;
+import entity.TextureManager;
 
 public class ThreeBallsEffect extends EffectItem {
 

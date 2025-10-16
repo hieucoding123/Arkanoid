@@ -1,8 +1,7 @@
-package entity;
+package entity.Effect;
 
-import com.badlogic.gdx.graphics.Texture;
-import entity.EffectItem;
 import entity.Paddle;
+import entity.TextureManager;
 
 public class ExpandEffect extends EffectItem {
     private static final float EFFECT_DURATION = 5.0f;
