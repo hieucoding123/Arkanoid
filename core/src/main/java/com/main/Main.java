@@ -34,7 +34,6 @@ public class Main extends ApplicationAdapter {
     GameScreen gameScreen;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
-    public static int cnt_threeball ;
     Map<String, Integer> ListEffect = new HashMap<String, Integer>();
 
     private UI ui;
@@ -46,7 +45,6 @@ public class Main extends ApplicationAdapter {
         TextureManager.loadTextures();
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
-        cnt_threeball = 0;
         batch = new SpriteBatch();
         bgTex = new Texture("background.png");
         paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
@@ -82,7 +80,6 @@ public class Main extends ApplicationAdapter {
 
         scoreMng = new ScoreManager();
         gameScreen = new GameScreen(scoreMng);
-        gameScreen.create();
     }
 
     public void handleInput() {
@@ -132,8 +129,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public void callEffect(Brick  brick) {
-        if (Math.random() < 0.5 && cnt_threeball <= 0 ) {
-            cnt_threeball++;
+        if (Math.random() < 0.5) {
             EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
         }
         else if (Math.random() < 0.5) {
@@ -246,7 +242,6 @@ public class Main extends ApplicationAdapter {
         paddle.update();
         EffectItem.updateEffectItems(paddle);
         if (Press_M || bricksMap.getsize() == 0) {
-            cnt_threeball = 0;
             Level_game.nextLevel();
             scoreMng.clearedLevel();
             bricksMap = Level_game.getCurrentLevel();
