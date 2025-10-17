@@ -25,7 +25,6 @@ public class Brick extends GameObject {
     }
 
     public void update() {
-        this.setDestroyed(this.hitPoints <= 0);
         if (isExploding) {
             explosionTimer -= 0.0167;
             if (explosionTimer <= 0) {

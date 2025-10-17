@@ -17,7 +17,7 @@ import java.util.Map;
 public class BricksMap {
     public final int rows = 15;
     public final int cols = 8;
-    public final int xBeginCoord = 90;
+    public static final int xBeginCoord = 90;
     public final int yBeginCoord = 810;
     public final int brickW = 78;
     public final int brickH = 36;

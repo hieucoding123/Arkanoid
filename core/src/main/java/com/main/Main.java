@@ -195,6 +195,8 @@ public class Main extends ApplicationAdapter {
                     scoreMng.addScore();
                     if (brick.getExplosion()) {
                         brick.startExplosion();
+                    } else {
+                        brick.setDestroyed(true);
                     }
                 }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
