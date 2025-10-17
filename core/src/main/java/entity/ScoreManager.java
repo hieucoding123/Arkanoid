@@ -20,12 +20,12 @@ public class ScoreManager {
     }
 
     public void addScore() {
-        score += 100;
+        score += 100.0d;
         System.out.println(score);
     }
 
     public void clearedLevel() {
-        score += 1000;
+        score += 1000.0d;
         System.out.println(score);
     }
 }

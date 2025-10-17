@@ -10,6 +10,9 @@ dependencies {
   api "com.github.tommyettinger:libgdx-utils-box2d:$utilsBox2dVersion"
   api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
   api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+  implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

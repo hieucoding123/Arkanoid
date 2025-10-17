@@ -31,6 +31,7 @@ public class Main extends ApplicationAdapter {
     Texture bgTex;
     BricksMap bricksMap;
     ScoreManager scoreMng;
+    GameScreen gameScreen;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
     public static int cnt_threeball ;
@@ -80,6 +81,7 @@ public class Main extends ApplicationAdapter {
         gameState = GameState.MAIN_MENU;
 
         scoreMng = new ScoreManager();
+        gameScreen = new GameScreen(scoreMng);
     }
 
     public void handleInput() {
@@ -285,6 +287,7 @@ public class Main extends ApplicationAdapter {
         if (ShieldEffect.isShield()) {
             batch.draw(TextureManager.lineTexture, padding_left_right, 0, SCREEN_WIDTH - 2 * padding_left_right, 5);
         }
+        gameScreen.draw(batch);
         batch.end();
     }
     @Override
@@ -326,6 +329,7 @@ public class Main extends ApplicationAdapter {
         TextureManager.dispose();
         ui.dispose();
         settingsUI.dispose();
+        gameScreen.dispose();
     }
 }
 // Một lỗi của expandpaddle là khi mở rộng paddle lúc gần cạnh tường thì nó sẽ bị tràn ra ngoài Screen
