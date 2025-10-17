@@ -93,6 +93,9 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.M)) {
             Press_M = true;
         }
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.R)) {
+            System.out.println("Cursor position: (" + Gdx.input.getX() + ", " + (Gdx.graphics.getHeight() - Gdx.input.getY()) + ")");
+        }
         //Resize screen
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
             if (Gdx.graphics.isFullscreen()) {

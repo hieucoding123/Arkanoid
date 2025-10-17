@@ -11,7 +11,7 @@ public class Level_game {
             levels.clear();
         }
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 1; i++) {
             String mapPath = "/maps/map" + i + ".txt";
             levels.add(new BricksMap(mapPath));
         }
