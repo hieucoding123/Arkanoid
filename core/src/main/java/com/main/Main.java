@@ -131,7 +131,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public void callEffect(Brick  brick) {
-        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
+        if (Math.random() < 0.5 && cnt_threeball <= 0 ) {
             cnt_threeball++;
             EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
         }

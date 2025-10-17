@@ -44,7 +44,7 @@ public class BricksMap {
                     int color = Integer.parseInt(line[j]);
 
                     Random rand = new Random();
-                    boolean explosion_check = (rand.nextInt(2) == 0) ? true : false;
+                    boolean explosion_check = (rand.nextInt(1) == 0) ? true : false;
 
                     if (color == 1) {
                         bricks.add(new Brick(
