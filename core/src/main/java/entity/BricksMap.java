@@ -70,51 +70,43 @@ public class BricksMap {
             e.printStackTrace();
         }
     }
-
-    public void bfs_explosion(int startRow, int startCol, ScoreManager score)  {
-        Map<Integer, Brick> save_brick = new HashMap<>();
-        Brick[][] grid = new Brick[rows][cols];
-        for (Brick b : bricks) {
-            if (b != null && !b.isDestroyed()) {
-                save_brick.put(b.getRow() * cols + b.getCol(), b);
-                grid[b.getRow()][b.getCol()] = b;
-            }
-        }
-        Queue<Brick> q = new LinkedList<>();
-        boolean [][] visited = new boolean[rows][cols];
-
-        Brick start = grid[startRow][startCol];
-        save_brick.get(startRow * cols + startCol).setHitPoints(0);
-        q.add(start);
-        visited[startRow][startCol] = true;
-
-        while (!q.isEmpty()) {
-            Brick cur = q.poll();
-            cur.setHitPoints(0);
-
-            for (int i = 0; i < r.length; i++) {
-                int new_row = cur.getRow() + r[i];
-                int new_col = cur.getCol() + c[i];
-
-                if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
-                    Brick new_brick = grid[new_row][new_col];
-                    if (new_brick != null && !visited[new_row][new_col] && new_brick.getExplosion()) {
-                        save_brick.get(new_row * cols + new_col).setHitPoints(0);
-                        visited[new_row][new_col] = true;
-                        q.add(new_brick);
-                        score.addScore();
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Update bricks(remove, add, ...).
      */
-    public void update() {
+    public void update(ScoreManager score) {
+        Map<Integer, Brick> save_brick = new HashMap<>();
+        ArrayList<Brick> bricksNeighbors = new ArrayList<>();
+
         for (Brick brick : bricks) {
             brick.update();
+            if (brick.shouldExplode()) {
+                bricksNeighbors.add(brick);
+            }
+        }
+        if (!bricksNeighbors.isEmpty()) {
+            Brick[][] grid = new Brick[rows][cols];
+            for (Brick b : bricks) {
+                if (b != null && !b.isDestroyed()) {
+                    save_brick.put(b.getRow() * cols + b.getCol(), b);
+                    grid[b.getRow()][b.getCol()] = b;
+                }
+            }
+            for (Brick cur : bricksNeighbors) {
+                cur.setexplosiontimes();
+                for (int i = 0; i < r.length; i++) {
+                    int new_row = cur.getRow() + r[i];
+                    int new_col = cur.getCol() + c[i];
+
+                    if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
+                        Brick new_brick = grid[new_row][new_col];
+                        if (new_brick != null && new_brick.getExplosion()) {
+                            save_brick.get(new_row * cols + new_col).setHitPoints(0);
+                            new_brick.startExplosion();
+                            score.addScore();
+                        }
+                    }
+                }
+            }
         }
         bricks.removeIf(Brick::isDestroyed);
     }

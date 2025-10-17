@@ -126,26 +126,26 @@ public class Main extends ApplicationAdapter {
     }
 
     public void callEffect(Brick  brick) {
-//        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
-//            cnt_threeball++;
-//            EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
-//        }
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
+            cnt_threeball++;
+            EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
+        }
+        else if (Math.random() < 0.5) {
             EffectItem.addEffectItem(new ExpandEffect(brick.getX(), brick.getY(), -1, paddle));
         }
-//        else if (Math.random() < 0.5) {
-//            EffectItem.addEffectItem(new ShieldEffect(brick.getX(), brick.getY(), -1));
-//        }
-//        else if (Math.random() < 0.5) {
-//            for (Ball ball : balls) {
-//                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
-//            }
-//        }
-//        else {
-//            for (Ball ball : balls) {
-//                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1, ball));
-//            }
-//        }
+        else if (Math.random() < 0.5) {
+            EffectItem.addEffectItem(new ShieldEffect(brick.getX(), brick.getY(), -1));
+        }
+        else if (Math.random() < 0.5) {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+            }
+        }
+        else {
+            for (Ball ball : balls) {
+                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1, ball));
+            }
+        }
     }
 
     public void checkCollision(Ball ball) {
@@ -189,7 +189,7 @@ public class Main extends ApplicationAdapter {
                     callEffect(brick);
                     scoreMng.addScore();
                     if (brick.getExplosion()) {
-                        bricksMap.bfs_explosion(brick.getRow(), brick.getCol(), scoreMng);
+                        brick.startExplosion();
                     }
                 }
                 float ballCenterX = ball.getX() + ball.getWidth() / 2f;
@@ -245,7 +245,7 @@ public class Main extends ApplicationAdapter {
             reset();
             Press_M = false;
         }
-        bricksMap.update();
+        bricksMap.update(scoreMng);
         // Create and reset ball if no ball exists
         if (balls.isEmpty()) {
             reset();
@@ -328,3 +328,4 @@ public class Main extends ApplicationAdapter {
         settingsUI.dispose();
     }
 }
+

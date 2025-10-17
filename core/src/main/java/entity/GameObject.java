@@ -14,7 +14,7 @@ public abstract class GameObject {
     protected float scale;
     private boolean isDestroyed;
 
-    private final Texture texture;
+    protected Texture texture;
 
     /**
      * Initialize game object.
