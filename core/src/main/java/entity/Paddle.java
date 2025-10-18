@@ -17,8 +17,8 @@ public class Paddle extends MovableObject {
         this.setScale(1.5f, 1.0f);
     }
 
-    public void update() {
-        super.update();
+    public void update(float delta) {
+        super.update(delta);
         if (expandEnd > 0 && System.currentTimeMillis() > expandEnd) {
             this.setScale(1.0f, 1.0f);
             this.expandEnd = 0;

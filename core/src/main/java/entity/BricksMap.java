@@ -44,7 +44,7 @@ public class BricksMap {
                     int color = Integer.parseInt(line[j]);
 
                     Random rand = new Random();
-                    boolean explosion_check = (rand.nextInt(1) == 0) ? true : false;
+                    boolean explosion_check = (rand.nextInt(2) == 0) ? true : false;
 
                     if (color == 1) {
                         bricks.add(new Brick(
@@ -73,12 +73,12 @@ public class BricksMap {
     /**
      * Update bricks(remove, add, ...).
      */
-    public void update(ScoreManager score) {
+    public void update(float delta, ScoreManager score) {
         Map<Integer, Brick> save_brick = new HashMap<>();
         ArrayList<Brick> bricksNeighbors = new ArrayList<>();
 
         for (Brick brick : bricks) {
-            brick.update();
+            brick.update(delta);
             if (brick.shouldExplode()) {
                 bricksNeighbors.add(brick);
             }

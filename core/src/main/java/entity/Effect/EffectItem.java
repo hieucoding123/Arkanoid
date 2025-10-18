@@ -14,15 +14,7 @@ public abstract class EffectItem extends MovableObject {
     public EffectItem(float x, float y, float dy, Texture texture) {
         super(x, y, texture);
         this.dx = 0;            // can only drop down
-        this.dy = dy;
-        this.startTime = System.currentTimeMillis();
-        items.add(this);
-    }
-
-    public EffectItem(float x, float y, float dy, float scaleWidth, float scaleHeight, Texture texture) {
-        super(x, y, scaleWidth, scaleHeight, texture);
-        this.dx = 0;
-        this.dy = dy;           // can only drop down
+        this.dy = dy * 60f;
         this.startTime = System.currentTimeMillis();
         items.add(this);
     }
@@ -43,9 +35,9 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Update all effect items and check collision with paddle.
      */
-    public static void updateEffectItems(Paddle paddle) {
+    public static void updateEffectItems(Paddle paddle, float delta) {
         for (EffectItem effectItem : items) {
-            effectItem.update();
+            effectItem.update(delta);
             if (paddle.checkCollision(effectItem)) {
                 effectItem.applyEffect();
             }

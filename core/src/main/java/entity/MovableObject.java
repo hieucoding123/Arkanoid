@@ -46,9 +46,9 @@ public abstract class MovableObject extends GameObject {
     /**
      * Update on object.
      */
-    public void update() {
-        this.x += dx;
-        this.y += dy;
+    public void update(float delta) {
+        this.x += dx * delta;
+        this.y += dy * delta;
     }
 
     public float getDy() {

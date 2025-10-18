@@ -19,7 +19,7 @@ public class Ball extends MovableObject {
      */
     public Ball(float x, float y, Texture texture, float speed) {
         super(x, y, texture);
-        this.speed = speed;
+        this.speed = speed * 60f;
         setRandomAngle();
     }
 
@@ -63,17 +63,17 @@ public class Ball extends MovableObject {
 
     public void activateSlow(float duration) {
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
-        this.setSpeed(1.0f);
+        this.setSpeed(180f);
     }
 
-    public void update() {
-        super.update();
+    public void update(float delta) {
+        super.update(delta);
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
             this.setScale(1.0f, 1.0f);
             BigEnd = 0;
         }
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
-            this.setSpeed(2.0f);
+            this.setSpeed(300f);
             SlowEnd = 0;
         }
     }

@@ -32,10 +32,10 @@ public class ThreeBallsEffect extends EffectItem {
         float ballX = originalBall.getX();
         float ballY = originalBall.getY();
 
-        Ball ball1 = new Ball(ballX, ballY, TextureManager.ballTexture, 2.0f);
+        Ball ball1 = new Ball(ballX, ballY, TextureManager.ballTexture, 5.0f);
         ball1.updateVelocity();
 
-        Ball ball2 = new Ball(ballX, ballY, TextureManager.ballTexture, 2.0f);
+        Ball ball2 = new Ball(ballX, ballY, TextureManager.ballTexture, 5.0f);
         ball2.updateVelocity();
 
         Main.balls.add(ball1);

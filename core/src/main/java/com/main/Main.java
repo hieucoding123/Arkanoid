@@ -53,7 +53,7 @@ public class Main extends ApplicationAdapter {
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture,
-            2.0f));
+            5.0f));
 
         camera = new OrthographicCamera();
         // Tạo viewport với kích thước ảo là 800x1000 và liên kết nó với camera
@@ -129,7 +129,7 @@ public class Main extends ApplicationAdapter {
     }
 
     public void callEffect(Brick  brick) {
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.1) {
             EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
         }
         else if (Math.random() < 0.5) {
@@ -220,7 +220,7 @@ public class Main extends ApplicationAdapter {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
-            TextureManager.ballTexture, 3.0f));
+            TextureManager.ballTexture, 5.0f));
         paddle.setX(SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
         flowPaddle = true;
@@ -238,9 +238,9 @@ public class Main extends ApplicationAdapter {
         } else ListEffect.put("ShieldEffect", -1);
     }
 
-    public void update() {
-        paddle.update();
-        EffectItem.updateEffectItems(paddle);
+    public void update(float delta) {
+        paddle.update(delta);
+        EffectItem.updateEffectItems(paddle, delta);
         if (Press_M || bricksMap.getsize() == 0) {
             Level_game.nextLevel();
             scoreMng.clearedLevel();
@@ -248,7 +248,7 @@ public class Main extends ApplicationAdapter {
             reset();
             Press_M = false;
         }
-        bricksMap.update(scoreMng);
+        bricksMap.update(delta, scoreMng);
         // Create and reset ball if no ball exists
         if (balls.isEmpty()) {
             reset();
@@ -259,7 +259,7 @@ public class Main extends ApplicationAdapter {
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
         for (Ball ball : balls) {
-            ball.update();
+            ball.update(delta);
             checkCollision(ball);
         }
         updateTimeEffect();
@@ -294,6 +294,7 @@ public class Main extends ApplicationAdapter {
     }
     @Override
     public void render() {
+        float delta = Gdx.graphics.getDeltaTime();
         switch (gameState){
             case MAIN_MENU:
                 ui.render();
@@ -303,7 +304,7 @@ public class Main extends ApplicationAdapter {
                 break;
             case PLAYING:
                 handleInput();
-                update();
+                update(delta);
                 viewport.apply();
                 ScreenUtils.clear(0, 0, 0, 1);
                 batch.setProjectionMatrix(camera.combined);

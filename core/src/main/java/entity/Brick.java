@@ -24,9 +24,9 @@ public class Brick extends GameObject {
         this.explosionTexture = TextureManager.ExplosionTexture;
     }
 
-    public void update() {
+    public void update(float delta) {
         if (isExploding) {
-            explosionTimer -= 0.0167;
+            explosionTimer -= delta;
             if (explosionTimer <= 0) {
                 setDestroyed(true);
             }
