@@ -270,6 +270,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         // Cập nhật viewport với kích thước cửa sổ mới
+        ui.resize(width, height);
         viewport.update(width, height, true);
         gameScreen.resize(width, height);
     }
@@ -290,7 +291,7 @@ public class Main extends ApplicationAdapter {
         if (ShieldEffect.isShield()) {
             batch.draw(TextureManager.lineTexture, padding_left_right, 0, SCREEN_WIDTH - 2 * padding_left_right, 5);
         }
-//        gameScreen.draw(batch);
+        //gameScreen.draw(batch);
         batch.end();
     }
     @Override
