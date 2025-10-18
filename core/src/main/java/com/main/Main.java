@@ -270,6 +270,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         // Cập nhật viewport với kích thước cửa sổ mới
+        ui.resize(width, height);
         viewport.update(width, height, true);
         gameScreen.resize(width, height);
     }

@@ -15,7 +15,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+//import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 
@@ -37,7 +38,7 @@ public class UI extends ApplicationAdapter {
     public void create() {
         bg = new Texture(Gdx.files.internal("ui/bg.png"));
         skin = new Skin(Gdx.files.internal("ui/buttontest.json"));
-        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
         font.getData().setScale(1);
