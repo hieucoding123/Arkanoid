@@ -80,6 +80,7 @@ public class Main extends ApplicationAdapter {
 
         scoreMng = new ScoreManager();
         gameScreen = new GameScreen(scoreMng);
+        gameScreen.create();
     }
 
     public void handleInput() {
