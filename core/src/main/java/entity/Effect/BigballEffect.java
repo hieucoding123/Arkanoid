@@ -13,9 +13,20 @@ public class BigballEffect extends EffectItem {
 
     @Override
     public void applyEffect(Main main) {
-        // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
         for (Ball ball : main.balls) {
             ball.activateBig(EFFECT_DURATION);
+            //Left wall
+            if (ball.getX() < Main.padding_left_right) {
+                ball.setX(Main.padding_left_right);
+            }
+            //Right wall
+            if (ball.getX() + ball.getWidth() > Main.SCREEN_WIDTH - Main.padding_left_right) {
+                ball.setX(Main.SCREEN_WIDTH - Main.padding_left_right - ball.getWidth());
+            }
+            //Top wall
+            if (ball.getY() + ball.getHeight() > Main.padding_top) {
+                ball.setY(Main.padding_top - ball.getHeight());
+            }
         }
         this.setDestroyed(true);
     }
