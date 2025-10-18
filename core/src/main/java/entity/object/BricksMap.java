@@ -1,15 +1,14 @@
-package entity;
+package entity.object;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
+import entity.TextureManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;

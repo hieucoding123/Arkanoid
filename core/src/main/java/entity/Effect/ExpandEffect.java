@@ -1,8 +1,9 @@
 package entity.Effect;
 
-import entity.Paddle;
+import com.main.Main;
+import entity.object.Paddle;
 import entity.TextureManager;
-import entity.BricksMap;
+import entity.object.BricksMap;
 import com.badlogic.gdx.Gdx;
 
 public class ExpandEffect extends EffectItem {
@@ -13,8 +14,8 @@ public class ExpandEffect extends EffectItem {
         super(x, y, dy, TextureManager.expandpaddleTexture);
         this.paddle = paddle;
     }
-
-    public void applyEffect() {
+    @Override
+    public void applyEffect(Main main) {
         if (paddle != null) {
             paddle.activateExpand(EFFECT_DURATION);
             float screenWidth = Gdx.graphics.getWidth();

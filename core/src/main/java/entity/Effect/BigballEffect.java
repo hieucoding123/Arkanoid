@@ -1,18 +1,22 @@
 package entity.Effect;
 
-import entity.Ball;
+import com.main.Main;
+import entity.object.Ball;
 import entity.TextureManager;
 
 public class BigballEffect extends EffectItem {
     private static final float EFFECT_DURATION = 10.0f;
-    private Ball ball;
 
-    public BigballEffect(float x, float y, float dy, Ball ball) {
+    public BigballEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.BALLTexture);
-        this.ball = ball;
     }
-    public void applyEffect() {
-        ball.activateBig(EFFECT_DURATION);
+
+    @Override
+    public void applyEffect(Main main) {
+        // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
+        for (Ball ball : main.balls) {
+            ball.activateBig(EFFECT_DURATION);
+        }
         this.setDestroyed(true);
     }
 }

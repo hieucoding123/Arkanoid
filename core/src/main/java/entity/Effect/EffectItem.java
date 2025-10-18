@@ -3,26 +3,22 @@ package entity.Effect;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.MovableObject;
-import entity.Paddle;
-
+import entity.object.Paddle;
+import com.main.Main;
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
     private static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
-    protected long startTime;
 
     public EffectItem(float x, float y, float dy, Texture texture) {
         super(x, y, texture);
-        this.dx = 0;            // can only drop down
-        this.dy = dy * 60f;
-        this.startTime = System.currentTimeMillis();
+        this.setVelocity(0, dy * 60f);
         items.add(this);
     }
-
     /**
      * Apply effect.
      */
-    public abstract void applyEffect();
+    public abstract void applyEffect(Main main);
 
     /**
      * Add a new effect item to list.
@@ -35,14 +31,14 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Update all effect items and check collision with paddle.
      */
-    public static void updateEffectItems(Paddle paddle, float delta) {
-        for (EffectItem effectItem : items) {
+    public static void updateEffectItems(Paddle paddle, Main main, float delta) {
+        for (EffectItem effectItem : new ArrayList<>(items)) {
             effectItem.update(delta);
             if (paddle.checkCollision(effectItem)) {
-                effectItem.applyEffect();
+                effectItem.applyEffect(main);
             }
         }
-        EffectItem.items.removeIf(EffectItem::isDestroyed);
+        items.removeIf(EffectItem::isDestroyed);
     }
 
     /**
@@ -50,8 +46,8 @@ public abstract class EffectItem extends MovableObject {
      * @param batch SpriteBatch object
      */
     public static void drawEffectItems(SpriteBatch batch) {
-        for (EffectItem effectItem : items) {
-            effectItem.draw(batch);
+        for (EffectItem item : items) {
+            item.draw(batch);
         }
     }
 }

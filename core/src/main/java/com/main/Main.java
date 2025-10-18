@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
 import entity.Effect.*;
+import entity.object.Ball;
+import entity.object.Brick;
+import entity.object.BricksMap;
+import entity.object.Paddle;
 import ui.SettingsUI;
 import ui.UI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -34,7 +36,6 @@ public class Main extends ApplicationAdapter {
     GameScreen gameScreen;
     boolean flowPaddle = true;      // Ball follow paddle
     boolean Press_M = false;
-    Map<String, Integer> ListEffect = new HashMap<String, Integer>();
 
     private UI ui;
     private SettingsUI settingsUI;
@@ -63,12 +64,6 @@ public class Main extends ApplicationAdapter {
         bricksMap = Level_game.getCurrentLevel();
         padding_left_right = bricksMap.xBeginCoord;
         padding_top = bricksMap.yBeginCoord + bricksMap.brickH;
-
-        //Get List Effect
-        ListEffect.put("BigballEffect", -1);
-        ListEffect.put("ExpandEffect", -1);
-        ListEffect.put("ShieldEffect", -1);
-        ListEffect.put("SlowBallEffect", -1);
 
         ui = new UI(this);
         ui.create();
@@ -129,7 +124,7 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    public void callEffect(Brick  brick) {
+    public void callEffect(Brick brick) {
         if (Math.random() < 0.1) {
             EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));
         }
@@ -141,32 +136,34 @@ public class Main extends ApplicationAdapter {
         }
         else if (Math.random() < 0.5) {
             for (Ball ball : balls) {
-                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1, ball));
+                EffectItem.addEffectItem(new BigballEffect(brick.getX(), brick.getY(), -1));
             }
         }
         else {
             for (Ball ball : balls) {
-                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1, ball));
+                EffectItem.addEffectItem(new SlowBallEffect(brick.getX(), brick.getY(), -1));
             }
         }
     }
 
     public void checkCollision(Ball ball) {
-        //collision with paddle
+        //Collision with paddle
         if (ball.getDy() < 0 &&
             ball.getX() < paddle.getX() + paddle.getWidth() &&
             ball.getX() + ball.getWidth() > paddle.getX() &&
             ball.getY() <= paddle.getY() + paddle.getHeight() &&
-            ball.getY() >= paddle.getY()) {
+            ball.getY() + ball.getHeight() >= paddle.getY()) {
+
             float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
             float ballCenter = ball.getX() + ball.getWidth() / 2f;
-            float hitPosition = ballCenter - paddleCenter;
+            float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
 
-            float normalizedPosition = hitPosition / (paddle.getWidth() / 2f);
-            float maxBounceAngle = (float)Math.PI / 3f;
-            float newAngle = (float)Math.PI / 2f - (normalizedPosition * maxBounceAngle);
+            impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
+            float newAngle = (float)(Math.PI / 2 - impactPoint * (float)Math.PI / 3f);
 
             ball.setAngle(newAngle);
+            ball.updateVelocity();
+            ball.setY(paddle.getY() + paddle.getHeight());
         }
         //collision with the wall
         else if (ball.getX() <= padding_left_right || ball.getX() + ball.getWidth() >= SCREEN_WIDTH - padding_left_right) {
@@ -187,7 +184,7 @@ public class Main extends ApplicationAdapter {
         for (Brick brick : bricksMap.getBricks()) {
             if (ball.checkCollision(brick)) {
                 brick.takeHit();
-                if (Ball.isBig()) brick.setHitPoints(0);
+                if (ball.isBig()) brick.setHitPoints(0);
                 if (Brick.gethitPoints(brick) == 0) {
                     callEffect(brick);
                     scoreMng.addScore();
@@ -227,21 +224,9 @@ public class Main extends ApplicationAdapter {
         flowPaddle = true;
     }
 
-    public void updateTimeEffect() {
-        if (Paddle.getTimeExpandEffect() >= 0) ListEffect.put("ExpandEffect", (int) Paddle.getTimeExpandEffect());
-        else ListEffect.put("ExpandEffect", -1);
-        if (Ball.getTimeBigWEffect() >= 0)  ListEffect.put("BigBallEffect", (int) Ball.getTimeBigWEffect());
-        else ListEffect.put("BigBallEffect", -1);
-        if (Ball.getTimeSlowEffect() >= 0)  ListEffect.put("SlowBallEffect", (int) Ball.getTimeSlowEffect());
-        else ListEffect.put("SlowBallEffect", -1);
-        if (ShieldEffect.isShield()) {
-            ListEffect.put("ShieldEffect", 1);
-        } else ListEffect.put("ShieldEffect", -1);
-    }
-
     public void update(float delta) {
         paddle.update(delta);
-        EffectItem.updateEffectItems(paddle, delta);
+        EffectItem.updateEffectItems(paddle, this, delta);
         if (Press_M || bricksMap.getsize() == 0) {
             Level_game.nextLevel();
             scoreMng.clearedLevel();
@@ -259,11 +244,10 @@ public class Main extends ApplicationAdapter {
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
-        for (Ball ball : balls) {
+        for (Ball ball : new ArrayList<>(balls)) {
             ball.update(delta);
             checkCollision(ball);
         }
-        updateTimeEffect();
         balls.removeIf(Ball::isDestroyed);
     }
 

@@ -1,7 +1,9 @@
-package entity;
+package entity.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import entity.GameObject;
+import entity.TextureManager;
 
 public class Brick extends GameObject {
     private int hitPoints;

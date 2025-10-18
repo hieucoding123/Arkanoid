@@ -1,14 +1,14 @@
-package entity;
+package entity.object;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
+import entity.MovableObject;
 
 public class Ball extends MovableObject {
     private float speed;
     private float angle;
-    private static long BigEnd = 0;
-    private static long SlowEnd = 0;
-    private float originalWidth;
+    private long BigEnd = 0;
+    private long SlowEnd = 0;
+    private float originalspeed;
 
     /**
      * Constructor for ball.
@@ -19,13 +19,27 @@ public class Ball extends MovableObject {
      */
     public Ball(float x, float y, Texture texture, float speed) {
         super(x, y, texture);
+        this.originalspeed = speed;
         this.speed = speed * 60f;
         setRandomAngle();
     }
 
-//    public float getdy() {
-//        return this.dy;
-//    }
+    public Ball(Ball other) {
+        super(other.x, other.y, other.texture);
+        this.originalspeed = other.originalspeed;
+        this.speed = other.speed;
+        this.angle = other.angle - 0.3f;
+        this.scaleWidth = other.scaleWidth;
+        this.scaleHeight = other.scaleHeight;
+
+
+        if (other.BigEnd > System.currentTimeMillis()) {
+            this.BigEnd = other.BigEnd;
+        }
+        if (other.SlowEnd > System.currentTimeMillis()) {
+            this.SlowEnd = other.SlowEnd;
+        }
+    }
 
     private void setRandomAngle() {
         this.angle = (float) (Math.random() * (Math.PI / 2) + (Math.PI / 4));
@@ -51,6 +65,8 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    public float getAngle() { return this.angle; }
+
     public void setSpeed(float newSpeed) {
         this.speed = newSpeed;
         updateVelocity();
@@ -73,24 +89,16 @@ public class Ball extends MovableObject {
             BigEnd = 0;
         }
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
-            this.setSpeed(300f);
+            this.setSpeed(originalspeed * 60f);
             SlowEnd = 0;
         }
     }
 
-    public static boolean isBig() {
+    public boolean isBig() {
         if (System.currentTimeMillis() <= BigEnd) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public static long getTimeBigWEffect() {
-        return BigEnd - System.currentTimeMillis();
-    }
-
-    public static long getTimeSlowEffect() {
-        return SlowEnd - System.currentTimeMillis();
     }
 }

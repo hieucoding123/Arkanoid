@@ -1,8 +1,8 @@
-package entity;
+package entity.object;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Main;
+import entity.MovableObject;
 
 public class Paddle extends MovableObject {
     private static long expandEnd = 0;
