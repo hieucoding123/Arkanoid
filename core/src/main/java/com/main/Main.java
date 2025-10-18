@@ -82,6 +82,7 @@ public class Main extends ApplicationAdapter {
 
         scoreMng = new ScoreManager();
         gameScreen = new GameScreen(scoreMng);
+        gameScreen.create();
     }
 
     public void handleInput() {
@@ -274,6 +275,7 @@ public class Main extends ApplicationAdapter {
     public void resize(int width, int height) {
         // Cập nhật viewport với kích thước cửa sổ mới
         viewport.update(width, height, true);
+        gameScreen.resize(width, height);
     }
 
     public void draw() {
@@ -292,7 +294,7 @@ public class Main extends ApplicationAdapter {
         if (ShieldEffect.isShield()) {
             batch.draw(TextureManager.lineTexture, padding_left_right, 0, SCREEN_WIDTH - 2 * padding_left_right, 5);
         }
-        gameScreen.draw(batch);
+//        gameScreen.draw(batch);
         batch.end();
     }
     @Override
@@ -311,6 +313,7 @@ public class Main extends ApplicationAdapter {
                 ScreenUtils.clear(0, 0, 0, 1);
                 batch.setProjectionMatrix(camera.combined);
                 draw();
+                gameScreen.render();
                 break;
         }
     }
