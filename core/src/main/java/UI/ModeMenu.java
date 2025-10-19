@@ -1,4 +1,4 @@
-package entity.dashboard;
+package ui;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -21,15 +21,14 @@ import com.main.Main;
 
 import static com.badlogic.gdx.Gdx.gl;
 
-public class MainMenu extends ApplicationAdapter {
+public class ModeMenu extends ApplicationAdapter {
     private Stage stage;
     private Skin skin;
     private Main main;
     private Texture bg;
     private BitmapFont font;
-    private ModeMenu modeMenu;
 
-    public MainMenu(Main main) {
+    public ModeMenu(Main main) {
         this.main = main;
     }
 
@@ -69,58 +68,33 @@ public class MainMenu extends ApplicationAdapter {
         //Button Table
         Table buttonTable = new Table();
 
-        //Play Button
-        Button playButton = new Button(skin);
-        playButton.addListener(new ClickListener() {
+        //InfiniteMode Button
+        Button infiModeButton = new Button(skin);
+        infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.SELECT_MODE);
+                main.setGameState(GameState.INFI_MODE);
             }
         });
 
-        //Setting Button
-        Label settingsLabel = new Label("Settings", MenuText);
-        settingsLabel.setFontScale(0.8f);
-        settingsLabel.addListener(new ClickListener() {
+        // LevelsMode Button
+        Button levelsModeButton = new Button(skin);
+        levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.SETTINGS);
-                System.out.println("Settings Clicked");
-            }
-        });
-
-        //Leaderboard Button
-        Label LBLabel = new Label("Leaderboard", LBStyle);
-        LBLabel.setFontScale(0.8f);
-        LBLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("LB Clicked");
-            }
-        });
-
-        //Quit Button
-        Label quitLabel = new Label("Quit", MenuText);
-        quitLabel.setFontScale(0.8f);
-        quitLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+                main.setGameState(GameState.LEVELS_MODE);
             }
         });
 
         //Arrange the Buttons in the buttonTable
-        buttonTable.add(playButton).width(120).height(50).padBottom(40);
+        buttonTable.add(infiModeButton).width(120).height(50).padBottom(40);
         buttonTable.row();
-        buttonTable.add(LBLabel).padBottom(50);
+
+        buttonTable.add(levelsModeButton).width(120).height(50).padBottom(40);
         buttonTable.row();
-        buttonTable.add(settingsLabel).padBottom(50);
-        buttonTable.row();
-        buttonTable.add(quitLabel).padBottom(50);
 
         //Add to main table
         mainTable.add(buttonTable);
-
     }
 
     @Override
