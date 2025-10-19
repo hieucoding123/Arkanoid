@@ -99,4 +99,14 @@ public class InfiniteMode extends GameMode {
         for (Ball ball : balls) ball.draw(sp);
         paddle.draw(sp);
     }
+
+    public void reset() {
+        balls.clear();
+        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
+            paddle.getY() + paddle.getHeight(),
+            TextureManager.ballTexture, 3.0f));
+        paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
+        paddle.setY(50);
+        flowPaddle = true;
+    }
 }
