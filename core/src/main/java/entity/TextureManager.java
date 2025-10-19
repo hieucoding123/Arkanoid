@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 
 public class TextureManager {
+    public static Texture bgTexture;
     public static ArrayList<Texture> brickTextures = new ArrayList<>();
     public static Texture ballTexture;
     public static Texture paddleTexture;
@@ -19,6 +20,7 @@ public class TextureManager {
      * Load textures.
      */
     public static void loadTextures() {
+        bgTexture = new Texture("background.png");
         brickTextures.add(new Texture("brick_blue.png"));
         brickTextures.add(new Texture("brick_cyan.png"));
         ballTexture = new Texture("ball.png");
@@ -36,6 +38,7 @@ public class TextureManager {
      * Free texture memory.
      */
     public static void dispose() {
+        bgTexture.dispose();
         for (Texture texture: brickTextures) {
             texture.dispose();
         }

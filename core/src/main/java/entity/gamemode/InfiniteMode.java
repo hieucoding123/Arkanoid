@@ -1,7 +1,10 @@
 package entity.gamemode;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.BricksMap;
+import entity.TextureManager;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,7 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
+        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         currentMap.draw(sp);
     }
 }
