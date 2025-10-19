@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import entity.BricksMap;
 import entity.TextureManager;
 import ui.MainMenu;
 import ui.ModeMenu;
@@ -18,6 +19,8 @@ public class Game {
     private SpriteBatch spriteBatch;
     public static int SCREEN_WIDTH;
     public static int SCREEN_HEIGHT;
+    public static int padding_left_right;
+    public static int padding_top;
     private SettingsUI settingsUI;
     private MainMenu mainMenu;
     private ModeMenu modeMenu;
@@ -39,6 +42,9 @@ public class Game {
         spriteBatch = new SpriteBatch();
         SCREEN_WIDTH = Gdx.graphics.getWidth();
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
+        padding_left_right = BricksMap.xBeginCoord;
+        padding_top = BricksMap.yBeginCoord + BricksMap.brickH;
+
         TextureManager.loadTextures();
 
         mainMenu = new MainMenu(this.main);
@@ -74,6 +80,21 @@ public class Game {
                 break;
         }
         spriteBatch.end();
+    }
+
+    public void handleInput() {
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
+            if (Gdx.graphics.isFullscreen()) {
+                // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)
+                Gdx.graphics.setWindowedMode(800, 1000);
+            } else {
+                // Nếu đang ở cửa sổ, chuyển sang toàn màn hình
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+        }
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            setGameState(GameState.MAIN_MENU);
+        }
     }
 
     public void update() {
