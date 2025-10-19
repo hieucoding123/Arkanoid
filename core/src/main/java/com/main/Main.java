@@ -1,22 +1,11 @@
 package com.main;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
-import entity.Effect.*;
-import entity.dashboard.MainMenu;
-import entity.dashboard.ModeMenu;
-import ui.SettingsUI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
