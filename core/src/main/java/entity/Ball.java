@@ -2,6 +2,8 @@ package entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
+import com.main.Game;
+import entity.Effect.ShieldEffect;
 
 public class Ball extends MovableObject {
     private float speed;
@@ -68,6 +70,22 @@ public class Ball extends MovableObject {
 
     public void update() {
         super.update();
+        if (this.getX() <= Game.padding_left_right
+            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right)
+        {
+            this.reverseX();
+        }
+        if (this.getY() + this.getHeight() >= Game.padding_top) {
+            this.reverseY();
+        }
+        if (this.getY() <= 0) {
+            if (ShieldEffect.isShield()) {
+                ShieldEffect.setShield();
+                this.reverseY();
+            } else {
+                this.setDestroyed(true); // drop out of screen
+            }
+        }
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
             this.setScale(1.0f, 1.0f);
             BigEnd = 0;
@@ -77,6 +95,61 @@ public class Ball extends MovableObject {
             SlowEnd = 0;
         }
     }
+
+    public void collisionWith(Paddle paddle) {
+        if (this.getDy() < 0 &&
+            this.getX() < paddle.getX() + paddle.getWidth() &&
+            this.getX() + this.getWidth() > paddle.getX() &&
+            this.getY() <= paddle.getY() + paddle.getHeight() &&
+            this.getY() + this.getHeight() >= paddle.getY()) {
+
+            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+            float ballCenter = this.getX() + this.getWidth() / 2f;
+            float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
+
+            impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
+            float newAngle = (float)(Math.PI / 2 - impactPoint * (float)Math.PI / 3f);
+
+            this.setAngle(newAngle);
+            this.updateVelocity();
+            this.setY(paddle.getY() + paddle.getHeight());
+        }
+    }
+
+    public void collisionWith(BricksMap bricksMap) {
+        for (Brick brick : bricksMap.getBricks()) {
+            if (this.checkCollision(brick)) {
+                brick.takeHit();
+                if (this.isBig()) brick.setHitPoints(0);
+//                if (Brick.gethitPoints(brick) == 0) {
+////                    callEffect(brick);
+////                    scoreMng.addScore();
+//                    if (brick.getExplosion()) {
+////                        brick.startExplosion();
+//                    } else {
+//                        brick.setDestroyed(true);
+//                    }
+//                }
+                float ballCenterX = this.getX() + this.getWidth() / 2f;
+                float ballCenterY = this.getY() + this.getHeight() / 2f;
+                //Bottom and top collision
+                if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+                    this.reverseY();
+                }
+                //Left and right collision
+                else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
+                    this.reverseX();
+                }
+                //Corner collision
+                else {
+                    this.reverseY();
+                    this.reverseX();
+                }
+                break;
+            }
+        }
+    }
+
 
     public static boolean isBig() {
         if (System.currentTimeMillis() <= BigEnd) {
