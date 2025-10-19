@@ -61,14 +61,35 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp) {
-        this.handleInput();
+        this.handleInput(
+            com.badlogic.gdx.Input.Keys.LEFT,
+            com.badlogic.gdx.Input.Keys.RIGHT,
+            com.badlogic.gdx.Input.Keys.UP,
+            com.badlogic.gdx.Input.Keys.DOWN
+        );
         this.update();
         this.draw(sp);
     }
 
     @Override
-    public void handleInput() {
-
+    public void handleInput(int LEFT, int RIGHT, int UP, int DOWN) {
+        //Press LEFT
+        if (Gdx.input.isKeyPressed(LEFT)) {
+            paddle.moveLeft();
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(RIGHT)) {
+            paddle.moveRight();
+        }
+        //IF NO PRESS KEEP IT STAND
+        else {
+            paddle.setVelocity(0, 0);
+        }
+        // New state of the ball
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            flowPaddle = false;             // pulled ball up
+            balls.get(0).updateVelocity();
+        }
     }
 
     @Override

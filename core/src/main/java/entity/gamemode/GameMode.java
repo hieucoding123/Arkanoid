@@ -18,6 +18,6 @@ public abstract class GameMode {
     public abstract void create();
     public abstract void update();
     public abstract void render(SpriteBatch sp);
-    public abstract void handleInput();
+    public abstract void handleInput(int left, int right, int up, int down);
     public abstract void draw(SpriteBatch sp);
 }
