@@ -47,7 +47,7 @@ public class Main extends ApplicationAdapter {
         SCREEN_WIDTH = Gdx.graphics.getWidth(); //Add screen size
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
-        bgTex = new Texture("background.png");
+        bgTex = new Texture("images/background.png");
         paddle = new Paddle(SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
 
         balls = new ArrayList<>();
