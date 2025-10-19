@@ -2,7 +2,7 @@ package entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.main.Main;
+import com.main.Game;
 
 public class Paddle extends MovableObject {
     private static long expandEnd = 0;
@@ -31,15 +31,15 @@ public class Paddle extends MovableObject {
 
     public void moveRight() {
         x += speed;
-        if (x + getWidth() > Main.SCREEN_WIDTH - Main.padding_left_right) {
-            x = Main.SCREEN_WIDTH - Main.padding_left_right - getWidth();
+        if (x + getWidth() > Game.SCREEN_WIDTH - Game.padding_left_right) {
+            x = Game.SCREEN_WIDTH - Game.padding_left_right - getWidth();
         }
     }
 
     public void moveLeft() {
         x -= speed;
-        if (x < Main.padding_left_right) {
-            x = Main.padding_left_right;
+        if (x < Game.padding_left_right) {
+            x = Game.padding_left_right;
         }
     }
 }

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Main extends ApplicationAdapter {
 //    private OrthographicCamera camera;
 //    private Viewport viewport;
-    public static int SCREEN_WIDTH;
-    public static int SCREEN_HEIGHT;
-    public static int padding_left_right;
+//    public static int SCREEN_WIDTH;
+//    public static int SCREEN_HEIGHT;
+//    public static int padding_left_right;
 //    private SpriteBatch batch;
 //    public static int padding_top;
     public static ArrayList<Ball> balls;
@@ -96,15 +96,7 @@ public class Main extends ApplicationAdapter {
 //            Press_M = true;
 //        }
         //Resize screen
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
-            if (Gdx.graphics.isFullscreen()) {
-                // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)
-                Gdx.graphics.setWindowedMode(800, 1000);
-            } else {
-                // Nếu đang ở cửa sổ, chuyển sang toàn màn hình
-                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-            }
-        }
+        game.handleInput();
 //        //Press LEFT
 //        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT) || (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))) {
 //            paddle.moveLeft();
@@ -124,9 +116,9 @@ public class Main extends ApplicationAdapter {
 //            balls.get(0).updateVelocity();
 //        }
 //
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
-            setGameState(GameState.MAIN_MENU);
-        }
+//        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+//            setGameState(GameState.MAIN_MENU);
+//        }
     }
 
     public void callEffect(Brick  brick) {

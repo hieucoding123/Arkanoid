@@ -17,10 +17,10 @@ import java.util.Map;
 public class BricksMap {
     public final int rows = 15;
     public final int cols = 10;
-    public final int xBeginCoord = 25;
-    public final int yBeginCoord = 820;
-    public final int brickW = 75;
-    public final int brickH = 35;
+    public static final int xBeginCoord = 25;
+    public static final int yBeginCoord = 820;
+    public static final int brickW = 75;
+    public static final int brickH = 35;
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
 //    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
