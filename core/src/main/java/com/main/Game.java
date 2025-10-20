@@ -41,6 +41,9 @@ public class Game {
         this.init();
     }
 
+    /**
+     * Initialize game components.
+     */
     public void init() {
         scoreManager = new ScoreManager();
         gameScreen = new GameScreen(scoreManager);
@@ -70,11 +73,19 @@ public class Game {
         this.setGameState(GameState.MAIN_MENU);
     }
 
+    /**
+     * Resize game screen.
+     * @param width new width
+     * @param height new height
+     */
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         gameScreen.resize(width, height);
     }
 
+    /**
+     * Render game components.
+     */
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
         spriteBatch.begin();
@@ -95,6 +106,9 @@ public class Game {
         spriteBatch.end();
     }
 
+    /**
+     * Handle input.
+     */
     public void handleInput() {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
             if (Gdx.graphics.isFullscreen()) {
@@ -110,6 +124,9 @@ public class Game {
         }
     }
 
+    /**
+     * Update game components.
+     */
     public void update() {
         switch (gameState) {
             case INFI_MODE:
@@ -120,6 +137,9 @@ public class Game {
         }
     }
 
+    /**
+     * Dispose game resources.
+     */
     public void dispose() {
         spriteBatch.dispose();
         mainMenu.dispose();
@@ -129,6 +149,10 @@ public class Game {
         TextureManager.dispose();
     }
 
+    /**
+     * Set game state.
+     * @param newGameState game state
+     */
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
         switch (gameState) {
@@ -146,6 +170,9 @@ public class Game {
         }
     }
 
+    /**
+     * Go through menu and play game.
+     */
     private void playGame() {
         viewport.apply();
         switch (gameState) {
