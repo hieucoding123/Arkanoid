@@ -48,7 +48,7 @@ public class InfiniteMode extends GameMode {
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture,
-            5.0f)
+            10.0f)
         );
     }
 
@@ -58,7 +58,10 @@ public class InfiniteMode extends GameMode {
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, delta);
 
-        if (balls.isEmpty()) this.reset();
+        if (balls.isEmpty()) {
+            scoreManager.deduction();
+            this.reset();
+        }
 
         if (flowPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
@@ -79,7 +82,7 @@ public class InfiniteMode extends GameMode {
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }
-                        scoreManager.addScore();
+                        scoreManager.comboScore(brick);
                         if (brick.getExplosion()) {
                             brick.startExplosion();
                         } else {
