@@ -9,8 +9,8 @@ import entity.BricksMap;
 import entity.TextureManager;
 import ui.MainMenu;
 import ui.ModeMenu;
-import entity.gamemode.GameMode;
-import entity.gamemode.InfiniteMode;
+import com.main.gamemode.GameMode;
+import com.main.gamemode.InfiniteMode;
 import ui.SettingsUI;
 
 public class Game {

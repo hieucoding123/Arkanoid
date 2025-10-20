@@ -1,7 +1,6 @@
-package entity.gamemode;
+package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.Ball;
@@ -61,24 +60,19 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp) {
-        this.handleInput(
-            com.badlogic.gdx.Input.Keys.LEFT,
-            com.badlogic.gdx.Input.Keys.RIGHT,
-            com.badlogic.gdx.Input.Keys.UP,
-            com.badlogic.gdx.Input.Keys.DOWN
-        );
+        this.handleInput();
         this.update();
         this.draw(sp);
     }
 
     @Override
-    public void handleInput(int LEFT, int RIGHT, int UP, int DOWN) {
+    public void handleInput() {
         //Press LEFT
-        if (Gdx.input.isKeyPressed(LEFT)) {
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
             paddle.moveLeft();
         }
         //Press RIGHT
-        else if (Gdx.input.isKeyPressed(RIGHT)) {
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
             paddle.moveRight();
         }
         //IF NO PRESS KEEP IT STAND
