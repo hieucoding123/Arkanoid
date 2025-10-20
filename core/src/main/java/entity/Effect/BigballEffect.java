@@ -1,6 +1,7 @@
 package entity.Effect;
 
-import com.main.Main;
+import com.main.Game;
+import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
 
@@ -12,20 +13,20 @@ public class BigballEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(Main main) {
-        for (Ball ball : main.balls) {
+    public void applyEffect(GameMode gameMode) {
+        for (Ball ball : gameMode.balls) {
             ball.activateBig(EFFECT_DURATION);
             //Left wall
-            if (ball.getX() < Main.padding_left_right) {
-                ball.setX(Main.padding_left_right);
+            if (ball.getX() < Game.padding_left_right) {
+                ball.setX(Game.padding_left_right);
             }
             //Right wall
-            if (ball.getX() + ball.getWidth() > Main.SCREEN_WIDTH - Main.padding_left_right) {
-                ball.setX(Main.SCREEN_WIDTH - Main.padding_left_right - ball.getWidth());
+            if (ball.getX() + ball.getWidth() > Game.SCREEN_WIDTH - Game.padding_left_right) {
+                ball.setX(Game.SCREEN_WIDTH - Game.padding_left_right - ball.getWidth());
             }
             //Top wall
-            if (ball.getY() + ball.getHeight() > Main.padding_top) {
-                ball.setY(Main.padding_top - ball.getHeight());
+            if (ball.getY() + ball.getHeight() > Game.padding_top) {
+                ball.setY(Game.padding_top - ball.getHeight());
             }
         }
         this.setDestroyed(true);

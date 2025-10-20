@@ -1,17 +1,17 @@
-package entity;
+package entity.object;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
 import com.main.Game;
 import entity.Effect.ShieldEffect;
 import entity.MovableObject;
+import entity.ScoreManager;
 
 public class Ball extends MovableObject {
     private float speed;
     private float angle;
     private static long BigEnd = 0;
     private static long SlowEnd = 0;
-    private float originalWidth;
+    private float originalspeed;
 
     /**
      * Constructor for ball.
@@ -22,13 +22,26 @@ public class Ball extends MovableObject {
      */
     public Ball(float x, float y, Texture texture, float speed) {
         super(x, y, texture);
-        this.speed = speed;
+        this.originalspeed = speed;
+        this.speed = speed * 60f;
         setRandomAngle();
     }
 
-//    public float getdy() {
-//        return this.dy;
-//    }
+    public Ball(Ball other) {
+        super(other.x, other.y, other.texture);
+        this.originalspeed = other.originalspeed;
+        this.speed = other.speed;
+        this.angle = other.angle - 0.3f;
+        this.scaleWidth = other.scaleWidth;
+        this.scaleHeight = other.scaleHeight;
+
+        if (other.BigEnd > System.currentTimeMillis()) {
+            this.BigEnd = other.BigEnd;
+        }
+        if (other.SlowEnd > System.currentTimeMillis()) {
+            this.SlowEnd = other.SlowEnd;
+        }
+    }
 
     private void setRandomAngle() {
         this.angle = (float) (Math.random() * (Math.PI / 2) + (Math.PI / 4));
@@ -66,14 +79,13 @@ public class Ball extends MovableObject {
 
     public void activateSlow(float duration) {
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
-        this.setSpeed(1.0f);
+        this.setSpeed(180f);
     }
 
-    public void update() {
-        super.update();
+    public void update(float delta) {
+        super.update(delta);
         if (this.getX() <= Game.padding_left_right
-            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right)
-        {
+            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
             this.reverseX();
         }
         if (this.getY() + this.getHeight() >= Game.padding_top) {
@@ -87,8 +99,6 @@ public class Ball extends MovableObject {
                 this.setDestroyed(true); // drop out of screen
             }
         }
-    public void update(float delta) {
-        super.update(delta);
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
             this.setScale(1.0f, 1.0f);
             BigEnd = 0;
@@ -119,20 +129,20 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void collisionWith(BricksMap bricksMap) {
+    public void collisionWith(BricksMap bricksMap, ScoreManager scoreMng) {
         for (Brick brick : bricksMap.getBricks()) {
             if (this.checkCollision(brick)) {
                 brick.takeHit();
                 if (this.isBig()) brick.setHitPoints(0);
-//                if (Brick.gethitPoints(brick) == 0) {
-////                    callEffect(brick);
-////                    scoreMng.addScore();
-//                    if (brick.getExplosion()) {
-////                        brick.startExplosion();
-//                    } else {
-//                        brick.setDestroyed(true);
-//                    }
-//                }
+                if (Brick.gethitPoints(brick) == 0) {
+//                    callEffect(brick);
+                    scoreMng.addScore();
+                    if (brick.getExplosion()) {
+                        brick.startExplosion();
+                    } else {
+                        brick.setDestroyed(true);
+                    }
+                }
                 float ballCenterX = this.getX() + this.getWidth() / 2f;
                 float ballCenterY = this.getY() + this.getHeight() / 2f;
                 //Bottom and top collision
@@ -153,8 +163,6 @@ public class Ball extends MovableObject {
         }
     }
 
-
-    public static boolean isBig() {
     public boolean isBig() {
         if (System.currentTimeMillis() <= BigEnd) {
             return true;
@@ -170,4 +178,6 @@ public class Ball extends MovableObject {
     public static long getTimeSlowEffect() {
         return SlowEnd - System.currentTimeMillis();
     }
+
+    public float getAngle() { return this.angle; }
 }

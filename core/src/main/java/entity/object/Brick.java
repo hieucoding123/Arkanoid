@@ -2,6 +2,7 @@ package entity.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import entity.Effect.*;
 import entity.GameObject;
 import entity.TextureManager;
 
@@ -87,6 +88,4 @@ public class Brick extends GameObject {
     public void setexplosiontimes() {
         this.explosiontimes = true;
     }
-
-
 }

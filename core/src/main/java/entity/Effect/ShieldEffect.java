@@ -1,7 +1,7 @@
 package entity.Effect;
 
+import com.main.gamemode.GameMode;
 import entity.TextureManager;
-import com.main.Main;
 
 public class ShieldEffect extends EffectItem {
     private static boolean shield = false;
@@ -10,7 +10,7 @@ public class ShieldEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(Main main) {
+    public void applyEffect(GameMode gameMode) {
         shield = true;
         this.setDestroyed(true);
     }

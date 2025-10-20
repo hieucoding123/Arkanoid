@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
 import entity.*;
+import entity.object.Ball;
+import entity.object.Brick;
 
 import java.util.ArrayList;
 
@@ -16,7 +18,6 @@ public class Main extends ApplicationAdapter {
 //    public static int padding_left_right;
 //    private SpriteBatch batch;
 //    public static int padding_top;
-    public static ArrayList<Ball> balls;
 //    Paddle paddle;
 //    Texture bgTex;
 //    BricksMap bricksMap;
@@ -121,7 +122,7 @@ public class Main extends ApplicationAdapter {
 //        }
     }
 
-    public void callEffect(Brick  brick) {
+    public void callEffect(Brick brick) {
 //        if (Math.random() < 0.1 && cnt_threeball <= 0 && bricksMap.getsize() <= 48) {
 //            cnt_threeball++;
 //            EffectItem.addEffectItem(new ThreeBallsEffect(brick.getX(), brick.getY(), -1));

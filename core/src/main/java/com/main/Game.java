@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import entity.BricksMap;
+import entity.Effect.EffectItem;
+import entity.GameScreen;
+import entity.ScoreManager;
+import entity.object.BricksMap;
 import entity.TextureManager;
 import ui.MainMenu;
 import ui.ModeMenu;
@@ -24,6 +27,9 @@ public class Game {
     private SettingsUI settingsUI;
     private MainMenu mainMenu;
     private ModeMenu modeMenu;
+    float delta;
+    private ScoreManager scoreManager;
+    private GameScreen gameScreen;
 
     GameMode gameMode;
 
@@ -36,6 +42,10 @@ public class Game {
     }
 
     public void init() {
+        scoreManager = new ScoreManager();
+        gameScreen = new GameScreen(scoreManager);
+        gameScreen.create();
+
         camera = new OrthographicCamera();
         // Tạo viewport với kích thước ảo là 800x1000 và liên kết nó với camera
         viewport = new FitViewport(800, 1000, camera);
@@ -44,6 +54,7 @@ public class Game {
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
         padding_left_right = BricksMap.xBeginCoord;
         padding_top = BricksMap.yBeginCoord + BricksMap.brickH;
+        delta = Gdx.graphics.getDeltaTime();
 
         TextureManager.loadTextures();
 
@@ -61,9 +72,11 @@ public class Game {
 
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+        gameScreen.resize(width, height);
     }
 
     public void render() {
+        this.delta = Gdx.graphics.getDeltaTime();
         spriteBatch.begin();
         switch (gameState){
             case MAIN_MENU:
@@ -76,7 +89,7 @@ public class Game {
                 modeMenu.render();
                 break;
             case INFI_MODE:
-                gameMode.render(spriteBatch);
+                gameMode.render(spriteBatch, this.delta);
                 break;
         }
         spriteBatch.end();
@@ -100,7 +113,7 @@ public class Game {
     public void update() {
         switch (gameState) {
             case INFI_MODE:
-                gameMode.update();
+                gameMode.update(this.delta);
                 break;
             case LEVELS_MODE:
                 break;
@@ -112,6 +125,7 @@ public class Game {
         mainMenu.dispose();
         modeMenu.dispose();
         settingsUI.dispose();
+        gameScreen.dispose();
         TextureManager.dispose();
     }
 
@@ -136,7 +150,7 @@ public class Game {
         viewport.apply();
         switch (gameState) {
             case INFI_MODE:
-                gameMode = new InfiniteMode();
+                gameMode = new InfiniteMode(scoreManager, gameScreen);
                 break;
             case LEVELS_MODE:
                 break;

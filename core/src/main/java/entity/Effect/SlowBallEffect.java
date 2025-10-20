@@ -1,6 +1,6 @@
 package entity.Effect;
 
-import com.main.Main;
+import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
 
@@ -12,9 +12,9 @@ public class SlowBallEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(Main main) {
+    public void applyEffect(GameMode gameMode) {
         // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
-        for (Ball ball : main.balls) {
+        for (Ball ball : gameMode.balls) {
             ball.activateSlow(EFFECT_DURATION);
         }
         this.setDestroyed(true);

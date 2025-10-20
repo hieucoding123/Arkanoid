@@ -2,9 +2,10 @@ package entity.Effect;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Paddle;
-import com.main.Main;
+import com.main.Game;
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
@@ -18,7 +19,7 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Apply effect.
      */
-    public abstract void applyEffect(Main main);
+    public abstract void applyEffect(GameMode gameMode);
 
     /**
      * Add a new effect item to list.
@@ -31,11 +32,11 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Update all effect items and check collision with paddle.
      */
-    public static void updateEffectItems(Paddle paddle, Main main, float delta) {
+    public static void updateEffectItems(Paddle paddle, GameMode gameMode, float delta) {
         for (EffectItem effectItem : new ArrayList<>(items)) {
             effectItem.update(delta);
             if (paddle.checkCollision(effectItem)) {
-                effectItem.applyEffect(main);
+                effectItem.applyEffect(gameMode);
             }
         }
         items.removeIf(EffectItem::isDestroyed);

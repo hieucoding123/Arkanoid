@@ -1,8 +1,7 @@
-package entity;
-
-import com.badlogic.gdx.Gdx;
+package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
+import entity.MovableObject;
 
 public class Paddle extends MovableObject {
     private static long expandEnd = 0;
@@ -17,8 +16,8 @@ public class Paddle extends MovableObject {
         this.setScale(1.5f, 1.0f);
     }
 
-    public void update() {
-        super.update();
+    public void update(float delta) {
+        super.update(delta);
         if (expandEnd > 0 && System.currentTimeMillis() > expandEnd) {
             this.setScale(1.0f, 1.0f);
             this.expandEnd = 0;

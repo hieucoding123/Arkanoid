@@ -26,6 +26,5 @@ public class ScoreManager {
 
     public void clearedLevel() {
         score += 1000.0d;
-        System.out.println(score);
     }
 }
