@@ -1,25 +1,26 @@
-package entity.object;
+package entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
-import entity.TextureManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BricksMap {
     public final int rows = 15;
-    public final int cols = 8;
-    public static final int xBeginCoord = 90;
-    public final int yBeginCoord = 810;
-    public final int brickW = 78;
-    public final int brickH = 36;
+    public final int cols = 10;
+    public static final int xBeginCoord = 25;
+    public static final int yBeginCoord = 820;
+    public static final int brickW = 75;
+    public static final int brickH = 35;
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
 //    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
@@ -69,43 +70,51 @@ public class BricksMap {
             e.printStackTrace();
         }
     }
-    /**
-     * Update bricks(remove, add, ...).
-     */
-    public void update(float delta, ScoreManager score) {
-        Map<Integer, Brick> save_brick = new HashMap<>();
-        ArrayList<Brick> bricksNeighbors = new ArrayList<>();
 
-        for (Brick brick : bricks) {
-            brick.update(delta);
-            if (brick.shouldExplode()) {
-                bricksNeighbors.add(brick);
+    public void bfs_explosion(int startRow, int startCol, ScoreManager score)  {
+        Map<Integer, Brick> save_brick = new HashMap<>();
+        Brick[][] grid = new Brick[rows][cols];
+        for (Brick b : bricks) {
+            if (b != null && !b.isDestroyed()) {
+                save_brick.put(b.getRow() * cols + b.getCol(), b);
+                grid[b.getRow()][b.getCol()] = b;
             }
         }
-        if (!bricksNeighbors.isEmpty()) {
-            Brick[][] grid = new Brick[rows][cols];
-            for (Brick b : bricks) {
-                if (b != null && !b.isDestroyed()) {
-                    save_brick.put(b.getRow() * cols + b.getCol(), b);
-                    grid[b.getRow()][b.getCol()] = b;
-                }
-            }
-            for (Brick cur : bricksNeighbors) {
-                cur.setexplosiontimes();
-                for (int i = 0; i < r.length; i++) {
-                    int new_row = cur.getRow() + r[i];
-                    int new_col = cur.getCol() + c[i];
+        Queue<Brick> q = new LinkedList<>();
+        boolean [][] visited = new boolean[rows][cols];
 
-                    if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
-                        Brick new_brick = grid[new_row][new_col];
-                        if (new_brick != null && new_brick.getExplosion()) {
-                            save_brick.get(new_row * cols + new_col).setHitPoints(0);
-                            new_brick.startExplosion();
-                            score.addScore();
-                        }
+        Brick start = grid[startRow][startCol];
+        save_brick.get(startRow * cols + startCol).setHitPoints(0);
+        q.add(start);
+        visited[startRow][startCol] = true;
+
+        while (!q.isEmpty()) {
+            Brick cur = q.poll();
+            cur.setHitPoints(0);
+
+            for (int i = 0; i < r.length; i++) {
+                int new_row = cur.getRow() + r[i];
+                int new_col = cur.getCol() + c[i];
+
+                if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
+                    Brick new_brick = grid[new_row][new_col];
+                    if (new_brick != null && !visited[new_row][new_col] && new_brick.getExplosion()) {
+                        save_brick.get(new_row * cols + new_col).setHitPoints(0);
+                        visited[new_row][new_col] = true;
+                        q.add(new_brick);
+                        score.addScore();
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Update bricks(remove, add, ...).
+     */
+    public void update() {
+        for (Brick brick : bricks) {
+            brick.update();
         }
         bricks.removeIf(Brick::isDestroyed);
     }

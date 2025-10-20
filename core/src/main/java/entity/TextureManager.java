@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 
 public class TextureManager {
+    public static Texture bgTexture;
     public static ArrayList<Texture> brickTextures = new ArrayList<>();
     public static Texture ballTexture;
     public static Texture paddleTexture;
@@ -19,23 +20,25 @@ public class TextureManager {
      * Load textures.
      */
     public static void loadTextures() {
-        brickTextures.add(new Texture("images/brick_blue.png"));
-        brickTextures.add(new Texture("images/brick_cyan.png"));
-        ballTexture = new Texture("images/ball.png");
-        paddleTexture = new Texture("images/paddle.png");
-        threeBallsTextures = new Texture("images/threeBalls.png");
-        expandpaddleTexture = new Texture("images/expandpaddle.png");
-        shieldTexture = new Texture("images/shield.png");
-        lineTexture = new  Texture("images/yellow_line.png");
-        BALLTexture = new Texture("images/BallEffect.png");
-        SlowBallTexture = new Texture("images/Slow.png");
-        ExplosionTexture = new Texture("images/explosionEffect.png");
+        bgTexture = new Texture("background.png");
+        brickTextures.add(new Texture("brick_blue.png"));
+        brickTextures.add(new Texture("brick_cyan.png"));
+        ballTexture = new Texture("ball.png");
+        paddleTexture = new Texture("paddle.png");
+        threeBallsTextures = new Texture("threeBalls.png");
+        expandpaddleTexture = new Texture("expandpaddle.png");
+        shieldTexture = new Texture("shield.png");
+        lineTexture = new  Texture("yellow_line.png");
+        BALLTexture = new Texture("BallEffect.png");
+        SlowBallTexture = new Texture("Slow.png");
+        ExplosionTexture = new Texture("explosionEffect.png");
     }
 
     /**
      * Free texture memory.
      */
     public static void dispose() {
+        bgTexture.dispose();
         for (Texture texture: brickTextures) {
             texture.dispose();
         }
