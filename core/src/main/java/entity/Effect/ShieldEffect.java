@@ -2,6 +2,10 @@ package entity.Effect;
 
 import com.main.gamemode.GameMode;
 import entity.TextureManager;
+import entity.object.Ball;
+import entity.object.Paddle;
+
+import java.util.ArrayList;
 
 public class ShieldEffect extends EffectItem {
     private static boolean shield = false;
@@ -10,7 +14,7 @@ public class ShieldEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(GameMode gameMode) {
+    public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
         shield = true;
         this.setDestroyed(true);
     }
