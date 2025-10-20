@@ -4,13 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
 import entity.Effect.ShieldEffect;
 import entity.MovableObject;
-import entity.ScoreManager;
 
 public class Ball extends MovableObject {
     private float speed;
     private float angle;
-    private static long BigEnd = 0;
-    private static long SlowEnd = 0;
+    private long BigEnd = 0;
+    private long SlowEnd = 0;
     private float originalspeed;
 
     /**
@@ -104,7 +103,7 @@ public class Ball extends MovableObject {
             BigEnd = 0;
         }
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
-            this.setSpeed(2.0f);
+            this.setSpeed(originalspeed * 60f);
             SlowEnd = 0;
         }
     }
@@ -129,40 +128,6 @@ public class Ball extends MovableObject {
         }
     }
 
-    public void collisionWith(BricksMap bricksMap, ScoreManager scoreMng) {
-        for (Brick brick : bricksMap.getBricks()) {
-            if (this.checkCollision(brick)) {
-                brick.takeHit();
-                if (this.isBig()) brick.setHitPoints(0);
-                if (Brick.gethitPoints(brick) == 0) {
-//                    callEffect(brick);
-                    scoreMng.addScore();
-                    if (brick.getExplosion()) {
-                        brick.startExplosion();
-                    } else {
-                        brick.setDestroyed(true);
-                    }
-                }
-                float ballCenterX = this.getX() + this.getWidth() / 2f;
-                float ballCenterY = this.getY() + this.getHeight() / 2f;
-                //Bottom and top collision
-                if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                    this.reverseY();
-                }
-                //Left and right collision
-                else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                    this.reverseX();
-                }
-                //Corner collision
-                else {
-                    this.reverseY();
-                    this.reverseX();
-                }
-                break;
-            }
-        }
-    }
-
     public boolean isBig() {
         if (System.currentTimeMillis() <= BigEnd) {
             return true;
@@ -171,11 +136,11 @@ public class Ball extends MovableObject {
         }
     }
 
-    public static long getTimeBigWEffect() {
+    public long getTimeBigWEffect() {
         return BigEnd - System.currentTimeMillis();
     }
 
-    public static long getTimeSlowEffect() {
+    public long getTimeSlowEffect() {
         return SlowEnd - System.currentTimeMillis();
     }
 
