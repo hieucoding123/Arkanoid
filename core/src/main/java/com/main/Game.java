@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import entity.Effect.EffectItem;
 import entity.GameScreen;
 import entity.ScoreManager;
-import entity.object.BricksMap;
+import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import ui.MainMenu;
 import ui.ModeMenu;

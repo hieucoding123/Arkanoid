@@ -1,6 +1,6 @@
 package entity;
 
-import entity.object.BricksMap;
+import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 

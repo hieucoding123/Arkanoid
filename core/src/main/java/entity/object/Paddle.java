@@ -4,7 +4,7 @@ import com.main.Game;
 import entity.MovableObject;
 
 public class Paddle extends MovableObject {
-    private static long expandEnd = 0;
+    private long expandEnd = 0;
 
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
@@ -24,7 +24,7 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public static long getTimeExpandEffect() {
+    public long getTimeExpandEffect() {
         return expandEnd -  System.currentTimeMillis();
     }
 

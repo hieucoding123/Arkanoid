@@ -1,8 +1,7 @@
-package entity.object;
+package entity.object.brick;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import entity.Effect.*;
 import entity.GameObject;
 import entity.TextureManager;
 
@@ -49,8 +48,8 @@ public class Brick extends GameObject {
         this.hitPoints--;
     }
 
-    public static int gethitPoints(Brick brick) {
-        return brick.hitPoints;
+    public int gethitPoints() {
+        return this.hitPoints;
     }
 
     public void  setHitPoints(int hitPoints) {

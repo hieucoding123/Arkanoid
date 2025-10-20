@@ -3,7 +3,7 @@ package entity.Effect;
 import com.main.gamemode.GameMode;
 import entity.object.Paddle;
 import entity.TextureManager;
-import entity.object.BricksMap;
+import entity.object.brick.BricksMap;
 import com.badlogic.gdx.Gdx;
 
 public class ExpandEffect extends EffectItem {

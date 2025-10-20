@@ -7,7 +7,8 @@ import entity.Effect.*;
 import entity.GameScreen;
 import entity.ScoreManager;
 import entity.object.Ball;
-import entity.object.BricksMap;
+import entity.object.brick.Brick;
+import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
 

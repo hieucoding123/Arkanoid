@@ -1,4 +1,4 @@
-package entity.object;
+package entity.object.brick;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
