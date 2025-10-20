@@ -12,6 +12,7 @@ import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class InfiniteMode extends GameMode {
@@ -22,6 +23,7 @@ public class InfiniteMode extends GameMode {
     private BricksMap currentMap;
     private ScoreManager scoreManager;
     GameScreen gameScreen;
+    private EffectFactory effectFactory;
 
     public InfiniteMode(ScoreManager scoreManager, GameScreen gameScreen) {
         super();
@@ -29,6 +31,7 @@ public class InfiniteMode extends GameMode {
         bricksMaps = new ArrayList<>();
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
+        this.effectFactory = new EffectFactory();
         create();
     }
 
@@ -53,7 +56,8 @@ public class InfiniteMode extends GameMode {
     public void update(float delta) {
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
-        EffectItem.updateEffectItems(paddle, this, delta);
+        EffectItem.updateEffectItems(paddle, this.balls, delta);
+
         if (balls.isEmpty()) this.reset();
 
         if (flowPaddle) {       // follow paddle
@@ -64,7 +68,42 @@ public class InfiniteMode extends GameMode {
         for (Ball ball : balls) {
             ball.update(delta);
             ball.collisionWith(paddle);
-            ball.collisionWith(currentMap, this.scoreManager);
+
+            for (Brick brick : currentMap.getBricks()) {
+                if (ball.checkCollision(brick)) {
+                    brick.takeHit();
+                    if (ball.isBig()) brick.setHitPoints(0);
+                    if (brick.gethitPoints() == 0) {
+
+                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball);
+                        if (newEffectItem != null) {
+                            EffectItem.addEffectItem(newEffectItem);
+                        }
+                        scoreManager.addScore();
+                        if (brick.getExplosion()) {
+                            brick.startExplosion();
+                        } else {
+                            brick.setDestroyed(true);
+                        }
+                    }
+                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
+                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+                    //Bottom and top collision
+                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+                        ball.reverseY();
+                    }
+                    //Left and right collision
+                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
+                        ball.reverseX();
+                    }
+                    //Corner collision
+                    else {
+                        ball.reverseY();
+                        ball.reverseX();
+                    }
+                    break;
+                }
+            }
         }
         balls.removeIf(Ball::isDestroyed);
     }

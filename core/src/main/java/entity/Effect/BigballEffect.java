@@ -4,6 +4,9 @@ import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
+import entity.object.Paddle;
+
+import java.util.ArrayList;
 
 public class BigballEffect extends EffectItem {
     private static final float EFFECT_DURATION = 10.0f;
@@ -13,8 +16,8 @@ public class BigballEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(GameMode gameMode) {
-        for (Ball ball : gameMode.balls) {
+    public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
+        for (Ball ball : balls) {
             ball.activateBig(EFFECT_DURATION);
             //Left wall
             if (ball.getX() < Game.padding_left_right) {
