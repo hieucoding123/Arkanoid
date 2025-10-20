@@ -1,0 +1,146 @@
+package ui;
+
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.main.GameState;
+import com.main.Main;
+
+import static com.badlogic.gdx.Gdx.gl;
+
+public class MainMenu extends ApplicationAdapter {
+    private Stage stage;
+    private Skin skin;
+    private Main main;
+    private Texture bg;
+    private BitmapFont font;
+
+    public MainMenu(Main main) {
+        this.main = main;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    @Override
+    public void create() {
+        bg = new Texture(Gdx.files.internal("ui/bg.png"));
+        skin = new Skin(Gdx.files.internal("ui/buttontest.json"));
+        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
+        font.getData().setScale(1);
+
+        Gdx.input.setInputProcessor(stage);
+
+        //Table
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        stage.addActor(mainTable);
+
+        //Background
+        mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
+
+        //Label Styles
+        Label.LabelStyle MenuText = new Label.LabelStyle(font, Color.WHITE);
+        Label.LabelStyle LBStyle = new Label.LabelStyle(font, Color.YELLOW);
+
+        // --- Title Label ---
+        Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
+        titleLabel.setFontScale(1f);
+        mainTable.add(titleLabel).padBottom(40).padTop(30);
+        mainTable.row();
+
+        //Button Table
+        Table buttonTable = new Table();
+
+        //Play Button
+        Button playButton = new Button(skin);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.SELECT_MODE);
+            }
+        });
+
+        //Setting Button
+        Label settingsLabel = new Label("Settings", MenuText);
+        settingsLabel.setFontScale(0.8f);
+        settingsLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.SETTINGS);
+                System.out.println("Settings Clicked");
+            }
+        });
+
+        //Leaderboard Button
+        Label LBLabel = new Label("Leaderboard", LBStyle);
+        LBLabel.setFontScale(0.8f);
+        LBLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("LB Clicked");
+            }
+        });
+
+        //Quit Button
+        Label quitLabel = new Label("Quit", MenuText);
+        quitLabel.setFontScale(0.8f);
+        quitLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+        //Arrange the Buttons in the buttonTable
+        buttonTable.add(playButton).width(120).height(50).padBottom(40);
+        buttonTable.row();
+        buttonTable.add(LBLabel).padBottom(50);
+        buttonTable.row();
+        buttonTable.add(settingsLabel).padBottom(50);
+        buttonTable.row();
+        buttonTable.add(quitLabel).padBottom(50);
+
+        //Add to main table
+        mainTable.add(buttonTable);
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void render() {
+        gl.glClearColor(0, 0, 0, 1);
+        gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
+
+        stage.getViewport().apply();
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+        bg.dispose();
+    }
+}

@@ -1,15 +1,14 @@
-package entity;
+package entity.object.brick;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
+import entity.TextureManager;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +17,9 @@ public class BricksMap {
     public final int rows = 15;
     public final int cols = 8;
     public static final int xBeginCoord = 90;
-    public final int yBeginCoord = 810;
-    public final int brickW = 78;
-    public final int brickH = 36;
+    public static final int yBeginCoord = 810;
+    public static final int brickW = 78;
+    public static final int brickH = 36;
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
 //    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
@@ -53,6 +52,7 @@ public class BricksMap {
                             1,
                             explosion_check,
                             i, j,
+                            color,
                             TextureManager.brickTextures.get(color)));
                     } else if (color == 0) {
                         bricks.add(new Brick(
@@ -61,6 +61,7 @@ public class BricksMap {
                             2,
                             explosion_check,
                             i, j,
+                            color,
                             TextureManager.brickTextures.get(color)));
                     }
                 }
@@ -70,8 +71,11 @@ public class BricksMap {
             e.printStackTrace();
         }
     }
+
     /**
-     * Update bricks(remove, add, ...).
+     * Update bricks(remove, add, explosion, ...).
+     * @param delta fps balance
+     * @param score Score Manager
      */
     public void update(float delta, ScoreManager score) {
         Map<Integer, Brick> save_brick = new HashMap<>();
@@ -100,9 +104,15 @@ public class BricksMap {
                     if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
                         Brick new_brick = grid[new_row][new_col];
                         if (new_brick != null && new_brick.getExplosion()) {
+//                            int hp = new_brick.gethitPoints();
                             save_brick.get(new_row * cols + new_col).setHitPoints(0);
                             new_brick.startExplosion();
-                            score.addScore();
+//                            if (new_brick.getColor() == 1) {
+//                                score.addScore100();
+//                            } else if (new_brick.getColor() == 0) {
+//                                score.addScore200();
+//                            }
+                            score.addScore(new_brick);
                         }
                     }
                 }

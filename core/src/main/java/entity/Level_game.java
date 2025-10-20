@@ -1,5 +1,7 @@
 package entity;
 
+import entity.object.brick.BricksMap;
+
 import java.util.ArrayList;
 
 public class Level_game {

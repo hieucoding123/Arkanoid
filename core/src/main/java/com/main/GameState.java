@@ -2,6 +2,10 @@ package com.main;
 
 public enum GameState {
     MAIN_MENU,
+    LOGIN_MENU,
+    SELECT_MODE,
+    INFI_MODE,
+    LEVELS_MODE,
     PLAYING,
     SETTINGS
 }

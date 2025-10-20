@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.gamemode.GameMode;
 import entity.TextureManager;
 
 public class ShieldEffect extends EffectItem {
@@ -7,8 +8,9 @@ public class ShieldEffect extends EffectItem {
     public ShieldEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.shieldTexture);
     }
+
     @Override
-    public void applyEffect() {
+    public void applyEffect(GameMode gameMode) {
         shield = true;
         this.setDestroyed(true);
     }

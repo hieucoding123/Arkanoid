@@ -1,7 +1,8 @@
 package entity.Effect;
 
 import com.main.Main;
-import entity.Ball;
+import com.main.gamemode.GameMode;
+import entity.object.Ball;
 import entity.TextureManager;
 
 public class ThreeBallsEffect extends EffectItem {
@@ -15,32 +16,23 @@ public class ThreeBallsEffect extends EffectItem {
 //    }
 
     @Override
-    public void applyEffect() {
-        if (this.isDestroyed()) {
+    public void applyEffect(GameMode gameMode) {
+        if (this.isDestroyed() || gameMode.balls.isEmpty()) {
             return;
         }
-
         this.setDestroyed(true);
 
-        if (Main.balls.isEmpty()) {
-            this.setDestroyed(true);
-            return;
-        }
+        Ball originalBall = gameMode.balls.get(0);
 
-        Ball originalBall = Main.balls.get(0);
-
-        float ballX = originalBall.getX();
-        float ballY = originalBall.getY();
-
-        Ball ball1 = new Ball(ballX, ballY, TextureManager.ballTexture, 5.0f);
+        Ball ball1 = new Ball(originalBall);
+        ball1.setAngle(originalBall.getAngle() + 0.5f);
         ball1.updateVelocity();
 
-        Ball ball2 = new Ball(ballX, ballY, TextureManager.ballTexture, 5.0f);
+        Ball ball2 = new Ball(originalBall);
+        ball2.setAngle(originalBall.getAngle() - 0.5f);
         ball2.updateVelocity();
 
-        Main.balls.add(ball1);
-        Main.balls.add(ball2);
-
-        this.setDestroyed(true);
+        gameMode.balls.add(ball1);
+        gameMode.balls.add(ball2);
     }
 }

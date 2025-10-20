@@ -1,11 +1,10 @@
-package entity;
-
-import com.badlogic.gdx.Gdx;
+package entity.object;
 import com.badlogic.gdx.graphics.Texture;
-import com.main.Main;
+import com.main.Game;
+import entity.MovableObject;
 
 public class Paddle extends MovableObject {
-    private static long expandEnd = 0;
+    private long expandEnd = 0;
 
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
@@ -25,21 +24,21 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public static long getTimeExpandEffect() {
+    public long getTimeExpandEffect() {
         return expandEnd -  System.currentTimeMillis();
     }
 
     public void moveRight() {
         x += speed;
-        if (x + getWidth() > Main.SCREEN_WIDTH - Main.padding_left_right) {
-            x = Main.SCREEN_WIDTH - Main.padding_left_right - getWidth();
+        if (x + getWidth() > Game.SCREEN_WIDTH - Game.padding_left_right) {
+            x = Game.SCREEN_WIDTH - Game.padding_left_right - getWidth();
         }
     }
 
     public void moveLeft() {
         x -= speed;
-        if (x < Main.padding_left_right) {
-            x = Main.padding_left_right;
+        if (x < Game.padding_left_right) {
+            x = Game.padding_left_right;
         }
     }
 }
