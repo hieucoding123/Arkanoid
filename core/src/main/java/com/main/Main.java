@@ -30,6 +30,8 @@ public class Main extends ApplicationAdapter {
     }
     @Override
     public void render() {
+        game.handleInput();
+        game.update();
         game.render();
     }
 
