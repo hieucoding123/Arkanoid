@@ -5,16 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import entity.Effect.EffectItem;
 import entity.GameScreen;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
-import ui.MainMenu;
 import ui.ModeMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import ui.SettingsUI;
+import ui.UI;
 
 public class Game {
     private OrthographicCamera camera;
@@ -25,7 +24,7 @@ public class Game {
     public static int padding_left_right;
     public static int padding_top;
     private SettingsUI settingsUI;
-    private MainMenu mainMenu;
+    private UI ui;
     private ModeMenu modeMenu;
     float delta;
     private ScoreManager scoreManager;
@@ -58,8 +57,8 @@ public class Game {
 
         TextureManager.loadTextures();
 
-        mainMenu = new MainMenu(this.main);
-        mainMenu.create();
+        ui = new UI(this.main);
+        ui.create();
 
         modeMenu = new ModeMenu(this.main);
         modeMenu.create();
@@ -80,7 +79,7 @@ public class Game {
         spriteBatch.begin();
         switch (gameState){
             case MAIN_MENU:
-                mainMenu.render();
+                ui.render();
                 break;
             case SETTINGS:
                 settingsUI.render();
@@ -122,7 +121,7 @@ public class Game {
 
     public void dispose() {
         spriteBatch.dispose();
-        mainMenu.dispose();
+        ui.dispose();
         modeMenu.dispose();
         settingsUI.dispose();
         gameScreen.dispose();
@@ -133,7 +132,7 @@ public class Game {
         gameState = newGameState;
         switch (gameState) {
             case MAIN_MENU:
-                Gdx.input.setInputProcessor(mainMenu.getStage());
+                Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SETTINGS:
                 Gdx.input.setInputProcessor(settingsUI.getStage());
