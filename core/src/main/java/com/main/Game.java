@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,7 +10,7 @@ import entity.GameScreen;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
-import ui.ModeMenu;
+import Menu.ModeMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import ui.SettingsUI;
@@ -23,9 +24,7 @@ public class Game {
     public static int SCREEN_HEIGHT;
     public static int padding_left_right;
     public static int padding_top;
-    private SettingsUI settingsUI;
-    private MainMenu mainMenu;
-    private ModeMenu modeMenu;
+    private UserInterface ui;
     float delta;
     private ScoreManager scoreManager;
     private GameScreen gameScreen;
@@ -57,15 +56,6 @@ public class Game {
 
         TextureManager.loadTextures();
 
-        mainMenu = new MainMenu(this.main);
-        mainMenu.create();
-
-        modeMenu = new ModeMenu(this.main);
-        modeMenu.create();
-
-        settingsUI = new SettingsUI(this.main);
-        settingsUI.create();
-
         this.setGameState(GameState.MAIN_MENU);
     }
 
@@ -79,13 +69,9 @@ public class Game {
         spriteBatch.begin();
         switch (gameState){
             case MAIN_MENU:
-                mainMenu.render();
-                break;
             case SETTINGS:
-                settingsUI.render();
-                break;
             case SELECT_MODE:
-                modeMenu.render();
+                ui.render();
                 break;
             case INFI_MODE:
                 gameMode.render(spriteBatch, this.delta);
@@ -121,9 +107,7 @@ public class Game {
 
     public void dispose() {
         spriteBatch.dispose();
-        mainMenu.dispose();
-        modeMenu.dispose();
-        settingsUI.dispose();
+        ui.dispose();
         gameScreen.dispose();
         TextureManager.dispose();
     }
@@ -132,13 +116,19 @@ public class Game {
         gameState = newGameState;
         switch (gameState) {
             case MAIN_MENU:
-                Gdx.input.setInputProcessor(mainMenu.getStage());
+                ui = new MainMenu(main);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SETTINGS:
-                Gdx.input.setInputProcessor(settingsUI.getStage());
+                ui = new SettingsUI(main);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SELECT_MODE:
-                Gdx.input.setInputProcessor(modeMenu.getStage());
+                ui = new ModeMenu(main);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
                 break;
             default:
                 playGame();
