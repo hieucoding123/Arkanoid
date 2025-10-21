@@ -1,6 +1,6 @@
 package ui;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,40 +22,37 @@ import com.main.Main;
 
 import static com.badlogic.gdx.Gdx.gl;
 
-public class UI extends ApplicationAdapter {
-
-    private Stage stage;
-    private Skin skin;
-    private Main main;
-    private Texture bg;
-    private BitmapFont font;
-
-    public UI(Main main) {
-        this.main = main;
+public class MainMenu extends UserInterface {
+    public MainMenu(Main main) {
+        super(main);
     }
 
     @Override
     public void create() {
-        bg = new Texture(Gdx.files.internal("ui/bg.png"));
-        skin = new Skin(Gdx.files.internal("ui/buttontest.json"));
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
+        this.setSkin(new Skin(Gdx.files.internal("ui/buttontest.json")));
+        this.setStage(new Stage(
+            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
+        );
 
-        font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
-        font.getData().setScale(1);
+        this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
+        this.getFont().getData().setScale(1);
 
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this.getStage());
 
         //Table
         Table mainTable = new Table();
         mainTable.setFillParent(true);
-        stage.addActor(mainTable);
+        this.getStage().addActor(mainTable);
 
         //Background
-        mainTable.setBackground(new TextureRegionDrawable(new TextureRegion(bg)));
+        mainTable.setBackground(
+            new TextureRegionDrawable(new TextureRegion(this.getBGTexture()))
+        );
 
         //Label Styles
-        Label.LabelStyle MenuText = new Label.LabelStyle(font, Color.WHITE);
-        Label.LabelStyle LBStyle = new Label.LabelStyle(font, Color.YELLOW);
+        Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
         // --- Title Label ---
         Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
@@ -66,8 +63,10 @@ public class UI extends ApplicationAdapter {
         //Button Table
         Table buttonTable = new Table();
 
+        Main main = this.getMain();
+
         //Play Button
-        Button playButton = new Button(skin);
+        Button playButton = new Button(this.getSkin());
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -120,31 +119,5 @@ public class UI extends ApplicationAdapter {
         mainTable.add(buttonTable);
 
 
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void render() {
-        gl.glClearColor(0, 0, 0, 1);
-        gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
-
-        stage.getViewport().apply();
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
-        bg.dispose();
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 }

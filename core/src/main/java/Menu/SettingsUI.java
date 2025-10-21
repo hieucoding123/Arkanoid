@@ -1,6 +1,6 @@
 package ui;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,71 +14,66 @@ import com.main.Main;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-import static com.badlogic.gdx.Gdx.gl;
 
-public class SettingsUI extends ApplicationAdapter {
-
-    private Stage stage;
-    private Main main;
-    private Skin skin;
-    private BitmapFont font;
-
+public class SettingsUI extends UserInterface {
     public SettingsUI(Main main) {
-        this.main = main;
+        super(main);
     }
 
     @Override
     public void create() {
-        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
-        skin = new Skin();
-        skin.add("default-font", font);
+        this.setStage(
+            new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
+        );
+        this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
+        this.setSkin(new Skin());
+        this.getSkin().add("default-font", this.getFont());
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        skin.add("white", new Texture(pixmap));
+        this.getSkin().add("white", new Texture(pixmap));
 
         // Label Style
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
-        skin.add("default", labelStyle);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        this.getSkin().add("default", labelStyle);
 
         // Title Label Style (with new font instance)
         BitmapFont titleFont = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
         titleFont.getData().setScale(2.0f);
         Label.LabelStyle titleLabelStyle = new Label.LabelStyle(titleFont, Color.WHITE);
-        skin.add("title", titleLabelStyle);
+        this.getSkin().add("title", titleLabelStyle);
 
         // Slider Style
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
-        sliderStyle.background = skin.newDrawable("white", Color.DARK_GRAY);
-        Drawable knobDrawable = skin.newDrawable("white", Color.GRAY);
+        sliderStyle.background = this.getSkin().newDrawable("white", Color.DARK_GRAY);
+        Drawable knobDrawable = this.getSkin().newDrawable("white", Color.GRAY);
         knobDrawable.setMinWidth(20f);
         knobDrawable.setMinHeight(20f);
         sliderStyle.knob = knobDrawable;
-        skin.add("default-horizontal", sliderStyle);
+        this.getSkin().add("default-horizontal", sliderStyle);
 
         // TextButton Style
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = font;
-        skin.add("default", textButtonStyle);
+        textButtonStyle.up = this.getSkin().newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = this.getSkin().newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = this.getFont();
+        this.getSkin().add("default", textButtonStyle);
 
 
         Table table = new Table();
         table.setFillParent(true);
-        stage.addActor(table);
+        this.getStage().addActor(table);
 
         // Title
-        Label titleLabel = new Label("Settings", skin, "title");
+        Label titleLabel = new Label("Settings", this.getSkin(), "title");
         table.add(titleLabel).padBottom(50).colspan(2);
         table.row();
 
         // Music Slider
-        Label musicLabel = new Label("Music", skin);
+        Label musicLabel = new Label("Music", this.getSkin());
         table.add(musicLabel).padRight(20);
-        Slider musicSlider = new Slider(0, 100, 1, false, skin);
+        Slider musicSlider = new Slider(0, 100, 1, false, this.getSkin());
         table.add(musicSlider).width(300);
         table.row().padTop(20);
 
@@ -94,14 +89,16 @@ public class SettingsUI extends ApplicationAdapter {
         });
 
         // SFX Slider
-        Label sfxLabel = new Label("SFX", skin);
+        Label sfxLabel = new Label("SFX", this.getSkin());
         table.add(sfxLabel).padRight(20);
-        Slider sfxSlider = new Slider(0, 100, 1, false, skin);
+        Slider sfxSlider = new Slider(0, 100, 1, false, this.getSkin());
         table.add(sfxSlider).width(300);
         table.row().padTop(50);
 
+        Main main = this.getMain();
+
         // Back Button
-        TextButton backButton = new TextButton("Back", skin);
+        TextButton backButton = new TextButton("Back", this.getSkin());
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -109,28 +106,5 @@ public class SettingsUI extends ApplicationAdapter {
             }
         });
         table.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(50).padRight(50);
-    }
-
-
-
-    @Override
-    public void render() {
-        gl.glClearColor(0, 0, 0, 1);
-        gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
-
-        stage.getViewport().apply();
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
-        font.dispose();
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 }
