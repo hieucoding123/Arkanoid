@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.LoginGate;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;

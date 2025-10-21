@@ -5,12 +5,12 @@ public class Player {
     double score;
 
     public Player() {
-        this.name = " ";
+        this.name = "";
         this.score = 0;
     }
-    public Player(String name, double score) {
+    public Player(String name) {
         this.name = name;
-        this.score = score;
+        this.score = 0;
     }
 
     public String getName() {
@@ -27,6 +27,11 @@ public class Player {
         this.score = score;
     }
 
+    /**
+     * Compare with another player.
+     * @param other other Player
+     * @return true if have more score than another Player
+     */
     public boolean less(Player other) {
         if (this.score != other.score) {
             return this.score < other.score;
