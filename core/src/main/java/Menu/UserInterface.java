@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.main.Main;
+import entity.Player;
 
 import static com.badlogic.gdx.Gdx.gl;
 
@@ -16,9 +17,11 @@ public class UserInterface extends ApplicationAdapter {
     private Skin skin;
     private Texture bg;
     private BitmapFont font;
+    private Player player;
 
-    public UserInterface(Main main) {
+    public UserInterface(Main main, Player player) {
         this.main = main;
+        this.player = player;
     }
 
     @Override
@@ -82,5 +85,9 @@ public class UserInterface extends ApplicationAdapter {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

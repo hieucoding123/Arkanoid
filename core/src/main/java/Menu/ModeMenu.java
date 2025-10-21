@@ -16,11 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
+import entity.Player;
 
 public class ModeMenu extends UserInterface {
 
-    public ModeMenu(Main main) {
-        super(main);
+    public ModeMenu(Main main, Player player) {
+        super(main, player);
     }
 
     @Override

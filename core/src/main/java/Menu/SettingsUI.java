@@ -13,11 +13,12 @@ import com.main.GameState;
 import com.main.Main;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import entity.Player;
 
 
 public class SettingsUI extends UserInterface {
-    public SettingsUI(Main main) {
-        super(main);
+    public SettingsUI(Main main, Player player) {
+        super(main, player);
     }
 
     @Override

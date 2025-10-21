@@ -19,12 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
+import entity.Player;
 
 import static com.badlogic.gdx.Gdx.gl;
 
 public class MainMenu extends UserInterface {
-    public MainMenu(Main main) {
-        super(main);
+    public MainMenu(Main main, Player player) {
+        super(main, player);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class MainMenu extends UserInterface {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.SELECT_MODE);
+                main.setGameState(GameState.LOGIN_MENU);
 
             }
         });
@@ -117,7 +118,5 @@ public class MainMenu extends UserInterface {
 
         //Add to main table
         mainTable.add(buttonTable);
-
-
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import entity.GameScreen;
+import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
@@ -33,6 +34,7 @@ public class Game {
 
     public static GameState gameState;
     private Main main;
+    private Player player;
 
     public Game(Main main) {
         this.main = main;
@@ -40,6 +42,7 @@ public class Game {
     }
 
     public void init() {
+        player = new Player();
         scoreManager = new ScoreManager();
         gameScreen = new GameScreen(scoreManager);
         gameScreen.create();
@@ -71,6 +74,7 @@ public class Game {
             case MAIN_MENU:
             case SETTINGS:
             case SELECT_MODE:
+            case LOGIN_MENU:
                 ui.render();
                 break;
             case INFI_MODE:
@@ -97,6 +101,8 @@ public class Game {
 
     public void update() {
         switch (gameState) {
+            case LOGIN_MENU:
+                break;
             case INFI_MODE:
                 gameMode.update(this.delta);
                 break;
@@ -116,17 +122,22 @@ public class Game {
         gameState = newGameState;
         switch (gameState) {
             case MAIN_MENU:
-                ui = new MainMenu(main);
+                ui = new MainMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SETTINGS:
-                ui = new SettingsUI(main);
+                ui = new SettingsUI(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case LOGIN_MENU:
+                ui = new LoginGate(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SELECT_MODE:
-                ui = new ModeMenu(main);
+                ui = new ModeMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
