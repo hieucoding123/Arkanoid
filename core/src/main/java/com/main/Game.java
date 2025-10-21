@@ -13,7 +13,7 @@ import ui.ModeMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import ui.SettingsUI;
-import ui.UI;
+import ui.MainMenu;
 
 public class Game {
     private OrthographicCamera camera;
@@ -24,7 +24,7 @@ public class Game {
     public static int padding_left_right;
     public static int padding_top;
     private SettingsUI settingsUI;
-    private UI ui;
+    private MainMenu mainMenu;
     private ModeMenu modeMenu;
     float delta;
     private ScoreManager scoreManager;
@@ -57,8 +57,8 @@ public class Game {
 
         TextureManager.loadTextures();
 
-        ui = new UI(this.main);
-        ui.create();
+        mainMenu = new MainMenu(this.main);
+        mainMenu.create();
 
         modeMenu = new ModeMenu(this.main);
         modeMenu.create();
@@ -79,7 +79,7 @@ public class Game {
         spriteBatch.begin();
         switch (gameState){
             case MAIN_MENU:
-                ui.render();
+                mainMenu.render();
                 break;
             case SETTINGS:
                 settingsUI.render();
@@ -121,7 +121,7 @@ public class Game {
 
     public void dispose() {
         spriteBatch.dispose();
-        ui.dispose();
+        mainMenu.dispose();
         modeMenu.dispose();
         settingsUI.dispose();
         gameScreen.dispose();
@@ -132,7 +132,7 @@ public class Game {
         gameState = newGameState;
         switch (gameState) {
             case MAIN_MENU:
-                Gdx.input.setInputProcessor(ui.getStage());
+                Gdx.input.setInputProcessor(mainMenu.getStage());
                 break;
             case SETTINGS:
                 Gdx.input.setInputProcessor(settingsUI.getStage());
