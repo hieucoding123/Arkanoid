@@ -1,0 +1,15 @@
+ui-skin.png
+size:1024,128
+repeat:none
+buttondown
+bounds:522,21,157,80
+buttonhover
+bounds:363,21,157,80
+buttonup
+bounds:204,21,157,80
+cursor
+bounds:681,42,20,59
+selection
+bounds:2,2,32,32
+textfield-background
+bounds:2,36,200,65

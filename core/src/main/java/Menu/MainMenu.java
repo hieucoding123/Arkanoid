@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -31,7 +28,7 @@ public class MainMenu extends UserInterface {
     @Override
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
-        this.setSkin(new Skin(Gdx.files.internal("ui/buttontest.json")));
+        this.setSkin(new Skin(Gdx.files.internal("ui-skin/ui-skin.json")));
         this.setStage(new Stage(
             new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
         );
@@ -87,14 +84,7 @@ public class MainMenu extends UserInterface {
         });
 
         //Leaderboard Button
-        Label LBLabel = new Label("Leaderboard", LBStyle);
-        LBLabel.setFontScale(0.8f);
-        LBLabel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("LB Clicked");
-            }
-        });
+        TextField textField = new TextField("Enter name", this.getSkin());
 
         //Quit Button
         Label quitLabel = new Label("Quit", MenuText);
@@ -109,7 +99,7 @@ public class MainMenu extends UserInterface {
         //Arrange the Buttons in the buttonTable
         buttonTable.add(playButton).width(120).height(50).padBottom(40);
         buttonTable.row();
-        buttonTable.add(LBLabel).padBottom(50);
+        buttonTable.add(textField).width(300).height(50).padBottom(40);
         buttonTable.row();
         buttonTable.add(settingsLabel).padBottom(50);
         buttonTable.row();
