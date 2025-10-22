@@ -74,7 +74,6 @@ public class Game {
             case MAIN_MENU:
             case SETTINGS:
             case SELECT_MODE:
-            case LOGIN_MENU:
                 ui.render();
                 break;
             case INFI_MODE:
@@ -101,8 +100,6 @@ public class Game {
 
     public void update() {
         switch (gameState) {
-            case LOGIN_MENU:
-                break;
             case INFI_MODE:
                 gameMode.update(this.delta);
                 break;
