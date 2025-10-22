@@ -21,6 +21,7 @@ import entity.Player;
 import static com.badlogic.gdx.Gdx.gl;
 
 public class MainMenu extends UserInterface {
+    private TextField textField;
     public MainMenu(Main main, Player player) {
         super(main, player);
     }
@@ -84,7 +85,7 @@ public class MainMenu extends UserInterface {
         });
 
         //Leaderboard Button
-        TextField textField = new TextField("Enter name", this.getSkin());
+        this.textField = new TextField("Enter name", this.getSkin());
 
         //Quit Button
         Label quitLabel = new Label("Quit", MenuText);
@@ -107,5 +108,12 @@ public class MainMenu extends UserInterface {
 
         //Add to main table
         mainTable.add(buttonTable);
+    }
+
+    @Override
+    public void render() {
+        super.render();
+        // Updates player's name
+        this.getPlayer().setName(textField.getText());
     }
 }
