@@ -71,8 +71,7 @@ public class MainMenu extends UserInterface {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LOGIN_MENU);
-
+                main.setGameState(GameState.SELECT_MODE);
             }
         });
 

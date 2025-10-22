@@ -1,6 +1,5 @@
 package com.main;
 
-import Menu.LoginGate;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -129,11 +128,6 @@ public class Game {
                 break;
             case SETTINGS:
                 ui = new SettingsUI(main, this.player);
-                ui.create();
-                Gdx.input.setInputProcessor(ui.getStage());
-                break;
-            case LOGIN_MENU:
-                ui = new LoginGate(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
