@@ -13,6 +13,11 @@ public class Player {
         this.score = 0;
     }
 
+    public Player(String name, double score) {
+        this.name = name;
+        this.score = score;
+    }
+
     public String getName() {
         return name;
     }
