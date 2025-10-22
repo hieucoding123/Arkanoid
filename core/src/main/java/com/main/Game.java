@@ -142,7 +142,7 @@ public class Game {
         viewport.apply();
         switch (gameState) {
             case INFI_MODE:
-                gameMode = new InfiniteMode(scoreManager, gameScreen);
+                gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
                 break;
             case LEVELS_MODE:
                 break;

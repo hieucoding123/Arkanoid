@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.Effect.*;
 import entity.GameScreen;
+import entity.Player;
 import entity.ScoreManager;
 import entity.object.Ball;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
+import table.InfiModeTable;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -24,14 +26,19 @@ public class InfiniteMode extends GameMode {
     private ScoreManager scoreManager;
     GameScreen gameScreen;
     private EffectFactory effectFactory;
+    private InfiModeTable table;
 
-    public InfiniteMode(ScoreManager scoreManager, GameScreen gameScreen) {
+    public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
         balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
+        this.setPlayer(player);
+
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
+        this.table = new InfiModeTable();
+
         create();
     }
 
