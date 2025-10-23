@@ -37,7 +37,9 @@ public abstract class RecordTable {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                board.add(new Player(fields[0], Double.parseDouble(fields[1])));
+                board.add(new Player(
+                    fields[0], Double.parseDouble(fields[1]), Float.parseFloat(fields[2]))
+                );
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +51,13 @@ public abstract class RecordTable {
         StringBuilder builder = new StringBuilder();
 
         for (Player player : board) {
-            builder.append(player.getName()).append(",").append(player.getScore()).append("\n");
+            builder.append(
+                player.getName()
+            ).append(",").append(
+                player.getScore()
+            ).append(",").append(
+                player.getTimePlayed()
+            ).append("\n");
         }
 
         file.writeString(builder.toString(), false);
