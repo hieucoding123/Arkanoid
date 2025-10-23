@@ -84,6 +84,8 @@ public class Game {
     }
 
     public void handleInput() {
+        if (gameMode != null)
+            gameMode.handleInput();
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
             if (Gdx.graphics.isFullscreen()) {
                 // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)

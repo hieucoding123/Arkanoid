@@ -25,8 +25,9 @@ public class InfiniteMode extends GameMode {
     private ScoreManager scoreManager;
     GameScreen gameScreen;
     private EffectFactory effectFactory;
-    private InfiniteMode table;
+    private InfiModeTable table;
     private int currentIdx;
+    private float timePlayed;
     private int revie;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
@@ -38,6 +39,8 @@ public class InfiniteMode extends GameMode {
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
+        this.table = new InfiModeTable();
+        this.timePlayed = 0.0f;
         revie = 3;
 
         create();
@@ -63,6 +66,7 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void update(float delta) {
+        this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, delta);
@@ -73,8 +77,13 @@ public class InfiniteMode extends GameMode {
             this.revie--;
             this.setEnd(revie == 0);
         }
-        if (this.isEnd())
+        if (this.isEnd()) {
             EffectItem.clear();
+            this.getPlayer().setScore(this.scoreManager.getScore());
+            this.getPlayer().setTimePlayed(this.timePlayed);
+            this.table.addPlayer(this.getPlayer());
+            this.table.updateSystemFile();
+        }
 
         if (flowPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
@@ -132,8 +141,6 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
-        this.handleInput();
         this.draw(sp);
         gameScreen.render();
     }
@@ -180,7 +187,7 @@ public class InfiniteMode extends GameMode {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
-            TextureManager.ballTexture, 5.0f));
+            TextureManager.ballTexture, 10.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
         flowPaddle = true;
