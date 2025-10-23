@@ -27,6 +27,9 @@ public abstract class RecordTable {
     public abstract void createTable();
 
     public void loadTable() {
+        if (board == null) {
+            board = new ArrayList<>();
+        }
         try {
             FileHandle fileHandle = Gdx.files.internal(systemFile);
             BufferedReader br = fileHandle.reader(8192);
@@ -34,7 +37,7 @@ public abstract class RecordTable {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                board.add(new Player(fields[0], Integer.parseInt(fields[1])));
+                board.add(new Player(fields[0], Double.parseDouble(fields[1])));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,7 +56,6 @@ public abstract class RecordTable {
     }
 
     public static void addPlayer(Player newPlayer) {
-        System.out.println(newPlayer.getScore());
         // Empty board.
         if (board == null) {
             board = new ArrayList<>();
@@ -61,18 +63,27 @@ public abstract class RecordTable {
             return;
         }
 
+        // Incomplete table
         if (board.size() < capacity) {
             board.add(newPlayer);
         }
 
+        int idx = board.size() - 1;
+        if (!board.get(idx).less(newPlayer)) {
+            return;
+        }
+
         // insert to sorted board.
-        for (int i = board.size() - 2; i >= 0; i--) {
-            if (!board.get(i).less(newPlayer)) {
-                exch(i, i + 1);
+        for ( ; --idx >= 0;) {
+            if (board.get(idx).less(newPlayer)) {
+                exch(idx, idx + 1);
             }else {
-                board.get(i).replace(newPlayer);
+                board.set(idx + 1, newPlayer);
+                return;
             }
         }
+        // insert on top of table
+        board.set(0, newPlayer);
     }
 
     /**

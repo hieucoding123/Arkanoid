@@ -44,7 +44,7 @@ public class Player {
         if (!this.name.equals(other.name)) {
             return this.name.compareTo(other.name) < 0;
         }
-        return false;
+        return true;
     }
 
     /**
