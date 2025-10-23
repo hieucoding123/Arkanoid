@@ -25,6 +25,7 @@ public class InfiniteMode extends GameMode {
     private BricksMap currentMap;
     private ScoreManager scoreManager;
     GameScreen gameScreen;
+    private Player player;
     private EffectFactory effectFactory;
     private InfiModeTable table;
 
@@ -32,7 +33,7 @@ public class InfiniteMode extends GameMode {
         super();
         balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
-        this.setPlayer(player);
+        this.player = player;
 
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;

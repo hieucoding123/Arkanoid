@@ -135,7 +135,7 @@ public class BricksMap {
         return this.bricks;
     }
 
-    public int getsize() {
+    public int getSize() {
         return bricks.size();
     }
 }

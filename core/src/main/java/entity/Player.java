@@ -3,19 +3,23 @@ package entity;
 public class Player {
     String name;
     double score;
+    float timePlayed;
 
     public Player() {
         this.name = "";
         this.score = 0;
+        this.timePlayed = 0;
     }
     public Player(String name) {
         this.name = name;
         this.score = 0;
+        this.timePlayed = 0;
     }
 
-    public Player(String name, double score) {
+    public Player(String name, double score,  float timePlayed) {
         this.name = name;
         this.score = score;
+        this.timePlayed = timePlayed;
     }
 
     public String getName() {
@@ -32,6 +36,13 @@ public class Player {
         this.score = score;
     }
 
+    public float getTimePlayed() {
+        return this.timePlayed;
+    }
+    public void setTimePlayed(float timePlayed) {
+        this.timePlayed = timePlayed;
+    }
+
     /**
      * Compare with another player.
      * @param other other Player
@@ -40,6 +51,9 @@ public class Player {
     public boolean less(Player other) {
         if (this.score != other.score) {
             return this.score < other.score;
+        }
+        if (this.timePlayed != other.timePlayed) {
+            return this.timePlayed > other.timePlayed;
         }
         if (!this.name.equals(other.name)) {
             return this.name.compareTo(other.name) < 0;

@@ -14,6 +14,7 @@ import entity.TextureManager;
 import Menu.ModeMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
+import com.main.gamemode.VsMode;
 import ui.SettingsUI;
 import ui.MainMenu;
 

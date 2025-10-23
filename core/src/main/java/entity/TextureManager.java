@@ -9,6 +9,7 @@ public class TextureManager {
     public static ArrayList<Texture> brickTextures = new ArrayList<>();
     public static Texture ballTexture;
     public static Texture paddleTexture;
+    public static Texture flippedpaddleTexture;
     public static Texture threeBallsTextures;
     public static Texture expandpaddleTexture;
     public static Texture shieldTexture;
@@ -25,6 +26,7 @@ public class TextureManager {
         brickTextures.add(new Texture("images/brick_cyan.png"));
         ballTexture = new Texture("images/ball.png");
         paddleTexture = new Texture("images/paddle.png");
+        flippedpaddleTexture = new Texture("images/flippedpaddle.png");
         threeBallsTextures = new Texture("images/threeBalls.png");
         expandpaddleTexture = new Texture("images/expandpaddle.png");
         shieldTexture = new Texture("images/shield.png");
@@ -44,6 +46,7 @@ public class TextureManager {
         }
         ballTexture.dispose();
         paddleTexture.dispose();
+        flippedpaddleTexture.dispose();
         threeBallsTextures.dispose();
         expandpaddleTexture.dispose();
         shieldTexture.dispose();

@@ -11,6 +11,7 @@ public class Ball extends MovableObject {
     private long BigEnd = 0;
     private long SlowEnd = 0;
     private float originalspeed;
+    private int lastHitBy = 0;
 
     /**
      * Constructor for ball.
@@ -145,4 +146,12 @@ public class Ball extends MovableObject {
     }
 
     public float getAngle() { return this.angle; }
+
+    public void setLastHitBy(int playerNumber) {
+        this.lastHitBy = playerNumber;
+    }
+
+    public int getLastHitBy() {
+        return this.lastHitBy;
+    }
 }

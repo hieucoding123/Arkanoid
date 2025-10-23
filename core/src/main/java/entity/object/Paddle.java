@@ -4,11 +4,26 @@ import com.main.Game;
 import entity.MovableObject;
 
 public class Paddle extends MovableObject {
+    private boolean isFlipped;
     private long expandEnd = 0;
+
+    public void setFlipped(boolean flipped) {
+        this.isFlipped = flipped;
+    }
+
+    public boolean isFlipped() {
+        return isFlipped;
+    }
 
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
         this.speed = 2.5f;
+    }
+
+    public Paddle(float x, float y, Texture texture, boolean isFlipped) {
+        super(x, y, texture);
+        this.speed = 2.5f;
+        this.isFlipped = isFlipped;
     }
 
     public void activateExpand(float duration) {
