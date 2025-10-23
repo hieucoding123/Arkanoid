@@ -14,11 +14,10 @@ import entity.object.Paddle;
 import entity.TextureManager;
 import table.InfiModeTable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class InfiniteMode extends GameMode {
-    private final ArrayList<BricksMap> bricksMaps;
+    private final ArrayList<String> maps;
     private final ArrayList<Ball> balls;
     boolean flowPaddle = true;      // Ball follow paddle
     private Paddle paddle;
@@ -27,17 +26,22 @@ public class InfiniteMode extends GameMode {
     GameScreen gameScreen;
     private EffectFactory effectFactory;
     private InfiModeTable table;
+    private int currentIdx;
+    private float timePlayed;
+    private int revie;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
         balls = new ArrayList<>();
-        bricksMaps = new ArrayList<>();
+        maps = new ArrayList<>();
         this.setPlayer(player);
-
+        this.setEnd(false);
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
         this.table = new InfiModeTable();
+        this.timePlayed = 0.0f;
+        revie = 3;
 
         create();
     }
@@ -48,9 +52,10 @@ public class InfiniteMode extends GameMode {
 
         for (int i = 1; i <= 5; i++) {
             String mapPath = "/maps/map" + i + ".txt";
-            bricksMaps.add(new BricksMap(mapPath));
+            maps.add(mapPath);
         }
-        currentMap =  bricksMaps.get(0);
+        currentIdx = 0;
+        currentMap =  new BricksMap(maps.get(currentIdx));
         paddle = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
@@ -61,6 +66,7 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void update(float delta) {
+        this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, delta);
@@ -68,6 +74,15 @@ public class InfiniteMode extends GameMode {
         if (balls.isEmpty()) {
             scoreManager.deduction();
             this.reset();
+            this.revie--;
+            this.setEnd(revie == 0);
+        }
+        if (this.isEnd()) {
+            EffectItem.clear();
+            this.getPlayer().setScore(this.scoreManager.getScore());
+            this.getPlayer().setTimePlayed(this.timePlayed);
+            this.table.addPlayer(this.getPlayer());
+            this.table.updateSystemFile();
         }
 
         if (flowPaddle) {       // follow paddle
@@ -116,12 +131,16 @@ public class InfiniteMode extends GameMode {
             }
         }
         balls.removeIf(Ball::isDestroyed);
+        if (currentMap.getBricks().isEmpty()) {
+            currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
+            currentMap =  new BricksMap(maps.get(currentIdx));
+            EffectItem.clear();
+            reset();
+        }
     }
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
-        this.handleInput();
         this.draw(sp);
         gameScreen.render();
     }
@@ -168,7 +187,7 @@ public class InfiniteMode extends GameMode {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
-            TextureManager.ballTexture, 5.0f));
+            TextureManager.ballTexture, 10.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
         flowPaddle = true;
