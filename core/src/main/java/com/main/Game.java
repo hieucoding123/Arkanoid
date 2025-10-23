@@ -102,6 +102,9 @@ public class Game {
         switch (gameState) {
             case INFI_MODE:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.SELECT_MODE);
+                }
                 break;
             case LEVELS_MODE:
                 break;
