@@ -18,9 +18,9 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
-public class ModeMenu extends UserInterface {
+public class LevelSelectionMenu extends UserInterface {
 
-    public ModeMenu(Main main, Player player) {
+    public LevelSelectionMenu(Main main, Player player) {
         super(main, player);
     }
 
@@ -55,7 +55,7 @@ public class ModeMenu extends UserInterface {
         Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
         // --- Title Label ---
-        Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
+        Label titleLabel = new Label("CHOOSE LEVEL", MenuText);
         titleLabel.setFontScale(1f);
         mainTable.add(titleLabel).padBottom(40).padTop(30);
         mainTable.row();
@@ -66,28 +66,64 @@ public class ModeMenu extends UserInterface {
         Main main = this.getMain();
 
         //InfiniteMode Button
-        Button infiModeButton = new Button(this.getSkin());
-        infiModeButton.addListener(new ClickListener() {
+        Button Level1 = new Button(this.getSkin());
+        Level1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.INFI_MODE);
+                main.setGameState(GameState.LEVEL1);
             }
         });
         // LevelsMode Button
-        Button levelsModeButton = new Button(this.getSkin());
-        levelsModeButton.addListener(new ClickListener() {
+        Button Level2 = new Button(this.getSkin());
+        Level2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVELS_SELECTION);
+                main.setGameState(GameState.LEVEL2);
+//                main.setGameState(GameState.LEVELS_MODE);
+            }
+        });
+
+        Button Level3 = new Button(this.getSkin());
+        Level3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEVEL3);
+//                main.setGameState(GameState.LEVELS_MODE);
+            }
+        });
+
+        Button Level4 = new Button(this.getSkin());
+        Level4.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEVEL4);
+//                main.setGameState(GameState.LEVELS_MODE);
+            }
+        });
+
+        Button Level5 = new Button(this.getSkin());
+        Level5.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEVEL5);
 //                main.setGameState(GameState.LEVELS_MODE);
             }
         });
 
         //Arrange the Buttons in the buttonTable
-        buttonTable.add(infiModeButton).width(120).height(50).padBottom(40);
+        buttonTable.add(Level1).width(120).height(50).padBottom(40);
         buttonTable.row();
 
-        buttonTable.add(levelsModeButton).width(120).height(50).padBottom(40);
+        buttonTable.add(Level2).width(120).height(50).padBottom(40);
+        buttonTable.row();
+
+        buttonTable.add(Level3).width(120).height(50).padBottom(40);
+        buttonTable.row();
+
+        buttonTable.add(Level4).width(120).height(50).padBottom(40);
+        buttonTable.row();
+
+        buttonTable.add(Level5).width(120).height(50).padBottom(40);
         buttonTable.row();
 
         //Add to main table

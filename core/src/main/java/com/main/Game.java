@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.main.gamemode.LevelMode;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
+import Menu.LevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import ui.SettingsUI;
@@ -35,6 +37,7 @@ public class Game {
     public static GameState gameState;
     private Main main;
     private Player player;
+    private int selectedLevelNumber;
 
     public Game(Main main) {
         this.main = main;
@@ -76,7 +79,25 @@ public class Game {
             case SELECT_MODE:
                 ui.render();
                 break;
+            case LEVELS_SELECTION:
+                ui.render();
+                break;
             case INFI_MODE:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL1:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL2:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL3:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL4:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL5:
                 gameMode.render(spriteBatch, this.delta);
                 break;
         }
@@ -103,7 +124,20 @@ public class Game {
             case INFI_MODE:
                 gameMode.update(this.delta);
                 break;
-            case LEVELS_MODE:
+            case LEVEL1:
+                gameMode.update(this.delta);
+                break;
+            case LEVEL2:
+                gameMode.update(this.delta);
+                break;
+            case LEVEL3:
+                gameMode.update(this.delta);
+                break;
+            case LEVEL4:
+                gameMode.update(this.delta);
+                break;
+            case LEVEL5:
+                gameMode.update(this.delta);
                 break;
         }
     }
@@ -133,6 +167,11 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case LEVELS_SELECTION:
+                ui = new LevelSelectionMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             default:
                 playGame();
         }
@@ -144,8 +183,22 @@ public class Game {
             case INFI_MODE:
                 gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
                 break;
-            case LEVELS_MODE:
+            case LEVEL1:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 1);
                 break;
+            case LEVEL2:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 2);
+                break;
+            case LEVEL3:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 3);
+                break;
+            case LEVEL4:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 4);
+                break;
+            case LEVEL5:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
+                break;
+
         }
     }
 }
