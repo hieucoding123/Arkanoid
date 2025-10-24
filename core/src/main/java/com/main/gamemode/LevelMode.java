@@ -12,6 +12,7 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
+import table.LevelDatabase;
 
 import java.util.ArrayList;
 
@@ -54,10 +55,10 @@ public class LevelMode extends GameMode {
             String mapPath = "/maps_for_levelmode/map" + i + ".txt";
             bricksMaps.add(new BricksMap(mapPath));
         }
-        mapIndex = this.levelNumber - 1;
+        mapIndex = this.levelNumber;
 
-        if (mapIndex < 0 || mapIndex >= bricksMaps.size()) {
-            mapIndex = 0;
+        if (mapIndex <= 0 || mapIndex > bricksMaps.size()) {
+            mapIndex = 1;
         }
         currentMap = bricksMaps.get(mapIndex);
         paddle = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
@@ -100,16 +101,16 @@ public class LevelMode extends GameMode {
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
                         EffectItem newEffectItem = null;
-                        if (mapIndex == 0) {
+                        if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
                                 0.06, 0.11, 0.15, 0.19, 0.20);
-                        } else if  (mapIndex == 1) {
+                        } else if  (mapIndex == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
                                 0.05, 0.09, 0.13, 0.16, 0.18);
-                        } else if (mapIndex == 2) {
+                        } else if (mapIndex == 3) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
                                 0.04, 0.07, 0.10, 0.13, 0.15);
-                        } else if (mapIndex == 3) {
+                        } else if (mapIndex == 4) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
                                 0.03, 0.06, 0.08, 0.10, 0.12);
                         } else {
@@ -155,7 +156,7 @@ public class LevelMode extends GameMode {
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
-
+            LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, total_score);
         }
     }
 
