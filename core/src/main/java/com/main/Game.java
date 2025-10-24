@@ -131,18 +131,33 @@ public class Game {
                 break;
             case LEVEL1:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
                 break;
             case LEVEL2:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
                 break;
             case LEVEL3:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
                 break;
             case LEVEL4:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
                 break;
             case LEVEL5:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
                 break;
         }
     }

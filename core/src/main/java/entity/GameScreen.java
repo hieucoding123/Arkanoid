@@ -26,6 +26,7 @@ public class GameScreen {
 
     //Score
     private ScoreManager scoreManager;
+    private int lives;
 
     //Constants
     private final float RSCORE_X = 200f;
@@ -38,6 +39,7 @@ public class GameScreen {
     //Constructor
     public GameScreen(ScoreManager scoreManager) {
         this.scoreManager = scoreManager;
+        this.lives = 3;
     }
 
     public void create(){
@@ -55,7 +57,7 @@ public class GameScreen {
 
         // Labels
         scoreLabel = new Label("0.0", skin); // Initial text
-        livesLabel = new Label("3", skin);   // Initial text
+        livesLabel = new Label(String.valueOf(this.lives), skin);   // Initial text
         timeLabel = new Label("00:00", skin); // Initial text
 
         livesLabel.setPosition(LIVES_X, LIVES_Y);
@@ -73,13 +75,17 @@ public class GameScreen {
         scoreLabel.setPosition(RSCORE_X - scoreLabel.getPrefWidth(), SCORE_Y - scoreLabel.getPrefHeight());
 
         // Later
-        // livesLabel.setText(String.valueOf(playerLives));
+        livesLabel.setText(String.valueOf(this.lives));
         // timeLabel.setText(formatTime(gameTimer));
 
         //Render UI
         viewport.apply(true);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public void resize(int width, int height) {

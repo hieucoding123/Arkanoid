@@ -26,6 +26,7 @@ public class LevelMode extends GameMode {
     private EffectFactory effectFactory;
     private int levelNumber;
     private int mapIndex;
+    private int revie;
 
     public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
@@ -37,6 +38,8 @@ public class LevelMode extends GameMode {
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
+        this.revie = 3;
+        this.setEnd(false);
         create();
     }
 
@@ -71,6 +74,11 @@ public class LevelMode extends GameMode {
         if (balls.isEmpty()) {
             scoreManager.deduction();
             this.reset();
+            this.revie--;
+            if (this.revie == 0) {
+                this.setEnd(true);
+                EffectItem.clear();
+            }
         }
 
         if (flowPaddle) {       // follow paddle
@@ -142,6 +150,7 @@ public class LevelMode extends GameMode {
         this.update(delta);
         this.handleInput();
         this.draw(sp);
+        gameScreen.setLives(this.revie);
         gameScreen.render();
     }
 
