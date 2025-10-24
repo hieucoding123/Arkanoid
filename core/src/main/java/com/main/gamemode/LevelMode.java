@@ -27,6 +27,8 @@ public class LevelMode extends GameMode {
     private int levelNumber;
     private int mapIndex;
     private int revie;
+    private double timePlayed;
+    private boolean start = false;
 
     public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
@@ -40,6 +42,7 @@ public class LevelMode extends GameMode {
         this.levelNumber = levelNumber;
         this.revie = 3;
         this.setEnd(false);
+        this.timePlayed = 0.0f;
         create();
     }
 
@@ -67,6 +70,7 @@ public class LevelMode extends GameMode {
 
     @Override
     public void update(float delta) {
+        if (start) this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, delta);
@@ -151,6 +155,7 @@ public class LevelMode extends GameMode {
         this.handleInput();
         this.draw(sp);
         gameScreen.setLives(this.revie);
+        gameScreen.setTime(this.timePlayed);
         gameScreen.render();
     }
 
@@ -158,10 +163,12 @@ public class LevelMode extends GameMode {
     public void handleInput() {
         //Press LEFT
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+            start = true;
             paddle.moveLeft();
         }
         //Press RIGHT
         else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+            start = true;
             paddle.moveRight();
         }
         //IF NO PRESS KEEP IT STAND
@@ -171,6 +178,7 @@ public class LevelMode extends GameMode {
         // New state of the ball
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
             flowPaddle = false;             // pulled ball up
+            start = true;
             balls.get(0).updateVelocity();
         }
     }
