@@ -12,9 +12,7 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
-import table.InfiModeTable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class LevelMode extends GameMode {
@@ -26,8 +24,8 @@ public class LevelMode extends GameMode {
     private ScoreManager scoreManager;
     GameScreen gameScreen;
     private EffectFactory effectFactory;
-    private InfiModeTable table;
     private int levelNumber;
+    private int mapIndex;
 
     public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
@@ -38,7 +36,6 @@ public class LevelMode extends GameMode {
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
-        this.table = new InfiModeTable();
         this.levelNumber = levelNumber;
         create();
     }
@@ -48,10 +45,10 @@ public class LevelMode extends GameMode {
         gameScreen.create();
 
         for (int i = 1; i <= 5; i++) {
-            String mapPath = "/maps/map" + i + ".txt";
+            String mapPath = "/maps_for_levelmode/map" + i + ".txt";
             bricksMaps.add(new BricksMap(mapPath));
         }
-        int mapIndex = this.levelNumber - 1;
+        mapIndex = this.levelNumber - 1;
 
         if (mapIndex < 0 || mapIndex >= bricksMaps.size()) {
             mapIndex = 0;
@@ -90,8 +87,24 @@ public class LevelMode extends GameMode {
                     brick.takeHit();
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
+                        EffectItem newEffectItem = null;
+                        if (mapIndex == 0) {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                                0.06, 0.11, 0.15, 0.19, 0.20);
+                        } else if  (mapIndex == 1) {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                                0.05, 0.09, 0.13, 0.16, 0.18);
+                        } else if (mapIndex == 2) {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                                0.04, 0.07, 0.10, 0.13, 0.15);
+                        } else if (mapIndex == 3) {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                                0.03, 0.06, 0.08, 0.10, 0.12);
+                        } else {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                                0.02, 0.04, 0.06, 0.08, 0.10);
+                        }
 
-                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball);
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }
