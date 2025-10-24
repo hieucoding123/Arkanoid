@@ -70,6 +70,7 @@ public class LevelMode extends GameMode {
 
     @Override
     public void update(float delta) {
+        if (this.isEnd()) return;
         if (start) this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
@@ -80,7 +81,6 @@ public class LevelMode extends GameMode {
             this.reset();
             this.revie--;
             if (this.revie == 0) {
-                this.setEnd(true);
                 EffectItem.clear();
             }
         }
@@ -147,6 +147,16 @@ public class LevelMode extends GameMode {
             }
         }
         balls.removeIf(Ball::isDestroyed);
+
+        if ((currentMap.getBricks().isEmpty() && this.isEnd() == false) || (this.revie == 0)) {
+            this.setEnd(true);
+            double levelscore = this.scoreManager.getScore();
+            double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
+
+            double total_score = levelscore + bonusscore;
+            if (total_score < 0) total_score = 0;
+
+        }
     }
 
     @Override
