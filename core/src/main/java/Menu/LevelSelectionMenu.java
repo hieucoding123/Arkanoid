@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
@@ -62,71 +63,28 @@ public class LevelSelectionMenu extends UserInterface {
 
         //Button Table
         Table buttonTable = new Table();
-
         Main main = this.getMain();
 
-        //InfiniteMode Button
-        Button Level1 = new Button(this.getSkin());
-        Level1.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVEL1);
+        GameState[] levels = {
+            GameState.LEVEL1,
+            GameState.LEVEL2,
+            GameState.LEVEL3,
+            GameState.LEVEL4,
+            GameState.LEVEL5
+        };
+
+        for (final GameState levelState : levels) {
+            Button levelButton = new Button(this.getSkin());
+            levelButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levelState);
+                }
+            });
+
+            buttonTable.add(levelButton).width(120).height(50).padBottom(40);
+            buttonTable.row();
             }
-        });
-        // LevelsMode Button
-        Button Level2 = new Button(this.getSkin());
-        Level2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVEL2);
-//                main.setGameState(GameState.LEVELS_MODE);
-            }
-        });
-
-        Button Level3 = new Button(this.getSkin());
-        Level3.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVEL3);
-//                main.setGameState(GameState.LEVELS_MODE);
-            }
-        });
-
-        Button Level4 = new Button(this.getSkin());
-        Level4.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVEL4);
-//                main.setGameState(GameState.LEVELS_MODE);
-            }
-        });
-
-        Button Level5 = new Button(this.getSkin());
-        Level5.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVEL5);
-//                main.setGameState(GameState.LEVELS_MODE);
-            }
-        });
-
-        //Arrange the Buttons in the buttonTable
-        buttonTable.add(Level1).width(120).height(50).padBottom(40);
-        buttonTable.row();
-
-        buttonTable.add(Level2).width(120).height(50).padBottom(40);
-        buttonTable.row();
-
-        buttonTable.add(Level3).width(120).height(50).padBottom(40);
-        buttonTable.row();
-
-        buttonTable.add(Level4).width(120).height(50).padBottom(40);
-        buttonTable.row();
-
-        buttonTable.add(Level5).width(120).height(50).padBottom(40);
-        buttonTable.row();
-
-        //Add to main table
         mainTable.add(buttonTable);
     }
 }
