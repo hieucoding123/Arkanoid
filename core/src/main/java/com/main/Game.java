@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.main.gamemode.LevelMode;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
+import Menu.LevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
@@ -29,6 +31,7 @@ public class Game {
     private UserInterface ui;
     float delta;
     private ScoreManager scoreManager;
+    private ScoreManager scoreManagerP2;
     private GameScreen gameScreen;
 
     GameMode gameMode;
@@ -36,6 +39,8 @@ public class Game {
     public static GameState gameState;
     private Main main;
     private Player player;
+    private Player player2;
+    private int selectedLevelNumber;
 
     public Game(Main main) {
         this.main = main;
@@ -44,7 +49,9 @@ public class Game {
 
     public void init() {
         player = new Player();
+        player2 = new Player();
         scoreManager = new ScoreManager();
+        scoreManagerP2 = new ScoreManager();
         gameScreen = new GameScreen(scoreManager);
         gameScreen.create();
 
@@ -77,7 +84,28 @@ public class Game {
             case SELECT_MODE:
                 ui.render();
                 break;
+            case LEVELS_SELECTION:
+                ui.render();
+                break;
             case INFI_MODE:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL1:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL2:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL3:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL4:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case LEVEL5:
+                gameMode.render(spriteBatch, this.delta);
+                break;
+            case VS_MODE:
                 gameMode.render(spriteBatch, this.delta);
                 break;
         }
@@ -85,6 +113,8 @@ public class Game {
     }
 
     public void handleInput() {
+        if (gameMode != null)
+            gameMode.handleInput();
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
             if (Gdx.graphics.isFullscreen()) {
                 // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)
@@ -103,8 +133,45 @@ public class Game {
         switch (gameState) {
             case INFI_MODE:
                 gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.SELECT_MODE);
+                }
                 break;
-            case LEVELS_MODE:
+            case LEVEL1:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
+                break;
+            case LEVEL2:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
+                break;
+            case LEVEL3:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
+                break;
+            case LEVEL4:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
+                break;
+            case LEVEL5:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.LEVELS_SELECTION);
+                }
+                break;
+            case VS_MODE:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.SELECT_MODE);
+                }
                 break;
         }
     }
@@ -134,6 +201,11 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case LEVELS_SELECTION:
+                ui = new LevelSelectionMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             default:
                 playGame();
         }
@@ -145,7 +217,23 @@ public class Game {
             case INFI_MODE:
                 gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
                 break;
-            case LEVELS_MODE:
+            case LEVEL1:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 1);
+                break;
+            case LEVEL2:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 2);
+                break;
+            case LEVEL3:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 3);
+                break;
+            case LEVEL4:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 4);
+                break;
+            case LEVEL5:
+                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
+                break;
+            case VS_MODE:
+                gameMode = new VsMode(this.player, this.player2, gameScreen, this.scoreManager, this.scoreManagerP2);
                 break;
         }
     }

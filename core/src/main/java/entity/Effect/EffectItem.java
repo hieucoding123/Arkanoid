@@ -51,4 +51,8 @@ public abstract class EffectItem extends MovableObject {
             item.draw(batch);
         }
     }
+
+    public static void clear() {
+        items.clear();
+    }
 }

@@ -71,7 +71,7 @@ public class VsMode extends GameMode {
 //        currentMap = brickMap.get(0);
 //        currentRound = 1;
         paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture, false);
-        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 550, TextureManager.flippedpaddleTexture, true);
+        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 800, TextureManager.flippedpaddleTexture, true);
 //        balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
 //            paddle1.getY() + paddle1.getHeight(),
 //            TextureManager.ballTexture,
@@ -109,9 +109,10 @@ public class VsMode extends GameMode {
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
             10.0f);
+        ballP1.setVelocity(0, 10.0f);
 
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
-            paddle2.getY() - ballP2.getHeight(),
+            paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
             10.0f);
         ballP2.setVelocity(0, -10.0f);
@@ -162,8 +163,8 @@ public class VsMode extends GameMode {
         }
 
         if (flowPaddle2) {
-            ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP2.getWidth() / 2f);
-            ballP2.setY(paddle2.getY() - paddle2.getHeight());
+            ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP1.getWidth() / 2f);
+            ballP2.setY(paddle2.getY() - ballP1.getHeight());
             ballP2.setAngle(-(float)Math.PI / 2f);
         }
 
@@ -188,7 +189,7 @@ public class VsMode extends GameMode {
                         brick.setHitPoints(0);
                     }
                     if (brick.gethitPoints() == 0) {
-                        Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
+//                        Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
 //                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, relevantPaddle, ball);
 //                        if (newEffectItem != null) {
 //                            EffectItem.addEffectItem(newEffectItem);
@@ -200,11 +201,11 @@ public class VsMode extends GameMode {
                             scoreManagerP2.comboScore(brick);
                         }
 
-                        if (brick.getExplosion()) {
-                            brick.startExplosion();
-                        } else {
-                            brick.setDestroyed(true);
-                        }
+//                        if (brick.getExplosion()) {
+//                            brick.startExplosion();
+//                        } else {
+//                            brick.setDestroyed(true);
+//                        }
                     }
                     float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                     float ballCenterY = ball.getY() + ball.getHeight() / 2f;
@@ -277,7 +278,6 @@ public class VsMode extends GameMode {
 
         if (flowPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
             flowPaddle1 = false;
-            ballP1.setVelocity(0, 10.0f);
             balls.add(ballP1);
         }
 
