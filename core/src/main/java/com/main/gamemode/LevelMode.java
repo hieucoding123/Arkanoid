@@ -60,7 +60,7 @@ public class LevelMode extends GameMode {
         if (mapIndex <= 0 || mapIndex > bricksMaps.size()) {
             mapIndex = 1;
         }
-        currentMap = bricksMaps.get(mapIndex);
+        currentMap = bricksMaps.get(mapIndex - 1);
         paddle = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
@@ -81,9 +81,6 @@ public class LevelMode extends GameMode {
             scoreManager.deduction();
             this.reset();
             this.revie--;
-            if (this.revie == 0) {
-                EffectItem.clear();
-            }
         }
 
         if (flowPaddle) {       // follow paddle
@@ -149,14 +146,15 @@ public class LevelMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if ((currentMap.getBricks().isEmpty() && this.isEnd() == false) || (this.revie == 0)) {
+        if ((currentMap.getBricks().isEmpty() && !this.isEnd()) || (this.revie == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
             double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
-            LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, total_score);
+            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            else LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
         }
     }
 
