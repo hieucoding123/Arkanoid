@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class LevelDatabase {
 
@@ -149,5 +150,65 @@ public class LevelDatabase {
             e.printStackTrace();
             Gdx.app.error("Database", "Update Score/Level Error", e);
         }
+    }
+
+//Get the number of player show
+//    public static String getNumberPlayerShow(String inforNeed) {
+//        loadDriverIfNeeded();
+//        new File("leaderBoard").mkdirs();
+//
+//        String sqlCount = "SELECT COUNT(*) AS inforNeed FROM level_scores";
+//        int totalPlayers = 0;
+//
+//        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+//             Statement stmt = conn.createStatement()) {
+//            stmt.execute(SQL_CREATE_TABLE);
+//            //Get total number of player
+//            ResultSet rs = stmt.executeQuery(sqlCount);
+//            if (rs.next()) {
+//                totalPlayers = rs.getInt("total");
+//            }
+//            rs.close();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            Gdx.app.error("Database", "Get Player Count Error", e);
+//        }
+//
+//        int Numberofplayer = Math.min(20, totalPlayers);
+//
+//        return String.valueOf(Numberofplayer);
+//    }
+
+    public static ArrayList<String> getLeaderboardData() {
+        ArrayList<String> leaderboard = new ArrayList<>();
+
+        loadDriverIfNeeded();
+        new File("leaderBoard").mkdirs();
+
+        String sqlSelect = "SELECT playerName, maxLevelUnlocked, total FROM level_scores ORDER BY total DESC LIMIT 20";
+
+        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute(SQL_CREATE_TABLE);
+
+            ResultSet rs = stmt.executeQuery(sqlSelect);
+
+            while (rs.next()) {
+                String name = rs.getString("playerName");
+                int maxLevel = rs.getInt("maxLevelUnlocked");
+                double totalScore = rs.getDouble("total");
+                //Format save
+                String entry = name + "," + maxLevel + "," + totalScore;
+                leaderboard.add(entry);
+            }
+            rs.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Gdx.app.error("Database", "Get Leaderboard Data Error", e);
+        }
+        return leaderboard;
     }
 }
