@@ -24,13 +24,18 @@ public class ThreeBallsEffect extends EffectItem {
         }
 
         Ball originalBall = balls.get(0);
+        float originalBallAngle = originalBall.getAngle();
+
+        if (originalBallAngle < 0) {
+            originalBallAngle = -originalBallAngle;
+        }
 
         Ball ball1 = new Ball(originalBall);
-        ball1.setAngle(originalBall.getAngle() + 0.5f);
+        ball1.setAngle(originalBallAngle + 0.5f);
         ball1.updateVelocity();
 
         Ball ball2 = new Ball(originalBall);
-        ball2.setAngle(originalBall.getAngle() - 0.5f);
+        ball2.setAngle(originalBallAngle - 0.5f);
         ball2.updateVelocity();
 
         balls.add(ball1);

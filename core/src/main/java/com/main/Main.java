@@ -11,14 +11,6 @@ public class Main extends ApplicationAdapter {
         game = new Game(this);
     }
 
-    public void handleInput() {
-        game.handleInput();
-    }
-
-    public void update() {
-//        game.update();
-    }
-
     @Override
     public void resize(int width, int height) {
         // Cập nhật viewport với kích thước cửa sổ mới
@@ -44,4 +36,5 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         game.dispose();
     }
+    
 }

@@ -26,6 +26,10 @@ public class GameScreen {
 
     //Score
     private ScoreManager scoreManager;
+    //Lives
+    private int lives;
+    //Time
+    private double times;
 
     //Constants
     private final float RSCORE_X = 200f;
@@ -38,6 +42,8 @@ public class GameScreen {
     //Constructor
     public GameScreen(ScoreManager scoreManager) {
         this.scoreManager = scoreManager;
+        this.lives = 3;
+        this.times = 0.0f;
     }
 
     public void create(){
@@ -54,9 +60,9 @@ public class GameScreen {
         skin.add("default", uiLabelStyle);
 
         // Labels
-        scoreLabel = new Label("0.0", skin); // Initial text
-        livesLabel = new Label("3", skin);   // Initial text
-        timeLabel = new Label("00:00", skin); // Initial text
+        scoreLabel = new Label("0.0", skin);
+        livesLabel = new Label("3", skin);
+        timeLabel = new Label("0.0", skin);
 
         livesLabel.setPosition(LIVES_X, LIVES_Y);
         timeLabel.setPosition(TIME_X, TIME_Y);
@@ -73,13 +79,27 @@ public class GameScreen {
         scoreLabel.setPosition(RSCORE_X - scoreLabel.getPrefWidth(), SCORE_Y - scoreLabel.getPrefHeight());
 
         // Later
-        // livesLabel.setText(String.valueOf(playerLives));
-        // timeLabel.setText(formatTime(gameTimer));
+        livesLabel.setText(String.valueOf(this.lives));
+        timeLabel.setText(formatTime(times));
 
         //Render UI
         viewport.apply(true);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    private String formatTime(double time) {
+        int minutes = (int) (times / 60);
+        int seconds = (int) (times % 60);
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void setTime(double timeInSeconds) {
+        this.times = timeInSeconds;
     }
 
     public void resize(int width, int height) {

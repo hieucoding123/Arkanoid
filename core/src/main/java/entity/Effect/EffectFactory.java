@@ -9,20 +9,29 @@ import java.util.Random;
 public class EffectFactory {
     private Random rand = new Random();
 
-    public EffectItem tryCreateEffectItem(Brick brick, Paddle paddle, Ball ball) {
-        float chance = rand.nextFloat();
+    public EffectItem tryCreateEffectItem(Brick brick, Paddle paddle, Ball ball,
+                                          double expand,
+                                          double shield,
+                                          double bigball,
+                                          double slowball,
+                                          double threeball) {
+        double chance = rand.nextDouble();
 
-        if (chance < 0.1) {
-            return new SlowBallEffect(brick.getX(), brick.getY(), -1);
-        }else if (chance < 0.2) {
-            return new BigballEffect(brick.getX(), brick.getY(), -1);
-        }else if (chance < 0.4) {
-            return new ShieldEffect(ball.getX(), ball.getY(), -1);
-        }else if (chance < 0.65) {
+        if (chance <= expand) {
             return new ExpandEffect(brick.getX(), brick.getY(), -1, paddle);
-        }
-            return new ThreeBallsEffect(brick.getX(), brick.getY(), -1);
 
-//        return null;
+        } else if (chance <= shield) {
+            return new ShieldEffect(brick.getX(), brick.getY(), -1);
+
+        } else if (chance <= bigball) {
+            return new BigballEffect(brick.getX(), brick.getY(), -1);
+
+        } else if (chance <= slowball) {
+            return new SlowBallEffect(brick.getX(), brick.getY(), -1);
+
+        } else if (chance <= threeball) {
+            return new ThreeBallsEffect(brick.getX(), brick.getY(), -1);
+        }
+        return null;
     }
 }
