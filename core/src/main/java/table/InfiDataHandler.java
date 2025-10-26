@@ -30,7 +30,7 @@ public class InfiDataHandler extends DataHandler {
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
 
-        String sqlInsert = "INSERT INTO game_scores (playerName, score, time) VALUES (?, ?, ?);";
+        String sqlInsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?);";
 
         try (Connection conn = DriverManager.getConnection(getUrlDatabase())) {
             conn.setAutoCommit(true); // Tự động lưu cho mỗi lệnh
@@ -53,7 +53,7 @@ public class InfiDataHandler extends DataHandler {
             Gdx.app.error("Database", "Add Game Score Error", e);
         }
     }
-    public static ArrayList<String> getGameLeaderboardData() {
+    public static ArrayList<String> getLeaderboardData() {
         ArrayList<String> leaderboard = new ArrayList<>();
 
         loadDriverIfNeeded();
