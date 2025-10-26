@@ -1,9 +1,11 @@
 package com.main.gamemode;
 
+import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
+import entity.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.BricksMap;
@@ -55,5 +57,8 @@ public class CoopMode extends GameMode{
             mapIndex = 1;
         }
         currentMap = bricksMaps.get(mapIndex - 1);
+
+        paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
+        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 40, TextureManager.paddleTexture);
     }
 }
