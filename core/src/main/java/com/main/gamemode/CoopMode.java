@@ -40,4 +40,20 @@ public class CoopMode extends GameMode{
         this.timePlayed = 0.0f;
         create();
     }
+
+    @Override
+    public void create() {
+        gameScreen.create();
+
+        for (int i = 1; i <= 5; i++) {
+            String mapPath = "/maps_for_levelmode/map" + i + ".txt";
+            bricksMaps.add(new BricksMap(mapPath));
+        }
+        mapIndex = this.levelNumber;
+
+        if (mapIndex <= 0 || mapIndex > bricksMaps.size()) {
+            mapIndex = 1;
+        }
+        currentMap = bricksMaps.get(mapIndex - 1);
+    }
 }
