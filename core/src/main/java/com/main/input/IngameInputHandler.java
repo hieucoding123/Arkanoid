@@ -1,5 +1,6 @@
 package com.main.input;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.main.gamemode.GameMode;
 import entity.object.Paddle;
@@ -41,5 +42,59 @@ public class IngameInputHandler extends InputAdapter {
                 p2.setVelocity(0, 0);
             }
         }
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+
+        switch (keycode) {
+            case Input.Keys.A:
+                paddle1Left = true;
+                return true;
+            case Input.Keys.D:
+                paddle1Right = true;
+                return true;
+        }
+
+        boolean hasTwoPaddle = currentMode.getPaddle2() != null;
+        if (hasTwoPaddle) {
+            switch (keycode) {
+                case Input.Keys.LEFT:
+                    paddle2Left = true;
+                    return true;
+                case Input.Keys.RIGHT:
+                    paddle2Right = true;
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+
+        switch (keycode) {
+            case Input.Keys.A:
+                paddle1Left = false;
+                return true;
+            case Input.Keys.D:
+                paddle1Right = false;
+                return true;
+        }
+
+        boolean hasTwoPaddle = currentMode.getPaddle2() != null;
+        if (hasTwoPaddle) {
+            switch (keycode) {
+                case Input.Keys.LEFT:
+                    paddle2Left = false;
+                    return true;
+                case Input.Keys.RIGHT:
+                    paddle2Right = false;
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
