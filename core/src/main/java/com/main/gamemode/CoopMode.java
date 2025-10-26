@@ -3,46 +3,47 @@ package com.main.gamemode;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import entity.Effect.*;
+import entity.Effect.EffectFactory;
+import entity.Effect.EffectItem;
+import entity.Effect.ShieldEffect;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
+import entity.TextureManager;
 import entity.object.Ball;
+import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
-import entity.object.Paddle;
-import entity.TextureManager;
-import table.LevelDatabase;
 
 import java.util.ArrayList;
 
-public class LevelMode extends GameMode {
+public class CoopMode extends GameMode{
     private final ArrayList<BricksMap> bricksMaps;
     private final ArrayList<Ball> balls;
-    boolean flowPaddle = true;      // Ball follow paddle
-    private Paddle paddle;
+    boolean followPaddle = true;      // Ball follow paddle
+    private Paddle paddle1;
+    private Paddle paddle2;
     private BricksMap currentMap;
     private ScoreManager scoreManager;
     GameScreen gameScreen;
     private EffectFactory effectFactory;
     private int levelNumber;
     private int mapIndex;
-    private int revie;
+    private int lives;
     private double timePlayed;
     private boolean start = false;
 
-    public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
+    public CoopMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
         balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
-        this.setPlayer(player);
 
+        this.setPlayer(player);
+        this.setEnd(false);
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
-        this.revie = 3;
-        this.setEnd(false);
         this.timePlayed = 0.0f;
         create();
     }
@@ -61,9 +62,12 @@ public class LevelMode extends GameMode {
             mapIndex = 1;
         }
         currentMap = bricksMaps.get(mapIndex - 1);
-        paddle = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
-        balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
-            paddle.getY() + paddle.getHeight(),
+
+        paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 100, TextureManager.paddleTexture);
+        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
+
+        balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
+            paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
             5.0f)
         );
@@ -71,53 +75,79 @@ public class LevelMode extends GameMode {
 
     @Override
     public void update(float delta) {
-        if (this.isEnd()) return;
-        if (start) this.timePlayed += delta;
+        if (this.isEnd()) {
+            return;
+        }
+
+        if (start) {
+            this.timePlayed += delta;
+        }
+
         currentMap.update(delta, this.scoreManager);
-        paddle.update(delta);
-        EffectItem.updateEffectItems(paddle, this.balls, delta);
+        paddle1.update(delta);
+        paddle2.update(delta);
+        EffectItem.updateEffectItems(paddle1, this.balls, delta);
+        EffectItem.updateEffectItems(paddle2, this.balls, delta);
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            this.lives--;
             this.reset();
-            this.revie--;
         }
 
-        if (flowPaddle) {       // follow paddle
-            balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
-            balls.get(0).setY(paddle.getY() + paddle.getHeight());
-            balls.get(0).setAngle((float)Math.PI / 2f);
+        if (followPaddle) {
+            balls.get(0).setX(paddle1.getX() + paddle1.getWidth() / 2f - balls.get(0).getWidth() / 2f);
+            balls.get(0).setY(paddle1.getY() + paddle1.getHeight());
+            balls.get(0).setAngle((float) Math.PI / 2f);
         }
+
         for (Ball ball : balls) {
             ball.update(delta);
-            ball.collisionWith(paddle);
+            ball.collisionWith(paddle1);
+            ball.collisionWith(paddle2);
 
             for (Brick brick : currentMap.getBricks()) {
                 if (ball.checkCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
-                        EffectItem newEffectItem = null;
+                        EffectItem newEffectItem1 = null;
+                        EffectItem newEffectItem2 = null;
                         if (mapIndex == 1) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.06, 0.11, 0.15, 0.19, 0.20);
-                        } else if  (mapIndex == 2) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.06, 0.11, 0.15, 0.19, 0.20);
+                        } else if (mapIndex == 2) {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.05, 0.09, 0.13, 0.16, 0.18);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.05, 0.09, 0.13, 0.16, 0.18);
                         } else if (mapIndex == 3) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.04, 0.07, 0.10, 0.13, 0.15);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.04, 0.07, 0.10, 0.13, 0.15);
                         } else if (mapIndex == 4) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.03, 0.06, 0.08, 0.10, 0.12);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.03, 0.06, 0.08, 0.10, 0.12);
                         } else {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.02, 0.04, 0.06, 0.08, 0.10);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.02, 0.04, 0.06, 0.08, 0.10);
                         }
 
-                        if (newEffectItem != null) {
-                            EffectItem.addEffectItem(newEffectItem);
+                        if (newEffectItem1 != null) {
+                            EffectItem.addEffectItem(newEffectItem1);
                         }
+
+                        if (newEffectItem2 != null) {
+                            EffectItem.addEffectItem(newEffectItem2);
+                        }
+
                         scoreManager.comboScore(brick);
                         if (brick.getExplosion()) {
                             brick.startExplosion();
@@ -127,6 +157,7 @@ public class LevelMode extends GameMode {
                     }
                     float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                     float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+
                     //Bottom and top collision
                     if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
                         ball.reverseY();
@@ -145,17 +176,6 @@ public class LevelMode extends GameMode {
             }
         }
         balls.removeIf(Ball::isDestroyed);
-
-        if ((currentMap.getBricks().isEmpty() && !this.isEnd()) || (this.revie == 0)) {
-            this.setEnd(true);
-            double levelscore = this.scoreManager.getScore();
-            double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
-
-            double total_score = levelscore + bonusscore;
-            if (total_score < 0) total_score = 0;
-            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            else LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
-        }
     }
 
     @Override
@@ -163,30 +183,41 @@ public class LevelMode extends GameMode {
         this.update(delta);
         this.handleInput();
         this.draw(sp);
-        gameScreen.setLives(this.revie);
+        gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
         gameScreen.render();
     }
 
     @Override
     public void handleInput() {
+        //Press A
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
+            start = true;
+            paddle1.moveLeft();
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
+            start = true;
+            paddle1.moveRight();
+        }
         //Press LEFT
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
             start = true;
-            paddle.moveLeft();
+            paddle2.moveLeft();
         }
         //Press RIGHT
         else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
             start = true;
-            paddle.moveRight();
+            paddle2.moveRight();
         }
         //IF NO PRESS KEEP IT STAND
         else {
-            paddle.setVelocity(0, 0);
+            paddle1.setVelocity(0,0);
+            paddle2.setVelocity(0, 0);
         }
-        // New state of the ball
+        // Paddle 1 shoot
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            flowPaddle = false;             // pulled ball up
+            followPaddle = false;             // pulled ball up
             start = true;
             balls.get(0).updateVelocity();
         }
@@ -206,16 +237,17 @@ public class LevelMode extends GameMode {
             );
         }
         for (Ball ball : balls) ball.draw(sp);
-        paddle.draw(sp);
+        paddle1.draw(sp);
+        paddle2.draw(sp);
     }
 
     public void reset() {
         balls.clear();
-        balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
-            paddle.getY() + paddle.getHeight(),
+        balls.add(new Ball(paddle1.getX() + (paddle1.getWidth() / 2f) - 12,
+            paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture, 5.0f));
-        paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
-        paddle.setY(50);
-        flowPaddle = true;
+        paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
+        paddle1.setY(50);
+        followPaddle = true;
     }
 }

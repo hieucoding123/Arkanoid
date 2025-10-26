@@ -143,6 +143,8 @@ public class InfiniteMode extends GameMode {
     public void render(SpriteBatch sp, float delta) {
         this.draw(sp);
         gameScreen.render();
+        gameScreen.setTime(this.timePlayed);
+        gameScreen.setLives(this.revie);
     }
 
     @Override
@@ -192,6 +194,4 @@ public class InfiniteMode extends GameMode {
         paddle.setY(50);
         flowPaddle = true;
     }
-
-
 }

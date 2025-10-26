@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
+import table.LevelDatabase;
 
 public class LevelSelectionMenu extends UserInterface {
 
@@ -53,7 +53,10 @@ public class LevelSelectionMenu extends UserInterface {
 
         //Label Styles
         Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
-        Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
+        Label.LabelStyle ButtonLabelStyle = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        ButtonLabelStyle.font.getData().setScale(0.6f);
+        Label.LabelStyle LockedLabelStyle = new Label.LabelStyle(this.getFont(), Color.GRAY);
+        LockedLabelStyle.font.getData().setScale(0.6f);
 
         // --- Title Label ---
         Label titleLabel = new Label("CHOOSE LEVEL", MenuText);
@@ -65,6 +68,9 @@ public class LevelSelectionMenu extends UserInterface {
         Table buttonTable = new Table();
         Main main = this.getMain();
 
+        String playerName = this.getPlayer().getName();
+        int maxLevel = LevelDatabase.getPlayerMaxLevel(playerName);
+
         GameState[] levels = {
             GameState.LEVEL1,
             GameState.LEVEL2,
@@ -73,14 +79,23 @@ public class LevelSelectionMenu extends UserInterface {
             GameState.LEVEL5
         };
 
-        for (final GameState levelState : levels) {
+        for (int i = 0; i < levels.length; i++) {
+            final int levelNumber = i + 1;
+            final GameState levelState = levels[i];
+
             Button levelButton = new Button(this.getSkin());
-            levelButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    main.setGameState(levelState);
-                }
-            });
+
+            if (levelNumber <= maxLevel) {
+                levelButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        main.setGameState(levelState);
+                    }
+                });
+
+            } else {
+                levelButton.setDisabled(true);
+            }
 
             buttonTable.add(levelButton).width(120).height(50).padBottom(40);
             buttonTable.row();

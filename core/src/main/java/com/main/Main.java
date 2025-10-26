@@ -31,10 +31,13 @@ public class Main extends ApplicationAdapter {
         game.setGameState(newGameState);
     }
 
+    public void setLevelSelectionMode(boolean isCoop) {
+        game.setLevelSelectionMode(isCoop);
+    }
 
     @Override
     public void dispose() {
         game.dispose();
     }
-    
+
 }
