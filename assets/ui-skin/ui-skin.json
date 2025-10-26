@@ -20,7 +20,8 @@
       fontColor: white,
       background: textfield-background,
       cursor: cursor,
-      selection: selection
+      selection: selection,
+      "messageFontColor": white
     }
   }
 }

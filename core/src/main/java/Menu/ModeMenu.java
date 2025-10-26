@@ -20,6 +20,12 @@ import entity.Player;
 
 public class ModeMenu extends UserInterface {
 
+    // --- Skins for each button ---
+    private Skin infiniteSkin;
+    private Skin levelsSkin;
+    private Skin coopSkin;
+    private Skin vsModeSkin;
+
     public ModeMenu(Main main, Player player) {
         super(main, player);
     }
@@ -27,7 +33,16 @@ public class ModeMenu extends UserInterface {
     @Override
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
-        this.setSkin(new Skin(Gdx.files.internal("ui/buttontest.json")));
+
+        //Load skin
+        this.infiniteSkin = new Skin(Gdx.files.internal("ui/infbutton.json"));
+        this.levelsSkin = new Skin(Gdx.files.internal("ui/Singleplayerbutton.json"));
+        this.coopSkin = new Skin(Gdx.files.internal("ui/CoopButton.json"));
+        this.vsModeSkin = new Skin(Gdx.files.internal("ui/vsmodebutton.json"));
+
+        //Set def skin
+        this.setSkin(this.infiniteSkin);
+
         this.setStage(new Stage(new ExtendViewport(
             Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
         );
@@ -54,8 +69,8 @@ public class ModeMenu extends UserInterface {
         Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
         Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
-        // --- Title Label ---
-        Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
+        //Title Label
+        Label titleLabel = new Label("Select your mode", MenuText);
         titleLabel.setFontScale(1f);
         mainTable.add(titleLabel).padBottom(40).padTop(30);
         mainTable.row();
@@ -66,7 +81,7 @@ public class ModeMenu extends UserInterface {
         Main main = this.getMain();
 
         //InfiniteMode Button
-        Button infiModeButton = new Button(this.getSkin());
+        Button infiModeButton = new Button(this.infiniteSkin);
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -74,8 +89,8 @@ public class ModeMenu extends UserInterface {
             }
         });
 
-        // LevelsMode Button
-        Button levelsModeButton = new Button(this.getSkin());
+        //Singleplayer button
+        Button levelsModeButton = new Button(this.levelsSkin);
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -83,8 +98,8 @@ public class ModeMenu extends UserInterface {
             }
         });
 
-        // CoopMode Button
-        Button coopModeButton = new Button(this.getSkin());
+        //Coop button
+        Button coopModeButton = new Button(this.coopSkin);
         coopModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -92,17 +107,41 @@ public class ModeMenu extends UserInterface {
             }
         });
 
+        //Vs button
+        Button vsModeButton = new Button(this.vsModeSkin);
+        vsModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("VS MODE");
+                // main.setGameState(GameState.VS_MODE); // You can uncomment this when ready
+            }
+        });
+
         //Arrange the Buttons in the buttonTable
-        buttonTable.add(infiModeButton).width(120).height(50).padBottom(40);
+        buttonTable.add(levelsModeButton).width(220).height(72).padBottom(20);
         buttonTable.row();
 
-        buttonTable.add(levelsModeButton).width(120).height(50).padBottom(40);
+        buttonTable.add(coopModeButton).width(220).height(72).padBottom(20);
         buttonTable.row();
 
-        buttonTable.add(coopModeButton).width(120).height(50).padBottom(40);
+        buttonTable.add(infiModeButton).width(220).height(72).padBottom(20);
+        buttonTable.row();
+
+        buttonTable.add(vsModeButton).width(220).height(72).padBottom(20);
         buttonTable.row();
 
         //Add to main table
         mainTable.add(buttonTable);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        if (levelsSkin != null) {
+            levelsSkin.dispose();
+        }
+        if (coopSkin != null) {
+            coopSkin.dispose();
+        }
     }
 }

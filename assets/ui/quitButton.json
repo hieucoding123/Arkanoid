@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: quit
+		down: quit_dim
+		over: quit_g
+		focused: quit_g
+	}
+}
+}
