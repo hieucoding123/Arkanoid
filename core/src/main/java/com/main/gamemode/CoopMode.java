@@ -2,6 +2,7 @@ package com.main.gamemode;
 
 import com.main.Game;
 import entity.Effect.EffectFactory;
+import entity.Effect.EffectItem;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
@@ -66,5 +67,28 @@ public class CoopMode extends GameMode{
             TextureManager.ballTexture,
             5.0f)
         );
+    }
+
+    @Override
+    public void update(float delta) {
+        if (this.isEnd()) {
+            return;
+        }
+
+        if (start) {
+            this.timePlayed += delta;
+        }
+
+        currentMap.update(delta, this.scoreManager);
+        paddle1.update(delta);
+        paddle2.update(delta);
+        EffectItem.updateEffectItems(paddle1, this.balls, delta);
+        EffectItem.updateEffectItems(paddle2, this.balls, delta);
+
+        if (balls.isEmpty()) {
+            scoreManager.deduction();
+            this.lives--;
+            //this.reset();
+        }
     }
 }
