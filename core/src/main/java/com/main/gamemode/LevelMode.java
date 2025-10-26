@@ -29,7 +29,6 @@ public class LevelMode extends GameMode {
     private int mapIndex;
     private int lives;
     private double timePlayed;
-    private boolean start = false;
 
     public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
