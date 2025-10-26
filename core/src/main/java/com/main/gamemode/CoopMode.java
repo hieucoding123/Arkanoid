@@ -60,5 +60,11 @@ public class CoopMode extends GameMode{
 
         paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
         paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 40, TextureManager.paddleTexture);
+
+        balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
+            paddle1.getY() + paddle1.getHeight(),
+            TextureManager.ballTexture,
+            5.0f)
+        );
     }
 }
