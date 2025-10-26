@@ -198,37 +198,7 @@ public class CoopMode extends GameMode {
 
     @Override
     public void handleInput() {
-        //Press A
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
-            start = true;
-            paddle1.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
-            start = true;
-            paddle1.moveRight();
-        }
-        //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            start = true;
-            paddle2.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            start = true;
-            paddle2.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle1.setVelocity(0,0);
-            paddle2.setVelocity(0, 0);
-        }
-        // Paddle 1 shoot
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            followPaddle = false;             // pulled ball up
-            start = true;
-            balls.get(0).updateVelocity();
-        }
+        inputHandler.processMovement();
     }
 
     @Override
@@ -257,5 +227,31 @@ public class CoopMode extends GameMode {
         paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
         paddle1.setY(50);
         followPaddle = true;
+    }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle1;
+    }
+
+    @Override
+    public Paddle getPaddle2() {
+        return this.paddle2;
+    }
+
+    @Override
+    public void launchBall() {
+        if (followPaddle) {
+            followPaddle = false;
+            start = true;
+            balls.get(0).updateVelocity();
+        }
+    }
+
+    @Override
+    public void isStart(boolean start) {
+        if (!this.start) {
+            this.start = start;
+        }
     }
 }
