@@ -103,7 +103,8 @@ public class CoopMode extends GameMode{
 
         for (Ball ball : balls) {
             ball.update(delta);
-            ball.collisionWith(paddle);
+            ball.collisionWith(paddle1);
+            ball.collisionWith(paddle2);
 
             for (Brick brick : currentMap.getBricks()) {
                 if (ball.checkCollision(brick)) {
