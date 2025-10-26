@@ -30,7 +30,6 @@ public class VsMode extends GameMode {
     private GameScreen gameScreen;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
-    private ArrayList<Ball> balls;
     private Ball ballP1;
     private Ball ballP2;
     private int currentRound;
@@ -55,7 +54,6 @@ public class VsMode extends GameMode {
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
         this.effectFactory  = new EffectFactory();
-        balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();
     }
@@ -306,5 +304,15 @@ public class VsMode extends GameMode {
         }
         paddle1.draw(sp);
         paddle2.draw(sp);
+    }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle1;
+    }
+
+    @Override
+    public void launchBall() {
+        // DO NOTHING.
     }
 }

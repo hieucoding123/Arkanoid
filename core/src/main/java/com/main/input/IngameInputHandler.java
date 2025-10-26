@@ -19,6 +19,7 @@ public class IngameInputHandler extends InputAdapter {
         this.currentMode = currentMode;
     }
 
+    //Call this after passing down paddle entities
     public void processMovement() {
 
         Paddle p1 = currentMode.getPaddle1();

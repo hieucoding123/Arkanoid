@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class CoopMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
-    private final ArrayList<Ball> balls;
-    boolean followPaddle = true;      // Ball follow paddle
     private Paddle paddle1;
     private Paddle paddle2;
     private BricksMap currentMap;
@@ -33,11 +31,9 @@ public class CoopMode extends GameMode {
     private int mapIndex;
     private int lives;
     private double timePlayed;
-    private boolean start = false;
 
     public CoopMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
-        balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
 
         this.setPlayer(player);
@@ -189,7 +185,6 @@ public class CoopMode extends GameMode {
     @Override
     public void render(SpriteBatch sp, float delta) {
         this.update(delta);
-        this.handleInput();
         this.draw(sp);
         gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
@@ -239,19 +234,4 @@ public class CoopMode extends GameMode {
         return this.paddle2;
     }
 
-    @Override
-    public void launchBall() {
-        if (followPaddle) {
-            followPaddle = false;
-            start = true;
-            balls.get(0).updateVelocity();
-        }
-    }
-
-    @Override
-    public void isStart(boolean start) {
-        if (!this.start) {
-            this.start = start;
-        }
-    }
 }

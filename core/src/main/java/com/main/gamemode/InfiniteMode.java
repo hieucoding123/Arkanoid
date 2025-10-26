@@ -1,8 +1,10 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.input.IngameInputHandler;
 import entity.Effect.*;
 import entity.GameScreen;
 import entity.Player;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 
 public class InfiniteMode extends GameMode {
     private final ArrayList<String> maps;
-    private final ArrayList<Ball> balls;
-    boolean flowPaddle = true;      // Ball follow paddle
     private Paddle paddle;
     private BricksMap currentMap;
     private ScoreManager scoreManager;
@@ -28,11 +28,10 @@ public class InfiniteMode extends GameMode {
     private InfiModeTable table;
     private int currentIdx;
     private float timePlayed;
-    private int revie;
+    private int lives;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
-        balls = new ArrayList<>();
         maps = new ArrayList<>();
         this.setPlayer(player);
         this.setEnd(false);
@@ -41,7 +40,7 @@ public class InfiniteMode extends GameMode {
         this.effectFactory = new EffectFactory();
         this.table = new InfiModeTable();
         this.timePlayed = 0.0f;
-        revie = 3;
+        lives = 3;
 
         create();
     }
@@ -62,6 +61,12 @@ public class InfiniteMode extends GameMode {
             TextureManager.ballTexture,
             10.0f)
         );
+
+        this.inputHandler = new IngameInputHandler(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameScreen.getStage());
+        multiplexer.addProcessor(this.inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -74,8 +79,8 @@ public class InfiniteMode extends GameMode {
         if (balls.isEmpty()) {
             scoreManager.deduction();
             this.reset();
-            this.revie--;
-            this.setEnd(revie == 0);
+            this.lives--;
+            this.setEnd(lives == 0);
         }
         if (this.isEnd()) {
             EffectItem.clear();
@@ -85,7 +90,7 @@ public class InfiniteMode extends GameMode {
             this.table.updateSystemFile();
         }
 
-        if (flowPaddle) {       // follow paddle
+        if (followPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
@@ -144,28 +149,12 @@ public class InfiniteMode extends GameMode {
         this.draw(sp);
         gameScreen.render();
         gameScreen.setTime(this.timePlayed);
-        gameScreen.setLives(this.revie);
+        gameScreen.setLives(this.lives);
     }
 
     @Override
     public void handleInput() {
-        //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            paddle.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            paddle.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle.setVelocity(0, 0);
-        }
-        // New state of the ball
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            flowPaddle = false;             // pulled ball up
-            balls.get(0).updateVelocity();
-        }
+        inputHandler.processMovement();
     }
 
     @Override
@@ -192,6 +181,11 @@ public class InfiniteMode extends GameMode {
             TextureManager.ballTexture, 10.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
-        flowPaddle = true;
+        followPaddle = true;
+    }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle;
     }
 }
