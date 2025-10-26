@@ -31,5 +31,15 @@ public class IngameInputHandler extends InputAdapter {
             }
         }
 
+        Paddle p2 = currentMode.getPaddle2();
+        if (p2 != null) {
+            if (paddle2Left) {
+                p2.moveLeft();
+            } else if (paddle2Right) {
+                p2.moveRight();
+            } else {
+                p2.setVelocity(0, 0);
+            }
+        }
     }
 }
