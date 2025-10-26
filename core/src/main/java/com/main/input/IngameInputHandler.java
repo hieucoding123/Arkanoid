@@ -47,6 +47,12 @@ public class IngameInputHandler extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
 
+        if(keycode == Input.Keys.SPACE) {
+            currentMode.launchBall();
+            currentMode.start(true);
+            return true;
+        }
+
         switch (keycode) {
             case Input.Keys.A:
                 paddle1Left = true;
