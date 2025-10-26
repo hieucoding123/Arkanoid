@@ -1,8 +1,11 @@
 package com.main.input;
 
 import com.badlogic.gdx.InputAdapter;
+import com.main.gamemode.GameMode;
 
 public class IngameInputHandler extends InputAdapter {
+
+    private GameMode currentMode;
 
     //Paddles Movements
     private boolean paddle1Left = false;
