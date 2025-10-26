@@ -17,6 +17,7 @@ import Menu.LevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
+import com.main.gamemode.CoopMode;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -39,6 +40,8 @@ public class Game {
     private Main main;
     private Player player;
     private int selectedLevelNumber;
+
+    private boolean isCoopSelection = false;
 
     public Game(Main main) {
         this.main = main;
@@ -170,6 +173,11 @@ public class Game {
         TextureManager.dispose();
     }
 
+    public void setLevelSelectionMode(boolean isCoop) {
+        this.isCoopSelection = isCoop;
+        setGameState(GameState.LEVELS_SELECTION);
+    }
+
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
         switch (gameState) {
@@ -187,6 +195,7 @@ public class Game {
                 ui = new ModeMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
+                isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
                 ui = new LevelSelectionMenu(main, this.player);
@@ -205,19 +214,39 @@ public class Game {
                 gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
                 break;
             case LEVEL1:
-                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 1);
+                if (isCoopSelection) {
+                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 1);
+                } else {
+                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 1);
+                }
                 break;
             case LEVEL2:
-                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 2);
+                if (isCoopSelection) {
+                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 2);
+                } else {
+                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 2);
+                }
                 break;
             case LEVEL3:
-                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 3);
+                if (isCoopSelection) {
+                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 3);
+                } else {
+                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 3);
+                }
                 break;
             case LEVEL4:
-                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 4);
+                if (isCoopSelection) {
+                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 4);
+                } else {
+                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 4);
+                }
                 break;
             case LEVEL5:
-                gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
+                if (isCoopSelection) {
+                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 5);
+                } else {
+                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
+                }
                 break;
 
         }
