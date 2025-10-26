@@ -184,11 +184,9 @@ public class CoopMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
         this.draw(sp);
         gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
-        gameScreen.render();
     }
 
     @Override
@@ -198,7 +196,7 @@ public class CoopMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
         EffectItem.drawEffectItems(sp);
         if (ShieldEffect.isShield()) {

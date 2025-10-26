@@ -287,7 +287,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
 //        EffectItem.drawEffectItems(sp);
 

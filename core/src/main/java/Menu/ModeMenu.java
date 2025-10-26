@@ -13,14 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
 public class ModeMenu extends UserInterface {
 
-    // --- Skins for each button ---
     private Skin infiniteSkin;
     private Skin levelsSkin;
     private Skin coopSkin;
@@ -43,9 +42,7 @@ public class ModeMenu extends UserInterface {
         //Set def skin
         this.setSkin(this.infiniteSkin);
 
-        this.setStage(new Stage(new ExtendViewport(
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
+        this.setStage(new Stage(new FitViewport(800, 1000)));
 
         setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);

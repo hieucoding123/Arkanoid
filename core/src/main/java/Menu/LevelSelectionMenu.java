@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
@@ -26,9 +26,7 @@ public class LevelSelectionMenu extends UserInterface {
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
         this.setSkin(new Skin(Gdx.files.internal("ui/buttontest.json")));
-        this.setStage(new Stage(new ExtendViewport(
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
+        this.setStage(new Stage(new FitViewport(800, 1000)));
 
         setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);

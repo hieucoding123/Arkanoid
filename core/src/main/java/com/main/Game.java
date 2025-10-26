@@ -72,40 +72,39 @@ public class Game {
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         gameScreen.resize(width, height);
+        if (ui != null) {
+            ui.resize(width, height);
+        }
     }
 
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
-        spriteBatch.begin();
+
         switch (gameState){
             case MAIN_MENU:
             case SETTINGS:
             case SELECT_MODE:
-                ui.render();
-                break;
             case LEVELS_SELECTION:
-                ui.render();
+                if (ui != null) {
+                    ui.render();
+                }
                 break;
             case INFI_MODE:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL1:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL2:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL3:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL4:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL5:
-                gameMode.render(spriteBatch, this.delta);
+                if (gameMode != null) {
+                    viewport.apply();
+                    spriteBatch.setProjectionMatrix(camera.combined);
+                    spriteBatch.begin();
+                    gameMode.render(spriteBatch, this.delta);
+                    spriteBatch.end();
+                    gameScreen.render();
+                }
                 break;
         }
-        spriteBatch.end();
     }
 
     public void handleInput() {
