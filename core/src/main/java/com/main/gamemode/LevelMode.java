@@ -1,8 +1,10 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.input.IngameInputHandler;
 import entity.Effect.*;
 import entity.GameScreen;
 import entity.Player;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 
 public class LevelMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
-    private final ArrayList<Ball> balls;
-    boolean flowPaddle = true;      // Ball follow paddle
     private Paddle paddle;
     private BricksMap currentMap;
     private ScoreManager scoreManager;
@@ -27,21 +27,18 @@ public class LevelMode extends GameMode {
     private EffectFactory effectFactory;
     private int levelNumber;
     private int mapIndex;
-    private int revie;
+    private int lives;
     private double timePlayed;
-    private boolean start = false;
 
     public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
-        balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
         this.setPlayer(player);
-
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
-        this.revie = 3;
+        this.lives = 3;
         this.setEnd(false);
         this.timePlayed = 0.0f;
         create();
@@ -67,6 +64,12 @@ public class LevelMode extends GameMode {
             TextureManager.ballTexture,
             5.0f)
         );
+
+        this.inputHandler = new IngameInputHandler(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameScreen.getStage());
+        multiplexer.addProcessor(this.inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -80,10 +83,10 @@ public class LevelMode extends GameMode {
         if (balls.isEmpty()) {
             scoreManager.deduction();
             this.reset();
-            this.revie--;
+            this.lives--;
         }
 
-        if (flowPaddle) {       // follow paddle
+        if (followPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
@@ -146,7 +149,7 @@ public class LevelMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if ((currentMap.getBricks().isEmpty() && !this.isEnd()) || (this.revie == 0)) {
+        if ((currentMap.getBricks().isEmpty() && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
             double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
@@ -161,35 +164,15 @@ public class LevelMode extends GameMode {
     @Override
     public void render(SpriteBatch sp, float delta) {
         this.update(delta);
-        this.handleInput();
         this.draw(sp);
-        gameScreen.setLives(this.revie);
+        gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
         gameScreen.render();
     }
 
     @Override
     public void handleInput() {
-        //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            start = true;
-            paddle.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            start = true;
-            paddle.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle.setVelocity(0, 0);
-        }
-        // New state of the ball
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            flowPaddle = false;             // pulled ball up
-            start = true;
-            balls.get(0).updateVelocity();
-        }
+        inputHandler.processMovement();
     }
 
     @Override
@@ -216,6 +199,12 @@ public class LevelMode extends GameMode {
             TextureManager.ballTexture, 5.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
-        flowPaddle = true;
+        followPaddle = true;
     }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle;
+    }
+
 }
