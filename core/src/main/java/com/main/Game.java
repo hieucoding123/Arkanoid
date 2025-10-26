@@ -14,6 +14,7 @@ import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
 import Menu.LevelSelectionMenu;
+import Menu.SinglePlayerLevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
@@ -39,7 +40,6 @@ public class Game {
     public static GameState gameState;
     private Main main;
     private Player player;
-    private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
 
@@ -198,7 +198,11 @@ public class Game {
                 isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
-                ui = new LevelSelectionMenu(main, this.player);
+                if (isCoopSelection) {
+                    ui = new LevelSelectionMenu(main, this.player);
+                } else {
+                    ui = new SinglePlayerLevelSelectionMenu(main, this.player);
+                }
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;

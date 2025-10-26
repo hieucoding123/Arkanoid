@@ -152,33 +152,50 @@ public class LevelDatabase {
         }
     }
 
-//Get the number of player show
-//    public static String getNumberPlayerShow(String inforNeed) {
-//        loadDriverIfNeeded();
-//        new File("leaderBoard").mkdirs();
-//
-//        String sqlCount = "SELECT COUNT(*) AS inforNeed FROM level_scores";
-//        int totalPlayers = 0;
-//
-//        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
-//             Statement stmt = conn.createStatement()) {
-//            stmt.execute(SQL_CREATE_TABLE);
-//            //Get total number of player
-//            ResultSet rs = stmt.executeQuery(sqlCount);
-//            if (rs.next()) {
-//                totalPlayers = rs.getInt("total");
-//            }
-//            rs.close();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            Gdx.app.error("Database", "Get Player Count Error", e);
-//        }
-//
-//        int Numberofplayer = Math.min(20, totalPlayers);
-//
-//        return String.valueOf(Numberofplayer);
-//    }
+    public static double getPlayerTotalScore(String playerName) {
+        if (playerName == null || playerName.isEmpty() || playerName.equals("Enter name")) {
+            return 0;
+        }
+        loadDriverIfNeeded();
+        String sqlSelect = "SELECT total FROM level_scores WHERE playerName = ?";
+        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+             PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
+            pstmtSelect.setString(1, playerName);
+            ResultSet rs = pstmtSelect.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Gdx.app.error("Database", "Get Total Score Error", e);
+        }
+        return 0;
+    }
+
+    public static double getPlayerScoreForLevel(String playerName, int levelNumber) {
+        if (playerName == null || playerName.isEmpty() || playerName.equals("Enter name") || levelNumber < 1 || levelNumber > 5) {
+            return 0;
+        }
+        loadDriverIfNeeded();
+
+        String levelColumn = "level" + levelNumber;
+        String sqlSelect = "SELECT " + levelColumn + " FROM level_scores WHERE playerName = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+             PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
+
+            pstmtSelect.setString(1, playerName);
+            ResultSet rs = pstmtSelect.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble(levelColumn);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Gdx.app.error("Database", "Get Score for Level " + levelNumber + " Error", e);
+        }
+        return 0;
+    }
 
     public static ArrayList<String> getLeaderboardData() {
         ArrayList<String> leaderboard = new ArrayList<>();
