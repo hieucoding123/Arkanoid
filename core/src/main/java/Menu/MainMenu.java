@@ -73,6 +73,15 @@ public class MainMenu extends UserInterface {
             }
         });
 
+        // Leaderboard button
+        Button lbButton = new Button(this.getSkin());
+        lbButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEADER_BOARD);
+            }
+        });
+
         //Setting Button
         Label settingsLabel = new Label("Settings", MenuText);
         settingsLabel.setFontScale(0.8f);
@@ -84,7 +93,7 @@ public class MainMenu extends UserInterface {
             }
         });
 
-        //Leaderboard Button
+        // Text Field to get player's name
         this.textField = new TextField("Enter name", this.getSkin());
 
         //Quit Button
@@ -99,6 +108,8 @@ public class MainMenu extends UserInterface {
 
         //Arrange the Buttons in the buttonTable
         buttonTable.add(playButton).width(120).height(50).padBottom(40);
+        buttonTable.row();
+        buttonTable.add(lbButton).width(60).height(30).padBottom(20);
         buttonTable.row();
         buttonTable.add(textField).width(300).height(50).padBottom(40);
         buttonTable.row();

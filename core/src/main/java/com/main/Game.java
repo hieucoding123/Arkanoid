@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.LeaderBoard;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +19,7 @@ import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
+import table.InfiDataHandler;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -79,6 +81,7 @@ public class Game {
         spriteBatch.begin();
         switch (gameState){
             case MAIN_MENU:
+            case LEADER_BOARD:
             case SETTINGS:
             case SELECT_MODE:
                 ui.render();
@@ -90,17 +93,9 @@ public class Game {
                 gameMode.render(spriteBatch, this.delta);
                 break;
             case LEVEL1:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL2:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL3:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL4:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case LEVEL5:
                 gameMode.render(spriteBatch, this.delta);
                 break;
@@ -134,29 +129,9 @@ public class Game {
                 }
                 break;
             case LEVEL1:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL2:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL3:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL4:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL5:
                 gameMode.update(this.delta);
                 if (gameMode.isEnd()) {
@@ -183,6 +158,11 @@ public class Game {
         switch (gameState) {
             case MAIN_MENU:
                 ui = new MainMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case LEADER_BOARD:
+                ui =new LeaderBoard(main, this.player, InfiDataHandler.getLeaderboardData());
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
