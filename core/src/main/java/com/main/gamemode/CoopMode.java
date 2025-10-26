@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
+import entity.Effect.ShieldEffect;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
@@ -91,7 +92,7 @@ public class CoopMode extends GameMode{
         if (balls.isEmpty()) {
             scoreManager.deduction();
             this.lives--;
-            //this.reset();
+            this.reset();
         }
 
         if (followPaddle) {
@@ -219,5 +220,33 @@ public class CoopMode extends GameMode{
             start = true;
             balls.get(0).updateVelocity();
         }
+    }
+
+    @Override
+    public void draw(SpriteBatch sp) {
+        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        currentMap.draw(sp);
+        EffectItem.drawEffectItems(sp);
+        if (ShieldEffect.isShield()) {
+            sp.draw(
+                TextureManager.lineTexture, Game.padding_left_right,
+                0,
+                Game.SCREEN_WIDTH - 2 * Game.padding_left_right,
+                5
+            );
+        }
+        for (Ball ball : balls) ball.draw(sp);
+        paddle1.draw(sp);
+        paddle2.draw(sp);
+    }
+
+    public void reset() {
+        balls.clear();
+        balls.add(new Ball(paddle1.getX() + (paddle1.getWidth() / 2f) - 12,
+            paddle1.getY() + paddle1.getHeight(),
+            TextureManager.ballTexture, 5.0f));
+        paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
+        paddle1.setY(50);
+        followPaddle = true;
     }
 }
