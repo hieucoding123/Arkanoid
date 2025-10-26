@@ -1,5 +1,6 @@
 package com.main.gamemode;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.Effect.EffectFactory;
@@ -185,5 +186,38 @@ public class CoopMode extends GameMode{
         gameScreen.render();
     }
 
-
+    @Override
+    public void handleInput() {
+        //Press A
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
+            start = true;
+            paddle1.moveLeft();
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
+            start = true;
+            paddle1.moveRight();
+        }
+        //Press LEFT
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+            start = true;
+            paddle2.moveLeft();
+        }
+        //Press RIGHT
+        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+            start = true;
+            paddle2.moveRight();
+        }
+        //IF NO PRESS KEEP IT STAND
+        else {
+            paddle1.setVelocity(0,0);
+            paddle2.setVelocity(0, 0);
+        }
+        // Paddle 1 shoot
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            followPaddle = false;             // pulled ball up
+            start = true;
+            balls.get(0).updateVelocity();
+        }
+    }
 }
