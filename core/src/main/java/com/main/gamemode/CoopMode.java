@@ -63,8 +63,8 @@ public class CoopMode extends GameMode{
         }
         currentMap = bricksMaps.get(mapIndex - 1);
 
-        paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture);
-        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 40, TextureManager.paddleTexture);
+        paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 100, TextureManager.paddleTexture);
+        paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 20, TextureManager.paddleTexture);
 
         balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
             paddle1.getY() + paddle1.getHeight(),
