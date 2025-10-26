@@ -49,7 +49,7 @@ public class IngameInputHandler extends InputAdapter {
 
         if(keycode == Input.Keys.SPACE) {
             currentMode.launchBall();
-            currentMode.start(true);
+            currentMode.isStart(true);
             return true;
         }
 
