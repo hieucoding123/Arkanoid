@@ -96,7 +96,7 @@ public class CoopMode extends GameMode{
         }
 
         if (followPaddle) {
-            balls.get(0).setX(paddle1.getX() + paddle1.getWidth() / 2f);
+            balls.get(0).setX(paddle1.getX() + paddle1.getWidth() / 2f - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle1.getY() + paddle1.getHeight());
             balls.get(0).setAngle((float) Math.PI / 2f);
         }
