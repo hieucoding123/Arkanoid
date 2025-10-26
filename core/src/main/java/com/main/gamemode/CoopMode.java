@@ -9,6 +9,7 @@ import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
+import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
@@ -97,6 +98,79 @@ public class CoopMode extends GameMode{
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
 
+        for (Ball ball : balls) {
+            ball.update(delta);
+            ball.collisionWith(paddle);
 
+            for (Brick brick : currentMap.getBricks()) {
+                if (ball.checkCollision(brick)) {
+                    brick.takeHit();
+                    if (ball.isBig()) brick.setHitPoints(0);
+                    if (brick.gethitPoints() == 0) {
+                        EffectItem newEffectItem1 = null;
+                        EffectItem newEffectItem2 = null;
+                        if (mapIndex == 1) {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.06, 0.11, 0.15, 0.19, 0.20);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.06, 0.11, 0.15, 0.19, 0.20);
+                        } else if  (mapIndex == 2) {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.05, 0.09, 0.13, 0.16, 0.18);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.05, 0.09, 0.13, 0.16, 0.18);
+                        } else if (mapIndex == 3) {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.04, 0.07, 0.10, 0.13, 0.15);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.04, 0.07, 0.10, 0.13, 0.15);
+                        } else if (mapIndex == 4) {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.03, 0.06, 0.08, 0.10, 0.12);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.03, 0.06, 0.08, 0.10, 0.12);
+                        } else {
+                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0.02, 0.04, 0.06, 0.08, 0.10);
+                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0.02, 0.04, 0.06, 0.08, 0.10);
+                        }
+
+                        if (newEffectItem1 != null) {
+                            EffectItem.addEffectItem(newEffectItem1);
+                        }
+
+                        if (newEffectItem2 != null) {
+                            EffectItem.addEffectItem(newEffectItem2);
+                        }
+
+                        scoreManager.comboScore(brick);
+                        if (brick.getExplosion()) {
+                            brick.startExplosion();
+                        } else {
+                            brick.setDestroyed(true);
+                        }
+                    }
+                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
+                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+
+                    //Bottom and top collision
+                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+                        ball.reverseY();
+                    }
+                    //Left and right collision
+                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
+                        ball.reverseX();
+                    }
+                    //Corner collision
+                    else {
+                        ball.reverseY();
+                        ball.reverseX();
+                    }
+                    break;
+                }
+            }
+        }
+        balls.removeIf(Ball::isDestroyed);
     }
 }
