@@ -1,8 +1,10 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.input.IngameInputHandler;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
 import entity.Effect.ShieldEffect;
@@ -17,7 +19,7 @@ import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
-public class CoopMode extends GameMode{
+public class CoopMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
     private final ArrayList<Ball> balls;
     boolean followPaddle = true;      // Ball follow paddle
@@ -71,6 +73,12 @@ public class CoopMode extends GameMode{
             TextureManager.ballTexture,
             5.0f)
         );
+
+        this.inputHandler = new IngameInputHandler(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameScreen.getStage());
+        multiplexer.addProcessor(this.inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
