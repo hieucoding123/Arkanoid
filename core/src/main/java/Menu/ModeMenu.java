@@ -73,13 +73,22 @@ public class ModeMenu extends UserInterface {
                 main.setGameState(GameState.INFI_MODE);
             }
         });
+
         // LevelsMode Button
         Button levelsModeButton = new Button(this.getSkin());
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.LEVELS_SELECTION);
-//                main.setGameState(GameState.LEVELS_MODE);
+                main.setLevelSelectionMode(false); // This sets single-player mode
+            }
+        });
+
+        // CoopMode Button
+        Button coopModeButton = new Button(this.getSkin());
+        coopModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setLevelSelectionMode(true);
             }
         });
 
@@ -88,6 +97,9 @@ public class ModeMenu extends UserInterface {
         buttonTable.row();
 
         buttonTable.add(levelsModeButton).width(120).height(50).padBottom(40);
+        buttonTable.row();
+
+        buttonTable.add(coopModeButton).width(120).height(50).padBottom(40);
         buttonTable.row();
 
         //Add to main table
