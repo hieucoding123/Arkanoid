@@ -13,5 +13,8 @@ public class IngameInputHandler extends InputAdapter {
     private boolean paddle2Left = false;
     private boolean paddle2Right = false;
 
+    public IngameInputHandler(GameMode currentMode) {
+        this.currentMode = currentMode;
+    }
 
 }
