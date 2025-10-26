@@ -1,5 +1,6 @@
 package com.main.gamemode;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
@@ -92,10 +93,10 @@ public class CoopMode extends GameMode{
             //this.reset();
         }
 
-        if(followPaddle) {
+        if (followPaddle) {
             balls.get(0).setX(paddle1.getX() + paddle1.getWidth() / 2f);
             balls.get(0).setY(paddle1.getY() + paddle1.getHeight());
-            balls.get(0).setAngle((float)Math.PI / 2f);
+            balls.get(0).setAngle((float) Math.PI / 2f);
         }
 
         for (Ball ball : balls) {
@@ -114,7 +115,7 @@ public class CoopMode extends GameMode{
                                 0.06, 0.11, 0.15, 0.19, 0.20);
                             newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.06, 0.11, 0.15, 0.19, 0.20);
-                        } else if  (mapIndex == 2) {
+                        } else if (mapIndex == 2) {
                             newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.05, 0.09, 0.13, 0.16, 0.18);
                             newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
@@ -173,4 +174,16 @@ public class CoopMode extends GameMode{
         }
         balls.removeIf(Ball::isDestroyed);
     }
+
+    @Override
+    public void render(SpriteBatch sp, float delta) {
+        this.update(delta);
+        this.handleInput();
+        this.draw(sp);
+        gameScreen.setLives(this.lives);
+        gameScreen.setTime(this.timePlayed);
+        gameScreen.render();
+    }
+
+
 }
