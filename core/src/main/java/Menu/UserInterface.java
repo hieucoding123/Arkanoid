@@ -46,6 +46,10 @@ public class UserInterface extends ApplicationAdapter {
         font.dispose();
     }
 
+    public void update() {
+
+    }
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }

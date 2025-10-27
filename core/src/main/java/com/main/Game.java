@@ -1,6 +1,6 @@
 package com.main;
 
-import Menu.LeaderBoard;
+import Menu.leaderboard.LeaderBoard;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,13 +14,11 @@ import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
-import Menu.LevelSelectionMenu;
 import Menu.SinglePlayerLevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
-import table.InfiDataHandler;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -158,6 +156,8 @@ public class Game {
                 if (gameMode.isEnd()) {
                     setGameState(GameState.SELECT_MODE);
                 }
+            case LEADER_BOARD:
+                ui.update();
                 break;
         }
     }
@@ -185,7 +185,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case LEADER_BOARD:
-                ui =new LeaderBoard(main, this.player, InfiDataHandler.getLeaderboardData());
+                ui =new LeaderBoard(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
