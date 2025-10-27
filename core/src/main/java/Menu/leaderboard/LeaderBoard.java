@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 import table.InfiDataHandler;
+import table.InfiModeTable;
 
 import java.util.ArrayList;
 
@@ -53,39 +55,55 @@ public class LeaderBoard extends UserInterface {
 
         Main main = this.getMain();
 
-        Button infiModeButton = new Button(this.getSkin());
+        //Buttons
+        Label coopModeButton = new Label("Co-op", whiteText);
+        Label infiModeButton = new Label("Infinite", whiteText);
+        Label levelsModeButton = new Label("Singleplayer", whiteText);
+
+        //Inf button
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showLeaderBoard = "INFINITE";
                 scrollableContent.clear();
+                infiModeButton.setColor(Color.YELLOW);
+                levelsModeButton.setColor(Color.WHITE);
+                coopModeButton.setColor(Color.WHITE);
             }
         });
 
         //Singleplayer button
-        Button levelsModeButton = new Button(this.getSkin());
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showLeaderBoard = "LEVELS";
                 scrollableContent.clear();
+                levelsModeButton.setColor(Color.YELLOW);
+                coopModeButton.setColor(Color.WHITE);
+                infiModeButton.setColor(Color.WHITE);
             }
         });
 
         //Coop button
-        Button coopModeButton = new Button(this.getSkin());
         coopModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showLeaderBoard = "COOP";
                 scrollableContent.clear();
+                coopModeButton.setColor(Color.YELLOW);
+                infiModeButton.setColor(Color.WHITE);
+                levelsModeButton.setColor(Color.WHITE);
             }
         });
 
-        buttonTable.add(infiModeButton).width(220).height(72).padBottom(20);
-        buttonTable.add(levelsModeButton).width(220).height(72).padBottom(20);
-        buttonTable.add(coopModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
+        infiModeButton.setPosition(50,150);
+        levelsModeButton.setPosition(266,150);
+        coopModeButton.setPosition(600,150);
+
+        this.getStage().addActor(infiModeButton);
+        this.getStage().addActor(levelsModeButton);
+        this.getStage().addActor(coopModeButton);
+
 
         scrollableContent = new Table(this.getSkin());
         scrollableContent.top();
