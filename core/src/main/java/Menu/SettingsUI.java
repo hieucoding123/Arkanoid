@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -24,7 +24,7 @@ public class SettingsUI extends UserInterface {
     @Override
     public void create() {
         this.setStage(
-            new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
+            new Stage(new FitViewport(800, 1000))
         );
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.setSkin(new Skin());

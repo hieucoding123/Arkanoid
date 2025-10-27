@@ -162,10 +162,12 @@ public class Game {
 
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
+
         switch (gameState) {
             case MAIN_MENU:
                 ui = new MainMenu(main, this.player);
                 ui.create();
+                ui.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case LEADER_BOARD:
@@ -185,11 +187,7 @@ public class Game {
                 isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
-                if (isCoopSelection) {
-                    ui = new LevelSelectionMenu(main, this.player);
-                } else {
-                    ui = new SinglePlayerLevelSelectionMenu(main, this.player);
-                }
+                ui = new SinglePlayerLevelSelectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;

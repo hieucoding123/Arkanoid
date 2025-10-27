@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.main.Main;
 import entity.Player;
 
-import static com.badlogic.gdx.Gdx.gl;
-
 public class UserInterface extends ApplicationAdapter {
     private Stage stage;
     private Main main;
@@ -36,9 +34,6 @@ public class UserInterface extends ApplicationAdapter {
 
     @Override
     public void render() {
-        gl.glClearColor(0, 0, 0, 1);
-        gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
-
         stage.getViewport().apply();
         stage.act();
         stage.draw();
