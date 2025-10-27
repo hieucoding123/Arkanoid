@@ -43,9 +43,7 @@ public class MainMenu extends UserInterface {
         //Set def skin
         this.setSkin(playButtonSkin);
 
-        this.setStage(new Stage(
-            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
+        this.setStage(new Stage(new FitViewport(800, 1000)));
 
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);

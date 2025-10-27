@@ -15,6 +15,9 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 import table.LevelDatabase;
+import ui.MainMenu;
+
+import static com.main.GameState.SELECT_MODE;
 
 public class LevelSelectionMenu extends UserInterface {
 
@@ -67,12 +70,21 @@ public class LevelSelectionMenu extends UserInterface {
             GameState.LEVEL4, GameState.LEVEL5
         };
 
+        Button Back = new Button(this.getSkin());
+        Back.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(SELECT_MODE);
+            }
+        });
+        Back.setPosition(670, 10);
+        Back.setSize(buttonWidth, buttonHeight);
+        this.getStage().addActor(Back);
+
         Table buttonTable1 = new Table();
 
         Button levelButton1 = new Button(this.getSkin());
         if (1 <= maxLevel) {
             levelButton1.addListener(new ClickListener() {
-                @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[0]);
                 }
@@ -143,5 +155,7 @@ public class LevelSelectionMenu extends UserInterface {
         buttonTable2.add(levelButton5).width(buttonWidth).height(buttonHeight);
 
         mainTable.add(buttonTable2);
+
+
     }
 }
