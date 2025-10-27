@@ -12,6 +12,7 @@ public enum GameState {
     LEVEL3,
     LEVEL4,
     LEVEL5,
+    VS_MODE,
     PLAYING,
     SETTINGS
 }

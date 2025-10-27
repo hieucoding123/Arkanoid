@@ -35,6 +35,7 @@ public class Game {
     private UserInterface ui;
     float delta;
     private ScoreManager scoreManager;
+    private ScoreManager scoreManagerP2;
     private GameScreen gameScreen;
 
     GameMode gameMode;
@@ -42,6 +43,8 @@ public class Game {
     public static GameState gameState;
     private Main main;
     private Player player;
+    private Player player2;
+    private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
 
@@ -52,7 +55,9 @@ public class Game {
 
     public void init() {
         player = new Player();
+        player2 = new Player();
         scoreManager = new ScoreManager();
+        scoreManagerP2 = new ScoreManager();
         gameScreen = new GameScreen(scoreManager);
         gameScreen.create();
 
@@ -87,12 +92,15 @@ public class Game {
             case LEADER_BOARD:
             case SETTINGS:
             case SELECT_MODE:
+                ui.render();
+                break;
             case LEVELS_SELECTION:
                 if (ui != null) {
                     ui.render();
                 }
                 break;
             case INFI_MODE:
+            case VS_MODE:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
@@ -145,6 +153,12 @@ public class Game {
                     setGameState(GameState.LEVELS_SELECTION);
                 }
                 break;
+            case VS_MODE:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    setGameState(GameState.SELECT_MODE);
+                }
+                break;
         }
     }
 
@@ -162,10 +176,12 @@ public class Game {
 
     public void setGameState(GameState newGameState) {
         gameState = newGameState;
+
         switch (gameState) {
             case MAIN_MENU:
                 ui = new MainMenu(main, this.player);
                 ui.create();
+                ui.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case LEADER_BOARD:
@@ -185,11 +201,7 @@ public class Game {
                 isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
-                if (isCoopSelection) {
-                    ui = new LevelSelectionMenu(main, this.player);
-                } else {
-                    ui = new SinglePlayerLevelSelectionMenu(main, this.player);
-                }
+                ui = new SinglePlayerLevelSelectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
@@ -239,7 +251,9 @@ public class Game {
                     gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
                 }
                 break;
-
+            case VS_MODE:
+                gameMode = new VsMode(this.player, this.player2, gameScreen, this.scoreManager, this.scoreManagerP2);
+                break;
         }
     }
 }

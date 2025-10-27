@@ -109,8 +109,8 @@ public class ModeMenu extends UserInterface {
         vsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("VS MODE");
-                // main.setGameState(GameState.VS_MODE); // You can uncomment this when ready
+                //System.out.println("VS MODE");
+                main.setGameState(GameState.VS_MODE); // You can uncomment this when ready
             }
         });
 

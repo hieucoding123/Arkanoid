@@ -17,11 +17,9 @@ public class Main extends ApplicationAdapter {
         game.resize(width, height);
     }
 
-    public void draw() {
-        ScreenUtils.clear(0, 0, 0, 1);
-    }
     @Override
     public void render() {
+        ScreenUtils.clear(0, 0, 0, 1);
         game.handleInput();
         game.update();
         game.render();
