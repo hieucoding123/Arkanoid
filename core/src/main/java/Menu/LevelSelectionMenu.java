@@ -70,15 +70,15 @@ public class LevelSelectionMenu extends UserInterface {
             GameState.LEVEL4, GameState.LEVEL5
         };
 
-        Button Back = new Button(this.getSkin());
-        Back.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(SELECT_MODE);
-            }
-        });
-        Back.setPosition(670, 10);
-        Back.setSize(buttonWidth, buttonHeight);
-        this.getStage().addActor(Back);
+//        Button Back = new Button(this.getSkin());
+//        Back.addListener(new ClickListener() {
+//            public void clicked(InputEvent event, float x, float y) {
+//                main.setGameState(SELECT_MODE);
+//            }
+//        });
+//        Back.setPosition(670, 10);
+//        Back.setSize(buttonWidth, buttonHeight);
+//        this.getStage().addActor(Back);
 
         Table buttonTable1 = new Table();
 
@@ -161,7 +161,7 @@ public class LevelSelectionMenu extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.MAIN_MENU);
+                main.setGameState(GameState.SELECT_MODE);
             }
         });
 
