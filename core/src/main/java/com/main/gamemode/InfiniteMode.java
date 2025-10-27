@@ -59,7 +59,7 @@ public class InfiniteMode extends GameMode {
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture,
-            10.0f)
+            5.0f)
         );
 
         this.inputHandler = new IngameInputHandler(this);
@@ -71,7 +71,8 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void update(float delta) {
-        this.timePlayed += delta;
+        if (!followPaddle)
+            this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, delta);
@@ -146,6 +147,7 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
+        this.update(delta);
         this.draw(sp);
         gameScreen.setTime(this.timePlayed);
         gameScreen.setLives(this.lives);
@@ -177,7 +179,7 @@ public class InfiniteMode extends GameMode {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
-            TextureManager.ballTexture, 10.0f));
+            TextureManager.ballTexture, 5.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
         followPaddle = true;
