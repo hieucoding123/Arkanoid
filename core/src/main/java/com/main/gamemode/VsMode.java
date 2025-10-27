@@ -291,7 +291,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
 //        EffectItem.drawEffectItems(sp);
 
@@ -308,5 +308,15 @@ public class VsMode extends GameMode {
         }
         paddle1.draw(sp);
         paddle2.draw(sp);
+    }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle1;
+    }
+
+    @Override
+    public void launchBall() {
+        // DO NOTHING.
     }
 }

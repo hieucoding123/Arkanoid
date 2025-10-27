@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
@@ -22,6 +23,13 @@ import static com.badlogic.gdx.Gdx.gl;
 
 public class MainMenu extends UserInterface {
     private TextField textField;
+    private Skin textFieldSkin;
+
+    //Button skins
+    private Skin playButtonSkin;
+    private Skin settingsButtonSkin;
+    private Skin quitButtonSkin;
+
     public MainMenu(Main main, Player player) {
         super(main, player);
     }
@@ -29,7 +37,16 @@ public class MainMenu extends UserInterface {
     @Override
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
-        this.setSkin(new Skin(Gdx.files.internal("ui-skin/ui-skin.json")));
+
+        // 1. Load all skins
+        this.playButtonSkin = new Skin(Gdx.files.internal("ui/playButton.json"));
+        this.settingsButtonSkin = new Skin(Gdx.files.internal("ui/settingbutton.json"));
+        this.quitButtonSkin = new Skin(Gdx.files.internal("ui/quitButton.json"));
+        this.textFieldSkin = new Skin(Gdx.files.internal("ui-skin/ui-skin.json"));
+
+        //Set def skin
+        this.setSkin(playButtonSkin);
+
         this.setStage(new Stage(
             new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
         );
@@ -51,9 +68,8 @@ public class MainMenu extends UserInterface {
 
         //Label Styles
         Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
-        Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
-        // --- Title Label ---
+        //Title
         Label titleLabel = new Label("Welcome to Arkanoid!", MenuText);
         titleLabel.setFontScale(1f);
         mainTable.add(titleLabel).padBottom(40).padTop(30);
@@ -65,7 +81,7 @@ public class MainMenu extends UserInterface {
         Main main = this.getMain();
 
         //Play Button
-        Button playButton = new Button(this.getSkin());
+        Button playButton = new Button(this.playButtonSkin);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -74,9 +90,8 @@ public class MainMenu extends UserInterface {
         });
 
         //Setting Button
-        Label settingsLabel = new Label("Settings", MenuText);
-        settingsLabel.setFontScale(0.8f);
-        settingsLabel.addListener(new ClickListener() {
+        Button settingsButton = new Button(this.settingsButtonSkin);
+        settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.SETTINGS);
@@ -84,27 +99,30 @@ public class MainMenu extends UserInterface {
             }
         });
 
-        //Leaderboard Button
-        this.textField = new TextField("Enter name", this.getSkin());
+        //Enter name
+        this.textField = new TextField("", this.textFieldSkin);
+        this.textField.setMessageText("Enter name");
+        this.textField.setAlignment(Align.center);
 
-        //Quit Button
-        Label quitLabel = new Label("Quit", MenuText);
-        quitLabel.setFontScale(0.8f);
-        quitLabel.addListener(new ClickListener() {
+        //Quit Btn
+        Button quitButton = new Button(this.quitButtonSkin);
+        quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
 
-        //Arrange the Buttons in the buttonTable
-        buttonTable.add(playButton).width(120).height(50).padBottom(40);
+        //Button arrange
+        buttonTable.add(textField).width(300).height(72).padBottom(40);
         buttonTable.row();
-        buttonTable.add(textField).width(300).height(50).padBottom(40);
+        buttonTable.add(playButton).width(220).height(72).padBottom(20);
         buttonTable.row();
-        buttonTable.add(settingsLabel).padBottom(50);
+        buttonTable.add(settingsButton).width(220).height(72).padBottom(20);
         buttonTable.row();
-        buttonTable.add(quitLabel).padBottom(50);
+        buttonTable.add(quitButton).width(220).height(72).padBottom(20);
+
+
 
         //Add to main table
         mainTable.add(buttonTable);
@@ -114,6 +132,23 @@ public class MainMenu extends UserInterface {
     public void render() {
         super.render();
         // Updates player's name
-        this.getPlayer().setName(textField.getText());
+        if (this.getPlayer() != null && this.textField != null) {
+            this.getPlayer().setName(textField.getText());
+        }
+    }
+
+    // Clean up all loaded skins
+    @Override
+    public void dispose() {
+        super.dispose(); // Disposes the main skin (playButtonSkin)
+        if (textFieldSkin != null) {
+            textFieldSkin.dispose();
+        }
+        if (settingsButtonSkin != null) {
+            settingsButtonSkin.dispose();
+        }
+        if (quitButtonSkin != null) {
+            quitButtonSkin.dispose();
+        }
     }
 }

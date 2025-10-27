@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: Singleplayer
+		down: Singleplayer_dim
+		over: Singleplayer_g
+		focused: Singleplayer_g
+	}
+}
+}

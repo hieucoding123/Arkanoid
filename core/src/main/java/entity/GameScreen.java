@@ -47,7 +47,7 @@ public class GameScreen {
     }
 
     public void create(){
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new FitViewport(800, 1000);
         stage = new Stage(viewport, new SpriteBatch());
         font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
         font.getData().setScale(0.6f);

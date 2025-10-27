@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: coop
+		down: coop_dim
+		over: coop_g
+		focused: coop_g
+	}
+}
+}

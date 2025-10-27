@@ -7,17 +7,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
-import table.LevelDatabase;
+import table.LevelDataHandler;
 
 public class LevelSelectionMenu extends UserInterface {
 
@@ -29,9 +26,7 @@ public class LevelSelectionMenu extends UserInterface {
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
         this.setSkin(new Skin(Gdx.files.internal("ui/buttontest.json")));
-        this.setStage(new Stage(new ExtendViewport(
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
+        this.setStage(new Stage(new FitViewport(800, 1000)));
 
         setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);
@@ -44,12 +39,7 @@ public class LevelSelectionMenu extends UserInterface {
         this.getStage().addActor(mainTable);
 
         //Background
-        mainTable.setBackground(
-            new TextureRegionDrawable(
-                new TextureRegion(this.getBGTexture()
-                )
-            )
-        );
+        mainTable.setBackground( new TextureRegionDrawable( new TextureRegion(this.getBGTexture())));
 
         //Label Styles
         Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
@@ -58,48 +48,100 @@ public class LevelSelectionMenu extends UserInterface {
         Label.LabelStyle LockedLabelStyle = new Label.LabelStyle(this.getFont(), Color.GRAY);
         LockedLabelStyle.font.getData().setScale(0.6f);
 
-        // --- Title Label ---
         Label titleLabel = new Label("CHOOSE LEVEL", MenuText);
         titleLabel.setFontScale(1f);
-        mainTable.add(titleLabel).padBottom(40).padTop(30);
+        mainTable.add(titleLabel).padTop(-130).padBottom(70);
         mainTable.row();
 
-        //Button Table
-        Table buttonTable = new Table();
         Main main = this.getMain();
-
         String playerName = this.getPlayer().getName();
-        int maxLevel = LevelDatabase.getPlayerMaxLevel(playerName);
+        int maxLevel = LevelDataHandler.getPlayerMaxLevel(playerName);
+
+        int buttonWidth = 120;
+        int buttonHeight = 50;
+        int verticalPadding = 40;
+        int horizontalPadding = 70;
 
         GameState[] levels = {
-            GameState.LEVEL1,
-            GameState.LEVEL2,
-            GameState.LEVEL3,
-            GameState.LEVEL4,
-            GameState.LEVEL5
+            GameState.LEVEL1, GameState.LEVEL2, GameState.LEVEL3,
+            GameState.LEVEL4, GameState.LEVEL5
         };
 
-        for (int i = 0; i < levels.length; i++) {
-            final int levelNumber = i + 1;
-            final GameState levelState = levels[i];
+        Table buttonTable1 = new Table();
 
-            Button levelButton = new Button(this.getSkin());
+        Button levelButton1 = new Button(this.getSkin());
+        if (1 <= maxLevel) {
+            levelButton1.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levels[0]);
+                }
+            });
+        } else {
+            levelButton1.setDisabled(true);
+        }
+        buttonTable1.add(levelButton1).width(buttonWidth).height(buttonHeight)
+            .padRight(horizontalPadding);
 
-            if (levelNumber <= maxLevel) {
-                levelButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        main.setGameState(levelState);
-                    }
-                });
+        Button levelButton2 = new Button(this.getSkin());
+        if (2 <= maxLevel) {
+            levelButton2.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levels[1]);
+                }
+            });
+        } else {
+            levelButton2.setDisabled(true);
+        }
+        buttonTable1.add(levelButton2).width(buttonWidth).height(buttonHeight)
+            .padRight(horizontalPadding);
 
-            } else {
-                levelButton.setDisabled(true);
-            }
+        Button levelButton3 = new Button(this.getSkin());
+        if (3 <= maxLevel) {
+            levelButton3.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levels[2]);
+                }
+            });
+        } else {
+            levelButton3.setDisabled(true);
+        }
+        buttonTable1.add(levelButton3).width(buttonWidth).height(buttonHeight);
 
-            buttonTable.add(levelButton).width(120).height(50).padBottom(40);
-            buttonTable.row();
-            }
-        mainTable.add(buttonTable);
+        mainTable.add(buttonTable1).padBottom(verticalPadding);
+        mainTable.row();
+
+        Table buttonTable2 = new Table();
+
+        Button levelButton4 = new Button(this.getSkin());
+        if (4 <= maxLevel) {
+            levelButton4.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levels[3]);
+                }
+            });
+        } else {
+            levelButton4.setDisabled(true);
+        }
+        buttonTable2.add(levelButton4).width(buttonWidth).height(buttonHeight)
+            .padRight(horizontalPadding);
+
+        Button levelButton5 = new Button(this.getSkin());
+        if (5 <= maxLevel) {
+            levelButton5.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    main.setGameState(levels[4]);
+                }
+            });
+        } else {
+            levelButton5.setDisabled(true);
+        }
+        buttonTable2.add(levelButton5).width(buttonWidth).height(buttonHeight);
+
+        mainTable.add(buttonTable2);
     }
 }

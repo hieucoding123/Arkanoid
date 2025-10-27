@@ -1,8 +1,10 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.input.IngameInputHandler;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
 import entity.Effect.ShieldEffect;
@@ -17,10 +19,8 @@ import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
-public class CoopMode extends GameMode{
+public class CoopMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
-    private final ArrayList<Ball> balls;
-    boolean followPaddle = true;      // Ball follow paddle
     private Paddle paddle1;
     private Paddle paddle2;
     private BricksMap currentMap;
@@ -31,11 +31,9 @@ public class CoopMode extends GameMode{
     private int mapIndex;
     private int lives;
     private double timePlayed;
-    private boolean start = false;
 
     public CoopMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
         super();
-        balls = new ArrayList<>();
         bricksMaps = new ArrayList<>();
 
         this.setPlayer(player);
@@ -71,6 +69,12 @@ public class CoopMode extends GameMode{
             TextureManager.ballTexture,
             5.0f)
         );
+
+        this.inputHandler = new IngameInputHandler(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameScreen.getStage());
+        multiplexer.addProcessor(this.inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -180,52 +184,19 @@ public class CoopMode extends GameMode{
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
-        this.handleInput();
         this.draw(sp);
         gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
-        gameScreen.render();
     }
 
     @Override
     public void handleInput() {
-        //Press A
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
-            start = true;
-            paddle1.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
-            start = true;
-            paddle1.moveRight();
-        }
-        //Press LEFT
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            start = true;
-            paddle2.moveLeft();
-        }
-        //Press RIGHT
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            start = true;
-            paddle2.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle1.setVelocity(0,0);
-            paddle2.setVelocity(0, 0);
-        }
-        // Paddle 1 shoot
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
-            followPaddle = false;             // pulled ball up
-            start = true;
-            balls.get(0).updateVelocity();
-        }
+        inputHandler.processMovement();
     }
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
         EffectItem.drawEffectItems(sp);
         if (ShieldEffect.isShield()) {
@@ -250,4 +221,15 @@ public class CoopMode extends GameMode{
         paddle1.setY(50);
         followPaddle = true;
     }
+
+    @Override
+    public Paddle getPaddle1() {
+        return this.paddle1;
+    }
+
+    @Override
+    public Paddle getPaddle2() {
+        return this.paddle2;
+    }
+
 }

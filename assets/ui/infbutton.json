@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: Infinite
+		down: Infinite_dim
+		over: Infinite_g
+		focused: Infinite_g
+	}
+}
+}

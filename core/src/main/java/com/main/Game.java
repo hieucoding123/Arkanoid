@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.LeaderBoard;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,10 +15,12 @@ import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
 import Menu.LevelSelectionMenu;
+import Menu.SinglePlayerLevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
+import table.InfiDataHandler;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -76,43 +79,43 @@ public class Game {
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         gameScreen.resize(width, height);
+        if (ui != null) {
+            ui.resize(width, height);
+        }
     }
 
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
-        spriteBatch.begin();
+
         switch (gameState){
             case MAIN_MENU:
+            case LEADER_BOARD:
             case SETTINGS:
             case SELECT_MODE:
                 ui.render();
                 break;
             case LEVELS_SELECTION:
-                ui.render();
+                if (ui != null) {
+                    ui.render();
+                }
                 break;
             case INFI_MODE:
-                gameMode.render(spriteBatch, this.delta);
-                break;
-            case LEVEL1:
-                gameMode.render(spriteBatch, this.delta);
-                break;
-            case LEVEL2:
-                gameMode.render(spriteBatch, this.delta);
-                break;
-            case LEVEL3:
-                gameMode.render(spriteBatch, this.delta);
-                break;
-            case LEVEL4:
-                gameMode.render(spriteBatch, this.delta);
-                break;
-            case LEVEL5:
-                gameMode.render(spriteBatch, this.delta);
-                break;
             case VS_MODE:
-                gameMode.render(spriteBatch, this.delta);
+            case LEVEL1:
+            case LEVEL2:
+            case LEVEL3:
+            case LEVEL4:
+            case LEVEL5:
+                if (gameMode != null) {
+                    viewport.apply();
+                    spriteBatch.setProjectionMatrix(camera.combined);
+                    spriteBatch.begin();
+                    gameMode.render(spriteBatch, this.delta);
+                    spriteBatch.end();
+                    gameScreen.render();
+                }
                 break;
         }
-        spriteBatch.end();
     }
 
     public void handleInput() {
@@ -141,29 +144,9 @@ public class Game {
                 }
                 break;
             case LEVEL1:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL2:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL3:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL4:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL5:
                 gameMode.update(this.delta);
                 if (gameMode.isEnd()) {
@@ -199,6 +182,11 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case LEADER_BOARD:
+                ui =new LeaderBoard(main, this.player, InfiDataHandler.getLeaderboardData());
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             case SETTINGS:
                 ui = new SettingsUI(main, this.player);
                 ui.create();
@@ -211,7 +199,11 @@ public class Game {
                 isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
-                ui = new LevelSelectionMenu(main, this.player);
+                if (isCoopSelection) {
+                    ui = new LevelSelectionMenu(main, this.player);
+                } else {
+                    ui = new SinglePlayerLevelSelectionMenu(main, this.player);
+                }
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;

@@ -1,0 +1,10 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: vsmode
+		down: vsmode_dim
+		over: vsmode_g
+		focused: vsmode_g
+	}
+}
+}

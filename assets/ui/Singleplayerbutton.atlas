@@ -1,0 +1,30 @@
+
+Singleplayerbutton.png
+size: 256, 256
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+Singleplayer
+  rotate: false
+  xy: 1, 113
+  size: 161, 54
+  split: 0, 0, 0, 0
+  orig: 161, 54
+  offset: 0, 0
+  index: -1
+Singleplayer_dim
+  rotate: false
+  xy: 1, 57
+  size: 161, 54
+  split: 0, 0, 0, 0
+  orig: 161, 54
+  offset: 0, 0
+  index: -1
+Singleplayer_g
+  rotate: false
+  xy: 1, 1
+  size: 161, 54
+  split: 0, 0, 0, 0
+  orig: 161, 54
+  offset: 0, 0
+  index: -1
