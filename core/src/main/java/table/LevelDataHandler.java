@@ -154,7 +154,7 @@ public class LevelDataHandler extends DataHandler {
         }
         loadDriverIfNeeded();
         String sqlSelect = "SELECT total FROM level_scores WHERE playerName = ?";
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
             pstmtSelect.setString(1, playerName);
             ResultSet rs = pstmtSelect.executeQuery();
@@ -177,7 +177,7 @@ public class LevelDataHandler extends DataHandler {
         String levelColumn = "level" + levelNumber;
         String sqlSelect = "SELECT " + levelColumn + " FROM level_scores WHERE playerName = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
 
             pstmtSelect.setString(1, playerName);

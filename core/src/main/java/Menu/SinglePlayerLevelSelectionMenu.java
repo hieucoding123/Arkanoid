@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.main.Main;
 import entity.Player;
-import table.LevelDatabase;
+import table.LevelDataHandler;
 
 public class SinglePlayerLevelSelectionMenu extends LevelSelectionMenu {
 
@@ -24,13 +24,13 @@ public class SinglePlayerLevelSelectionMenu extends LevelSelectionMenu {
             playerName = "Guest";
         }
 
-        int maxLevel = LevelDatabase.getPlayerMaxLevel(playerName);
-        double totalScore = LevelDatabase.getPlayerTotalScore(playerName);
-        double lvl1 = LevelDatabase.getPlayerScoreForLevel(playerName, 1);
-        double lvl2 = LevelDatabase.getPlayerScoreForLevel(playerName, 2);
-        double lvl3 = LevelDatabase.getPlayerScoreForLevel(playerName, 3);
-        double lvl4 = LevelDatabase.getPlayerScoreForLevel(playerName, 4);
-        double lvl5 = LevelDatabase.getPlayerScoreForLevel(playerName, 5);
+        int maxLevel = LevelDataHandler.getPlayerMaxLevel(playerName);
+        double totalScore = LevelDataHandler.getPlayerTotalScore(playerName);
+        double lvl1 = LevelDataHandler.getPlayerScoreForLevel(playerName, 1);
+        double lvl2 = LevelDataHandler.getPlayerScoreForLevel(playerName, 2);
+        double lvl3 = LevelDataHandler.getPlayerScoreForLevel(playerName, 3);
+        double lvl4 = LevelDataHandler.getPlayerScoreForLevel(playerName, 4);
+        double lvl5 = LevelDataHandler.getPlayerScoreForLevel(playerName, 5);
 
         Label.LabelStyle infoStyle = new Label.LabelStyle(this.getFont(), Color.WHITE);
         infoStyle.font.getData().setScale(0.7f);
