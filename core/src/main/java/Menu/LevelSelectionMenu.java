@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
-import table.LevelDatabase;
+import table.LevelDataHandler;
 
 public class LevelSelectionMenu extends UserInterface {
 
@@ -55,7 +55,7 @@ public class LevelSelectionMenu extends UserInterface {
 
         Main main = this.getMain();
         String playerName = this.getPlayer().getName();
-        int maxLevel = LevelDatabase.getPlayerMaxLevel(playerName);
+        int maxLevel = LevelDataHandler.getPlayerMaxLevel(playerName);
 
         int buttonWidth = 120;
         int buttonHeight = 50;

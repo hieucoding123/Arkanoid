@@ -14,7 +14,7 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
-import table.LevelDatabase;
+import table.LevelDataHandler;
 
 import java.util.ArrayList;
 
@@ -156,8 +156,8 @@ public class LevelMode extends GameMode {
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
-            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            else LevelDatabase.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            else LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
         }
     }
 
