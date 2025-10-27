@@ -30,6 +30,9 @@ public class MainMenu extends UserInterface {
     private Skin settingsButtonSkin;
     private Skin quitButtonSkin;
 
+    //Texture
+    private Texture Leaderboard;
+
     public MainMenu(Main main, Player player) {
         super(main, player);
     }
@@ -38,11 +41,14 @@ public class MainMenu extends UserInterface {
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
 
-        // 1. Load all skins
+        //Load all skins
         this.playButtonSkin = new Skin(Gdx.files.internal("ui/playButton.json"));
         this.settingsButtonSkin = new Skin(Gdx.files.internal("ui/settingbutton.json"));
         this.quitButtonSkin = new Skin(Gdx.files.internal("ui/quitButton.json"));
         this.textFieldSkin = new Skin(Gdx.files.internal("ui-skin/ui-skin.json"));
+
+        //Image Button
+        this.Leaderboard = new Texture(Gdx.files.internal("images/trophy.png"));
 
         //Set def skin
         this.setSkin(playButtonSkin);
@@ -112,7 +118,7 @@ public class MainMenu extends UserInterface {
         });
 
         // LeaderBoard Button
-        Button lbButton = new Button(this.playButtonSkin);
+        Image lbButton = new Image(this.Leaderboard);
         lbButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -128,8 +134,10 @@ public class MainMenu extends UserInterface {
         buttonTable.add(settingsButton).width(220).height(72).padBottom(20);
         buttonTable.row();
         buttonTable.add(quitButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
-        buttonTable.add(lbButton).width(220).height(72).padBottom(20);
+
+        lbButton.setPosition(750,0);
+        lbButton.setSize(50,50);
+        this.getStage().addActor(lbButton);
 
         //Add to main table
         mainTable.add(buttonTable);
