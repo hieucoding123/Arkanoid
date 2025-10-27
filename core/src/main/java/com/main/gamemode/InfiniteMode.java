@@ -28,6 +28,12 @@ public class InfiniteMode extends GameMode {
     private int currentIdx;
     private float timePlayed;
     private int lives;
+    private int mapPassed;
+    private double expand;
+    private double shield;
+    private double bigball;
+    private double slowball;
+    private double threeball;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
@@ -39,6 +45,12 @@ public class InfiniteMode extends GameMode {
         this.effectFactory = new EffectFactory();
         this.timePlayed = 0.0f;
         lives = 3;
+        mapPassed = 0;
+        expand = 0.1;
+        shield = expand + 0.2;
+        bigball = shield + 0.2;
+        slowball = bigball + 0.2;
+        threeball = slowball + 0.1;
 
         create();
     }
@@ -57,7 +69,7 @@ public class InfiniteMode extends GameMode {
         balls.add(new Ball(paddle.getX() + paddle.getWidth() / 2f - 12,
             paddle.getY() + paddle.getHeight(),
             TextureManager.ballTexture,
-            5.0f)
+            10.0f)
         );
 
         this.inputHandler = new IngameInputHandler(this);
@@ -103,7 +115,14 @@ public class InfiniteMode extends GameMode {
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
 
-                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball, 0.5, 0.5, 0.5, 0.5, 0.5);
+                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
+                            brick, paddle, ball,
+                            expand,
+                            shield,
+                            bigball,
+                            slowball,
+                            threeball
+                        );
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }
@@ -135,7 +154,11 @@ public class InfiniteMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
         if (currentMap.getBricks().isEmpty()) {
-            currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
+            mapPassed++;
+            if (currentIdx < maps.size() - 1) {
+                currentIdx++;
+            }
+            makeGameHarder();
             currentMap =  new BricksMap(maps.get(currentIdx));
             EffectItem.clear();
             reset();
@@ -175,7 +198,7 @@ public class InfiniteMode extends GameMode {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
-            TextureManager.ballTexture, 5.0f));
+            TextureManager.ballTexture, 10.0f));
         paddle.setX(Game.SCREEN_WIDTH / 2f - paddle.getWidth() / 2f);
         paddle.setY(50);
         followPaddle = true;
@@ -184,5 +207,13 @@ public class InfiniteMode extends GameMode {
     @Override
     public Paddle getPaddle1() {
         return this.paddle;
+    }
+
+    public void makeGameHarder() {
+        expand -= 0.03 / mapPassed;
+        shield = expand + expand/ mapPassed;
+        bigball = shield + expand/ mapPassed;
+        slowball = bigball + expand/ mapPassed;
+        threeball = slowball + expand/ mapPassed;
     }
 }
