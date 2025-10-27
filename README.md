@@ -7,7 +7,7 @@
 *Main menu*
 <img src="assets/version/demo1.png" alt="DEMO" width="350">
 *Select mode*
-<img src="assets/version/demo2.png" alt="DEMO" widt="350">
+<img src="assets/version/demo2.png" alt="DEMO" width="350">
 
 **Structure**
 
@@ -15,7 +15,8 @@
 
 **Improve**
 - Add 4 game mode: `Infinite Mode`, `Co-op Mode`, `SinglePlayer Mode(Levels)`, `1vs1 Mode`.
-- Add `DataHandler` and use `SQL lite` to save player achievement
+- Enter player name, calculate time played
+- Add `DataHandler` and use `SQL lite` to save and query player achievement
 - Display player achievement
 ## Contributors
 - `Nguyen Quang Linh`: implements `SinglePlayer Mode(Levels)`, use `SQL lite`
