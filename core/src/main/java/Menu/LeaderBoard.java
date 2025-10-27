@@ -100,15 +100,18 @@ public class LeaderBoard extends UserInterface{
 
         Main main = this.getMain();
 
-        //Play Button
-        Button backButton = new Button(this.getSkin());
+        //Back Button
+        Label backButton = new Label("Return", whiteText);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.MAIN_MENU);
             }
         });
-        buttonTable.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(10).padRight(50);
-        mainTable.add(buttonTable);
+
+        backButton.setPosition(0, 0);
+        backButton.setFontScale(0.6f);
+        this.getStage().addActor(backButton);
+
     }
 }

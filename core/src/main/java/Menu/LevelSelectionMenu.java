@@ -45,13 +45,13 @@ public class LevelSelectionMenu extends UserInterface {
         mainTable.setBackground( new TextureRegionDrawable( new TextureRegion(this.getBGTexture())));
 
         //Label Styles
-        Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
         Label.LabelStyle ButtonLabelStyle = new Label.LabelStyle(this.getFont(), Color.WHITE);
         ButtonLabelStyle.font.getData().setScale(0.6f);
         Label.LabelStyle LockedLabelStyle = new Label.LabelStyle(this.getFont(), Color.GRAY);
         LockedLabelStyle.font.getData().setScale(0.6f);
 
-        Label titleLabel = new Label("CHOOSE LEVEL", MenuText);
+        Label titleLabel = new Label("CHOOSE LEVEL", whiteText);
         titleLabel.setFontScale(1f);
         mainTable.add(titleLabel).padTop(-130).padBottom(70);
         mainTable.row();
@@ -156,6 +156,18 @@ public class LevelSelectionMenu extends UserInterface {
 
         mainTable.add(buttonTable2);
 
+        //Back Button
+        Label backButton = new Label("Return", whiteText);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.MAIN_MENU);
+            }
+        });
+
+        backButton.setPosition(0, 0);
+        backButton.setFontScale(0.6f);
+        this.getStage().addActor(backButton);
 
     }
 }

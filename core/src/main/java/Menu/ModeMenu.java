@@ -63,11 +63,11 @@ public class ModeMenu extends UserInterface {
         );
 
         //Label Styles
-        Label.LabelStyle MenuText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
         Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
         //Title Label
-        Label titleLabel = new Label("Select your mode", MenuText);
+        Label titleLabel = new Label("Select your mode", whiteText);
         titleLabel.setFontScale(1f);
         mainTable.add(titleLabel).padBottom(40).padTop(30);
         mainTable.row();
@@ -126,6 +126,19 @@ public class ModeMenu extends UserInterface {
 
         buttonTable.add(vsModeButton).width(220).height(72).padBottom(20);
         buttonTable.row();
+
+        //Back Button
+        Label backButton = new Label("Return", whiteText);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.MAIN_MENU);
+            }
+        });
+
+        backButton.setPosition(0, 0);
+        backButton.setFontScale(0.6f);
+        this.getStage().addActor(backButton);
 
         //Add to main table
         mainTable.add(buttonTable);
