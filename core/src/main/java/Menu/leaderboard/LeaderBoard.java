@@ -1,5 +1,6 @@
-package Menu;
+package Menu.leaderboard;
 
+import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,16 +12,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
+import table.InfiDataHandler;
 
 import java.util.ArrayList;
 
-public class LeaderBoard extends UserInterface{
-    ArrayList<String> data;
-
-    public LeaderBoard(Main main, Player player, ArrayList<String> data) {
+public class LeaderBoard extends UserInterface {
+    private Table scrollableContent;
+    private String showLeaderBoard = "";
+    private ArrayList<String> data;
+    public LeaderBoard(Main main, Player player) {
         super(main, player);
         this.data = data;
     }
@@ -29,10 +33,7 @@ public class LeaderBoard extends UserInterface{
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
         this.setSkin(new Skin(Gdx.files.internal("ui2/ui2.json")));
-        this.setStage(new Stage(new ExtendViewport(
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
-
+        this.setStage(new Stage(new FitViewport(800, 1000)));
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);
 
@@ -43,14 +44,80 @@ public class LeaderBoard extends UserInterface{
         this.getStage().addActor(mainTable);
 
         mainTable.setBackground(
-            new TextureRegionDrawable(new TextureRegion(this.getBGTexture()))
+            new TextureRegionDrawable(
+                new TextureRegion(this.getBGTexture())
+            )
         );
+        Table buttonTable = new Table();
 
-        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+        Main main = this.getMain();
 
-        Table scrollableContent = new Table(this.getSkin());
+        Button infiModeButton = new Button(this.getSkin());
+        infiModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showLeaderBoard = "INFINITE";
+                scrollableContent.clear();
+            }
+        });
+
+        //Singleplayer button
+        Button levelsModeButton = new Button(this.getSkin());
+        levelsModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showLeaderBoard = "LEVELS";
+                scrollableContent.clear();
+            }
+        });
+
+        //Coop button
+        Button coopModeButton = new Button(this.getSkin());
+        coopModeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showLeaderBoard = "COOP";
+                scrollableContent.clear();
+            }
+        });
+
+        buttonTable.add(infiModeButton).width(220).height(72).padBottom(20);
+        buttonTable.add(levelsModeButton).width(220).height(72).padBottom(20);
+        buttonTable.add(coopModeButton).width(220).height(72).padBottom(20);
+        buttonTable.row();
+
+        scrollableContent = new Table(this.getSkin());
         scrollableContent.top();
 
+        ScrollPane scrollPane = new ScrollPane(scrollableContent,  this.getSkin());
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setScrollingDisabled(true, false);
+
+        mainTable.add(scrollPane).expandY().width(800).height(400).pad(20);
+        mainTable.row();
+
+        Button backButton = new Button(this.getSkin());
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.MAIN_MENU);
+            }
+        });
+        buttonTable.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(10).padRight(50);
+
+        mainTable.add(buttonTable);
+    }
+
+    public void update() {
+        if (showLeaderBoard.equals("INFINITE")) {
+            loadInfiniteTable();
+            showLeaderBoard = "";
+        }
+    }
+
+    private void loadInfiniteTable() {
+        data = InfiDataHandler.getLeaderboardData();
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
         Label nameHeader = new Label("Name", whiteText);
         Label scoreHeader = new Label("Score", whiteText);
         Label timeHeader = new Label("Time Played", whiteText);
