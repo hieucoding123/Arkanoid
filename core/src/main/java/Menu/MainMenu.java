@@ -47,9 +47,7 @@ public class MainMenu extends UserInterface {
         //Set def skin
         this.setSkin(playButtonSkin);
 
-        this.setStage(new Stage(
-            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
-        );
+        this.setStage(new Stage(new FitViewport(800, 1000)));
 
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);
@@ -113,6 +111,15 @@ public class MainMenu extends UserInterface {
             }
         });
 
+        // LeaderBoard Button
+        Button lbButton = new Button(this.playButtonSkin);
+        lbButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEADER_BOARD);
+            }
+        });
+
         //Button arrange
         buttonTable.add(textField).width(300).height(72).padBottom(40);
         buttonTable.row();
@@ -121,8 +128,8 @@ public class MainMenu extends UserInterface {
         buttonTable.add(settingsButton).width(220).height(72).padBottom(20);
         buttonTable.row();
         buttonTable.add(quitButton).width(220).height(72).padBottom(20);
-
-
+        buttonTable.row();
+        buttonTable.add(lbButton).width(220).height(72).padBottom(20);
 
         //Add to main table
         mainTable.add(buttonTable);

@@ -71,9 +71,7 @@ public class SinglePlayerLevelSelectionMenu extends LevelSelectionMenu {
         Table bottomContainerTable = new Table();
         bottomContainerTable.setFillParent(true);
 
-        bottomContainerTable.add(infoTable).expandY().bottom().left()
-            .padLeft(10)
-            .padBottom(70);
+        bottomContainerTable.add(infoTable).expandY().bottom().left().padLeft(10).padBottom(70);
 
         this.getStage().addActor(bottomContainerTable);
     }

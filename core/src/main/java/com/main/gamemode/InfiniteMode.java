@@ -144,7 +144,6 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
         this.draw(sp);
         gameScreen.setTime(this.timePlayed);
         gameScreen.setLives(this.lives);
