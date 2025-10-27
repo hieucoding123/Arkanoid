@@ -26,7 +26,6 @@ public class LeaderBoard extends UserInterface {
     private ArrayList<String> data;
     public LeaderBoard(Main main, Player player) {
         super(main, player);
-        this.data = data;
     }
 
     @Override
@@ -36,6 +35,8 @@ public class LeaderBoard extends UserInterface {
         this.setStage(new Stage(new FitViewport(800, 1000)));
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);
+
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
 
         Gdx.input.setInputProcessor(this.getStage());
 
@@ -96,14 +97,18 @@ public class LeaderBoard extends UserInterface {
         mainTable.add(scrollPane).expandY().width(800).height(400).pad(20);
         mainTable.row();
 
-        Button backButton = new Button(this.getSkin());
+        //Back Button
+        Label backButton = new Label("Return", whiteText);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.MAIN_MENU);
             }
         });
-        buttonTable.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(10).padRight(50);
+
+        backButton.setPosition(0, 0);
+        backButton.setFontScale(0.6f);
+        this.getStage().addActor(backButton);
 
         mainTable.add(buttonTable);
     }
@@ -155,30 +160,5 @@ public class LeaderBoard extends UserInterface {
             scrollableContent.add(time).width(150).pad(5).right();
             scrollableContent.row();
         }
-
-        ScrollPane scrollPane = new ScrollPane(scrollableContent,  this.getSkin());
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
-
-        mainTable.add(scrollPane).expandY().width(800).height(400).pad(20);
-        mainTable.row();
-
-        Table buttonTable = new Table();
-
-        Main main = this.getMain();
-
-        //Back Button
-        Label backButton = new Label("Return", whiteText);
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.MAIN_MENU);
-            }
-        });
-
-        backButton.setPosition(0, 0);
-        backButton.setFontScale(0.6f);
-        this.getStage().addActor(backButton);
-
     }
 }
