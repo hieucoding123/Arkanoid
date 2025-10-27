@@ -43,6 +43,7 @@ public class CoopMode extends GameMode {
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
         this.timePlayed = 0.0f;
+        this.lives = 3;
         create();
     }
 
@@ -115,42 +116,30 @@ public class CoopMode extends GameMode {
                     brick.takeHit();
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
-                        EffectItem newEffectItem1 = null;
-                        EffectItem newEffectItem2 = null;
+                        EffectItem newEffectItem = null;
+//                        EffectItem newEffectItem1 = null;
+//                        EffectItem newEffectItem2 = null;
                         if (mapIndex == 1) {
-                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.06, 0.11, 0.15, 0.19, 0.20);
-                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.06, 0.11, 0.15, 0.19, 0.20);
                         } else if (mapIndex == 2) {
-                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.05, 0.09, 0.13, 0.16, 0.18);
-                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.05, 0.09, 0.13, 0.16, 0.18);
                         } else if (mapIndex == 3) {
-                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.04, 0.07, 0.10, 0.13, 0.15);
-                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.04, 0.07, 0.10, 0.13, 0.15);
                         } else if (mapIndex == 4) {
-                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.03, 0.06, 0.08, 0.10, 0.12);
-                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.03, 0.06, 0.08, 0.10, 0.12);
                         } else {
-                            newEffectItem1 = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.02, 0.04, 0.06, 0.08, 0.10);
-                            newEffectItem2 = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
                                 0.02, 0.04, 0.06, 0.08, 0.10);
                         }
 
-                        if (newEffectItem1 != null) {
-                            EffectItem.addEffectItem(newEffectItem1);
+                        if (newEffectItem != null) {
+                            EffectItem.addEffectItem(newEffectItem);
                         }
 
-                        if (newEffectItem2 != null) {
-                            EffectItem.addEffectItem(newEffectItem2);
-                        }
 
                         scoreManager.comboScore(brick);
                         if (brick.getExplosion()) {
@@ -218,7 +207,9 @@ public class CoopMode extends GameMode {
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture, 5.0f));
         paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
-        paddle1.setY(50);
+        paddle1.setY(100);
+        paddle2.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
+        paddle2.setY(40);
         followPaddle = true;
     }
 

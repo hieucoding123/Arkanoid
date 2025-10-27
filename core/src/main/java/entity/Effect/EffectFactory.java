@@ -18,7 +18,7 @@ public class EffectFactory {
         double chance = rand.nextDouble();
 
         if (chance <= expand) {
-            return new ExpandEffect(brick.getX(), brick.getY(), -1, paddle);
+            return new ExpandEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= shield) {
             return new ShieldEffect(brick.getX(), brick.getY(), -1);

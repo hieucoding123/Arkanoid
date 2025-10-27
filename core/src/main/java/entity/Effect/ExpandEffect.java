@@ -11,24 +11,24 @@ import java.util.ArrayList;
 
 public class ExpandEffect extends EffectItem {
     private static final float EFFECT_DURATION = 5.0f;
-    private Paddle paddle;
+//    private Paddle paddle;
 
-    public ExpandEffect(float x, float y, float dy, Paddle paddle) {
+    public ExpandEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.expandpaddleTexture);
-        this.paddle = paddle;
+//        this.paddle = paddle;
     }
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
-        if (this.paddle != null) {
-            this.paddle.activateExpand(EFFECT_DURATION);
+        if (paddle != null) {
+            paddle.activateExpand(EFFECT_DURATION);
             float screenWidth = Gdx.graphics.getWidth();
-            if (this.paddle.getX() + this.paddle.getWidth() > screenWidth - BricksMap.xBeginCoord) {
-                float newX = screenWidth - BricksMap.xBeginCoord - this.paddle.getWidth();
-                this.paddle.setX(newX);
+            if (paddle.getX() + paddle.getWidth() > screenWidth - BricksMap.xBeginCoord) {
+                float newX = screenWidth - BricksMap.xBeginCoord - paddle.getWidth();
+                paddle.setX(newX);
             }
 
-            if (this.paddle.getX() < BricksMap.xBeginCoord) {
-                this.paddle.setX(BricksMap.xBeginCoord);
+            if (paddle.getX() < BricksMap.xBeginCoord) {
+                paddle.setX(BricksMap.xBeginCoord);
             }
         }
         this.setDestroyed(true);
