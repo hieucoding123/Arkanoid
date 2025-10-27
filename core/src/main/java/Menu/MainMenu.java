@@ -2,6 +2,7 @@ package ui;
 
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,11 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+//import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
+
+import static com.badlogic.gdx.Gdx.gl;
 
 public class MainMenu extends UserInterface {
     private TextField textField;
@@ -107,6 +111,15 @@ public class MainMenu extends UserInterface {
             }
         });
 
+        // LeaderBoard Button
+        Button lbButton = new Button(this.playButtonSkin);
+        lbButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.LEADER_BOARD);
+            }
+        });
+
         //Button arrange
         buttonTable.add(textField).width(300).height(72).padBottom(40);
         buttonTable.row();
@@ -115,8 +128,8 @@ public class MainMenu extends UserInterface {
         buttonTable.add(settingsButton).width(220).height(72).padBottom(20);
         buttonTable.row();
         buttonTable.add(quitButton).width(220).height(72).padBottom(20);
-
-
+        buttonTable.row();
+        buttonTable.add(lbButton).width(220).height(72).padBottom(20);
 
         //Add to main table
         mainTable.add(buttonTable);

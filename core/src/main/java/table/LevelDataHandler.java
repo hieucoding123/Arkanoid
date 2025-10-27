@@ -10,11 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class LevelDatabase {
-
-    private static final String URL_DATABASE = "jdbc:sqlite:leaderBoard/level_scores.db";
-    private static boolean isLoaded = false;
-
+public class LevelDataHandler extends DataHandler {
     private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS level_scores ("
         + " playerName TEXT PRIMARY KEY NOT NULL,"
         + " level1 REAL DEFAULT 0,"
@@ -28,13 +24,13 @@ public class LevelDatabase {
 
 
     private static void loadDriverIfNeeded() {
-        if (isLoaded) {
+        if (isLoaded()) {
             return;
         }
         else {
             try {
                 Class.forName("org.sqlite.JDBC");
-                isLoaded = true;
+                setLoaded(true);
             } catch (ClassNotFoundException e) {
                 Gdx.app.error("Database", "Not find SQLite JDBC Driver! Check build.gradle.", e);
                 throw new RuntimeException(e);
@@ -53,7 +49,7 @@ public class LevelDatabase {
         String sqlInsert = "INSERT OR IGNORE INTO level_scores (playerName) VALUES (?);";
         String sqlSelect = "SELECT maxLevelUnlocked FROM level_scores WHERE playerName = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE)) {
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase())) {
             conn.setAutoCommit(true); // auto save change
 
             //Make new table if not have
@@ -103,7 +99,7 @@ public class LevelDatabase {
             + "WHERE playerName = ? AND maxLevelUnlocked = ?";
 
 
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE)) {
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase())) {
             conn.setAutoCommit(false);
 
             //Make new table if not have
@@ -158,7 +154,7 @@ public class LevelDatabase {
         }
         loadDriverIfNeeded();
         String sqlSelect = "SELECT total FROM level_scores WHERE playerName = ?";
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
             pstmtSelect.setString(1, playerName);
             ResultSet rs = pstmtSelect.executeQuery();
@@ -181,7 +177,7 @@ public class LevelDatabase {
         String levelColumn = "level" + levelNumber;
         String sqlSelect = "SELECT " + levelColumn + " FROM level_scores WHERE playerName = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
 
             pstmtSelect.setString(1, playerName);
@@ -205,7 +201,7 @@ public class LevelDatabase {
 
         String sqlSelect = "SELECT playerName, maxLevelUnlocked, total FROM level_scores ORDER BY total DESC LIMIT 20";
 
-        try (Connection conn = DriverManager.getConnection(URL_DATABASE);
+        try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(SQL_CREATE_TABLE);

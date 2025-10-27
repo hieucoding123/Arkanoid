@@ -14,7 +14,7 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
-import table.InfiModeTable;
+import table.InfiDataHandler;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,6 @@ public class InfiniteMode extends GameMode {
     private ScoreManager scoreManager;
     GameScreen gameScreen;
     private EffectFactory effectFactory;
-    private InfiModeTable table;
     private int currentIdx;
     private float timePlayed;
     private int lives;
@@ -38,7 +37,6 @@ public class InfiniteMode extends GameMode {
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.effectFactory = new EffectFactory();
-        this.table = new InfiModeTable();
         this.timePlayed = 0.0f;
         lives = 3;
 
@@ -87,8 +85,7 @@ public class InfiniteMode extends GameMode {
             EffectItem.clear();
             this.getPlayer().setScore(this.scoreManager.getScore());
             this.getPlayer().setTimePlayed(this.timePlayed);
-            this.table.addPlayer(this.getPlayer());
-            this.table.updateSystemFile();
+            InfiDataHandler.addScore(getPlayer().getName(), getPlayer().getScore(), getPlayer().getTimePlayed());
         }
 
         if (followPaddle) {       // follow paddle
@@ -147,7 +144,6 @@ public class InfiniteMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.update(delta);
         this.draw(sp);
         gameScreen.setTime(this.timePlayed);
         gameScreen.setLives(this.lives);

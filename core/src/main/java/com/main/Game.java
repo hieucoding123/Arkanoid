@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.LeaderBoard;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,6 +20,7 @@ import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
+import table.InfiDataHandler;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -82,6 +84,7 @@ public class Game {
 
         switch (gameState){
             case MAIN_MENU:
+            case LEADER_BOARD:
             case SETTINGS:
             case SELECT_MODE:
             case LEVELS_SELECTION:
@@ -133,29 +136,9 @@ public class Game {
                 }
                 break;
             case LEVEL1:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL2:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL3:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL4:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.LEVELS_SELECTION);
-                }
-                break;
             case LEVEL5:
                 gameMode.update(this.delta);
                 if (gameMode.isEnd()) {
@@ -185,6 +168,11 @@ public class Game {
                 ui = new MainMenu(main, this.player);
                 ui.create();
                 ui.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case LEADER_BOARD:
+                ui =new LeaderBoard(main, this.player, InfiDataHandler.getLeaderboardData());
+                ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SETTINGS:
