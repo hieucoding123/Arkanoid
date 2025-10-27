@@ -110,22 +110,38 @@ public class Ball extends MovableObject {
     }
 
     public void collisionWith(Paddle paddle) {
-        if (this.getDy() < 0 &&
-            this.getX() < paddle.getX() + paddle.getWidth() &&
-            this.getX() + this.getWidth() > paddle.getX() &&
-            this.getY() <= paddle.getY() + paddle.getHeight() &&
-            this.getY() + this.getHeight() >= paddle.getY()) {
+        if (paddle.isFlipped()) {
+            if (this.getDy() > 0) {
+                float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+                float ballCenter = this.getX() + this.getWidth() / 2f;
+                float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
+                impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
 
-            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
-            float ballCenter = this.getX() + this.getWidth() / 2f;
-            float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
+                float newAngle = -((float)Math.PI / 2 - impactPoint * (float)Math.PI / 3f);
 
-            impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
-            float newAngle = (float)(Math.PI / 2 - impactPoint * (float)Math.PI / 3f);
+                this.setAngle(newAngle);
+                this.updateVelocity();
 
-            this.setAngle(newAngle);
-            this.updateVelocity();
-            this.setY(paddle.getY() + paddle.getHeight());
+                this.setY(paddle.getY() - this.getHeight());
+            }
+        } else {
+            if (this.getDy() < 0 &&
+                this.getX() < paddle.getX() + paddle.getWidth() &&
+                this.getX() + this.getWidth() > paddle.getX() &&
+                this.getY() <= paddle.getY() + paddle.getHeight() &&
+                this.getY() + this.getHeight() >= paddle.getY()) {
+
+                float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
+                float ballCenter = this.getX() + this.getWidth() / 2f;
+                float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
+
+                impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
+                float newAngle = (float) (Math.PI / 2 - impactPoint * (float) Math.PI / 3f);
+
+                this.setAngle(newAngle);
+                this.updateVelocity();
+                this.setY(paddle.getY() + paddle.getHeight());
+            }
         }
     }
 

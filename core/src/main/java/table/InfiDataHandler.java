@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 public class InfiDataHandler extends DataHandler {
     private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS infinite_scores ("
-        + " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + " playerName TEXT NOT NULL,"
+        + " playerName TEXT PRIMARY KEY NOT NULL,"
         + " score INTEGER DEFAULT 0,"
         + " time REAL DEFAULT 0"
         + ");";
@@ -30,7 +29,14 @@ public class InfiDataHandler extends DataHandler {
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
 
-        String sqlInsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?);";
+//        String sqlUpsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?);";
+        String sqlUpsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?) "
+            + "ON CONFLICT(playerName) DO UPDATE SET " // Nếu playerName đã tồn tại...
+            + "  score = excluded.score, "              // ...cập nhật điểm...
+            + "  time = excluded.time "                 // ...và thời gian...
+            + "WHERE " // ...NHƯNG CHỈ KHI...
+            + "  excluded.score > infinite_scores.score " // ...điểm mới > điểm cũ
+            + "  OR (excluded.score = infinite_scores.score AND excluded.time < infinite_scores.time);"; // ...hoặc điểm bằng, thời gian mới < thời gian cũ
 
         try (Connection conn = DriverManager.getConnection(getUrlDatabase())) {
             conn.setAutoCommit(true); // Tự động lưu cho mỗi lệnh
@@ -41,7 +47,7 @@ public class InfiDataHandler extends DataHandler {
             }
 
             // 2. Chèn dữ liệu mới
-            try (PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
+            try (PreparedStatement pstmt = conn.prepareStatement(sqlUpsert)) {
                 pstmt.setString(1, pName);
                 pstmt.setInt(2, (int) score);
                 pstmt.setDouble(3, time);

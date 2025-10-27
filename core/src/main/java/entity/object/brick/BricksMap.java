@@ -121,13 +121,22 @@ public class BricksMap {
         bricks.removeIf(Brick::isDestroyed);
     }
 
+    public void update(float delta) {
+        for (Brick brick : bricks) {
+            brick.update(delta);
+        }
+
+        bricks.removeIf(Brick::isDestroyed);
+    }
     /**
      * Draw bricks on game screen.
      * @param batch game drawing programming
      */
     public void draw(SpriteBatch batch) {
         for (Brick brick : bricks) {
-            brick.draw(batch);
+            if (!brick.isDestroyed()) {
+                brick.draw(batch);
+            }
         }
     }
 
