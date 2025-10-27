@@ -122,6 +122,12 @@ public class Game {
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             }
         }
+        //Debug
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.R)) {
+            int x = Gdx.input.getX();
+            int y_from_bottom = Gdx.graphics.getHeight() - Gdx.input.getY();
+            System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
+        }
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             setGameState(GameState.MAIN_MENU);
         }
