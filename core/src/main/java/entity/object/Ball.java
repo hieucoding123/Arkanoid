@@ -10,6 +10,7 @@ public class Ball extends MovableObject {
     private float angle;
     private long BigEnd = 0;
     private long SlowEnd = 0;
+    private long FastEnd = 0;
     private float originalspeed;
     private int lastHitBy = 0;
 
@@ -82,6 +83,11 @@ public class Ball extends MovableObject {
         this.setSpeed(180f);
     }
 
+    public void activateFast(float duration) {
+        FastEnd = System.currentTimeMillis() + (long)(duration * 1000);
+        this.setSpeed(1000f);
+    }
+
     public void update(float delta) {
         super.update(delta);
         if (this.getX() <= Game.padding_left_right
@@ -106,6 +112,10 @@ public class Ball extends MovableObject {
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
             this.setSpeed(originalspeed * 60f);
             SlowEnd = 0;
+        }
+        if (FastEnd > 0 && System.currentTimeMillis() > FastEnd) {
+            this.setSpeed(originalspeed * 60f);
+            FastEnd = 0;
         }
     }
 
