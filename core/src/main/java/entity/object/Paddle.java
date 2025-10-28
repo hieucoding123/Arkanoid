@@ -6,6 +6,7 @@ import entity.MovableObject;
 public class Paddle extends MovableObject {
     private boolean isFlipped;
     private long expandEnd = 0;
+    private long StunEnd = 0;
 
     public void setFlipped(boolean flipped) {
         this.isFlipped = flipped;
@@ -31,6 +32,14 @@ public class Paddle extends MovableObject {
         this.setScale(1.5f, 1.0f);
     }
 
+    public void activateStun(float duration) {
+        this.StunEnd = System.currentTimeMillis() + (long)(duration * 1000);
+    }
+
+    public boolean isStunned() {
+        return System.currentTimeMillis() < StunEnd;
+    }
+
     public void update(float delta) {
         super.update(delta);
         if (expandEnd > 0 && System.currentTimeMillis() > expandEnd) {
@@ -44,6 +53,9 @@ public class Paddle extends MovableObject {
     }
 
     public void moveRight() {
+        if (isStunned()) {
+            return;
+        }
         x += speed;
         if (x + getWidth() > Game.SCREEN_WIDTH - Game.padding_left_right) {
             x = Game.SCREEN_WIDTH - Game.padding_left_right - getWidth();
@@ -51,6 +63,9 @@ public class Paddle extends MovableObject {
     }
 
     public void moveLeft() {
+        if (isStunned()) {
+            return;
+        }
         x -= speed;
         if (x < Game.padding_left_right) {
             x = Game.padding_left_right;

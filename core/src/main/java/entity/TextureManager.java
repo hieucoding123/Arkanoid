@@ -18,6 +18,7 @@ public class TextureManager {
     public static Texture SlowBallTexture;
     public static Texture ExplosionTexture;
     public static Texture FastBallTexture;
+    public static Texture StunPaddleTexture;
     /**
      * Load textures.
      */
@@ -36,6 +37,7 @@ public class TextureManager {
         SlowBallTexture = new Texture("images/Slow.png");
         ExplosionTexture = new Texture("images/explosionEffect.png");
         FastBallTexture = new Texture("images/FastEffect.png");
+        StunPaddleTexture = new Texture("images/StunPaddle.png");
     }
 
     /**
@@ -57,5 +59,6 @@ public class TextureManager {
         SlowBallTexture.dispose();
         ExplosionTexture.dispose();
         FastBallTexture.dispose();
+        StunPaddleTexture.dispose();
     }
 }
