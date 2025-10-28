@@ -12,8 +12,10 @@ public class EffectFactory {
     public EffectItem tryCreateEffectItem(Brick brick, Paddle paddle, Ball ball,
                                           double expand,
                                           double shield,
+                                          double stunpaddle,
                                           double bigball,
                                           double slowball,
+                                          double fastball,
                                           double threeball) {
         double chance = rand.nextDouble();
 
@@ -23,11 +25,17 @@ public class EffectFactory {
         } else if (chance <= shield) {
             return new ShieldEffect(brick.getX(), brick.getY(), -1);
 
+        }  else if (chance <= stunpaddle) {
+            return new StunPaddleEffect(brick.getX(), brick.getY(), -1);
+
         } else if (chance <= bigball) {
             return new BigballEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= slowball) {
             return new SlowBallEffect(brick.getX(), brick.getY(), -1);
+
+        } else if (chance <= fastball) {
+            return new FastBallEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= threeball) {
             return new ThreeBallsEffect(brick.getX(), brick.getY(), -1);

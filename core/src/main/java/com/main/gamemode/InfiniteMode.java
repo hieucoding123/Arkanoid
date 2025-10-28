@@ -103,7 +103,7 @@ public class InfiniteMode extends GameMode {
                     if (ball.isBig()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
 
-                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball, 0.5, 0.5, 0.5, 0.5, 0.5);
+                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5);
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }

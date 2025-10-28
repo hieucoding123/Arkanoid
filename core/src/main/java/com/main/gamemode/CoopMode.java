@@ -121,19 +121,19 @@ public class CoopMode extends GameMode {
 //                        EffectItem newEffectItem2 = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.06, 0.11, 0.15, 0.19, 0.20);
-                        } else if (mapIndex == 2) {
+                                0.05, 0.09, 0.12, 0.14, 0.16, 0.18, 0.20);
+                        } else if  (mapIndex == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.05, 0.09, 0.13, 0.16, 0.18);
+                                0.04, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18);
                         } else if (mapIndex == 3) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.04, 0.07, 0.10, 0.13, 0.15);
+                                0.03, 0.06, 0.08, 0.10, 0.12, 0.14, 0.15);
                         } else if (mapIndex == 4) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.03, 0.06, 0.08, 0.10, 0.12);
+                                0.03, 0.05, 0.07, 0.08, 0.09, 0.10, 0.12);
                         } else {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.02, 0.04, 0.06, 0.08, 0.10);
+                                0.02, 0.04, 0.05, 0.06, 0.07, 0.08, 0.10);
                         }
 
                         if (newEffectItem != null) {
