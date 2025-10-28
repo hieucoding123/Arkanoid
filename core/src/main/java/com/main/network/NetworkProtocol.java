@@ -7,13 +7,21 @@ import entity.object.brick.BricksMap;
 import java.util.ArrayList;
 
 public class NetworkProtocol {
-    public static final int TCP_PORT = 6666;
-    public static final int UDP_PORT = 6667;
+    public static final int TCP_PORT = 54555;
+    public static final int UDP_PORT = 54777;
 
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
         // register message classes
+        kryo.register(LoginResponse.class);
+        kryo.register(LoginRequest.class);
+        kryo.register(PlayerInput.class);
+        kryo.register(GameStateUpdate.class);
+        kryo.register(StartGameRequest.class);
+        kryo.register(PaddleState.class);
+        kryo.register(BallState.class);
+        kryo.register(BrickState.class);
         kryo.register(BricksMap.class);
     }
 
