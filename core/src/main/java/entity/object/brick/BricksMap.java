@@ -41,7 +41,18 @@ public class BricksMap {
                 String[] line = br.readLine().trim().split("\\s+");
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
-                    if (color == 1) {
+                    int radom = (int)(Math.random() * 3);
+                    if (radom == 1 && color != -1) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            1,
+                            true,
+                            i, j,
+                            color,
+                            TextureManager.brickexplo));
+                    }
+                    else if (color == 1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
@@ -59,15 +70,6 @@ public class BricksMap {
                             i, j,
                             color,
                             TextureManager.brick2HIT));
-                    } else if (color == 2) {
-                        bricks.add(new Brick(
-                            xBeginCoord + j * brickW,
-                            yBeginCoord - i * brickH,
-                            1,
-                            true,
-                            i, j,
-                            color,
-                            TextureManager.brickexplo));
                     }
                 }
             }
