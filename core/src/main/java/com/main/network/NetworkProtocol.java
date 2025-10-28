@@ -14,8 +14,9 @@ public class NetworkProtocol {
         Kryo kryo = endPoint.getKryo();
 
         // register message classes
-        kryo.register(LoginResponse.class);
+        kryo.register(GameMode.class);
         kryo.register(LoginRequest.class);
+        kryo.register(LoginResponse.class);
         kryo.register(PlayerInput.class);
         kryo.register(GameStateUpdate.class);
         kryo.register(StartGameRequest.class);
