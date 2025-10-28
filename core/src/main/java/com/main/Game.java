@@ -1,5 +1,6 @@
 package com.main;
 
+import Menu.NetworkConnectionMenu;
 import Menu.leaderboard.LeaderBoard;
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
@@ -7,7 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.main.gamemode.LevelMode;
+import com.main.gamemode.*;
+import com.main.network.GameServer;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
@@ -15,10 +17,6 @@ import entity.object.brick.BricksMap;
 import entity.TextureManager;
 import Menu.ModeMenu;
 import Menu.SinglePlayerLevelSelectionMenu;
-import com.main.gamemode.GameMode;
-import com.main.gamemode.InfiniteMode;
-import com.main.gamemode.VsMode;
-import com.main.gamemode.CoopMode;
 import ui.SettingsUI;
 import ui.MainMenu;
 
@@ -45,6 +43,10 @@ public class Game {
     private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
+
+    private GameServer gameServer;
+    private String networkServerIP;
+    private boolean isNetworkHost;
 
     public Game(Main main) {
         this.main = main;
@@ -89,6 +91,7 @@ public class Game {
             case MAIN_MENU:
             case LEADER_BOARD:
             case SETTINGS:
+            case NETWORK_CONNECTION_MENU:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -165,10 +168,28 @@ public class Game {
             case LEADER_BOARD:
                 ui.update();
                 break;
+            case NETWORK_VS:
+                gameMode.update(this.delta);
+                if (gameMode.isEnd()) {
+                    stopNetworkGame();
+                    setGameState(GameState.NETWORK_CONNECTION_MENU);
+                }
+                break;
+        }
+    }
+
+    private void stopNetworkGame() {
+        if (gameServer != null) {
+            gameServer.stop();
+            gameServer = null;
+        }
+        if (gameMode instanceof NetworkVsMode) {
+            ((NetworkVsMode) gameMode).dispose();
         }
     }
 
     public void dispose() {
+        stopNetworkGame();
         spriteBatch.dispose();
         ui.dispose();
         gameScreen.dispose();
@@ -208,6 +229,11 @@ public class Game {
                 break;
             case LEVELS_SELECTION:
                 ui = new SinglePlayerLevelSelectionMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case NETWORK_CONNECTION_MENU:
+                ui = new NetworkConnectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
@@ -260,6 +286,54 @@ public class Game {
             case VS_MODE:
                 gameMode = new VsMode(this.player, this.player2, gameScreen, this.scoreManager, this.scoreManagerP2);
                 break;
+            case NETWORK_VS:
+                playNetworkGame();
+                break;
+        }
+    }
+
+    private void playNetworkGame() {
+        gameMode = new NetworkVsMode(
+            player, scoreManager, gameScreen, networkServerIP, isNetworkHost
+        );
+        if (isNetworkHost && gameServer != null) {
+            VsMode severGameMode = new  VsMode(player, player2, gameScreen,
+                scoreManager, scoreManagerP2);
+            gameServer.setGameMode(severGameMode);
+        }
+
+    }
+
+    public void startNetworkGame(String severIP, boolean isHost) {
+        this.networkServerIP = severIP;
+        this.isNetworkHost = isHost;
+
+        if (isHost) {
+            startGameServer();
+        }
+        setGameState(GameState.NETWORK_VS);
+    }
+
+    private void startGameServer() {
+        try {
+            gameServer = new GameServer();
+            gameServer.start();
+
+            new Thread(() -> {
+                while (gameServer != null) {
+                    float delta = 1/60f;
+                    gameServer.update(delta);
+
+                    try {
+                        Thread.sleep(16);   // ~ 60 fps
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }).start();
+            System.out.println("Game server started successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
