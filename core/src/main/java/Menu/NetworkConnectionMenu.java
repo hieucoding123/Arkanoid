@@ -16,15 +16,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
+import com.main.network.IPDisplayDialog;
+import com.main.network.NetworkProtocol;
+import com.main.network.NetworkUtils;
 import entity.Player;
 
 public class NetworkConnectionMenu extends  UserInterface{
     private TextField textField;
     private Label statusLabel;
+    private Label serverIPLabel;
+    private TextButton showAllIPsButton;
     private boolean isHosting;
 
     public NetworkConnectionMenu(Main main, Player player) {
         super(main, player);
+    }
+
+    private void showIPDialog(Skin skin) {
+        IPDisplayDialog dialog = new IPDisplayDialog("Server IP Information", skin);
+        dialog.show(this.getStage());
     }
 
     @Override
@@ -69,6 +79,21 @@ public class NetworkConnectionMenu extends  UserInterface{
             }
         });
 
+        serverIPLabel = new Label("", this.getSkin());
+        serverIPLabel.setColor(Color.GREEN);
+        serverIPLabel.setFontScale(1.0f);
+        serverIPLabel.setVisible(false);        // invisible first
+//        buttonTable.add(serverIPLabel).padBottom(40).row();
+
+        showAllIPsButton = new TextButton("Show All Network IPs", this.getSkin());
+        showAllIPsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showIPDialog(getSkin());
+            }
+        });
+        showAllIPsButton.setVisible(false);
+
         this.textField = new TextField("", this.getSkin());
         textField.setMessageText("Enter server IP");
 
@@ -94,6 +119,8 @@ public class NetworkConnectionMenu extends  UserInterface{
             }
         });
         buttonTable.add(hostButton).padBottom(40).padTop(30).row();
+        buttonTable.add(serverIPLabel).padBottom(40).row();
+        buttonTable.add(showAllIPsButton).width(250).height(40).padBottom(20).row();
         buttonTable.add(textField).padBottom(40).padTop(30).row();
         buttonTable.add(joinButton).padBottom(40).padTop(30).row();
         buttonTable.add(backButton).padBottom(40).padTop(30).row();
@@ -132,8 +159,14 @@ public class NetworkConnectionMenu extends  UserInterface{
 
         new Thread(() -> {
             try {
+                String localIP = NetworkUtils.getLocalIpAddress();
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Sever started! Waiting for players...");
+
+                    serverIPLabel.setText("Your Server IP: " + localIP + "\nPort: " + NetworkProtocol.TCP_PORT);
+                    serverIPLabel.setVisible(true);
+
+                    showAllIPsButton.setVisible(true);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
