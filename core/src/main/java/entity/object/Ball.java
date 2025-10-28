@@ -14,6 +14,8 @@ public class Ball extends MovableObject {
     private float originalspeed;
     private int lastHitBy = 0;
 
+    private float baseScale;
+
     /**
      * Constructor for ball.
      * @param x x coordinate of ball
@@ -26,6 +28,10 @@ public class Ball extends MovableObject {
         this.originalspeed = speed;
         this.speed = speed * 60f;
         setRandomAngle();
+
+        //Rescale
+        this.baseScale = 36.0f / this.orgWidth;
+        this.setScale(this.baseScale, this.baseScale);
     }
 
     public Ball(Ball other) {
@@ -35,6 +41,8 @@ public class Ball extends MovableObject {
         this.angle = other.angle - 0.3f;
         this.scaleWidth = other.scaleWidth;
         this.scaleHeight = other.scaleHeight;
+
+        this.baseScale = other.baseScale;
 
         if (other.BigEnd > System.currentTimeMillis()) {
             this.BigEnd = other.BigEnd;
@@ -75,7 +83,8 @@ public class Ball extends MovableObject {
 
     public void activateBig(float duration) {
         BigEnd = System.currentTimeMillis() + (long)(duration * 1000);
-        this.setScale(1.5f, 1.5f);
+//        this.setScale(1.5f, 1.5f);
+        this.setScale(this.baseScale * 1.5f, this.baseScale * 1.5f);
     }
 
     public void activateSlow(float duration) {
@@ -106,7 +115,8 @@ public class Ball extends MovableObject {
             }
         }
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
-            this.setScale(1.0f, 1.0f);
+//            this.setScale(1.0f, 1.0f);
+            this.setScale(this.baseScale, this.baseScale);
             BigEnd = 0;
         }
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {

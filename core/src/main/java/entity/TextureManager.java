@@ -31,7 +31,7 @@ public class TextureManager {
         brick1HIT = new Texture("images/brick_cyan.png");
         brickexplo = new Texture("images/brick_red.png");
         brickNOHIT = new Texture("images/brick_black.png");
-        ballTexture = new Texture("images/ball.png");
+        ballTexture = new Texture("images/tempball.png");
         paddleTexture = new Texture("images/paddle.png");
         flippedpaddleTexture = new Texture("images/flippedpaddle.png");
         threeBallsTextures = new Texture("images/threeBalls.png");
