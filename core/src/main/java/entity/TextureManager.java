@@ -6,7 +6,10 @@ import java.util.ArrayList;
 
 public class TextureManager {
     public static Texture bgTexture;
-    public static ArrayList<Texture> brickTextures = new ArrayList<>();
+    public static Texture brick1HIT;
+    public static Texture brick2HIT;
+    public static Texture brickexplo;
+    public static Texture brickNOHIT;
     public static Texture ballTexture;
     public static Texture paddleTexture;
     public static Texture flippedpaddleTexture;
@@ -24,8 +27,10 @@ public class TextureManager {
      */
     public static void loadTextures() {
         bgTexture = new Texture("images/background.png");
-        brickTextures.add(new Texture("images/brick_blue.png"));
-        brickTextures.add(new Texture("images/brick_cyan.png"));
+        brick2HIT = new Texture("images/brick_blue.png");
+        brick1HIT = new Texture("images/brick_cyan.png");
+        brickexplo = new Texture("images/brick_red.png");
+        brickNOHIT = new Texture("images/brick_black.png");
         ballTexture = new Texture("images/ball.png");
         paddleTexture = new Texture("images/paddle.png");
         flippedpaddleTexture = new Texture("images/flippedpaddle.png");
@@ -45,9 +50,10 @@ public class TextureManager {
      */
     public static void dispose() {
         bgTexture.dispose();
-        for (Texture texture: brickTextures) {
-            texture.dispose();
-        }
+        brick1HIT.dispose();
+        brick2HIT.dispose();
+        brickexplo.dispose();
+        brickNOHIT.dispose();
         ballTexture.dispose();
         paddleTexture.dispose();
         flippedpaddleTexture.dispose();

@@ -48,6 +48,9 @@ public class Brick extends GameObject {
 
     public void takeHit() {
         this.hitPoints--;
+        if (this.hitPoints == 1) {
+            this.texture = TextureManager.brick1HIT;
+        }
     }
 
     public int gethitPoints() {
