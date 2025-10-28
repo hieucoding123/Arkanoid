@@ -143,6 +143,7 @@ public class NetworkConnectionMenu extends  UserInterface{
                 Thread.sleep(500);      // Connection delay
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Connected! Staring game...");
+                    getMain().startNetworkGame(severIP, false);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
@@ -167,6 +168,7 @@ public class NetworkConnectionMenu extends  UserInterface{
                     serverIPLabel.setVisible(true);
 
                     showAllIPsButton.setVisible(true);
+                    this.getMain().startNetworkGame(localIP, true);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
