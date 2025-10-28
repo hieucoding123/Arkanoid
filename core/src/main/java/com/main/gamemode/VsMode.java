@@ -42,6 +42,7 @@ public class VsMode extends GameMode {
     private int roundsWonP2;
     private ScoreManager scoreManagerP1;
     private ScoreManager scoreManagerP2;
+    private boolean isGameEnded = false;
 
     public VsMode(Player p1, Player p2, GameScreen gameScreen,
                   ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
@@ -91,7 +92,7 @@ public class VsMode extends GameMode {
         this.currentMap = brickMap.get(currentRound - 1);
 
         this.roundTimer = ROUND_DURATION;
-        this.isPaused = true;
+        //this.isPaused = true;
 
         this.scoreManagerP1.setScore(0.0d);
         this.scoreManagerP2.setScore(0.0d);
@@ -121,11 +122,17 @@ public class VsMode extends GameMode {
     }
 
     private void gameOver() {
-        isPaused = true;
+        //isPaused = true;
+        isGameEnded = true;
+    }
+
+    @Override
+    public boolean isEnd() {
+        return isGameEnded;
     }
 
     public void endRound() {
-        isPaused = true;
+        //isPaused = true;
         if (scoreManagerP1.getScore() > scoreManagerP2.getScore() || ballP2.isDestroyed()) {
             roundsWonP1++;
         } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore() || ballP1.isDestroyed()) {
@@ -149,14 +156,14 @@ public class VsMode extends GameMode {
         }
 
         if (flowPaddle2) {
-            ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP1.getWidth() / 2f);
-            ballP2.setY(paddle2.getY() - ballP1.getHeight());
+            ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP2.getWidth() / 2f);
+            ballP2.setY(paddle2.getY() - ballP2.getHeight());
             ballP2.setAngle(-(float)Math.PI / 2f);
         }
 
-        if (isPaused) {
-            return;
-        }
+//        if (isPaused) {
+//            return;
+//        }
 
         if (!flowPaddle1 || !flowPaddle2) {
             roundTimer -= delta;
@@ -248,7 +255,7 @@ public class VsMode extends GameMode {
     @Override
     public void handleInput() {
         if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            isPaused = false;
+            //isPaused = false;
             return;
         }
 
