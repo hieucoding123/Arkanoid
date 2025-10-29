@@ -142,15 +142,19 @@ public class GameServer {
 
         System.out.println("Player " + pNumber + " is ready");
 
-        // Broadcast ready signal
-        String message = "PLAYER_READY:" + pNumber;
-        broadcastMessage(message);
-
         broadcastLobbyUpdate();
 
-        if (playersReady[0] && playersReady[1]) {
-            startGame();
+        boolean allReady = true;
+        if (playerConnections.size() < 2) allReady = false;
+
+        for (int i = 0; i < playerConnections.size(); i++) {
+            if (!playersReady[i]) {
+                allReady = false;
+                break;
+            }
         }
+        if (allReady)
+            startGame();
     }
 
     private void startGame() {

@@ -187,13 +187,13 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             myReadyButton.setDisabled(true);
             myReadyButton.setColor(Color.GRAY);
 
-            if (myPNumber == 1) {
-                player1ReadyLabel.setText("READY!");
-                player1ReadyLabel.setColor(Color.GREEN);
-            } else if (myPNumber == 2) {
-                player2ReadyLabel.setText("READY!");
-                player2ReadyLabel.setColor(Color.GREEN);
-            }
+//            if (myPNumber == 1) {
+//                player1ReadyLabel.setText("READY!");
+//                player1ReadyLabel.setColor(Color.GREEN);
+//            } else if (myPNumber == 2) {
+//                player2ReadyLabel.setText("READY!");
+//                player2ReadyLabel.setColor(Color.GREEN);
+//            }
             updateWaittingMessage();
         }
     }
@@ -212,12 +212,43 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             player1StatusLabel.setColor(Color.GRAY);
         }
 
+        if (player1Ready) {
+            player1ReadyLabel.setText("Ready!");
+            player1ReadyLabel.setColor(Color.GREEN);
+        } else {
+            player1ReadyLabel.setText("Not Ready!");
+            player1ReadyLabel.setColor(Color.RED);
+        }
+
         if (player2Connected) {
             player2StatusLabel.setText("Connected!");
             player2StatusLabel.setColor(Color.GREEN);
         } else {
             player2StatusLabel.setText("Waiting...");
             player2StatusLabel.setColor(Color.GRAY);
+        }
+
+        if (player2Ready) {
+            player2ReadyLabel.setText("Ready!");
+            player2ReadyLabel.setColor(Color.GREEN);
+        } else {
+            player2ReadyLabel.setText("Not Ready!");
+            player2ReadyLabel.setColor(Color.RED);
+        }
+
+        if (myPNumber == 1) {
+            myReadyButton.setVisible(player1Connected);
+            myQuitButton.setVisible(player1Connected);
+            player1ReadyLabel.setVisible(player1Connected);
+        } else {
+            player1ReadyLabel.setVisible(player1Connected);
+        }
+        if (myPNumber == 2) {
+            myReadyButton.setVisible(player2Connected);
+            myQuitButton.setVisible(player2Connected);
+            player2ReadyLabel.setVisible(player2Connected);
+        } else {
+            player2ReadyLabel.setVisible(player2Connected);
         }
         updateWaittingMessage();
     }
