@@ -28,7 +28,6 @@ public class EffectFactory {
 
         } else if (chance <= unbreak) {
             return new UnbreakBrickEffect(brick.getX(), brick.getY(), -1);
-
         } else if (chance <= stunpaddle) {
             return new StunPaddleEffect(brick.getX(), brick.getY(), -1);
 

@@ -103,7 +103,7 @@ public class LevelMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                1, 0.05, 0.09, 0.12, 0.14, 0.16, 0.18, 0.20);
+                                0.05, 0.05, 0.09, 0.12, 0.14, 0.16, 0.18, 0.20);
                         } else if  (mapIndex == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
                                 0.04, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18);
