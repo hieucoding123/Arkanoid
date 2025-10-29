@@ -108,8 +108,19 @@ public class NetworkProtocol {
         }
     }
     public static class LobbyUpdate {
-        public int pNumber;
-        public LobbyUpdate() {}
+        public boolean p1Connected;
+        public boolean p2Connected;
+        public boolean p1Ready;
+        public boolean p2Ready;
+        public LobbyUpdate (
+            boolean p1Connected, boolean p2Connected,
+            boolean p1Ready, boolean p2Ready
+        ) {
+            this.p1Connected = p1Connected;
+            this.p2Connected = p2Connected;
+            this.p1Ready = p1Ready;
+            this.p2Ready = p2Ready;
+        }
     }
     // STATE CLASSES
 
