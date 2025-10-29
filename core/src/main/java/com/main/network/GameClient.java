@@ -133,4 +133,8 @@ public class GameClient {
     public NetworkProtocol.GameStateUpdate getLastGameState() {
         return lastGameState;
     }
+
+    public void setListener(GameClientListener listener) {
+        this.listener = listener;
+    }
 }

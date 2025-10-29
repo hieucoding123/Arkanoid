@@ -46,6 +46,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         this.isHost = isHost;
         this.myPNumber = client.getMyPNumber();
 
+        this.client.setListener(this);
+
         if (myPNumber == 1)
             player1Connected = true;
         else if (myPNumber == 2)
@@ -95,15 +97,15 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         Label p1Title = new Label("PLAYER 1", this.getSkin());
         p1Title.setFontScale(1.5f);
         p1Title.setColor(Color.GREEN);
-        player1Table.add(p1Title).row();
+        player1Table.add(p1Title).colspan(1).row();
 
         player1StatusLabel = new Label("Waiting...", this.getSkin());
         player1StatusLabel.setColor(Color.YELLOW);
-        player1Table.add(player1StatusLabel).row();
+        player1Table.add(player1StatusLabel).colspan(1).row();
 
         player1ReadyLabel = new Label("Not Ready", this.getSkin());
         player1ReadyLabel.setColor(Color.RED);
-        player1Table.add(player1ReadyLabel).pad(10).row();
+        player1Table.add(player1ReadyLabel).colspan(1).pad(5).row();
 
         if (myPNumber == 1) {
             myReadyButton = new TextButton("READY", this.getSkin());
@@ -113,7 +115,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     sendReady();
                 }
             });
-            player1Table.add(myReadyButton).width(150).height(50).padTop(20).row();
+            player1Table.add(myReadyButton).width(120).height(40).padTop(15).row();
 
             myQuitButton = new TextButton("QUIT", this.getSkin());
             myQuitButton.addListener(new ClickListener() {
@@ -122,9 +124,9 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     quitLobby();
                 }
             });
-            player1Table.add(myQuitButton).width(150).height(30).padTop(10).row();
+            player1Table.add(myQuitButton).width(120).height(40).padTop(10).row();
         }
-        mainTable.add(player1Table).width(300).pad(20);
+        mainTable.add(player1Table).width(250).padRight(20);
 
         // PLAYER 2
         Table player2Table = new Table();
@@ -133,15 +135,15 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         Label p2Title = new Label("PLAYER 2", this.getSkin());
         p2Title.setFontScale(1.5f);
         p2Title.setColor(Color.BLUE);
-        player2Table.add(p2Title).row();
+        player2Table.add(p2Title).colspan(1).row();
 
         player2StatusLabel = new Label("Waiting...", this.getSkin());
         player2StatusLabel.setColor(Color.YELLOW);
-        player2Table.add(player2StatusLabel).row();
+        player2Table.add(player2StatusLabel).colspan(1).row();
 
         player2ReadyLabel = new Label("Not Ready", this.getSkin());
         player2ReadyLabel.setColor(Color.RED);
-        player2Table.add(player2ReadyLabel).pad(10).row();
+        player2Table.add(player2ReadyLabel).colspan(1).pad(5).row();
         if (myPNumber == 2) {
             myReadyButton = new TextButton("READY", this.getSkin());
             myReadyButton.addListener(new ClickListener() {
@@ -150,7 +152,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     sendReady();
                 }
             });
-            player2Table.add(myReadyButton).width(150).height(50).padTop(20).row();
+            player2Table.add(myReadyButton).width(120).height(40).padTop(15).row();
 
             myQuitButton = new TextButton("QUIT", this.getSkin());
             myQuitButton.addListener(new ClickListener() {
@@ -159,14 +161,14 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     quitLobby();
                 }
             });
-            player2Table.add(myQuitButton).width(150).height(50).padTop(10).row();
+            player2Table.add(myQuitButton).width(120).height(40).padTop(5).row();
         }
-        mainTable.add(player2Table).width(300).pad(20);
+        mainTable.add(player2Table).width(250).pad(20).row();
 
         waitingLabel = new Label("Waiting for players...", this.getSkin());
         waitingLabel.setScale(1.2f);
         waitingLabel.setColor(Color.YELLOW);
-        mainTable.add(waitingLabel).colspan(2).padBottom(20).row();
+        mainTable.add(waitingLabel).colspan(2).padTop(20).row();
 
         updatePlayerStatus();
     }
@@ -190,7 +192,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                 player2ReadyLabel.setText("READY!");
                 player2ReadyLabel.setColor(Color.GREEN);
             }
-            updateWattingMessage();
+            updateWaittingMessage();
         }
     }
 
@@ -215,10 +217,10 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             player2StatusLabel.setText("Waiting...");
             player2StatusLabel.setColor(Color.GRAY);
         }
-        updateWattingMessage();
+        updateWaittingMessage();
     }
 
-    private void updateWattingMessage() {
+    private void updateWaittingMessage() {
         if (!player1Connected || !player2Connected) {
             waitingLabel.setText("Waiting for players to connect...");
             waitingLabel.setColor(Color.YELLOW);
@@ -286,7 +288,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                 player2ReadyLabel.setText("READY!");
                 player2ReadyLabel.setColor(Color.GREEN);
             }
-            updateWattingMessage();
+            updateWaittingMessage();
         } else if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");

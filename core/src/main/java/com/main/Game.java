@@ -350,6 +350,7 @@ public class Game {
                 }
             });
             networkClient.connect(severIP, player.getName(), NetworkProtocol.GameMode.VS);
+            Thread.sleep(300);
             setGameState(GameState.NETWORK_LOBBY);
         } catch (Exception e) {
             System.err.println("Failed to connect: " + e.getMessage());
