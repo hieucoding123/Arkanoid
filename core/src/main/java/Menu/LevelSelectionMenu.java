@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -82,11 +83,24 @@ public class LevelSelectionMenu extends UserInterface {
 
         Table buttonTable1 = new Table();
 
+        final Color DEFAULT_COLOR = Color.WHITE;
+        final Color HOVER_COLOR = Color.YELLOW;
+
+// --- Level 1 ---
         Label levelButton1 = new Label("Level 1", whiteText);
         if (1 <= maxLevel) {
+            levelButton1.setColor(DEFAULT_COLOR);
             levelButton1.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[0]);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    levelButton1.setColor(HOVER_COLOR);
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    levelButton1.setColor(DEFAULT_COLOR);
                 }
             });
         } else {
@@ -95,12 +109,22 @@ public class LevelSelectionMenu extends UserInterface {
         buttonTable1.add(levelButton1).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
+// --- Level 2 ---
         Label levelButton2 = new Label("Level 2", whiteText);
         if (2 <= maxLevel) {
+            levelButton2.setColor(DEFAULT_COLOR);
             levelButton2.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[1]);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    levelButton2.setColor(HOVER_COLOR);
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    levelButton2.setColor(DEFAULT_COLOR);
                 }
             });
         } else {
@@ -109,12 +133,22 @@ public class LevelSelectionMenu extends UserInterface {
         buttonTable1.add(levelButton2).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
+// --- Level 3 ---
         Label levelButton3 = new Label("Level 3", whiteText);
         if (3 <= maxLevel) {
-            levelButton2.addListener(new ClickListener() {
+            levelButton3.setColor(DEFAULT_COLOR);
+            levelButton3.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[2]);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    levelButton3.setColor(HOVER_COLOR);
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    levelButton3.setColor(DEFAULT_COLOR);
                 }
             });
         } else {
@@ -127,12 +161,22 @@ public class LevelSelectionMenu extends UserInterface {
 
         Table buttonTable2 = new Table();
 
+// --- Level 4 ---
         Label levelButton4 = new Label("Level 4", whiteText);
         if (4 <= maxLevel) {
-            levelButton2.addListener(new ClickListener() {
+            levelButton4.setColor(DEFAULT_COLOR);
+            levelButton4.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[3]);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    levelButton4.setColor(HOVER_COLOR);
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    levelButton4.setColor(DEFAULT_COLOR);
                 }
             });
         } else {
@@ -141,12 +185,22 @@ public class LevelSelectionMenu extends UserInterface {
         buttonTable2.add(levelButton4).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
+// --- Level 5 ---
         Label levelButton5 = new Label("Level 5", whiteText);
         if (5 <= maxLevel) {
+            levelButton5.setColor(DEFAULT_COLOR);
             levelButton5.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[4]);
+                }
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    levelButton5.setColor(HOVER_COLOR);
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    levelButton5.setColor(DEFAULT_COLOR);
                 }
             });
         } else {
