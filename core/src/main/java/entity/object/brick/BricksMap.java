@@ -111,14 +111,8 @@ public class BricksMap {
                     if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
                         Brick new_brick = grid[new_row][new_col];
                         if (new_brick != null && new_brick.getExplosion()) {
-//                            int hp = new_brick.gethitPoints();
                             save_brick.get(new_row * cols + new_col).setHitPoints(0);
                             new_brick.startExplosion();
-//                            if (new_brick.getColor() == 1) {
-//                                score.addScore100();
-//                            } else if (new_brick.getColor() == 0) {
-//                                score.addScore200();
-//                            }
                             score.addScore(new_brick);
                         }
                     }
@@ -153,5 +147,15 @@ public class BricksMap {
 
     public int getSize() {
         return bricks.size();
+    }
+
+    public int getNumberBreakBrick() {
+        int cnt = 0;
+        for (Brick brick : bricks) {
+            if (!brick.isUnbreak()) {
+                cnt += 1;
+            }
+        }
+        return cnt;
     }
 }

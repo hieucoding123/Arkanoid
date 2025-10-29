@@ -8,6 +8,7 @@ import entity.TextureManager;
 public class Brick extends GameObject {
     private int hitPoints;
     private boolean explosion;
+    private boolean unbreak = false;
     private int row;
     private int col;
     private int color;
@@ -47,6 +48,10 @@ public class Brick extends GameObject {
     }
 
     public void takeHit() {
+        if (unbreak) {
+            return;
+        }
+
         this.hitPoints--;
         if (this.hitPoints == 1) {
             this.texture = TextureManager.brick1HIT;
@@ -85,15 +90,21 @@ public class Brick extends GameObject {
         return this.color;
     }
 
-    public boolean isExploding() {
-        return this.isExploding;
-    }
-
     public boolean shouldExplode() {
         return isExploding && explosionTimer <= 0 && !explosiontimes;
     }
 
     public void setexplosiontimes() {
         this.explosiontimes = true;
+    }
+
+    public void setUnbreak() {
+        this.unbreak = true;
+        this.texture = TextureManager.brickNOHIT;
+        this.explosion = false;
+    }
+
+    public boolean isUnbreak() {
+        return this.unbreak;
     }
 }

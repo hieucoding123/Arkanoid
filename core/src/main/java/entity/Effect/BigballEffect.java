@@ -5,6 +5,7 @@ import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
 import entity.object.Paddle;
+import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class BigballEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
+    public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         for (Ball ball : balls) {
             ball.activateBig(EFFECT_DURATION);
             //Left wall

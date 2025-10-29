@@ -6,6 +6,9 @@ import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Ball;
 import entity.object.Paddle;
+import entity.object.brick.Brick;
+import entity.object.brick.BricksMap;
+
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
@@ -19,7 +22,7 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Apply effect.
      */
-    public abstract void applyEffect(Paddle paddle, ArrayList<Ball> balls);
+    public abstract void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap);
 
     /**
      * Add a new effect item to list.
@@ -32,11 +35,11 @@ public abstract class EffectItem extends MovableObject {
     /**
      * Update all effect items and check collision with paddle.
      */
-    public static void updateEffectItems(Paddle paddle, ArrayList<Ball> balls, float delta) {
+    public static void updateEffectItems(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap, float delta) {
         for (EffectItem effectItem : items) {
             effectItem.update(delta);
             if (paddle.checkCollision(effectItem)) {
-                effectItem.applyEffect(paddle, balls);
+                effectItem.applyEffect(paddle, balls, bricksMap);
             }
         }
         items.removeIf(EffectItem::isDestroyed);

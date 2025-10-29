@@ -18,7 +18,7 @@ public class ExpandEffect extends EffectItem {
 //        this.paddle = paddle;
     }
     @Override
-    public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
+    public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         if (paddle != null) {
             paddle.activateExpand(EFFECT_DURATION);
             float screenWidth = Gdx.graphics.getWidth();

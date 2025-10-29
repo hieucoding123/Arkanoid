@@ -22,6 +22,7 @@ public class TextureManager {
     public static Texture ExplosionTexture;
     public static Texture FastBallTexture;
     public static Texture StunPaddleTexture;
+    public static Texture UnbreakBrickTexture;
     /**
      * Load textures.
      */
@@ -43,6 +44,7 @@ public class TextureManager {
         ExplosionTexture = new Texture("images/explosionEffect.png");
         FastBallTexture = new Texture("images/FastEffect.png");
         StunPaddleTexture = new Texture("images/StunPaddle.png");
+        UnbreakBrickTexture = new Texture("images/brickinfi.png");
     }
 
     /**
@@ -66,5 +68,6 @@ public class TextureManager {
         ExplosionTexture.dispose();
         FastBallTexture.dispose();
         StunPaddleTexture.dispose();
+        UnbreakBrickTexture.dispose();
     }
 }

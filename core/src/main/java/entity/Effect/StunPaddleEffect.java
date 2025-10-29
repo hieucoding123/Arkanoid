@@ -3,6 +3,7 @@ package entity.Effect;
 import entity.object.Ball;
 import entity.TextureManager;
 import entity.object.Paddle;
+import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class StunPaddleEffect extends EffectItem {
     }
 
     @Override
-    public void applyEffect(Paddle paddle, ArrayList<Ball> balls) {
+    public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         if (paddle != null) {
             paddle.activateStun(EFFECT_DURATION);
         }
