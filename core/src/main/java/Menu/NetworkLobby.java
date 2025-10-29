@@ -204,6 +204,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     }
 
     private void updatePlayerStatus() {
+        System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: Bắt đầu cập nhật. P1_Ready=" + player1Ready + ", P2_Ready=" + player2Ready);
         if (player1Connected) {
             player1StatusLabel.setText("Connected!");
             player1StatusLabel.setColor(Color.GREEN);
@@ -213,9 +214,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         }
 
         if (player1Ready) {
+            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ READY -> Đổi label sang xanh");
             player1ReadyLabel.setText("Ready!");
             player1ReadyLabel.setColor(Color.GREEN);
         } else {
+            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ NOT READY -> Đổi label sang đỏ");
             player1ReadyLabel.setText("Not Ready!");
             player1ReadyLabel.setColor(Color.RED);
         }
@@ -229,9 +232,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         }
 
         if (player2Ready) {
+            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P2 LÀ READY -> Đổi label sang xanh");
             player2ReadyLabel.setText("Ready!");
             player2ReadyLabel.setColor(Color.GREEN);
         } else {
+            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P2 LÀ NOT READY -> Đổi label sang đỏ");
             player2ReadyLabel.setText("Not Ready!");
             player2ReadyLabel.setColor(Color.RED);
         }
@@ -351,12 +356,13 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player1Ready =  update.p1Ready;
         player2Ready =  update.p2Ready;
 
-        System.out.println(
-            "[CLIENT " + myPNumber + "] NHẬN LOBBY UPDATE: P1_Ready="
-                + player1Ready + ", P2_Ready=" + player2Ready);
-
         // Update players and lobby interface status
         Gdx.app.postRunnable(() -> {
+            System.out.println("[CLIENT " + myPNumber + "] UI THREAD: Đang chạy postRunnable...");
+            if (player1ReadyLabel == null || player2ReadyLabel == null) {
+                System.err.println("[CLIENT " + myPNumber + "] UI THREAD: LỖI NGHIÊM TRỌNG! player1ReadyLabel hoặc player2ReadyLabel bị null!");
+                return;
+            }
             updatePlayerStatus();
             updateWaittingMessage();
         });
