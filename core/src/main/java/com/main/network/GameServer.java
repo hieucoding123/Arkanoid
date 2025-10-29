@@ -185,6 +185,16 @@ public class GameServer {
     }
 
     private void handleLoginRequest(Connection connection, NetworkProtocol.LoginRequest request) {
+        if (!NetworkProtocol.PROTOCOL_VERSION.equals(request.protocolVersion)) {
+            NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(
+                false, 0, "Version mismatch! Server: " + NetworkProtocol.PROTOCOL_VERSION +
+                ", Client: " + request.protocolVersion
+            );
+            connection.sendTCP(response);
+            connection.close();
+            System.err.println("Client version mismatch: " + request.protocolVersion);
+            return;
+        }
         // Check empty slot
         if (playerConnections.size() >= 2) {
             NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(

@@ -171,8 +171,8 @@ public class Game {
                 ui.update();
                 break;
             case NETWORK_VS:
-                gameMode.update(this.delta);
-//                gameServer.update(this.delta);
+//                gameMode.update(this.delta);
+                gameServer.update(this.delta);
                 if (gameMode.isEnd()) {
                     stopNetworkGame();
                     setGameState(GameState.NETWORK_CONNECTION_MENU);

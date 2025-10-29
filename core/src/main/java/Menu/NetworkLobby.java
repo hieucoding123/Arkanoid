@@ -113,7 +113,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     sendReady();
                 }
             });
-            player1Table.add(myReadyButton).width(150).height(30).padTop(20).row();
+            player1Table.add(myReadyButton).width(150).height(50).padTop(20).row();
 
             myQuitButton = new TextButton("QUIT", this.getSkin());
             myQuitButton.addListener(new ClickListener() {
@@ -122,7 +122,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     quitLobby();
                 }
             });
-            player1Table.add(myReadyButton).width(150).height(30).padTop(10).row();
+            player1Table.add(myQuitButton).width(150).height(30).padTop(10).row();
         }
         mainTable.add(player1Table).width(300).pad(20);
 
@@ -150,7 +150,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                     sendReady();
                 }
             });
-            player2Table.add(myReadyButton).width(150).height(30).padTop(20).row();
+            player2Table.add(myReadyButton).width(150).height(50).padTop(20).row();
 
             myQuitButton = new TextButton("QUIT", this.getSkin());
             myQuitButton.addListener(new ClickListener() {
@@ -164,8 +164,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         mainTable.add(player2Table).width(300).pad(20);
 
         waitingLabel = new Label("Waiting for players...", this.getSkin());
-        waitingLabel.setColor(Color.YELLOW);
         waitingLabel.setScale(1.2f);
+        waitingLabel.setColor(Color.YELLOW);
         mainTable.add(waitingLabel).colspan(2).padBottom(20).row();
 
         updatePlayerStatus();
@@ -219,7 +219,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     }
 
     private void updateWattingMessage() {
-        if (!player2Connected || !player2Connected) {
+        if (!player1Connected || !player2Connected) {
             waitingLabel.setText("Waiting for players to connect...");
             waitingLabel.setColor(Color.YELLOW);
         } else if (!player1Ready || !player2Ready) {

@@ -83,7 +83,6 @@ public class NetworkConnectionMenu extends  UserInterface{
         serverIPLabel.setColor(Color.GREEN);
         serverIPLabel.setFontScale(1.0f);
         serverIPLabel.setVisible(false);        // invisible first
-//        buttonTable.add(serverIPLabel).padBottom(40).row();
 
         showAllIPsButton = new TextButton("Show All Network IPs", this.getSkin());
         showAllIPsButton.addListener(new ClickListener() {
