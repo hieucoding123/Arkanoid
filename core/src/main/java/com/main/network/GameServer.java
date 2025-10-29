@@ -19,6 +19,10 @@ public class GameServer {
     private float updateInterval = 1/60f;
     private float timeSinceLastUpdate = 0;
 
+    // Lobby state
+    private boolean p1Connected = false;
+    private boolean p2Connected = false;
+
     public GameServer() {
         server = new Server(16384, 8192);
         playerConnections = new HashMap<>();
@@ -86,8 +90,8 @@ public class GameServer {
     }
 
     private void handleMessage(Connection connection, Object obj) {
-        if (obj instanceof NetworkProtocol.LoginResponse) {
-            handleLoginRequest(connection, (NetworkProtocol.LoginResponse) obj);
+        if (obj instanceof NetworkProtocol.LoginRequest) {
+            handleLoginRequest(connection, (NetworkProtocol.LoginRequest) obj);
         }
         else if (obj instanceof NetworkProtocol.PlayerInput) {
             handlePlayerInput(connection, (NetworkProtocol.PlayerInput) obj);
@@ -101,8 +105,34 @@ public class GameServer {
         Integer pNumber = playerConnections.remove(connection);
         if (pNumber != null) {
             System.out.println("Player " + pNumber + " disconnected");
+            if (pNumber == 1) {
+                p1Connected = false;
+                playersReady[0] = false;
+            } else {
+                p2Connected = false;
+                playersReady[1] = false;
+            }
             gameStarted = false;
+            for (Connection c : playerConnections.keySet()) {
+                c.sendTCP("PLAYER_DISCONNECT:" + pNumber);
+                c.close();
+            }
+            playerConnections.clear();
             broadcastMessage("Player " + pNumber + " disconnected. Game ended.");
+            broadcastLobbyUpdate();
+        }
+    }
+
+    private void broadcastLobbyUpdate() {
+        NetworkProtocol.LobbyUpdate update = new NetworkProtocol.LobbyUpdate(
+            p1Connected,
+            p2Connected,
+            playersReady[0],
+            playersReady[1]
+        );
+
+        for (Connection c : playerConnections.keySet()) {
+            c.sendTCP(update);
         }
     }
 
@@ -111,6 +141,12 @@ public class GameServer {
         playersReady[pNumber - 1] = true;
 
         System.out.println("Player " + pNumber + " is ready");
+
+        // Broadcast ready signal
+        String message = "PLAYER_READY:" + pNumber;
+        broadcastMessage(message);
+
+        broadcastLobbyUpdate();
 
         if (playersReady[0] && playersReady[1]) {
             startGame();
@@ -148,11 +184,11 @@ public class GameServer {
         }
     }
 
-    private void handleLoginRequest(Connection connection, NetworkProtocol.LoginResponse obj) {
+    private void handleLoginRequest(Connection connection, NetworkProtocol.LoginRequest request) {
         // Check empty slot
         if (playerConnections.size() >= 2) {
             NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(
-                false, 0, "Sever is full"
+                false, 0, "Server is full"
             );
             connection.sendTCP(response);
             return;
@@ -161,14 +197,26 @@ public class GameServer {
         int playerNumber = playerConnections.size() + 1;
         playerConnections.put(connection, playerNumber);
 
+        // Update lobby state
+        if (playerNumber == 1)
+            p1Connected = true;
+        else
+            p2Connected = true;
+
         NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(
             true, playerNumber, "Connected as Player " + playerNumber
         );
         connection.sendTCP(response);
-        System.out.println("Player " +  playerNumber + " connected");
+        System.out.println("Player " +  playerNumber + "(" + request.playerName + ")" + " connected");
 
-        if (playerConnections.size() == 2)
-            broadcastMessage("All players are connected. Ready to start!");
+        broadcastLobbyUpdate();
+        // Send message for other client.
+        String message = "PLAYER_CONNECTED:" + playerNumber;
+        for (Connection c : playerConnections.keySet()) {
+            if (c != connection) {
+                c.sendTCP(message);
+            }
+        }
     }
 
     private void broadcastMessage(String message) {
