@@ -17,5 +17,6 @@ public enum GameState {
     SETTINGS,
 
     NETWORK_CONNECTION_MENU,
+    NETWORK_LOBBY,
     NETWORK_VS
 }
