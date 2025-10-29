@@ -82,7 +82,7 @@ public class LevelSelectionMenu extends UserInterface {
 
         Table buttonTable1 = new Table();
 
-        Button levelButton1 = new Button(this.getSkin());
+        Label levelButton1 = new Label("Level 1", whiteText);
         if (1 <= maxLevel) {
             levelButton1.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -90,12 +90,12 @@ public class LevelSelectionMenu extends UserInterface {
                 }
             });
         } else {
-            levelButton1.setDisabled(true);
+            levelButton1.setColor(Color.GRAY);
         }
         buttonTable1.add(levelButton1).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
-        Button levelButton2 = new Button(this.getSkin());
+        Label levelButton2 = new Label("Level 2", whiteText);
         if (2 <= maxLevel) {
             levelButton2.addListener(new ClickListener() {
                 @Override
@@ -104,21 +104,21 @@ public class LevelSelectionMenu extends UserInterface {
                 }
             });
         } else {
-            levelButton2.setDisabled(true);
+            levelButton2.setColor(Color.GRAY);
         }
         buttonTable1.add(levelButton2).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
-        Button levelButton3 = new Button(this.getSkin());
+        Label levelButton3 = new Label("Level 3", whiteText);
         if (3 <= maxLevel) {
-            levelButton3.addListener(new ClickListener() {
+            levelButton2.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[2]);
                 }
             });
         } else {
-            levelButton3.setDisabled(true);
+            levelButton3.setColor(Color.GRAY);
         }
         buttonTable1.add(levelButton3).width(buttonWidth).height(buttonHeight);
 
@@ -127,21 +127,21 @@ public class LevelSelectionMenu extends UserInterface {
 
         Table buttonTable2 = new Table();
 
-        Button levelButton4 = new Button(this.getSkin());
+        Label levelButton4 = new Label("Level 4", whiteText);
         if (4 <= maxLevel) {
-            levelButton4.addListener(new ClickListener() {
+            levelButton2.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     main.setGameState(levels[3]);
                 }
             });
         } else {
-            levelButton4.setDisabled(true);
+            levelButton4.setColor(Color.GRAY);
         }
         buttonTable2.add(levelButton4).width(buttonWidth).height(buttonHeight)
             .padRight(horizontalPadding);
 
-        Button levelButton5 = new Button(this.getSkin());
+        Label levelButton5 = new Label("Level 5", whiteText);
         if (5 <= maxLevel) {
             levelButton5.addListener(new ClickListener() {
                 @Override
@@ -150,7 +150,7 @@ public class LevelSelectionMenu extends UserInterface {
                 }
             });
         } else {
-            levelButton5.setDisabled(true);
+            levelButton5.setColor(Color.GRAY);
         }
         buttonTable2.add(levelButton5).width(buttonWidth).height(buttonHeight);
 
