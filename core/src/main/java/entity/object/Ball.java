@@ -115,13 +115,12 @@ public class Ball extends MovableObject {
                 float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
                 float ballCenter = this.getX() + this.getWidth() / 2f;
                 float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
-                impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
 
+                impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
                 float newAngle = -((float)Math.PI / 2 - impactPoint * (float)Math.PI / 3f);
 
                 this.setAngle(newAngle);
                 this.updateVelocity();
-
                 this.setY(paddle.getY() - this.getHeight());
             }
         } else {
