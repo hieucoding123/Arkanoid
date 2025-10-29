@@ -106,8 +106,11 @@ public class GameClient {
         }
     }
 
-    private void  handleLobbyUpdate(NetworkProtocol.LobbyUpdate lobbyUpdate) {
-
+    private void  handleLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+        System.out.println("Lobby update: P1=" + update.p1Connected +
+            " P2=" + update.p2Connected +
+            " P1Ready=" + update.p1Ready +
+            " P2Ready=" + update.p2Ready);
     }
 
     private void handleDisconnect() {
