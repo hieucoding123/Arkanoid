@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture; // Import Texture
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image; // Import Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -24,6 +26,12 @@ public class GameScreen {
     private Label livesLabel;
     private Label timeLabel;
 
+    // Textures and Images for icons
+    private Texture heartTexture;
+    private Texture clockTexture;
+    private Image heartImage;
+    private Image clockImage;
+
     //Score
     private ScoreManager scoreManager;
     //Lives
@@ -32,12 +40,14 @@ public class GameScreen {
     private double times;
 
     //Constants
-    private final float RSCORE_X = 200f;
+    private final float RSCORE_X = 300f;
     private final float SCORE_Y = 970f;
-    private final float LIVES_X = 80f;
-    private final float LIVES_Y = 900f;
-    private final float TIME_X = 152f;
-    private final float TIME_Y = 900f;
+    private final float LIVES_X = 80f; // This will be the icon's X
+    private final float LIVES_Y = 900f; // This will be the icon's Y
+    private final float TIME_X = 170f; // This will be the icon's X
+    private final float TIME_Y = 900f; // This will be the icon's Y
+    private final float ICON_LABEL_PADDING = 5f; // Padding between icon and label
+    private final float ICON_SIZE = 25f; // New constant for icon size
 
     //Constructor
     public GameScreen(ScoreManager scoreManager) {
@@ -64,11 +74,32 @@ public class GameScreen {
         livesLabel = new Label("3", skin);
         timeLabel = new Label("0.0", skin);
 
-        livesLabel.setPosition(LIVES_X, LIVES_Y);
-        timeLabel.setPosition(TIME_X, TIME_Y);
+        // Load textures
+        heartTexture = new Texture(Gdx.files.internal("images/heart.png"));
+        clockTexture = new Texture(Gdx.files.internal("images/clock.png"));
 
+        // Create images
+        heartImage = new Image(heartTexture);
+        clockImage = new Image(clockTexture);
+
+        // Set size
+        heartImage.setSize(ICON_SIZE, ICON_SIZE);
+        clockImage.setSize(ICON_SIZE, ICON_SIZE);
+
+        // Position icons
+        heartImage.setPosition(LIVES_X, LIVES_Y+5);
+        clockImage.setPosition(TIME_X, TIME_Y+5);
+
+        // Position labels next to icons
+        // We use ICON_SIZE now instead of heartImage.getWidth() or clockImage.getWidth()
+        livesLabel.setPosition(LIVES_X + ICON_SIZE + ICON_LABEL_PADDING, LIVES_Y);
+        timeLabel.setPosition(TIME_X + ICON_SIZE + ICON_LABEL_PADDING, TIME_Y);
+
+        // Add actors to stage
         stage.addActor(scoreLabel);
+        stage.addActor(heartImage); // Add heart icon
         stage.addActor(livesLabel);
+        stage.addActor(clockImage); // Add clock icon
         stage.addActor(timeLabel);
     }
 
@@ -110,6 +141,8 @@ public class GameScreen {
         if (stage != null) stage.dispose();
         if (skin != null) skin.dispose();
         if (font != null) font.dispose();
+        if (heartTexture != null) heartTexture.dispose(); // Dispose texture
+        if (clockTexture != null) clockTexture.dispose(); // Dispose texture
     }
 
     // Getter
@@ -117,4 +150,3 @@ public class GameScreen {
         return stage;
     }
 }
-
