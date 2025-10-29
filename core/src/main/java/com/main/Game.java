@@ -348,6 +348,14 @@ public class Game {
                 public void onMessage(String message) {
 
                 }
+
+                @Override
+                public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+                    System.out.println("Lobby update: P1=" + update.p1Connected +
+                    " P2=" + update.p2Connected +
+                    " P1Ready=" + update.p1Ready +
+                    " P2Ready=" + update.p2Ready);
+                }
             });
             networkClient.connect(severIP, player.getName(), NetworkProtocol.GameMode.VS);
             new Thread(() -> {

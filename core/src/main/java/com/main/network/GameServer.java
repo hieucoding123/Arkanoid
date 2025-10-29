@@ -221,12 +221,12 @@ public class GameServer {
 
         broadcastLobbyUpdate();
         // Send message for other client.
-        String message = "PLAYER_CONNECTED:" + playerNumber;
-        for (Connection c : playerConnections.keySet()) {
-            if (c != connection) {
-                c.sendTCP(message);
-            }
-        }
+//        String message = "PLAYER_CONNECTED:" + playerNumber;
+//        for (Connection c : playerConnections.keySet()) {
+//            if (c != connection) {
+//                c.sendTCP(message);
+//            }
+//        }
     }
 
     private void broadcastMessage(String message) {

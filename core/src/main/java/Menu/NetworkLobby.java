@@ -112,7 +112,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             myReadyButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    sendReady();
+                    if (player1Connected && player2Connected)
+                        sendReady();
                 }
             });
             player1Table.add(myReadyButton).width(120).height(40).padTop(15).row();
@@ -149,7 +150,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             myReadyButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    sendReady();
+                    if (player1Connected && player2Connected)
+                        sendReady();
                 }
             });
             player2Table.add(myReadyButton).width(120).height(40).padTop(15).row();
@@ -236,12 +238,12 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     @Override
     public void onConnected(int pNumber) {
         this.myPNumber = pNumber;
-        if (pNumber == 1) {
-            player1Connected = true;
-        } else {
-            player2Connected = true;
-        }
-        updatePlayerStatus();
+//        if (pNumber == 1) {
+//            player1Connected = true;
+//        } else {
+//            player2Connected = true;
+//        }
+//        updatePlayerStatus();
     }
 
     @Override
@@ -269,27 +271,28 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onMessage(String message) {
         System.out.println("Lobby message: " + message);
 
-        if (message.startsWith("PLAYER_CONNECTED:")) {
-            int playerNum = Integer.parseInt(message.split(":")[1]);
-            if (playerNum == 1) {
-                player1Connected = true;
-            }else {
-                player2Connected = true;
-            }
-            updatePlayerStatus();
-        } else if (message.startsWith("PLAYER_READY:")) {
-            int playerNum = Integer.parseInt(message.split(":")[1]);
-            if (playerNum == 1) {
-                player1Ready = true;
-                player1ReadyLabel.setText("READY!");
-                player1ReadyLabel.setColor(Color.GREEN);
-            } else if (playerNum == 2) {
-                player2Ready = true;
-                player2ReadyLabel.setText("READY!");
-                player2ReadyLabel.setColor(Color.GREEN);
-            }
-            updateWaittingMessage();
-        } else if (message.startsWith("PLAYER_DISCONNECTED:")) {
+//        if (message.startsWith("PLAYER_CONNECTED:")) {
+//            int playerNum = Integer.parseInt(message.split(":")[1]);
+//            if (playerNum == 1) {
+//                player1Connected = true;
+//            }else {
+//                player2Connected = true;
+//            }
+//            updatePlayerStatus();
+//        } else if (message.startsWith("PLAYER_READY:")) {
+//            int playerNum = Integer.parseInt(message.split(":")[1]);
+//            if (playerNum == 1) {
+//                player1Ready = true;
+//                player1ReadyLabel.setText("READY!");
+//                player1ReadyLabel.setColor(Color.GREEN);
+//            } else if (playerNum == 2) {
+//                player2Ready = true;
+//                player2ReadyLabel.setText("READY!");
+//                player2ReadyLabel.setColor(Color.GREEN);
+//            }
+//            updateWaittingMessage();
+//        } else
+            if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");
 
@@ -308,5 +311,19 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                 });
             }).start();
         }
+    }
+
+    @Override
+    public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+        player1Connected = update.p1Connected;
+        player2Connected = update.p2Connected;
+        player1Ready =  update.p1Ready;
+        player2Ready =  update.p2Ready;
+
+        // Update players and lobby interface status
+        Gdx.app.postRunnable(() -> {
+            updatePlayerStatus();
+            updateWaittingMessage();
+        });
     }
 }

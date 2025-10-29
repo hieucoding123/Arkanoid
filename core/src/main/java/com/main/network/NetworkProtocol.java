@@ -2,7 +2,6 @@ package com.main.network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 

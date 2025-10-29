@@ -143,6 +143,14 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     }
 
     @Override
+    public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+        System.out.println("Lobby update: P1=" + update.p1Connected +
+            " P2=" + update.p2Connected +
+            " P1Ready=" + update.p1Ready +
+            " P2Ready=" + update.p2Ready);
+    }
+
+    @Override
     public Paddle getPaddle1() {
         return renderPaddle1;
     }

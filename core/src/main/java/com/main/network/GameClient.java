@@ -19,6 +19,7 @@ public class GameClient {
         void onGameStarted();
         void onDisconnected(String reason);
         void onMessage(String message);
+        void onLobbyUpdate(NetworkProtocol.LobbyUpdate update);
     }
 
     public GameClient(GameClientListener listener) {
@@ -106,11 +107,12 @@ public class GameClient {
         }
     }
 
-    private void  handleLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
-        System.out.println("Lobby update: P1=" + update.p1Connected +
-            " P2=" + update.p2Connected +
-            " P1Ready=" + update.p1Ready +
-            " P2Ready=" + update.p2Ready);
+    private void handleLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+        listener.onLobbyUpdate(update);
+//        System.out.println("Lobby update: P1=" + update.p1Connected +
+//            " P2=" + update.p2Connected +
+//            " P1Ready=" + update.p1Ready +
+//            " P2Ready=" + update.p2Ready);
     }
 
     private void handleDisconnect() {
