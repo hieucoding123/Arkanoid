@@ -111,27 +111,10 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
 
         player1ReadyLabel = new Label("Not Ready", notReadyStyle);
         player1Table.add(player1ReadyLabel).colspan(1).pad(5).row();
-
         if (myPNumber == 1) {
-            myReadyButton = new TextButton("READY", this.getSkin());
-            myReadyButton.setDisabled(true);
-            myReadyButton.setColor(Color.GRAY);
-            myReadyButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("[CLIENT " + myPNumber + "] ĐÃ NHẤN NÚT READY.");
-                    sendReady();
-                }
-            });
+            myReadyButton = createReadyButton();
+            myQuitButton = createQuitButton();
             player1Table.add(myReadyButton).width(120).height(40).padTop(15).row();
-
-            myQuitButton = new TextButton("QUIT", this.getSkin());
-            myQuitButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    quitLobby();
-                }
-            });
             player1Table.add(myQuitButton).width(120).height(40).padTop(10).row();
         }
         mainTable.add(player1Table).width(250).padRight(20);
@@ -150,28 +133,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player2Table.add(player2StatusLabel).colspan(1).row();
 
         player2ReadyLabel = new Label("Not Ready", notReadyStyle);
-        player2ReadyLabel.setColor(Color.RED);
         player2Table.add(player2ReadyLabel).colspan(1).pad(5).row();
         if (myPNumber == 2) {
-            myReadyButton = new TextButton("READY", this.getSkin());
-            myReadyButton.setDisabled(true);
-            myReadyButton.setColor(Color.GRAY);
-            myReadyButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("[CLIENT " + myPNumber + "] ĐÃ NHẤN NÚT READY.");
-                    sendReady();
-                }
-            });
+            myReadyButton = createReadyButton();
             player2Table.add(myReadyButton).width(120).height(40).padTop(15).row();
-
-            myQuitButton = new TextButton("QUIT", this.getSkin());
-            myQuitButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    quitLobby();
-                }
-            });
+            myQuitButton = createQuitButton();
             player2Table.add(myQuitButton).width(120).height(40).padTop(5).row();
         }
         mainTable.add(player2Table).width(250).pad(20).row();
@@ -184,6 +150,30 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         updatePlayerStatus();
     }
 
+    private TextButton createQuitButton() {
+        TextButton button = new TextButton("QUIT", this.getSkin());
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quitLobby();
+            }
+        });
+        return button;
+    }
+
+    private TextButton createReadyButton() {
+        TextButton button = new TextButton("READY", this.getSkin());
+        button.setDisabled(true);
+        button.setColor(Color.GRAY);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                sendReady();
+            }
+        });
+        return button;
+    }
+
     /**
      * Send ready signal to Server
      */
@@ -191,19 +181,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         if (!myReady) {
             myReady = true;
             client.sendReady();
-
-            myReadyButton.setText("READY!");
-            myReadyButton.setDisabled(true);
-            myReadyButton.setColor(Color.GRAY);
-
-//            if (myPNumber == 1) {
-//                player1ReadyLabel.setText("READY!");
-//                player1ReadyLabel.setColor(Color.GREEN);
-//            } else if (myPNumber == 2) {
-//                player2ReadyLabel.setText("READY!");
-//                player2ReadyLabel.setColor(Color.GREEN);
-//            }
-            updateWaittingMessage();
+            if (myReadyButton != null) {
+                myReadyButton.setDisabled(true);
+                myReadyButton.setColor(Color.GRAY);
+            }
+//            updateWaittingMessage();
         }
     }
 
@@ -213,63 +195,51 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     }
 
     private void updatePlayerStatus() {
-        System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: Bắt đầu cập nhật. P1_Ready=" + player1Ready + ", P2_Ready=" + player2Ready);
         if (player1Connected) {
             player1StatusLabel.setText("Connected!");
             player1StatusLabel.setColor(Color.GREEN);
+
+            player1ReadyLabel.setVisible(true);
+            if (player1Ready) {
+                player1ReadyLabel.setText("Ready!");
+                player1ReadyLabel.setStyle(readyStyle);
+            } else {
+                player1ReadyLabel.setText("Not Ready!");
+                player1ReadyLabel.setStyle(notReadyStyle);
+            }
         } else {
             player1StatusLabel.setText("Waiting...");
             player1StatusLabel.setColor(Color.GRAY);
-        }
-
-        if (player1Ready) {
-            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ READY -> Đổi label sang xanh");
-            player1ReadyLabel.setText("Ready!");
-            player1ReadyLabel.setStyle(readyStyle);
-        } else {
-            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ NOT READY -> Đổi label sang đỏ");
-            player1ReadyLabel.setText("Not Ready!");
-            player1ReadyLabel.setStyle(notReadyStyle);
+            player1ReadyLabel.setVisible(false);
         }
 
         if (player2Connected) {
             player2StatusLabel.setText("Connected!");
-            player2StatusLabel.setStyle(readyStyle);
+            player2StatusLabel.setColor(Color.GREEN);
+
+            player2ReadyLabel.setVisible(true);
+            if (player2Ready) {
+                player2ReadyLabel.setText("Ready!");
+                player2ReadyLabel.setStyle(readyStyle);
+            } else {
+                player2ReadyLabel.setText("Not Ready!");
+                player2ReadyLabel.setStyle(notReadyStyle);
+            }
         } else {
             player2StatusLabel.setText("Waiting...");
-            player2StatusLabel.setStyle(notReadyStyle);
+            player2StatusLabel.setColor(Color.GRAY);
+            player2ReadyLabel.setVisible(false);
         }
 
-        if (player2Ready) {
-            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P2 LÀ READY -> Đổi label sang xanh");
-            player2ReadyLabel.setText("Ready!");
-            player2ReadyLabel.setColor(Color.GREEN);
-        } else {
-            System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P2 LÀ NOT READY -> Đổi label sang đỏ");
-            player2ReadyLabel.setText("Not Ready!");
-            player2ReadyLabel.setColor(Color.RED);
-        }
-
-        player1ReadyLabel.setVisible(player1Connected);
-        player2ReadyLabel.setVisible(player2Connected);
-
-        if (myPNumber == 1) {
-            myReadyButton.setVisible(player1Connected);
-            myQuitButton.setVisible(player1Connected);
-        }
-        if (myPNumber == 2) {
-            myReadyButton.setVisible(player2Connected);
-            myQuitButton.setVisible(player2Connected);
-        }
         if (myReadyButton != null) {
-            boolean allConnected = player1Connected && player2Connected;
+            boolean allPlayersConnected = player1Connected && player2Connected;
 
-            // Kích hoạt nút NẾU: Cả 2 đã kết nối VÀ tôi (myReady) chưa nhấn ready
-            if (allConnected && !myReady) {
+            // Kích hoạt nút NẾU: Cả 2 đã kết nối VÀ client này chưa nhấn Ready
+            if (allPlayersConnected && !myReady) {
                 myReadyButton.setDisabled(false);
-                myReadyButton.setColor(Color.WHITE); // Hoặc màu mặc định của skin
+                myReadyButton.setColor(Color.WHITE); // Trở lại màu bình thường
             }
-            // Vô hiệu hóa nút NẾU: Một trong hai chưa kết nối HOẶC tôi đã nhấn ready rồi
+            // Vô hiệu hóa nút NẾU: Một trong hai chưa kết nối HOẶC client này đã nhấn Ready rồi
             else {
                 myReadyButton.setDisabled(true);
                 myReadyButton.setColor(Color.GRAY);
@@ -294,12 +264,6 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     @Override
     public void onConnected(int pNumber) {
         this.myPNumber = pNumber;
-//        if (pNumber == 1) {
-//            player1Connected = true;
-//        } else {
-//            player2Connected = true;
-//        }
-//        updatePlayerStatus();
     }
 
     @Override
@@ -327,27 +291,6 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onMessage(String message) {
         System.out.println("Lobby message: " + message);
 
-//        if (message.startsWith("PLAYER_CONNECTED:")) {
-//            int playerNum = Integer.parseInt(message.split(":")[1]);
-//            if (playerNum == 1) {
-//                player1Connected = true;
-//            }else {
-//                player2Connected = true;
-//            }
-//            updatePlayerStatus();
-//        } else if (message.startsWith("PLAYER_READY:")) {
-//            int playerNum = Integer.parseInt(message.split(":")[1]);
-//            if (playerNum == 1) {
-//                player1Ready = true;
-//                player1ReadyLabel.setText("READY!");
-//                player1ReadyLabel.setColor(Color.GREEN);
-//            } else if (playerNum == 2) {
-//                player2Ready = true;
-//                player2ReadyLabel.setText("READY!");
-//                player2ReadyLabel.setColor(Color.GREEN);
-//            }
-//            updateWaittingMessage();
-//        } else
             if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");
@@ -378,13 +321,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
 
         // Update players and lobby interface status
         Gdx.app.postRunnable(() -> {
-            System.out.println("[CLIENT " + myPNumber + "] UI THREAD: Đang chạy postRunnable...");
-            if (player1ReadyLabel == null || player2ReadyLabel == null) {
-                System.err.println("[CLIENT " + myPNumber + "] UI THREAD: LỖI NGHIÊM TRỌNG! player1ReadyLabel hoặc player2ReadyLabel bị null!");
-                return;
-            }
             updatePlayerStatus();
-            updateWaittingMessage();
         });
     }
 }
