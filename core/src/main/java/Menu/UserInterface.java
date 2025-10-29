@@ -1,6 +1,7 @@
 package Menu;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -34,7 +35,19 @@ public class UserInterface extends ApplicationAdapter {
 
     @Override
     public void render() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT);
+
         stage.getViewport().apply();
+
+        if (this.bg != null) {
+            stage.getBatch().begin();
+            stage.getBatch().draw(this.bg, 0, 0,
+                stage.getViewport().getWorldWidth(),
+                stage.getViewport().getWorldHeight());
+            stage.getBatch().end();
+        }
+
         stage.act();
         stage.draw();
     }
