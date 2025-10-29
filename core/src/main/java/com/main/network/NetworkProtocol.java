@@ -112,6 +112,8 @@ public class NetworkProtocol {
         public boolean p2Connected;
         public boolean p1Ready;
         public boolean p2Ready;
+
+        public LobbyUpdate() {}
         public LobbyUpdate (
             boolean p1Connected, boolean p2Connected,
             boolean p1Ready, boolean p2Ready
