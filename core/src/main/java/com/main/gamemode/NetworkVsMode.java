@@ -63,7 +63,9 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-
+        handleInput();
+        update(delta);
+        draw(sp);
     }
 
     @Override
