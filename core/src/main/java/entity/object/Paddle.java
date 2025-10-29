@@ -71,4 +71,11 @@ public class Paddle extends MovableObject {
             x = Game.padding_left_right;
         }
     }
+
+    public long getTimeStunEffect() {
+        if (System.currentTimeMillis() < StunEnd) {
+            return StunEnd - System.currentTimeMillis();
+        }
+        return 0;
+    }
 }

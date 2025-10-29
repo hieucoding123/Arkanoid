@@ -159,6 +159,7 @@ public class LevelMode extends GameMode {
             if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
             else LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
         }
+        printActiveEffects(delta);
     }
 
     @Override

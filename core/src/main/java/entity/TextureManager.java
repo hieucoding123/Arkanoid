@@ -26,6 +26,7 @@ public class TextureManager {
     public static Texture StunPaddleTexture;
     public static Texture UnbreakBrickTexture;
     public static Texture RandomEffectTexture;
+
     /**
      * Load textures.
      */

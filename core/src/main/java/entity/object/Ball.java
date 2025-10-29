@@ -190,4 +190,11 @@ public class Ball extends MovableObject {
     public int getLastHitBy() {
         return this.lastHitBy;
     }
+
+    public long getTimeFastEffect() {
+        if (FastEnd > 0 && System.currentTimeMillis() <= FastEnd) {
+            return FastEnd - System.currentTimeMillis();
+        }
+        return 0;
+    }
 }
