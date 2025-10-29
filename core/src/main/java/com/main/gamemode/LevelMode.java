@@ -78,7 +78,7 @@ public class LevelMode extends GameMode {
         if (start) this.timePlayed += delta;
         currentMap.update(delta, this.scoreManager);
         paddle.update(delta);
-        EffectItem.updateEffectItems(paddle, this.balls, delta);
+        EffectItem.updateEffectItems(paddle, this.balls, currentMap, delta);
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
@@ -103,19 +103,19 @@ public class LevelMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.06, 0.11, 0.15, 0.19, 0.20);
+                                0.05, 0.05, 0.09, 0.12, 0.14, 0.16, 0.18, 0.20, 0.05);
                         } else if  (mapIndex == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.05, 0.09, 0.13, 0.16, 0.18);
+                                0.04, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18, 0.05);
                         } else if (mapIndex == 3) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.04, 0.07, 0.10, 0.13, 0.15);
+                                0.03,0.05 ,  0.06, 0.08, 0.10, 0.12, 0.14, 0.15, 0.05);
                         } else if (mapIndex == 4) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.03, 0.06, 0.08, 0.10, 0.12);
+                                0.03,0.05,0.05, 0.07, 0.08, 0.09, 0.10, 0.12, 0.05);
                         } else {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.02, 0.04, 0.06, 0.08, 0.10);
+                                0.02,0.05,  0.04, 0.05, 0.06, 0.07, 0.08, 0.10, 0.05);
                         }
 
                         if (newEffectItem != null) {
@@ -149,7 +149,7 @@ public class LevelMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if ((currentMap.getBricks().isEmpty() && !this.isEnd()) || (this.lives == 0)) {
+        if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
             double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);

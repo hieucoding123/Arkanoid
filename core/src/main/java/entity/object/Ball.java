@@ -10,8 +10,11 @@ public class Ball extends MovableObject {
     private float angle;
     private long BigEnd = 0;
     private long SlowEnd = 0;
+    private long FastEnd = 0;
     private float originalspeed;
     private int lastHitBy = 0;
+
+    private float baseScale;
 
     /**
      * Constructor for ball.
@@ -25,6 +28,10 @@ public class Ball extends MovableObject {
         this.originalspeed = speed;
         this.speed = speed * 60f;
         setRandomAngle();
+
+        //Rescale
+        this.baseScale = 36.0f / this.orgWidth;
+        this.setScale(this.baseScale, this.baseScale);
     }
 
     public Ball(Ball other) {
@@ -34,6 +41,8 @@ public class Ball extends MovableObject {
         this.angle = other.angle - 0.3f;
         this.scaleWidth = other.scaleWidth;
         this.scaleHeight = other.scaleHeight;
+
+        this.baseScale = other.baseScale;
 
         if (other.BigEnd > System.currentTimeMillis()) {
             this.BigEnd = other.BigEnd;
@@ -74,12 +83,18 @@ public class Ball extends MovableObject {
 
     public void activateBig(float duration) {
         BigEnd = System.currentTimeMillis() + (long)(duration * 1000);
-        this.setScale(1.5f, 1.5f);
+//        this.setScale(1.5f, 1.5f);
+        this.setScale(this.baseScale * 1.5f, this.baseScale * 1.5f);
     }
 
     public void activateSlow(float duration) {
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(180f);
+    }
+
+    public void activateFast(float duration) {
+        FastEnd = System.currentTimeMillis() + (long)(duration * 1000);
+        this.setSpeed(1000f);
     }
 
     public void update(float delta) {
@@ -100,12 +115,17 @@ public class Ball extends MovableObject {
             }
         }
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
-            this.setScale(1.0f, 1.0f);
+//            this.setScale(1.0f, 1.0f);
+            this.setScale(this.baseScale, this.baseScale);
             BigEnd = 0;
         }
         if (SlowEnd > 0 && System.currentTimeMillis() > SlowEnd) {
             this.setSpeed(originalspeed * 60f);
             SlowEnd = 0;
+        }
+        if (FastEnd > 0 && System.currentTimeMillis() > FastEnd) {
+            this.setSpeed(originalspeed * 60f);
+            FastEnd = 0;
         }
     }
 

@@ -26,6 +26,7 @@ public class SettingsUI extends UserInterface {
         this.setStage(
             new Stage(new FitViewport(800, 1000))
         );
+        this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.setSkin(new Skin());
         this.getSkin().add("default-font", this.getFont());

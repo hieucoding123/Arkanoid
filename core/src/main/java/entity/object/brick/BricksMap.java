@@ -20,10 +20,10 @@ public class BricksMap {
     public static final int yBeginCoord = 810;
     public static final int brickW = 78;
     public static final int brickH = 36;
-    private final int[] r = {-1, 1, 0, 0};
-    private final int[] c = {0, 0, -1, 1};
-//    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
-//    private final int[] c = {0, 0, -1, 1, -1, 1, 1, -1};
+//    private final int[] r = {-1, 1, 0, 0};
+//    private final int[] c = {0, 0, -1, 1};
+    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
+    private final int[] c = {0, 0, -1, 1, -1, 1, 1, -1};
 
     public final ArrayList<Brick> bricks;
 
@@ -38,31 +38,38 @@ public class BricksMap {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             for (int i = 0; i < rows; i++) {
-                String[] line = br.readLine().split(" ");
+                String[] line = br.readLine().trim().split("\\s+");
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
-
-                    Random rand = new Random();
-                    boolean explosion_check = (rand.nextInt(2) == 0) ? true : false;
-
-                    if (color == 1) {
+                    int radom = (int)(Math.random() * 3);
+                    if (radom == 1 && color != -1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
                             1,
-                            explosion_check,
+                            true,
                             i, j,
                             color,
-                            TextureManager.brickTextures.get(color)));
+                            TextureManager.brickexplo));
+                    }
+                    else if (color == 1) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            1,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick1HIT));
                     } else if (color == 0) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
                             2,
-                            explosion_check,
+                            false,
                             i, j,
                             color,
-                            TextureManager.brickTextures.get(color)));
+                            TextureManager.brick2HIT));
                     }
                 }
             }
@@ -104,14 +111,8 @@ public class BricksMap {
                     if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
                         Brick new_brick = grid[new_row][new_col];
                         if (new_brick != null && new_brick.getExplosion()) {
-//                            int hp = new_brick.gethitPoints();
                             save_brick.get(new_row * cols + new_col).setHitPoints(0);
                             new_brick.startExplosion();
-//                            if (new_brick.getColor() == 1) {
-//                                score.addScore100();
-//                            } else if (new_brick.getColor() == 0) {
-//                                score.addScore200();
-//                            }
                             score.addScore(new_brick);
                         }
                     }
@@ -146,5 +147,15 @@ public class BricksMap {
 
     public int getSize() {
         return bricks.size();
+    }
+
+    public int getNumberBreakBrick() {
+        int cnt = 0;
+        for (Brick brick : bricks) {
+            if (!brick.isUnbreak()) {
+                cnt += 1;
+            }
+        }
+        return cnt;
     }
 }
