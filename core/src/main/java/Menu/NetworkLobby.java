@@ -351,6 +351,10 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player1Ready =  update.p1Ready;
         player2Ready =  update.p2Ready;
 
+        System.out.println(
+            "[CLIENT " + myPNumber + "] NHẬN LOBBY UPDATE: P1_Ready="
+                + player1Ready + ", P2_Ready=" + player2Ready);
+
         // Update players and lobby interface status
         Gdx.app.postRunnable(() -> {
             updatePlayerStatus();
