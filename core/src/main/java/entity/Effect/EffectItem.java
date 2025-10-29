@@ -18,10 +18,10 @@ public abstract class EffectItem extends MovableObject {
         super(x, y, texture);
 
         if (this.orgWidth != 0) {
-            this.scaleWidth = 50.0f / this.orgWidth;
+            this.scaleWidth = 40.0f / this.orgWidth;
         }
         if (this.orgHeight != 0) {
-            this.scaleHeight = 50.0f / this.orgHeight;
+            this.scaleHeight = 40.0f / this.orgHeight;
         }
         this.setVelocity(0, dy * 60f);
         items.add(this);
