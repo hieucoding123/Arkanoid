@@ -40,6 +40,9 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     private boolean player2Ready = false;
     private boolean myReady = false;
 
+    private Label.LabelStyle readyStyle;
+    private Label.LabelStyle notReadyStyle;
+
     public NetworkLobby(Main main, Player player, GameClient client, boolean isHost) {
         super(main, player);
         this.client = client;
@@ -69,6 +72,9 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         this.getSkin().add("default-font", this.getFont());
 
         Gdx.input.setInputProcessor(this.getStage());
+
+        readyStyle = new Label.LabelStyle(this.getFont(), Color.GREEN);
+        notReadyStyle = new Label.LabelStyle(this.getFont(), Color.RED);
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
@@ -103,8 +109,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player1StatusLabel.setColor(Color.YELLOW);
         player1Table.add(player1StatusLabel).colspan(1).row();
 
-        player1ReadyLabel = new Label("Not Ready", this.getSkin());
-        player1ReadyLabel.setColor(Color.RED);
+        player1ReadyLabel = new Label("Not Ready", notReadyStyle);
         player1Table.add(player1ReadyLabel).colspan(1).pad(5).row();
 
         if (myPNumber == 1) {
@@ -112,8 +117,14 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             myReadyButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (player1Connected && player2Connected)
+                    System.out.println("[CLIENT " + myPNumber + "] ĐÃ NHẤN NÚT READY.");
+                    System.out.println("[CLIENT " + myPNumber + "] Kiểm tra điều kiện: P1_Connected=" + player1Connected + ", P2_Connected=" + player2Connected);
+                    if (player1Connected && player2Connected) {
+                        System.out.println("[CLIENT " + myPNumber + "] ĐIỀU KIỆN ĐÚNG -> Gửi sendReady()");
                         sendReady();
+                    }else {
+                        System.out.println("[CLIENT " + myPNumber + "] ĐIỀU KIỆN SAI -> KHÔNG Gửi sendReady()");
+                    }
                 }
             });
             player1Table.add(myReadyButton).width(120).height(40).padTop(15).row();
@@ -142,7 +153,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player2StatusLabel.setColor(Color.YELLOW);
         player2Table.add(player2StatusLabel).colspan(1).row();
 
-        player2ReadyLabel = new Label("Not Ready", this.getSkin());
+        player2ReadyLabel = new Label("Not Ready", notReadyStyle);
         player2ReadyLabel.setColor(Color.RED);
         player2Table.add(player2ReadyLabel).colspan(1).pad(5).row();
         if (myPNumber == 2) {
@@ -216,19 +227,19 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         if (player1Ready) {
             System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ READY -> Đổi label sang xanh");
             player1ReadyLabel.setText("Ready!");
-            player1ReadyLabel.setColor(Color.GREEN);
+            player1ReadyLabel.setStyle(readyStyle);
         } else {
             System.out.println("[CLIENT " + myPNumber + "] updatePlayerStatus: P1 LÀ NOT READY -> Đổi label sang đỏ");
             player1ReadyLabel.setText("Not Ready!");
-            player1ReadyLabel.setColor(Color.RED);
+            player1ReadyLabel.setStyle(notReadyStyle);
         }
 
         if (player2Connected) {
             player2StatusLabel.setText("Connected!");
-            player2StatusLabel.setColor(Color.GREEN);
+            player2StatusLabel.setStyle(readyStyle);
         } else {
             player2StatusLabel.setText("Waiting...");
-            player2StatusLabel.setColor(Color.GRAY);
+            player2StatusLabel.setStyle(notReadyStyle);
         }
 
         if (player2Ready) {
