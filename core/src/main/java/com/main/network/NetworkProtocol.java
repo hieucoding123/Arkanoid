@@ -10,30 +10,44 @@ public class NetworkProtocol {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54777;
 
+    public static final String PROTOCOL_VERSION = "1.0.0";
+
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
+        kryo.setRegistrationRequired(true);
+
         // register message classes
-        kryo.register(GameMode.class);
-        kryo.register(LoginRequest.class);
-        kryo.register(LoginResponse.class);
-        kryo.register(PlayerInput.class);
-        kryo.register(GameStateUpdate.class);
-        kryo.register(StartGameRequest.class);
-        kryo.register(PaddleState.class);
-        kryo.register(BallState.class);
-        kryo.register(BrickState.class);
-        kryo.register(BricksMap.class);
+        // Register with ID from 50
+        // Enum: 50 - 59
+        kryo.register(GameMode.class, 50);
+        kryo.register(InputType.class, 51);
+        // Message classes: 60 - 69
+        kryo.register(LoginRequest.class, 60);
+        kryo.register(LoginResponse.class, 61);
+        kryo.register(GameStateUpdate.class, 62);
+        kryo.register(PlayerInput.class, 63);
+        kryo.register(StartGameRequest.class, 64);
+        kryo.register(LobbyUpdate.class, 65);
+        // State classes: 70 -79
+        kryo.register(BallState.class, 70);
+        kryo.register(PaddleState.class, 71);
+        kryo.register(BrickState.class, 72);
+        // Java collections: 80-89
+        kryo.register(ArrayList.class, 80);
+        kryo.register(java.util.HashMap.class, 81);
     }
 
     // MESSAGE CLASSES
     public static class LoginRequest {
+        public String protocolVersion;
         public String playerName;
         public GameMode gameMode;
 
         public LoginRequest() {}
 
         public LoginRequest(String pName, GameMode mode) {
+            protocolVersion = PROTOCOL_VERSION;
             this.playerName = pName;
             this.gameMode = mode;
         }
@@ -92,6 +106,10 @@ public class NetworkProtocol {
         public StartGameRequest(int pNumber) {
             this.pNumber = pNumber;
         }
+    }
+    public static class LobbyUpdate {
+        public int pNumber;
+        public LobbyUpdate() {}
     }
     // STATE CLASSES
 

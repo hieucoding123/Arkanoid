@@ -75,6 +75,9 @@ public class GameClient {
         else if (obj instanceof NetworkProtocol.GameStateUpdate) {
             handleGameStateUpdate((NetworkProtocol.GameStateUpdate) obj);
         }
+        else if (obj instanceof NetworkProtocol.LobbyUpdate) {
+            handleLobbyUpdate((NetworkProtocol.LobbyUpdate) obj);
+        }
         else if (obj instanceof String) {
             String message = (String) obj;
             if (message.equals("GAME_START")) {
@@ -101,6 +104,10 @@ public class GameClient {
             System.out.println("Connection failed: " + loginResponse.message);
             listener.onDisconnected(loginResponse.message);
         }
+    }
+
+    private void  handleLobbyUpdate(NetworkProtocol.LobbyUpdate lobbyUpdate) {
+
     }
 
     private void handleDisconnect() {
