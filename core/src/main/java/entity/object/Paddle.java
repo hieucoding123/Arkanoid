@@ -7,6 +7,7 @@ public class Paddle extends MovableObject {
     private boolean isFlipped;
     private long expandEnd = 0;
     private long StunEnd = 0;
+    private final float SPRINT_MULTIPLIER = 2.0f;
 
     public void setFlipped(boolean flipped) {
         this.isFlipped = flipped;
@@ -73,6 +74,32 @@ public class Paddle extends MovableObject {
             return;
         }
         x -= speed;
+        if (x < Game.padding_left_right) {
+            x = Game.padding_left_right;
+        }
+    }
+
+    public void moveRight(boolean isSprinting) {
+        if (isStunned()) {
+            return;
+        }
+
+        float currentSpeed = isSprinting ? speed * SPRINT_MULTIPLIER : speed;
+
+        x += currentSpeed;
+        if (x + getWidth() > Game.SCREEN_WIDTH - Game.padding_left_right) {
+            x = Game.SCREEN_WIDTH - Game.padding_left_right - getWidth();
+        }
+    }
+
+    public void moveLeft(boolean isSprinting) {
+        if (isStunned()) {
+            return;
+        }
+
+        float currentSpeed = isSprinting ? speed * SPRINT_MULTIPLIER : speed;
+
+        x -= currentSpeed;
         if (x < Game.padding_left_right) {
             x = Game.padding_left_right;
         }
