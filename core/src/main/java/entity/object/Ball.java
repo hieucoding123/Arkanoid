@@ -97,11 +97,19 @@ public class Ball extends MovableObject {
     }
 
     public void activateSlow(float duration) {
+        if (FastEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            FastEnd = 0;
+        }
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(180f);
     }
 
     public void activateFast(float duration) {
+        if (SlowEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            SlowEnd = 0;
+        }
         FastEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(1000f);
     }
@@ -111,23 +119,27 @@ public class Ball extends MovableObject {
         if (this.getX() <= Game.padding_left_right
             || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
             this.reverseX();
+            Game.playSfx(Game.sfx_touchpaddle,1.2f);
         }
         if (this.getY() + this.getHeight() >= Game.padding_top) {
             if (isIn1v1()) {
                 if (ShieldEffect.isShield()) {
                     ShieldEffect.setShield();
                     this.reverseY();
+                    Game.playSfx(Game.sfx_touchpaddle,1.2f);
                 } else {
                     this.setDestroyed(true);
                 }
             } else {
                 this.reverseY();
+                Game.playSfx(Game.sfx_touchpaddle,1.2f);
             }
         }
         if (this.getY() <= 0) {
             if (ShieldEffect.isShield()) {
                 ShieldEffect.setShield();
                 this.reverseY();
+                Game.playSfx(Game.sfx_touchpaddle,1.2f);
             } else {
                 this.setDestroyed(true); // drop out of screen
             }
@@ -160,6 +172,7 @@ public class Ball extends MovableObject {
                 this.setAngle(newAngle);
                 this.updateVelocity();
                 this.setY(paddle.getY() - this.getHeight());
+                Game.playSfx(Game.sfx_touchpaddle,1.2f);
             }
         } else {
             if (this.getDy() < 0 &&
@@ -178,8 +191,17 @@ public class Ball extends MovableObject {
                 this.setAngle(newAngle);
                 this.updateVelocity();
                 this.setY(paddle.getY() + paddle.getHeight());
+                Game.playSfx(Game.sfx_touchpaddle,1.2f);
             }
         }
+    }
+
+    public void clearEffects() {
+        this.BigEnd = 0;
+        this.SlowEnd = 0;
+        this.FastEnd = 0;
+        this.setScale(this.baseScale, this.baseScale);
+        this.setSpeed(originalspeed * 60f);
     }
 
     public boolean isBig() {
@@ -206,5 +228,12 @@ public class Ball extends MovableObject {
 
     public int getLastHitBy() {
         return this.lastHitBy;
+    }
+
+    public long getTimeFastEffect() {
+        if (FastEnd > 0 && System.currentTimeMillis() <= FastEnd) {
+            return FastEnd - System.currentTimeMillis();
+        }
+        return 0;
     }
 }

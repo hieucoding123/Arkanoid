@@ -2,16 +2,18 @@ package entity.Effect;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Ball;
 import entity.object.Paddle;
+import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
 
-    private static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
+    static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
 
     protected Ball triggeringBall = null;
 

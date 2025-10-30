@@ -2,10 +2,11 @@ package entity.object.brick;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import entity.GameObject;
+import com.main.Game;
+import entity.MovableObject;
 import entity.TextureManager;
 
-public class Brick extends GameObject {
+public class Brick extends MovableObject {
     private int hitPoints;
     private boolean explosion;
     private boolean unbreak = false;
@@ -17,9 +18,14 @@ public class Brick extends GameObject {
     private float explosionTimer = 0f;
     public static final float EXPLOSION_DURATION = 0.2f;
     private static Texture explosionTexture;
+    private boolean isMove = false;
+    private float moveSpeed = 0;
+    private float originalX;
+    private float moveRange;
 
     public Brick(float x, float y, int hitPoints, boolean explosion, int row, int col, int color, Texture texture) {
         super(x, y, texture);
+        originalX = x;
         this.hitPoints = hitPoints;
         this.explosion = explosion;
         this.row = row;
@@ -30,13 +36,36 @@ public class Brick extends GameObject {
     }
 
     public void update(float delta) {
+        super.update(delta);
+
         if (isExploding) {
             explosionTimer -= delta;
             if (explosionTimer <= 0) {
                 setDestroyed(true);
             }
         }
+
+        if (isMove) {
+            float left = originalX - moveRange;
+            float right = originalX + moveRange;
+
+            if (dx > 0 && x >= right) {
+                x = right;
+                dx = -moveSpeed;
+            } else if (dx < 0 && x <= left) {
+                x = left;
+                dx = moveSpeed;
+            }
+        }
     }
+
+    public void setMovement(float moveSpeed, float moveRange) {
+        this.isMove = true;
+        this.moveSpeed = moveSpeed * 60f;
+        this.moveRange = moveRange;
+        this.dx = this.moveSpeed;
+    }
+
     @Override
     public void draw(SpriteBatch batch) {
         if (isDestroyed()) return;
@@ -51,7 +80,7 @@ public class Brick extends GameObject {
         if (unbreak) {
             return;
         }
-
+        com.main.Game.sfx_pop.play();
         this.hitPoints--;
         if (this.hitPoints == 1) {
             this.texture = TextureManager.brick1HIT;
@@ -80,6 +109,7 @@ public class Brick extends GameObject {
     //Handle explosion
     public void startExplosion() {
         if (!isExploding && !isDestroyed()) {
+            Game.playSfx(Game.sfx_explode,0.8f);
             this.isExploding = true;
             this.explosionTimer = EXPLOSION_DURATION;
             this.setHitPoints(0);
@@ -106,5 +136,17 @@ public class Brick extends GameObject {
 
     public boolean isUnbreak() {
         return this.unbreak;
+    }
+
+    public void clearUnbreak() {
+        if (this.unbreak) {
+            this.unbreak = false;
+
+            if (this.hitPoints >= 2) {
+                this.texture = TextureManager.brick2HIT;
+            } else {
+                this.texture = TextureManager.brick1HIT;
+            }
+        }
     }
 }

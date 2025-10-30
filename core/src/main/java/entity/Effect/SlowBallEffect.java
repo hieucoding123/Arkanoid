@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
@@ -23,10 +24,10 @@ public class SlowBallEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_slowball,0.8f);
         if (paddle.isFlipped()) {
             this.setVelocity(0, -this.getDy());
         }
-
         if (this.triggeringBall != null) {
             this.triggeringBall.activateSlow(EFFECT_DURATION);
         } else {
@@ -34,7 +35,6 @@ public class SlowBallEffect extends EffectItem {
                 ball.activateSlow(EFFECT_DURATION);
             }
         }
-
         this.setDestroyed(true);
     }
 

@@ -180,6 +180,9 @@ public class VsMode extends GameMode {
 
         paddle1.update(delta);
         paddle2.update(delta);
+
+//        EffectItem.updateEffectItems(paddle1, this.balls, delta);
+//        EffectItem.updateEffectItems(paddle2, this.balls, delta);
         currentMap.update(delta);
         EffectItem.moveItems(delta);
         EffectItem.effectCollision(paddle1, this.balls, currentMap);
@@ -209,13 +212,13 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0, 0, 0, 0, 0, 1, 0, 0, 0);
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0, 0, 0, 0, 0, 1, 0, 0, 0);
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }

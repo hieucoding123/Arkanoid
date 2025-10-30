@@ -24,6 +24,7 @@ public class BigballEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_bigball,0.8f);
         if (paddle.isFlipped()) {
             this.setVelocity(0, -this.getDy());
         }

@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.TextureManager;
@@ -14,45 +15,49 @@ public class RandomEffect extends EffectItem {
     public RandomEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.RandomEffectTexture);
     }
+
+    private void applyChosenEffect(EffectItem effect, Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        if (effect != null) {
+            EffectItem.items.remove(effect);
+            effect.applyEffect(paddle, balls, bricksMap);
+        }
+    }
+
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        int RadomNumber = rand.nextInt(8);
-        EffectItem Effectchosen = null;
-        int x = 0;
-        int y = 0;
+        Game.playSfx(Game.sfx_random,0.8f);
+        int RadomNumber = rand.nextInt(8) + 1;
+
+        float x = this.getX();
+        float y = this.getY();
 
         switch (RadomNumber) {
-            case 0:
-                Effectchosen = new ExpandEffect(x, y, dy);
-                break;
             case 1:
-                Effectchosen = new ShieldEffect(x, y, dy);
+                applyChosenEffect(new ShieldEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 2:
-                Effectchosen = new BigballEffect(x, y, dy);
+                applyChosenEffect(new BigballEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 3:
-                Effectchosen = new FastBallEffect(x, y, dy);
+                applyChosenEffect(new FastBallEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 4:
-                Effectchosen = new SlowBallEffect(x, y, dy);
+                applyChosenEffect(new SlowBallEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 5:
-                Effectchosen = new StunPaddleEffect(x, y, dy);
+                applyChosenEffect(new StunPaddleEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 6:
-                Effectchosen = new ThreeBallsEffect(x, y, dy);
+                applyChosenEffect(new ThreeBallsEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
             case 7:
-                Effectchosen = new UnbreakBrickEffect(x, y, dy);
+                applyChosenEffect(new UnbreakBrickEffect(x, y, dy), paddle, balls, bricksMap);
                 break;
-        }
-
-        if (Effectchosen != null) {
-            Effectchosen.applyEffect(paddle, balls, bricksMap);
+            case 8:
+                applyChosenEffect(new ExpandEffect(x, y, dy), paddle, balls, bricksMap);
+                break;
         }
 
         this.setDestroyed(true);
     }
 }
-

@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.object.Paddle;
@@ -19,6 +20,7 @@ public class ExpandEffect extends EffectItem {
     }
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_bigpaddle,0.8f);
         if (paddle != null) {
             paddle.activateExpand(EFFECT_DURATION);
             float screenWidth = Gdx.graphics.getWidth();

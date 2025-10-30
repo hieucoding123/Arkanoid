@@ -19,8 +19,11 @@ import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
-import ui.SettingsUI;
-import ui.MainMenu;
+import Menu.SettingsUI;
+import Menu.MainMenu;
+
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 
 public class Game {
     private OrthographicCamera camera;
@@ -45,6 +48,31 @@ public class Game {
     private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
+
+    public static Music bgm;
+    public static Sound sfx_bigball;
+    public static Sound sfx_bigpaddle;
+    public static Sound sfx_bricked;
+    public static Sound sfx_cleareffect;
+    public static Sound sfx_fastball;
+    public static Sound sfx_frozen;
+    public static Sound sfx_random;
+    public static Sound sfx_shield;
+    public static Sound sfx_slowball;
+    public static Sound sfx_tripleball;
+    public static Sound sfx_pop;
+    public static Sound sfx_explode;
+    public static Sound sfx_win;
+    public static Sound sfx_paused;
+    public static Sound sfx_click;
+    public static Sound sfx_back;
+    public static Sound sfx_touchpaddle;
+
+    public static float musicVolumePercent = 1.0f;
+    public static float sfxVolumePercent = 1.0f;
+
+    public static final float MAX_MUSIC_VOLUME = 0.3f;
+    public static final float MAX_SFX_VOLUME = 1.5f;
 
     public Game(Main main) {
         this.main = main;
@@ -71,7 +99,56 @@ public class Game {
 
         TextureManager.loadTextures();
 
+        // Load and play audio
+        loadAudio();
+        bgm.setLooping(true);
+        bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
+        bgm.play();
+
         this.setGameState(GameState.MAIN_MENU);
+    }
+
+    private void loadAudio() {
+        //BGM
+        bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm2.mp3"));
+
+        //SFX
+        sfx_bigball = Gdx.audio.newSound(Gdx.files.internal("sound/e_bigball.mp3"));
+        sfx_bigpaddle = Gdx.audio.newSound(Gdx.files.internal("sound/e_bigpaddle.mp3"));
+        sfx_bricked = Gdx.audio.newSound(Gdx.files.internal("sound/e_bricked.mp3"));
+        sfx_cleareffect = Gdx.audio.newSound(Gdx.files.internal("sound/e_cleareffect.mp3"));
+        sfx_fastball = Gdx.audio.newSound(Gdx.files.internal("sound/e_fastball.mp3"));
+        sfx_frozen = Gdx.audio.newSound(Gdx.files.internal("sound/e_frozen.mp3"));
+        sfx_random = Gdx.audio.newSound(Gdx.files.internal("sound/e_random.mp3"));
+        sfx_shield = Gdx.audio.newSound(Gdx.files.internal("sound/e_shield.mp3"));
+        sfx_slowball = Gdx.audio.newSound(Gdx.files.internal("sound/e_slowball.mp3"));
+        sfx_tripleball = Gdx.audio.newSound(Gdx.files.internal("sound/e_tripleball.mp3"));
+
+        sfx_pop = Gdx.audio.newSound(Gdx.files.internal("sound/pop.mp3"));
+        sfx_explode = Gdx.audio.newSound(Gdx.files.internal("sound/explode.mp3"));
+        sfx_touchpaddle = Gdx.audio.newSound(Gdx.files.internal("sound/touchpaddle.mp3"));
+
+        sfx_click = Gdx.audio.newSound(Gdx.files.internal("sound/click.mp3"));
+        sfx_back = Gdx.audio.newSound(Gdx.files.internal("sound/back.mp3"));
+
+        //Unimplemented
+        sfx_win = Gdx.audio.newSound(Gdx.files.internal("sound/win.mp3"));
+        sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
+    }
+
+    public static void updateMusicVolume() {
+        if (bgm != null) {
+            bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
+        }
+    }
+
+    public static void playSfx(Sound sfx) {
+        sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
+    }
+
+    public static void playSfx(Sound sfx, float relativeVolume) {
+        float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
+        sfx.play(finalVolume);
     }
 
     public void resize(int width, int height) {
@@ -173,6 +250,25 @@ public class Game {
         ui.dispose();
         gameScreen.dispose();
         TextureManager.dispose();
+
+        bgm.dispose();
+        sfx_bigball.dispose();
+        sfx_bigpaddle.dispose();
+        sfx_bricked.dispose();
+        sfx_cleareffect.dispose();
+        sfx_fastball.dispose();
+        sfx_frozen.dispose();
+        sfx_random.dispose();
+        sfx_shield.dispose();
+        sfx_slowball.dispose();
+        sfx_tripleball.dispose();
+        sfx_pop.dispose();
+        sfx_explode.dispose();
+        sfx_win.dispose();
+        sfx_paused.dispose();
+        sfx_click.dispose();
+        sfx_back.dispose();
+        sfx_touchpaddle.dispose();
     }
 
     public void setLevelSelectionMode(boolean isCoop) {

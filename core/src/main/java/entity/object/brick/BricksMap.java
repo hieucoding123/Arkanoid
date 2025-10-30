@@ -20,10 +20,10 @@ public class BricksMap {
     public static final int yBeginCoord = 810;
     public static final int brickW = 78;
     public static final int brickH = 36;
-//    private final int[] r = {-1, 1, 0, 0};
-//    private final int[] c = {0, 0, -1, 1};
-    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
-    private final int[] c = {0, 0, -1, 1, -1, 1, 1, -1};
+    private final int[] r = {-1, 1, 0, 0};
+    private final int[] c = {0, 0, -1, 1};
+//    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
+//    private final int[] c = {0, 0, -1, 1, -1, 1, 1, -1};
 
     public final ArrayList<Brick> bricks;
 
@@ -70,6 +70,26 @@ public class BricksMap {
                             i, j,
                             color,
                             TextureManager.brick2HIT));
+                    } else if (color == 31) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            1,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick1HIT));
+                        bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
+                    } else if (color == 32) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            2,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick2HIT));
+                        bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
                     }
                 }
             }
@@ -110,7 +130,13 @@ public class BricksMap {
 
                     if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
                         Brick new_brick = grid[new_row][new_col];
-                        if (new_brick != null && new_brick.getExplosion()) {
+                        Random rand = new Random();
+                        int radom = rand.nextInt(4) + 1;
+                        if (new_brick != null && new_brick.getExplosion() && !new_brick.isDestroyed()) {
+                            save_brick.get(new_row * cols + new_col).setHitPoints(0);
+                            new_brick.startExplosion();
+                            score.addScore(new_brick);
+                        } else if (new_brick != null && radom == 1 && !new_brick.isDestroyed()) {
                             save_brick.get(new_row * cols + new_col).setHitPoints(0);
                             new_brick.startExplosion();
                             score.addScore(new_brick);

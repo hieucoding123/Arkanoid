@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
@@ -23,11 +24,7 @@ public class FastBallEffect extends EffectItem {
     }
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        if (paddle.isFlipped()) {
-            this.setVelocity(0, -this.getDy());
-
-        }
-
+        Game.playSfx(Game.sfx_fastball,0.8f);
         if (triggeringBall != null) {
             this.triggeringBall.activateFast(EFFECT_DURATION);
         } else {
