@@ -29,21 +29,15 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     private Paddle renderPaddle2;
 
     public NetworkVsMode(Player player, ScoreManager scoreManager, GameScreen gameScreen,
-                         String serverIP, boolean isHost) {
+                         String serverIP, boolean isHost, GameClient existingClient) {
         super();
         this.setPlayer(player);
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.isHost = isHost;
 
-        client = new GameClient(this);
-
-        try {
-            client.connect(serverIP, player.getName(), NetworkProtocol.GameMode.VS);
-        } catch (Exception e) {
-            System.err.println("Failed to connect: " + e.getMessage());
-            this.setEnd(true);
-        }
+        client = existingClient;
+        client.setListener(this);
 
         create();
     }
@@ -53,7 +47,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         gameScreen.create();
 
         renderPaddle1 = new Paddle(100, 100, TextureManager.paddleTexture);
-        renderPaddle2 = new Paddle(100, 100, TextureManager.paddleTexture);
+        renderPaddle2 = new Paddle(500, 100, TextureManager.paddleTexture);
     }
 
     @Override
@@ -128,6 +122,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     @Override
     public void onGameStarted() {
         System.out.println("GameStarted!");
+        System.out.println("VS Mode is started");
         this.start = true;
     }
 
@@ -144,10 +139,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
-        System.out.println("Lobby update: P1=" + update.p1Connected +
-            " P2=" + update.p2Connected +
-            " P1Ready=" + update.p1Ready +
-            " P2Ready=" + update.p2Ready);
+        //
     }
 
     @Override

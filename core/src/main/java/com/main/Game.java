@@ -171,9 +171,13 @@ public class Game {
                 ui.update();
                 break;
             case NETWORK_VS:
-//                gameMode.update(this.delta);
-                gameServer.update(this.delta);
-                if (gameMode.isEnd()) {
+                if (gameMode != null) {
+                    gameMode.update(this.delta);
+                }
+                if (isNetworkHost && gameServer != null) {
+                    gameServer.update(this.delta);
+                }
+                if (gameMode != null && gameMode.isEnd()) {
                     stopNetworkGame();
                     setGameState(GameState.NETWORK_CONNECTION_MENU);
                 }
@@ -304,7 +308,8 @@ public class Game {
 
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, scoreManager, gameScreen, networkServerIP, isNetworkHost
+            player, scoreManager, gameScreen,
+            networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
             VsMode severGameMode = new  VsMode(player, player2, gameScreen,
