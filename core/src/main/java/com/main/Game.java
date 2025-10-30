@@ -140,6 +140,10 @@ public class Game {
             System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
         }
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            if (gameServer != null) {
+                gameServer.stop();
+            }
+            networkClient.disconnect();
             setGameState(GameState.MAIN_MENU);
         }
     }
