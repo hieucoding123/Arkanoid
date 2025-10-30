@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
 import entity.Effect.ShieldEffect;
 import entity.MovableObject;
+import entity.object.brick.Brick;
 
 public class Ball extends MovableObject {
     private float speed;
@@ -107,24 +108,24 @@ public class Ball extends MovableObject {
 
     public void update(float delta) {
         super.update(delta);
-        if (this.getX() <= Game.padding_left_right
-            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
-            this.reverseX();
-            Game.playSfx(Game.sfx_touchpaddle,1.2f);
-        }
-        if (this.getY() + this.getHeight() >= Game.padding_top) {
-            this.reverseY();
-            Game.playSfx(Game.sfx_touchpaddle,1.2f);
-        }
-        if (this.getY() <= 0) {
-            if (ShieldEffect.isShield()) {
-                ShieldEffect.setShield();
-                this.reverseY();
-                Game.playSfx(Game.sfx_touchpaddle,1.2f);
-            } else {
-                this.setDestroyed(true); // drop out of screen
-            }
-        }
+//        if (this.getX() <= Game.padding_left_right
+//            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
+//            this.reverseX();
+//            Game.playSfx(Game.sfx_touchpaddle,1.2f);
+//        }
+//        if (this.getY() + this.getHeight() >= Game.padding_top) {
+//            this.reverseY();
+//            Game.playSfx(Game.sfx_touchpaddle,1.2f);
+//        }
+//        if (this.getY() <= 0) {
+//            if (ShieldEffect.isShield()) {
+//                ShieldEffect.setShield();
+//                this.reverseY();
+//                Game.playSfx(Game.sfx_touchpaddle,1.2f);
+//            } else {
+//                this.setDestroyed(true); // drop out of screen
+//            }
+//        }
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
 //            this.setScale(1.0f, 1.0f);
             this.setScale(this.baseScale, this.baseScale);
@@ -139,8 +140,49 @@ public class Ball extends MovableObject {
             FastEnd = 0;
         }
     }
+    public void handleWallCollision() {
+        boolean collided = false;
+        // Va chạm tường trái hoặc phải
+        if (this.getX() <= Game.padding_left_right) {
+            this.setX(Game.padding_left_right); // Đẩy bóng ra
+            this.reverseX();
+            collided = true;
+        } else if (this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
+            this.setX(Game.SCREEN_WIDTH - Game.padding_left_right - this.getWidth()); // Đẩy bóng ra
+            this.reverseX();
+            collided = true;
+        }
+
+        // Va chạm tường trên
+        if (this.getY() + this.getHeight() >= Game.padding_top) {
+            this.setY(Game.padding_top - this.getHeight()); // Đẩy bóng ra
+            this.reverseY();
+            collided = true;
+            // ÁP DỤNG HIỆU ỨNG "PONG" KHI CHẠM TƯỜNG TRÊN
+            angleSpeedAdjustment();
+        }
+
+        // Va chạm đáy màn hình
+        if (this.getY() <= 0) {
+            if (ShieldEffect.isShield()) {
+                ShieldEffect.setShield();
+                this.setY(0); // Đẩy bóng ra
+                this.reverseY();
+                collided = true;
+            } else {
+                this.setDestroyed(true); // Rớt ra ngoài
+            }
+        }
+
+        if (collided) {
+            Game.playSfx(Game.sfx_touchpaddle, 1.2f);
+        }
+    }
 
     public void collisionWith(Paddle paddle) {
+        if (!this.checkCollision(paddle)) {
+            return;
+        }
         if (paddle.isFlipped()) {
             if (this.getDy() > 0) {
                 float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
@@ -157,12 +199,7 @@ public class Ball extends MovableObject {
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
             }
         } else {
-            if (this.getDy() < 0 &&
-                this.getX() < paddle.getX() + paddle.getWidth() &&
-                this.getX() + this.getWidth() > paddle.getX() &&
-                this.getY() <= paddle.getY() + paddle.getHeight() &&
-                this.getY() + this.getHeight() >= paddle.getY()) {
-
+            if (this.getDy() < 0) {
                 float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
                 float ballCenter = this.getX() + this.getWidth() / 2f;
                 float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
@@ -171,10 +208,67 @@ public class Ball extends MovableObject {
                 float newAngle = (float) (Math.PI / 2 - impactPoint * (float) Math.PI / 3f);
 
                 this.setAngle(newAngle);
-                this.updateVelocity();
+//                this.updateVelocity();
                 this.setY(paddle.getY() + paddle.getHeight());
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
+                angleSpeedAdjustment();
             }
+        }
+    }
+
+    public boolean handleBrickCollision(Brick brick) {
+        if (brick.isDestroyed() || !this.checkCollision(brick)) {
+            return false;
+        }
+
+        float vecX = this.getCenterX() - brick.getCenterX();
+        float vecY = this.getCenterY() - brick.getCenterY();
+
+        float combinedHalfWidths = this.getWidth() / 2f + brick.getWidth() / 2f;
+        float combinedHalfHeights = this.getHeight() / 2f + brick.getHeight() / 2f;
+
+        float overlapX = combinedHalfWidths - Math.abs(vecX);
+        float overlapY = combinedHalfHeights - Math.abs(vecY);
+
+        if (overlapX < overlapY) {
+            this.reverseX();
+            if (vecX > 0) {
+                this.setX(this.getX() + overlapX);
+            } else {
+                this.setX(this.getX() - overlapX);
+            }
+        } else {
+            this.reverseY();
+            if (vecY > 0) {
+                this.setY(this.getY() + overlapY);
+            } else {
+                this.setY(this.getY() - overlapY);
+            }
+        }
+
+        return true;
+    }
+
+    private void angleSpeedAdjustment() {
+
+        if (SlowEnd > 0 || FastEnd > 0) {
+            return;
+        }
+
+        float verticalComponent = Math.abs((float)Math.sin(this.angle));
+
+        float speedMultiplier = 1.0f + (1.0f - 0.5f) * (1.0f - verticalComponent);
+
+
+        float maxSpeed = (originalspeed * 60f) * 2.0f;
+        float newSpeed = (originalspeed * 60f) * speedMultiplier;
+
+
+        if (newSpeed > this.speed && newSpeed <= maxSpeed) {
+            this.setSpeed(newSpeed);
+        } else if (newSpeed < this.speed) {
+
+            this.setSpeed(newSpeed);
         }
     }
 

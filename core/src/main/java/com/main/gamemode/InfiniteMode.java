@@ -28,7 +28,7 @@ public class InfiniteMode extends GameMode {
     private int currentIdx;
     private float timePlayed;
     private int lives;
-    private final double baseItemChance = 0.1;
+    private final double baseItemChance = 0.08;
     private final double minItemChance = 0.001;
     private final double decayPerLevel = 0.005;
 
@@ -101,9 +101,9 @@ public class InfiniteMode extends GameMode {
         for (Ball ball : balls) {
             ball.update(delta);
             ball.collisionWith(paddle);
-
+            ball.handleWallCollision();
             for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
+                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
@@ -130,21 +130,6 @@ public class InfiniteMode extends GameMode {
                         } else {
                             brick.setDestroyed(true);
                         }
-                    }
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
                     }
                     break;
                 }
