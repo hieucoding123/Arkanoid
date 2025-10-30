@@ -8,6 +8,8 @@ public class TextureManager {
     public static Texture bgTexture;
     public static Texture brick1HIT;
     public static Texture brick2HIT;
+    public static Texture brick3HIT;
+    public static Texture brick4HIT;
     public static Texture brickexplo;
     public static Texture brickNOHIT;
     public static Texture ballTexture;
@@ -29,8 +31,10 @@ public class TextureManager {
      */
     public static void loadTextures() {
         bgTexture = new Texture("images/background.png");
-        brick2HIT = new Texture("images/brick_blue.png");
-        brick1HIT = new Texture("images/brick_cyan.png");
+        brick1HIT = new Texture("images/brick_bronze.png");
+        brick2HIT = new Texture("images/brick_iron.png");
+        brick3HIT =  new Texture("images/brick_gold.png");
+        brick4HIT =  new Texture("images/brick_diamond.png");
         brickexplo = new Texture("images/brick_red.png");
         brickNOHIT = new Texture("images/brick_black.png");
         ballTexture = new Texture("images/tempball.png");
