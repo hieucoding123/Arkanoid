@@ -132,46 +132,29 @@ public class NetworkConnectionMenu extends  UserInterface{
 
         new Thread(() -> {
             // Client for discovering
-            Client tempClient = new Client(8192, 2048);
-            NetworkProtocol.register(tempClient);
+            Client tempClient = new Client();
             tempClient.start();
 
-            tempClient.addListener(new Listener() {
-                @Override
-                public void received(Connection connection, Object object) {
-                    if (object instanceof NetworkProtocol.ServerInfoResponse) {
-                        NetworkProtocol.ServerInfoResponse response = (NetworkProtocol.ServerInfoResponse) object;
-                        // sender's IP
-                        InetAddress serverIP = connection.getRemoteAddressTCP().getAddress();
-                        String displayName = String.format("%s (%d/%d)",
-                            response.hostName,
-                            response.currentPlayers,
-                            response.maxPlayers
-                        );
-                        foundServers.put(displayName, serverIP);
-                        Gdx.app.postRunnable(() -> {
-                            serversList.setItems(foundServers.keySet().toArray(new String[0]));
-                        });
-                    }
-                }
-            });
-            tempClient.sendUDP(new NetworkProtocol.DiscoverServerRequest());
-            // Waiting 3s
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            java.util.List<InetAddress> hosts = tempClient.discoverHosts(NetworkProtocol.UDP_PORT, 3000);
 
-            // Dọn dẹp
             tempClient.stop();
             tempClient.close();
 
             Gdx.app.postRunnable(() -> {
-                if (foundServers.isEmpty()) {
-                    statusLabel.setText("No servers found.");
-                } else {
-                    statusLabel.setText("Found " + foundServers.size() + " servers.");
+                if (hosts.isEmpty()) {
+                    statusLabel.setText("No servers found. Host one!");
+                }else {
+                    statusLabel.setText("Found " + hosts.size() + " server(s)!");
+                    ArrayList<String> displayItems = new ArrayList<>();
+                    for (InetAddress host : hosts) {
+                        String IP = host.getHostAddress();
+
+                        int roomCode = Math.abs(IP.hashCode() % 10000);
+                        String displayName = String.format("Room #%04d", roomCode); // last 4 chars
+                        foundServers.put(displayName, host);
+                        displayItems.add(displayName);
+                    }
+                    serversList.setItems(displayItems.toArray(new String[0]));
                 }
             });
 
@@ -186,21 +169,21 @@ public class NetworkConnectionMenu extends  UserInterface{
             return;
         }
 
-        InetAddress serverIP = foundServers.get(selectedDisplayName);
-        if (serverIP == null) {
+        InetAddress host = foundServers.get(selectedDisplayName);
+        if (host == null) {
             statusLabel.setText("Error joining server!. Please refresh");
             return;
         }
 
-        String serverIPString = serverIP.getHostAddress();
-        statusLabel.setText("Connected to: " + serverIPString);
+        String IP = host.getHostAddress();
+        statusLabel.setText("Connected to: " + IP);
 
         new Thread(() -> {
             try {
                 Thread.sleep(500);      // Connection delay
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Connected! Staring game...");
-                    getMain().startNetworkGame(serverIPString, false);
+                    getMain().startNetworkGame(IP, false);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
