@@ -17,7 +17,7 @@ public class StunPaddleEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_frozen.play();
+        Game.playSfx(Game.sfx_frozen,0.8f);
         if (paddle != null) {
             paddle.activateStun(EFFECT_DURATION);
         }

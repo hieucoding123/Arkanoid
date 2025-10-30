@@ -19,8 +19,8 @@ import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.VsMode;
 import com.main.gamemode.CoopMode;
-import ui.SettingsUI;
-import ui.MainMenu;
+import Menu.SettingsUI;
+import Menu.MainMenu;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -68,6 +68,12 @@ public class Game {
     public static Sound sfx_back;
     public static Sound sfx_touchpaddle;
 
+    public static float musicVolumePercent = 1.0f;
+    public static float sfxVolumePercent = 1.0f;
+
+    public static final float MAX_MUSIC_VOLUME = 0.3f;
+    public static final float MAX_SFX_VOLUME = 1.5f;
+
     public Game(Main main) {
         this.main = main;
         this.init();
@@ -96,7 +102,7 @@ public class Game {
         // Load and play audio
         loadAudio();
         bgm.setLooping(true);
-        bgm.setVolume(0.3f); // Set BGM volume to 50%
+        bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
         bgm.play();
 
         this.setGameState(GameState.MAIN_MENU);
@@ -128,6 +134,21 @@ public class Game {
         //Unimplemented
         sfx_win = Gdx.audio.newSound(Gdx.files.internal("sound/win.mp3"));
         sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
+    }
+
+    public static void updateMusicVolume() {
+        if (bgm != null) {
+            bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
+        }
+    }
+
+    public static void playSfx(Sound sfx) {
+        sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
+    }
+
+    public static void playSfx(Sound sfx, float relativeVolume) {
+        float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
+        sfx.play(finalVolume);
     }
 
     public void resize(int width, int height) {

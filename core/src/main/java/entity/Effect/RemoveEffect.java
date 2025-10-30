@@ -19,7 +19,7 @@ public class RemoveEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_cleareffect.play();
+        Game.playSfx(Game.sfx_cleareffect,0.8f);
         EffectItem.clear();
         if (paddle != null) {
             paddle.clearEffects();

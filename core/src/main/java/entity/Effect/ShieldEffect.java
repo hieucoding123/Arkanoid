@@ -17,7 +17,7 @@ public class ShieldEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_shield.play();
+        Game.playSfx(Game.sfx_shield,0.8f);
         shield = true;
         this.setDestroyed(true);
     }

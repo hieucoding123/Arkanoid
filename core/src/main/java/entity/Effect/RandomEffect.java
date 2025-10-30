@@ -25,7 +25,7 @@ public class RandomEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_random.play();
+        Game.playSfx(Game.sfx_random,0.8f);
         int RadomNumber = rand.nextInt(8) + 1;
 
         float x = this.getX();

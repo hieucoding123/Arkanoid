@@ -1,14 +1,17 @@
-package ui;
+package Menu;
 
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -90,6 +93,17 @@ public class SettingsUI extends UserInterface {
             }
         });
 
+        musicSlider.setValue(Game.musicVolumePercent);
+        musicSlider.setVisualPercent(Game.musicVolumePercent);
+
+        musicSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                Game.musicVolumePercent = musicSlider.getValue()/100;
+                Game.updateMusicVolume();
+            }
+        });
+
         // SFX Slider
         Label sfxLabel = new Label("SFX", this.getSkin());
         table.add(sfxLabel).padRight(20);
@@ -97,6 +111,41 @@ public class SettingsUI extends UserInterface {
         table.add(sfxSlider).width(300);
         table.row().padTop(50);
 
+        sfxSlider.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float stageX = event.getStageX();
+                float stageY = event.getStageY();
+                System.out.println("Slider clicked at Stage coordinates: (" + stageX + ", " + stageY + ")");
+                System.out.println("Slider's bottom-left corner is at: (" + sfxSlider.getX() + ", " + sfxSlider.getY() + ")");
+                return true;
+            }
+        });
+
+        // Starting pos
+        sfxSlider.setValue(Game.sfxVolumePercent);
+        sfxSlider.setVisualPercent(Game.sfxVolumePercent);
+
+        sfxSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // When this slider moves, update the SFX static field
+                Game.sfxVolumePercent = sfxSlider.getValue()/100;
+            }
+        });
+
+        sfxSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!sfxSlider.isDragging()) {
+                    Game.playSfx(Game.sfx_click);
+                }
+            }
+        });
+
+
+
+        // Main
         Main main = this.getMain();
 
         // Back Button
@@ -104,7 +153,7 @@ public class SettingsUI extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                com.main.Game.sfx_back.play(1.0f);
+                Game.playSfx(Game.sfx_back,1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
         });

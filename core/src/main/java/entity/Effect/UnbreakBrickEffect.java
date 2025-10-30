@@ -18,7 +18,7 @@ public class UnbreakBrickEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_bricked.play();
+        Game.playSfx(Game.sfx_bricked,0.8f);
         ArrayList<Brick> bricks = new ArrayList<>();
         if (bricksMap != null && !bricksMap.getBricks().isEmpty()) {
             for (Brick brick : bricksMap.getBricks()) {

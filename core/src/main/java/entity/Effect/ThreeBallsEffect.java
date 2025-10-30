@@ -21,7 +21,7 @@ public class ThreeBallsEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_tripleball.play();
+        Game.playSfx(Game.sfx_tripleball,0.8f);
         if (this.isDestroyed() || balls.isEmpty()) {
             return;
         }

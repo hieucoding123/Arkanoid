@@ -19,7 +19,7 @@ public class FastBallEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        Game.sfx_fastball.play();
+        Game.playSfx(Game.sfx_fastball,0.8f);
         // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
         for (Ball ball : balls) {
             ball.activateFast(EFFECT_DURATION);
