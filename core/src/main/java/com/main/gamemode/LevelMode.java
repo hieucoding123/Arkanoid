@@ -98,24 +98,24 @@ public class LevelMode extends GameMode {
             for (Brick brick : currentMap.getBricks()) {
                 if (ball.checkCollision(brick)) {
                     brick.takeHit();
-                    if (ball.isBig()) brick.setHitPoints(0);
+                    if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
                         EffectItem newEffectItem = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.05, 0.05, 0.09, 0.12, 0.14, 0.16, 0.18, 0.20, 0.05);
+                                0.05, 0.05, 0.05, 0.05, 0.05, 0.14, 0.16, 0.18, 0.20, 0.05);
                         } else if  (mapIndex == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.04, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18, 0.05);
+                                0.04, 0.05, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18, 0.05);
                         } else if (mapIndex == 3) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.03,0.05 ,  0.06, 0.08, 0.10, 0.12, 0.14, 0.15, 0.05);
+                                0.03, 0.05,0.05 ,  0.06, 0.08, 0.10, 0.12, 0.14, 0.15, 0.05);
                         } else if (mapIndex == 4) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.03,0.05,0.05, 0.07, 0.08, 0.09, 0.10, 0.12, 0.05);
+                                0.03, 0.05,0.05,0.05, 0.07, 0.08, 0.09, 0.10, 0.12, 0.05);
                         } else {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.02,0.05,  0.04, 0.05, 0.06, 0.07, 0.08, 0.10, 0.05);
+                                0.02, 0.05,0.05,  0.04, 0.05, 0.06, 0.07, 0.08, 0.10, 0.05);
                         }
 
                         if (newEffectItem != null) {

@@ -12,7 +12,7 @@ import entity.object.brick.BricksMap;
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
-    private static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
+    static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
 
     public EffectItem(float x, float y, float dy, Texture texture) {
         super(x, y, texture);

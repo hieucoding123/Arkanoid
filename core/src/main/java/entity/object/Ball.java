@@ -88,11 +88,19 @@ public class Ball extends MovableObject {
     }
 
     public void activateSlow(float duration) {
+        if (FastEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            FastEnd = 0;
+        }
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(180f);
     }
 
     public void activateFast(float duration) {
+        if (SlowEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            SlowEnd = 0;
+        }
         FastEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(1000f);
     }
@@ -163,6 +171,14 @@ public class Ball extends MovableObject {
                 this.setY(paddle.getY() + paddle.getHeight());
             }
         }
+    }
+
+    public void clearEffects() {
+        this.BigEnd = 0;
+        this.SlowEnd = 0;
+        this.FastEnd = 0;
+        this.setScale(this.baseScale, this.baseScale);
+        this.setSpeed(originalspeed * 60f);
     }
 
     public boolean isBig() {
