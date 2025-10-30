@@ -189,7 +189,7 @@ public class VsMode extends GameMode {
             for (Brick brick : currentMap.getBricks()) {
                 if (ball.checkCollision(brick)) {
                     brick.takeHit();
-//                    if (ball.isBig()) {
+//                    if (ball.isBig() && !brick.isUnbreak()) {
 //                        brick.setHitPoints(0);
 //                    }
                     if (brick.gethitPoints() == 0) {

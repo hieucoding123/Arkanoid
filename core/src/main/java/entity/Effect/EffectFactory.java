@@ -22,7 +22,7 @@ public class EffectFactory {
         double chance = rand.nextDouble();
 
         if (chance <= expand) {
-            return new ExpandEffect(brick.getX(), brick.getY(), -1);
+            return new RandomEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= radom) {
             return new RandomEffect(brick.getX(), brick.getY(), -1);

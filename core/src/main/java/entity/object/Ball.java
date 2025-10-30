@@ -88,11 +88,19 @@ public class Ball extends MovableObject {
     }
 
     public void activateSlow(float duration) {
+        if (FastEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            FastEnd = 0;
+        }
         SlowEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(180f);
     }
 
     public void activateFast(float duration) {
+        if (SlowEnd > 0) {
+            this.setSpeed(originalspeed * 60f);
+            SlowEnd = 0;
+        }
         FastEnd = System.currentTimeMillis() + (long)(duration * 1000);
         this.setSpeed(1000f);
     }

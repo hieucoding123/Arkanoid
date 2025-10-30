@@ -36,16 +36,16 @@ public class TextureManager {
         ballTexture = new Texture("images/tempball.png");
         paddleTexture = new Texture("images/paddle.png");
         flippedpaddleTexture = new Texture("images/flippedpaddle.png");
-        threeBallsTextures = new Texture("images/threeBalls.png");
-        expandpaddleTexture = new Texture("images/expandpaddle.png");
-        shieldTexture = new Texture("images/shield.png");
+        threeBallsTextures = new Texture("images/e_triple.png");
+        expandpaddleTexture = new Texture("images/e_bigpaddle.png");
+        shieldTexture = new Texture("images/e_shielded.png");
         lineTexture = new  Texture("images/yellow_line.png");
-        BALLTexture = new Texture("images/BallEffect.png");
-        SlowBallTexture = new Texture("images/Slow.png");
+        BALLTexture = new Texture("images/e_bigball.png");
+        SlowBallTexture = new Texture("images/e_slowball.png");
         ExplosionTexture = new Texture("images/explosionEffect.png");
-        FastBallTexture = new Texture("images/FastEffect.png");
-        StunPaddleTexture = new Texture("images/StunPaddle.png");
-        UnbreakBrickTexture = new Texture("images/brickinfi.png");
+        FastBallTexture = new Texture("images/e_fastball.png");
+        StunPaddleTexture = new Texture("images/e_stun.png");
+        UnbreakBrickTexture = new Texture("images/e_bricked.png");
         RandomEffectTexture = new Texture("images/e_random.png");
     }
 
