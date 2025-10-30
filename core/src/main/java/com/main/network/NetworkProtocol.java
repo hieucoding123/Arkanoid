@@ -28,6 +28,8 @@ public class NetworkProtocol {
         kryo.register(PlayerInput.class, 63);
         kryo.register(StartGameRequest.class, 64);
         kryo.register(LobbyUpdate.class, 65);
+        kryo.register(DiscoverServerRequest.class, 66);
+        kryo.register(ServerInfoResponse.class, 67);
         // State classes: 70 -79
         kryo.register(BallState.class, 70);
         kryo.register(PaddleState.class, 71);
@@ -38,7 +40,7 @@ public class NetworkProtocol {
     }
 
     // MESSAGE CLASSES
-    public static class LoginRequest {
+        public static class LoginRequest {
         public String protocolVersion;
         public String playerName;
         public GameMode gameMode;
@@ -122,6 +124,15 @@ public class NetworkProtocol {
             this.p1Ready = p1Ready;
             this.p2Ready = p2Ready;
         }
+    }
+    public static class DiscoverServerRequest {
+        public DiscoverServerRequest() {}
+    }
+    public static class ServerInfoResponse {
+        public String hostName;
+        public int currentPlayers;
+        public int maxPlayers;
+        public ServerInfoResponse() {}
     }
     // STATE CLASSES
 

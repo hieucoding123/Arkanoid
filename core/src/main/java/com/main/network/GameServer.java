@@ -25,6 +25,7 @@ public class GameServer {
     // Lobby state
     private boolean p1Connected = false;
     private boolean p2Connected = false;
+    private String hostName = "Server";
 
     public GameServer() {
         server = new Server(16384, 8192);
@@ -123,6 +124,17 @@ public class GameServer {
     }
 
     private void handleMessage(Connection connection, Object obj) {
+        if (obj instanceof NetworkProtocol.DiscoverServerRequest) {
+            // When server is not full
+            if (!gameStarted) {
+                NetworkProtocol.ServerInfoResponse response = new NetworkProtocol.ServerInfoResponse();
+                response.hostName = this.hostName;
+                response.currentPlayers = playerConnections.size();
+                response.maxPlayers = 2;
+                connection.sendUDP(response);
+            }
+            return;
+        }
         if (obj instanceof NetworkProtocol.LoginRequest) {
             handleLoginRequest(connection, (NetworkProtocol.LoginRequest) obj);
         }
@@ -249,10 +261,12 @@ public class GameServer {
         playerConnections.put(connection, playerNumber);
 
         // Update lobby state
-        if (playerNumber == 1)
+        if (playerNumber == 1) {
             p1Connected = true;
-        else
+            this.hostName = request.playerName;
+        } else {
             p2Connected = true;
+        }
 
         NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(
             true, playerNumber, "Connected as Player " + playerNumber

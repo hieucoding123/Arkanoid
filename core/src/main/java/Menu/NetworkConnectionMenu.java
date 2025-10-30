@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.main.GameState;
 import com.main.Main;
 import com.main.network.NetworkProtocol;
@@ -21,17 +23,19 @@ import entity.Player;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NetworkConnectionMenu extends  UserInterface{
     private List<String> serversList;
     private ScrollPane serversListScrollPane;
-    private ArrayList<InetAddress> foundServers;
+    private HashMap<String, InetAddress> foundServers;
 
     private Label statusLabel;
     private boolean isHosting;
 
     public NetworkConnectionMenu(Main main, Player player) {
         super(main, player);
+        foundServers = new HashMap<>();
     }
 
     @Override
@@ -128,47 +132,75 @@ public class NetworkConnectionMenu extends  UserInterface{
 
         new Thread(() -> {
             // Client for discovering
-            Client tempClient =  new Client();
+            Client tempClient = new Client(8192, 2048);
+            NetworkProtocol.register(tempClient);
             tempClient.start();
-            // Discovering
-            java.util.List<InetAddress> hosts = tempClient.discoverHosts(NetworkProtocol.UDP_PORT, 5000);
+
+            tempClient.addListener(new Listener() {
+                @Override
+                public void received(Connection connection, Object object) {
+                    if (object instanceof NetworkProtocol.ServerInfoResponse) {
+                        NetworkProtocol.ServerInfoResponse response = (NetworkProtocol.ServerInfoResponse) object;
+                        // sender's IP
+                        InetAddress serverIP = connection.getRemoteAddressTCP().getAddress();
+                        String displayName = String.format("%s (%d/%d)",
+                            response.hostName,
+                            response.currentPlayers,
+                            response.maxPlayers
+                        );
+                        foundServers.put(displayName, serverIP);
+                        Gdx.app.postRunnable(() -> {
+                            serversList.setItems(foundServers.keySet().toArray(new String[0]));
+                        });
+                    }
+                }
+            });
+            tempClient.sendUDP(new NetworkProtocol.DiscoverServerRequest());
+            // Waiting 3s
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Dọn dẹp
             tempClient.stop();
             tempClient.close();
 
-            // Update UI
             Gdx.app.postRunnable(() -> {
-                if (hosts.isEmpty()) {
-                    statusLabel.setText("No Servers Found. Host one!");
+                if (foundServers.isEmpty()) {
+                    statusLabel.setText("No servers found.");
                 } else {
-                    statusLabel.setText("Found " + hosts.size() + " server(s).");
-                    ArrayList<String> displayItems = new ArrayList<>();
-                    for (InetAddress host : hosts) {
-                        String IP = host.getHostAddress();
-                        foundServers.add(host);
-                        displayItems.add(IP);
-                    }
-                    serversList.setItems(displayItems.toArray(new String[0]));
+                    statusLabel.setText("Found " + foundServers.size() + " servers.");
                 }
             });
+
         }).start();
     }
 
     // Join game -> Client
     private void joinGame() {
-        String selectedIP = serversList.getSelected();
-        if (selectedIP == null) {
+        String selectedDisplayName = serversList.getSelected();
+        if (selectedDisplayName == null) {
             statusLabel.setText("Please Select Server!");
             return;
         }
 
-        statusLabel.setText("Connecting to " + selectedIP + " sever");
+        InetAddress serverIP = foundServers.get(selectedDisplayName);
+        if (serverIP == null) {
+            statusLabel.setText("Error joining server!. Please refresh");
+            return;
+        }
+
+        String serverIPString = serverIP.getHostAddress();
+        statusLabel.setText("Connected to: " + serverIPString);
 
         new Thread(() -> {
             try {
                 Thread.sleep(500);      // Connection delay
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Connected! Staring game...");
-                    getMain().startNetworkGame(selectedIP, false);
+                    getMain().startNetworkGame(serverIPString, false);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
