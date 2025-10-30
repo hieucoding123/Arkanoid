@@ -216,6 +216,8 @@ public class GameServer {
             case MOVE_RIGHT:
                 paddle.moveRight();
                 break;
+            case STOP:
+                paddle.setVelocity(0, 0);
             case LAUNCH_BALL:
                 vsMode.launchBall(pNumber);
                 break;

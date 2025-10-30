@@ -69,7 +69,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     @Override
     public void render(SpriteBatch sp, float delta) {
 //        handleInput();
-//        update(delta);
+        update(delta);
         draw(sp);
     }
 
@@ -86,20 +86,14 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             client.sendInput(NetworkProtocol.InputType.LAUNCH_BALL);
         }
+        else {
+            client.sendInput(NetworkProtocol.InputType.STOP);
+        }
     }
 
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
-//        if (currentState != null) {
-//            for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
-//                if (paddle.pNumber == 1) {
-//                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
-//                }else {
-//                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
-//                }
-//            }
-//        }
         if (currentState == null)
             return;
 
@@ -129,10 +123,6 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     public void onConnected(int pNumber) {
         this.mPNumber = pNumber;
         System.out.println("Connected as Player " + this.mPNumber);
-
-//        if (this.isHost) {
-//            client.sendReady();
-//        }
     }
 
     @Override
