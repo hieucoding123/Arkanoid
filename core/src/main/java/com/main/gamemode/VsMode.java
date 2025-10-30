@@ -254,6 +254,9 @@ public class VsMode extends GameMode {
     }
 
     public void launchBall(int pNumber) {
+        if (isPaused) {
+            isPaused = false;
+        }
         if (pNumber == 1 && flowPaddle1) {
             flowPaddle1 = false;
             if (ballP1 != null) ballP1.updateVelocity();

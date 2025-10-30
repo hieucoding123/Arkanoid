@@ -77,10 +77,10 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     public void handleInput() {
 //        Paddle myPaddle = (mPNumber == 1) ? paddle1 : paddle2;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             client.sendInput(NetworkProtocol.InputType.MOVE_LEFT);
         }
-        else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             client.sendInput(NetworkProtocol.InputType.MOVE_RIGHT);
         }
         else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
