@@ -11,6 +11,8 @@ import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
+import entity.object.brick.Brick;
+import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
@@ -18,15 +20,18 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     private GameClient client;
     private GameScreen gameScreen;
     private ScoreManager scoreManager;
-    private Paddle paddle1;
-    private Paddle paddle2;
+//    private Paddle paddle1;
+//    private Paddle paddle2;
     private int mPNumber;
     private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
 
-    private ArrayList<Ball> renderballs;
-    private Paddle renderPaddle1;
-    private Paddle renderPaddle2;
+//    private ArrayList<Ball> renderballs;
+//    private Paddle renderPaddle1;
+//    private Paddle renderPaddle2;
+
+    private ArrayList<BricksMap> brickMaps;
+    private BricksMap currentMap;
 
     public NetworkVsMode(Player player, ScoreManager scoreManager, GameScreen gameScreen,
                          String serverIP, boolean isHost, GameClient existingClient) {
@@ -46,8 +51,14 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     public void create() {
         gameScreen.create();
 
-        renderPaddle1 = new Paddle(100, 100, TextureManager.paddleTexture);
-        renderPaddle2 = new Paddle(500, 100, TextureManager.paddleTexture);
+//        renderPaddle1 = new Paddle(100, 100, TextureManager.paddleTexture);
+//        renderPaddle2 = new Paddle(500, 100, TextureManager.paddleTexture);
+        brickMaps = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            String mapPath = "/maps/map_vs" + i + ".txt";
+            brickMaps.add(new BricksMap(mapPath));
+        }
+        currentMap = brickMaps.get(0);
     }
 
     @Override
@@ -57,14 +68,14 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        handleInput();
-        update(delta);
+//        handleInput();
+//        update(delta);
         draw(sp);
     }
 
     @Override
     public void handleInput() {
-        Paddle myPaddle = (mPNumber == 1) ? paddle1 : paddle2;
+//        Paddle myPaddle = (mPNumber == 1) ? paddle1 : paddle2;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             client.sendInput(NetworkProtocol.InputType.MOVE_LEFT);
@@ -80,14 +91,37 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
-        if (currentState != null) {
-            for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
-                if (paddle.pNumber == 1) {
-                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
-                }else {
-                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
-                }
+//        if (currentState != null) {
+//            for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
+//                if (paddle.pNumber == 1) {
+//                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
+//                }else {
+//                    sp.draw(TextureManager.paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
+//                }
+//            }
+//        }
+        if (currentState == null)
+            return;
+
+        if (currentState.currentRound > 0 && currentState.currentRound <= brickMaps.size()) {
+            currentMap = brickMaps.get(currentState.currentRound - 1);
+        }
+
+        for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
+            if (paddle.pNumber == 1)
+                sp.draw(TextureManager.paddleTexture, paddle.x,  paddle.y, paddle.width, paddle.height);
+            else
+                sp.draw(TextureManager.flippedpaddleTexture, paddle.x,  paddle.y, paddle.width, paddle.height);
+        }
+
+        for (NetworkProtocol.BallState ball : currentState.balls) {
+            if (!ball.isDestroyed) {
+                sp.draw(TextureManager.ballTexture, ball.x, ball.y, ball.width, ball.height);
             }
+        }
+
+        if (currentMap != null) {
+            currentMap.draw(sp);
         }
     }
 
@@ -96,22 +130,21 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         this.mPNumber = pNumber;
         System.out.println("Connected as Player " + this.mPNumber);
 
-        if (this.isHost) {
-            client.sendReady();
-        }
+//        if (this.isHost) {
+//            client.sendReady();
+//        }
     }
 
     @Override
     public void onGameStateUpdated(NetworkProtocol.GameStateUpdate state) {
         this.currentState = state;
-        if (state.paddles.size() >= 2) {
-            NetworkProtocol.PaddleState p1 = state.paddles.get(0);
-            NetworkProtocol.PaddleState p2 = state.paddles.get(1);
-
-            renderPaddle1.setX(p1.x);
-            renderPaddle1.setY(p1.y);
-            renderPaddle2.setX(p2.x);
-            renderPaddle2.setY(p2.y);
+        if (currentMap != null && state.bricks != null) {
+            for (NetworkProtocol.BrickState brickState : state.bricks) {
+                for (int i = 0; i < state.bricks.size(); i++) {
+                    currentMap.getBricks().get(i).setDestroyed(state.bricks.get(i).isDestroyed);
+                    currentMap.getBricks().get(i).setHitPoints(state.bricks.get(i).hitPoints);
+                }
+            }
         }
 
         if (state.isGameOver) {
@@ -144,12 +177,12 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public Paddle getPaddle1() {
-        return renderPaddle1;
+        return null;        // Client don't manage paddle
     }
 
     @Override
     public Paddle getPaddle2() {
-        return renderPaddle2;
+        return null;
     }
 
     public void dispose() {

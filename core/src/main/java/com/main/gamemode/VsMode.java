@@ -140,7 +140,7 @@ public class VsMode extends GameMode {
     }
     @Override
     public void update(float delta) {
-        handleInput();
+//        handleInput();
 
         if (flowPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
@@ -240,74 +240,74 @@ public class VsMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.handleInput();
-        this.update(delta);
-        this.draw(sp);
+//        this.handleInput();
+//        this.update(delta);
+//        this.draw(sp);
     }
 
     @Override
     public void handleInput() {
-        if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            isPaused = false;
-            return;
-        }
-
-        //Press LEFT paddle1
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
-            paddle1.moveLeft();
-        }
-
-        //Press RIGHT paddle1
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
-            paddle1.moveRight();
-        }
-
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle1.setVelocity(0, 0);
-        }
-
-        //Press LEFT paddle 2
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            paddle2.moveLeft();
-        }
-        //Press RIGHT paddle 2
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            paddle2.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle2.setVelocity(0, 0);
-        }
-
-        if (flowPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
-            flowPaddle1 = false;
-        }
-
-        if (flowPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
-            flowPaddle2 = false;
-        }
+//        if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+//            isPaused = false;
+//            return;
+//        }
+//
+//        //Press LEFT paddle1
+//        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
+//            paddle1.moveLeft();
+//        }
+//
+//        //Press RIGHT paddle1
+//        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
+//            paddle1.moveRight();
+//        }
+//
+//        //IF NO PRESS KEEP IT STAND
+//        else {
+//            paddle1.setVelocity(0, 0);
+//        }
+//
+//        //Press LEFT paddle 2
+//        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
+//            paddle2.moveLeft();
+//        }
+//        //Press RIGHT paddle 2
+//        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
+//            paddle2.moveRight();
+//        }
+//        //IF NO PRESS KEEP IT STAND
+//        else {
+//            paddle2.setVelocity(0, 0);
+//        }
+//
+//        if (flowPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
+//            flowPaddle1 = false;
+//        }
+//
+//        if (flowPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
+//            flowPaddle2 = false;
+//        }
     }
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
-        currentMap.draw(sp);
-//        EffectItem.drawEffectItems(sp);
-
-        if (flowPaddle1) {
-            ballP1.draw(sp);
-        }
-
-        if (flowPaddle2) {
-            ballP2.draw(sp);
-        }
-
-        for (Ball ball : balls) {
-            ball.draw(sp);
-        }
-        paddle1.draw(sp);
-        paddle2.draw(sp);
+//        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
+//        currentMap.draw(sp);
+////        EffectItem.drawEffectItems(sp);
+//
+//        if (flowPaddle1) {
+//            ballP1.draw(sp);
+//        }
+//
+//        if (flowPaddle2) {
+//            ballP2.draw(sp);
+//        }
+//
+//        for (Ball ball : balls) {
+//            ball.draw(sp);
+//        }
+//        paddle1.draw(sp);
+//        paddle2.draw(sp);
     }
 
     @Override
@@ -316,7 +316,41 @@ public class VsMode extends GameMode {
     }
 
     @Override
-    public void launchBall() {
-        // DO NOTHING.
+    public Paddle getPaddle2() {
+        return this.paddle2;
+    }
+
+//    @Override
+//    public void launchBall() {
+//        // DO NOTHING.
+//    }
+    public void launchBall(int pNumber) {
+        if (pNumber == 1 && flowPaddle1) {
+            flowPaddle1 = false;
+        }
+        else if (pNumber == 2 && flowPaddle2) {
+            flowPaddle2 = false;
+        }
+    }
+
+    public ArrayList<Ball> balls() { return this.balls;  }
+    public BricksMap getCurrentMap() { return this.currentMap; }
+    public int getCurrentRound() {
+        return this.currentRound;
+    }
+
+    public float getRoundTimer() {
+        return this.roundTimer;
+    }
+
+    public ScoreManager getScoreManagerP1() {
+        return this.scoreManagerP1;
+    }
+
+    public ScoreManager getScoreManagerP2() {
+        return this.scoreManagerP2;
+    }
+    public boolean getIsGameOver() {
+        return (roundsWonP1 == 2 || roundsWonP2 == 2 || (currentRound == MAX_ROUNDS && roundTimer <= 0));
     }
 }

@@ -4,7 +4,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.main.gamemode.GameMode;
+import com.main.gamemode.VsMode;
+import entity.object.Ball;
 import entity.object.Paddle;
+import entity.object.brick.Brick;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,6 +70,9 @@ public class GameServer {
     }
 
     private void broadcastGameState() {
+        if (!(mode instanceof VsMode))  return;
+        VsMode vsMode =  (VsMode)mode;
+
         NetworkProtocol.GameStateUpdate update = new NetworkProtocol.GameStateUpdate();
 
         // Broadcast paddle
@@ -74,17 +80,44 @@ public class GameServer {
         Paddle p2 = mode.getPaddle2();
         if (p1 != null) {
             update.paddles.add(new NetworkProtocol.PaddleState(
-                1, p1.getX(), p1.getX(), p1.getWidth(), p1.getHeight()
+                1, p1.getX(), p1.getY(), p1.getWidth(), p1.getHeight()
             ));
         }
         if (p2 != null) {
             update.paddles.add(new NetworkProtocol.PaddleState(
-                2, p2.getX(), p2.getX(), p2.getWidth(), p2.getHeight()
+                2, p2.getX(), p2.getY(), p2.getWidth(), p2.getHeight()
             ));
         }
 
-        // Broadcast balls
-        // Broadcast bricks
+        // Update balls
+        for (Ball ball : vsMode.balls()) {
+            NetworkProtocol.BallState ballState = new NetworkProtocol.BallState();
+            ballState.x = ball.getX();
+            ballState.y = ball.getY();
+            ballState.width = ball.getWidth();
+            ballState.height = ball.getHeight();
+            ballState.isDestroyed = ball.isDestroyed();
+            ballState.lastHitBy = ball.getLastHitBy();
+            update.balls.add(ballState);
+        }
+        // Update bricks
+        if (vsMode.getCurrentMap() != null) {
+            for (Brick brick : vsMode.getCurrentMap().getBricks()) {
+                NetworkProtocol.BrickState brickState = new NetworkProtocol.BrickState();
+                brickState.x = brick.getX();
+                brickState.y = brick.getY();
+                brickState.width = brick.getWidth();
+                brickState.height = brick.getHeight();
+                brickState.isDestroyed = brick.isDestroyed();
+                update.bricks.add(brickState);
+            }
+        }
+        // Update game status
+        update.p1Score = vsMode.getScoreManagerP1().getScore();
+        update.p2Score = vsMode.getScoreManagerP2().getScore();
+        update.roundTimer = vsMode.getRoundTimer();
+        update.currentRound = vsMode.getCurrentRound();
+        update.isGameOver = vsMode.getIsGameOver();
         // ...
         server.sendToAllTCP(update);
     }
@@ -169,11 +202,12 @@ public class GameServer {
     private void handlePlayerInput(Connection connection, NetworkProtocol.PlayerInput input) {
         if (!gameStarted || mode == null)
             return;
+        VsMode vsMode = (VsMode)mode;
 
         int pNumber = playerConnections.get(connection);
-        Paddle paddle = (pNumber == 1) ? mode.getPaddle1() : mode.getPaddle2();
-        if (paddle == null)
-            return;
+
+        Paddle paddle = (pNumber == 1) ? vsMode.getPaddle1() : vsMode.getPaddle2();
+        if (paddle == null) return;
 
         switch (input.inputType) {
             case MOVE_LEFT:
@@ -183,7 +217,7 @@ public class GameServer {
                 paddle.moveRight();
                 break;
             case LAUNCH_BALL:
-                mode.launchBall();
+                vsMode.launchBall(pNumber);
                 break;
         }
     }
@@ -224,13 +258,6 @@ public class GameServer {
         System.out.println("Player " +  playerNumber + "(" + request.playerName + ")" + " connected");
 
         broadcastLobbyUpdate();
-        // Send message for other client.
-//        String message = "PLAYER_CONNECTED:" + playerNumber;
-//        for (Connection c : playerConnections.keySet()) {
-//            if (c != connection) {
-//                c.sendTCP(message);
-//            }
-//        }
     }
 
     private void broadcastMessage(String message) {
