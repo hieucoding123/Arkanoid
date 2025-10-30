@@ -70,6 +70,26 @@ public class BricksMap {
                             i, j,
                             color,
                             TextureManager.brick2HIT));
+                    } else if (color == 31) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            1,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick1HIT));
+                        bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
+                    } else if (color == 32) {
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            2,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick2HIT));
+                        bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
                     }
                 }
             }
