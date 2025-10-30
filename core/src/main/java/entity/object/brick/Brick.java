@@ -107,4 +107,16 @@ public class Brick extends GameObject {
     public boolean isUnbreak() {
         return this.unbreak;
     }
+
+    public void clearUnbreak() {
+        if (this.unbreak) {
+            this.unbreak = false;
+
+            if (this.hitPoints >= 2) {
+                this.texture = TextureManager.brick2HIT;
+            } else {
+                this.texture = TextureManager.brick1HIT;
+            }
+        }
+    }
 }

@@ -173,6 +173,14 @@ public class Ball extends MovableObject {
         }
     }
 
+    public void clearEffects() {
+        this.BigEnd = 0;
+        this.SlowEnd = 0;
+        this.FastEnd = 0;
+        this.setScale(this.baseScale, this.baseScale);
+        this.setSpeed(originalspeed * 60f);
+    }
+
     public boolean isBig() {
         if (System.currentTimeMillis() <= BigEnd) {
             return true;

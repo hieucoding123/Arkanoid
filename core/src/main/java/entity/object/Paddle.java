@@ -52,6 +52,12 @@ public class Paddle extends MovableObject {
         return expandEnd -  System.currentTimeMillis();
     }
 
+    public void clearEffects() {
+        this.expandEnd = 0;
+        this.StunEnd = 0;
+        this.setScale(1.0f, 1.0f);
+    }
+
     public void moveRight() {
         if (isStunned()) {
             return;

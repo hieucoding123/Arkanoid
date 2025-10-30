@@ -14,6 +14,7 @@ public class EffectFactory {
                                           double shield,
                                           double unbreak,
                                           double radom,
+                                          double delete,
                                           double stunpaddle,
                                           double bigball,
                                           double slowball,
@@ -22,12 +23,15 @@ public class EffectFactory {
         double chance = rand.nextDouble();
 
         if (chance <= expand) {
-            return new RandomEffect(brick.getX(), brick.getY(), -1);
+            return new ExpandEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= radom) {
             return new RandomEffect(brick.getX(), brick.getY(), -1);
 
-        }  else if (chance <= shield) {
+        }  else if (chance <= delete) {
+            return new RemoveEffect(brick.getX(), brick.getY(), -1);
+
+        } else if (chance <= shield) {
             return new ShieldEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= unbreak) {

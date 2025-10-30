@@ -26,6 +26,7 @@ public class TextureManager {
     public static Texture StunPaddleTexture;
     public static Texture UnbreakBrickTexture;
     public static Texture RandomEffectTexture;
+    public static Texture DeleteEffectTexture;
     /**
      * Load textures.
      */
@@ -51,6 +52,7 @@ public class TextureManager {
         StunPaddleTexture = new Texture("images/e_stun.png");
         UnbreakBrickTexture = new Texture("images/e_bricked.png");
         RandomEffectTexture = new Texture("images/e_random.png");
+        DeleteEffectTexture = new Texture("images/e_removeeffect.png");
     }
 
     /**
@@ -76,5 +78,6 @@ public class TextureManager {
         StunPaddleTexture.dispose();
         UnbreakBrickTexture.dispose();
         RandomEffectTexture.dispose();
+        DeleteEffectTexture.dispose();
     }
 }
