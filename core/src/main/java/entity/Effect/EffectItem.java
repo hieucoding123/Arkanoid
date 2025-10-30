@@ -2,17 +2,18 @@ package entity.Effect;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Ball;
 import entity.object.Paddle;
-import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
 public abstract class EffectItem extends MovableObject {
+
     private static ArrayList<EffectItem> items = new ArrayList<EffectItem>();
+
+    protected Ball triggeringBall = null;
 
     public EffectItem(float x, float y, float dy, Texture texture) {
         super(x, y, texture);
@@ -26,6 +27,7 @@ public abstract class EffectItem extends MovableObject {
         this.setVelocity(0, dy * 60f);
         items.add(this);
     }
+
     /**
      * Apply effect.
      */
@@ -53,6 +55,22 @@ public abstract class EffectItem extends MovableObject {
         items.removeIf(EffectItem::isDestroyed);
     }
 
+    public static void moveItems(float delta) {
+        ArrayList<EffectItem> items_copy = new ArrayList<EffectItem>(items);
+        for (EffectItem effectItem : items_copy) {
+            effectItem.update(delta);
+        }
+    }
+
+    public static void effectCollision(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        ArrayList<EffectItem> items_copy = new ArrayList<EffectItem>(items);
+        for (EffectItem effectItem : items_copy) {
+            if (paddle.checkCollision(effectItem)) {
+                effectItem.applyEffect(paddle, balls, bricksMap);
+            }
+        }
+        items.removeIf(EffectItem::isDestroyed);
+    }
     /**
      * Draw all effect items on game screen.
      * @param batch SpriteBatch object

@@ -7,6 +7,7 @@ public abstract class MovableObject extends GameObject {
     protected float dx;
     protected float dy;
     public float speed;
+
     /**
      * Constructor for MoveableObject.
      * @param x x coordinate

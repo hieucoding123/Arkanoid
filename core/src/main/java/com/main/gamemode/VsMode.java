@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
+import entity.Effect.ShieldEffect;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
@@ -18,7 +19,7 @@ import entity.object.brick.BricksMap;
 import java.util.ArrayList;
 
 public class VsMode extends GameMode {
-    private static final float ROUND_DURATION = 30.0f;
+    private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
     //private static final double VS_POINT_VALUE = 100.0;
 
@@ -26,7 +27,7 @@ public class VsMode extends GameMode {
     private Player player2;
     private Paddle paddle1;
     private Paddle paddle2;
-//    private EffectFactory effectFactory;
+    private EffectFactory effectFactory;
     private GameScreen gameScreen;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
@@ -55,7 +56,7 @@ public class VsMode extends GameMode {
         this.gameScreen = gameScreen;
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
-//        this.effectFactory  = new EffectFactory();
+        this.effectFactory  = new EffectFactory();
         balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();
@@ -88,15 +89,18 @@ public class VsMode extends GameMode {
     }
 
     public void startRound(int roundNum) {
+        System.out.println("p1: " + roundsWonP1);
+        System.out.println("p2: " + roundsWonP2);
         this.currentRound = roundNum;
         this.currentMap = brickMap.get(currentRound - 1);
 
         this.roundTimer = ROUND_DURATION;
-        //this.isPaused = true;
+        this.isPaused = true;
 
         this.scoreManagerP1.setScore(0.0d);
         this.scoreManagerP2.setScore(0.0d);
 
+        EffectItem.clear();
         resetBalls();
     }
 
@@ -109,20 +113,20 @@ public class VsMode extends GameMode {
         ballP1 = new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
-            10.0f);
-        ballP1.setVelocity(0, 10.0f);
+            5.0f);
+        ballP1.setVelocity(0, 5.0f);
         balls.add(ballP1);
 
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
             paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
-            10.0f);
-        ballP2.setVelocity(0, -10.0f);
+            5.0f);
+        ballP2.setVelocity(0, -5.0f);
         balls.add(ballP2);
     }
 
     private void gameOver() {
-        //isPaused = true;
+        isPaused = true;
         isGameEnded = true;
     }
 
@@ -132,10 +136,10 @@ public class VsMode extends GameMode {
     }
 
     public void endRound() {
-        //isPaused = true;
-        if (scoreManagerP1.getScore() > scoreManagerP2.getScore() || ballP2.isDestroyed()) {
+        isPaused = true;
+        if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
             roundsWonP1++;
-        } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore() || ballP1.isDestroyed()) {
+        } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
             roundsWonP2++;
         }
 
@@ -161,9 +165,9 @@ public class VsMode extends GameMode {
             ballP2.setAngle(-(float)Math.PI / 2f);
         }
 
-//        if (isPaused) {
-//            return;
-//        }
+        if (isPaused) {
+            return;
+        }
 
         if (!flowPaddle1 || !flowPaddle2) {
             roundTimer -= delta;
@@ -176,12 +180,13 @@ public class VsMode extends GameMode {
 
         paddle1.update(delta);
         paddle2.update(delta);
-
-//        EffectItem.updateEffectItems(paddle1, this.balls, delta);
-//        EffectItem.updateEffectItems(paddle2, this.balls, delta);
         currentMap.update(delta);
+        EffectItem.moveItems(delta);
+        EffectItem.effectCollision(paddle1, this.balls, currentMap);
+        EffectItem.effectCollision(paddle2, this.balls, currentMap);
 
         for (Ball ball : balls) {
+            ball.setIn1v1(true);
             ball.update(delta);
 
             if (ball.checkCollision(paddle1)) {
@@ -196,15 +201,29 @@ public class VsMode extends GameMode {
             for (Brick brick : currentMap.getBricks()) {
                 if (ball.checkCollision(brick)) {
                     brick.takeHit();
-//                    if (ball.isBig()) {
-//                        brick.setHitPoints(0);
-//                    }
+                    if (ball.isBig()) {
+                        brick.setHitPoints(0);
+                    }
                     if (brick.gethitPoints() == 0) {
-//                        Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
-//                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, relevantPaddle, ball);
-//                        if (newEffectItem != null) {
-//                            EffectItem.addEffectItem(newEffectItem);
-//                        }
+                        //Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
+                        EffectItem newEffectItem = null;
+                        if (ball.getLastHitBy() == 1) {
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                                0, 0, 0, 0, 0, 1, 0, 0, 0);
+                            if (newEffectItem != null) {
+                                newEffectItem.setVelocity(0, -60f);
+                            }
+                        } else if (ball.getLastHitBy() == 2){
+                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                                0, 0, 0, 0, 0, 1, 0, 0, 0);
+                            if (newEffectItem != null) {
+                                newEffectItem.setVelocity(0, 60f);
+                            }
+
+                        }
+                        if (newEffectItem != null) {
+                           EffectItem.addEffectItem(newEffectItem);
+                       }
 
                         if (ball.getLastHitBy() == 1) {
                             scoreManagerP1.comboScore(brick);
@@ -240,7 +259,7 @@ public class VsMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if (currentMap.getSize() == 0 || ballP1.isDestroyed() || ballP2.isDestroyed()) {
+        if (currentMap.getSize() == 0 || (ballP1.isDestroyed() && ballP2.isDestroyed())) {
             endRound();
         }
     }
@@ -255,7 +274,11 @@ public class VsMode extends GameMode {
     @Override
     public void handleInput() {
         if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            //isPaused = false;
+            isPaused = false;
+            return;
+        }
+
+        if (isPaused) {
             return;
         }
 
@@ -300,8 +323,20 @@ public class VsMode extends GameMode {
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
-//        EffectItem.drawEffectItems(sp);
+        EffectItem.drawEffectItems(sp);
+        if (paddle1.hasShield()) {
+            sp.draw(TextureManager.lineTexture,
+                Game.padding_left_right, 0,
+                Game.SCREEN_WIDTH - 2 * Game.padding_left_right,
+                5);
+        }
 
+        if (paddle2.hasShield()) {
+            sp.draw(TextureManager.lineTexture,
+                Game.padding_left_right, Game.padding_top - 5,
+                Game.SCREEN_WIDTH - 2 * Game.padding_left_right,
+                5);
+        }
         if (flowPaddle1) {
             ballP1.draw(sp);
         }
@@ -326,4 +361,5 @@ public class VsMode extends GameMode {
     public void launchBall() {
         // DO NOTHING.
     }
+
 }

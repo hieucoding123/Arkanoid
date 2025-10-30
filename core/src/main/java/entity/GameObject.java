@@ -15,7 +15,6 @@ public abstract class GameObject {
     private boolean isDestroyed;
 
     protected Texture texture;
-
     /**
      * Initialize game object.
      * @param x x coordinate of the object

@@ -8,12 +8,29 @@ public class Paddle extends MovableObject {
     private long expandEnd = 0;
     private long StunEnd = 0;
 
+    private boolean shieldActive = false;
+    private float shieldTimer = 0;
+    private static final float SHIELD_DURATION = 10.0f;
+
     public void setFlipped(boolean flipped) {
         this.isFlipped = flipped;
     }
 
     public boolean isFlipped() {
         return isFlipped;
+    }
+
+    public void activateShield() {
+        this.shieldActive = true;
+        this.shieldTimer = SHIELD_DURATION;
+    }
+
+    public void setShieldActive(boolean shieldActive) {
+        this.shieldActive = shieldActive;
+    }
+
+    public boolean hasShield() {
+        return this.shieldActive;
     }
 
     public Paddle(float x, float y, Texture texture) {
@@ -46,6 +63,13 @@ public class Paddle extends MovableObject {
             this.setScale(1.0f, 1.0f);
             this.expandEnd = 0;
         }
+
+        if (shieldActive) {
+            shieldTimer -= delta;
+            if (shieldTimer <= 0) {
+                this.setShieldActive(false);
+            }
+        }
     }
 
     public long getTimeExpandEffect() {
@@ -71,4 +95,6 @@ public class Paddle extends MovableObject {
             x = Game.padding_left_right;
         }
     }
+
+
 }

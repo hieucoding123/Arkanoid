@@ -12,11 +12,16 @@ public class ThreeBallsEffect extends EffectItem {
 
     public ThreeBallsEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.threeBallsTextures);
+        this.triggeringBall = null;
     }
 
 //    public ThreeBallsEffect(float x, float y, float dy, float scale) {
 //        super(x, y, dy, scale, TextureManager.threeBallsTextures);
 //    }
+    public ThreeBallsEffect(float x, float y, float dy, Ball triggeringBall) {
+        super(x, y, dy, TextureManager.threeBallsTextures);
+        this.triggeringBall = triggeringBall;
+    }
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
@@ -24,23 +29,33 @@ public class ThreeBallsEffect extends EffectItem {
             return;
         }
 
-        Ball originalBall = balls.get(0);
+        if (paddle.isFlipped()) {
+            this.setVelocity(0, -this.getDy());
+        }
+        Ball originalBall = null;
+        if (this.triggeringBall != null || balls.contains(this.triggeringBall)) {
+            originalBall = this.triggeringBall;
+        } else {
+            originalBall = balls.get(0);
+        }
         float originalBallAngle = originalBall.getAngle();
 
         if (originalBallAngle < 0) {
             originalBallAngle = -originalBallAngle;
         }
 
-        Ball ball1 = new Ball(originalBall);
-        ball1.setAngle(originalBallAngle + 0.5f);
-        ball1.updateVelocity();
+        if (originalBall != null) {
+            Ball ball1 = new Ball(originalBall);
+            ball1.setAngle(originalBallAngle + 0.5f);
+            ball1.updateVelocity();
 
-        Ball ball2 = new Ball(originalBall);
-        ball2.setAngle(originalBallAngle - 0.5f);
-        ball2.updateVelocity();
+            Ball ball2 = new Ball(originalBall);
+            ball2.setAngle(originalBallAngle - 0.5f);
+            ball2.updateVelocity();
 
-        balls.add(ball1);
-        balls.add(ball2);
+            balls.add(ball1);
+            balls.add(ball2);
+        }
         this.setDestroyed(true);
     }
 }

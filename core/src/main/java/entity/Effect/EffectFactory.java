@@ -37,16 +37,29 @@ public class EffectFactory {
             return new StunPaddleEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= bigball) {
-            return new BigballEffect(brick.getX(), brick.getY(), -1);
-
+            if (ball != null) {
+                return new BigballEffect(brick.getX(), brick.getY(), -1, ball);
+            } else {
+                return new BigballEffect(brick.getX(), brick.getY(), -1);
+            }
         } else if (chance <= slowball) {
+            if (ball != null) {
+                return new SlowBallEffect(brick.getX(), brick.getY(), -1, ball);
+            }
             return new SlowBallEffect(brick.getX(), brick.getY(), -1);
 
         } else if (chance <= fastball) {
-            return new FastBallEffect(brick.getX(), brick.getY(), -1);
-
+            if (ball != null) {
+                return new FastBallEffect(brick.getX(), brick.getY(), -1, ball);
+            } else {
+                return new FastBallEffect(brick.getX(), brick.getY(), -1);
+            }
         } else if (chance <= threeball) {
-            return new ThreeBallsEffect(brick.getX(), brick.getY(), -1);
+            if (ball != null) {
+                return new ThreeBallsEffect(brick.getX(), brick.getY(), -1, ball);
+            } else {
+                return new ThreeBallsEffect(brick.getX(), brick.getY(), -1);
+            }
         }
         return null;
     }

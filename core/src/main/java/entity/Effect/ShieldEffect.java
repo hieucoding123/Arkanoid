@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class ShieldEffect extends EffectItem {
     private static boolean shield = false;
+    private static boolean up = false;
+
     public ShieldEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.shieldTexture);
     }
@@ -17,6 +19,7 @@ public class ShieldEffect extends EffectItem {
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         shield = true;
+        paddle.activateShield();
         this.setDestroyed(true);
     }
 
@@ -26,5 +29,13 @@ public class ShieldEffect extends EffectItem {
 
     public static void setShield() {
         shield = false;
+    }
+
+    public static boolean isUp() {
+        return up;
+    }
+
+    public static void setUp() {
+        up = true;
     }
 }

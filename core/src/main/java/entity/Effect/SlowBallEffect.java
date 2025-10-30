@@ -13,14 +13,28 @@ public class SlowBallEffect extends EffectItem {
 
     public SlowBallEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.SlowBallTexture);
+        this.triggeringBall = null;
+    }
+
+    public SlowBallEffect(float x, float y, float dy, Ball triggeringBall) {
+        super(x, y, dy, TextureManager.SlowBallTexture);
+        this.triggeringBall = triggeringBall;
     }
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
-        // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
-        for (Ball ball : balls) {
-            ball.activateSlow(EFFECT_DURATION);
+        if (paddle.isFlipped()) {
+            this.setVelocity(0, -this.getDy());
         }
+
+        if (this.triggeringBall != null) {
+            this.triggeringBall.activateSlow(EFFECT_DURATION);
+        } else {
+            for (Ball ball : balls) {
+                ball.activateSlow(EFFECT_DURATION);
+            }
+        }
+
         this.setDestroyed(true);
     }
 

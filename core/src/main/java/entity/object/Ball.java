@@ -16,6 +16,7 @@ public class Ball extends MovableObject {
 
     private float baseScale;
 
+    private boolean in1v1 = false;
     /**
      * Constructor for ball.
      * @param x x coordinate of ball
@@ -50,6 +51,14 @@ public class Ball extends MovableObject {
         if (other.SlowEnd > System.currentTimeMillis()) {
             this.SlowEnd = other.SlowEnd;
         }
+    }
+
+    public boolean isIn1v1() {
+        return this.in1v1;
+    }
+
+    public void setIn1v1(boolean in1v1) {
+        this.in1v1 = in1v1;
     }
 
     private void setRandomAngle() {
@@ -104,7 +113,16 @@ public class Ball extends MovableObject {
             this.reverseX();
         }
         if (this.getY() + this.getHeight() >= Game.padding_top) {
-            this.reverseY();
+            if (isIn1v1()) {
+                if (ShieldEffect.isShield()) {
+                    ShieldEffect.setShield();
+                    this.reverseY();
+                } else {
+                    this.setDestroyed(true);
+                }
+            } else {
+                this.reverseY();
+            }
         }
         if (this.getY() <= 0) {
             if (ShieldEffect.isShield()) {
