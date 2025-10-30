@@ -100,6 +100,8 @@ public class VsMode extends GameMode {
         this.scoreManagerP1.setScore(0.0d);
         this.scoreManagerP2.setScore(0.0d);
 
+        paddle1.resetEffect();
+        paddle2.resetEffect();
         EffectItem.clear();
         resetBalls();
     }
@@ -212,13 +214,13 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                                0.5, 0.2, 0, 0, 0, 0, 0, 0, 0, 0.2);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                                0.5, 0.2, 0, 0, 0, 0, 0, 0, 0, 0.2);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }
@@ -262,7 +264,7 @@ public class VsMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if (currentMap.getSize() == 0 || (ballP1.isDestroyed() && ballP2.isDestroyed())) {
+        if (currentMap.getSize() == 0 || balls.isEmpty()) {
             endRound();
         }
     }

@@ -135,4 +135,14 @@ public class Paddle extends MovableObject {
         }
         return 0;
     }
+
+    public void resetEffect() {
+        this.expandEnd = 0;
+        this.setScale(1.0f, 1.0f);
+
+        this.shieldActive = false;
+        this.shieldTimer = 0;
+
+        this.StunEnd = 0;
+    }
 }
