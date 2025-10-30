@@ -62,6 +62,7 @@ public class LeaderBoard extends UserInterface {
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 showLeaderBoard = "INFINITE";
                 scrollableContent.clear();
                 infiModeButton.setColor(Color.YELLOW);
@@ -74,6 +75,7 @@ public class LeaderBoard extends UserInterface {
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 showLeaderBoard = "LEVELS";
                 scrollableContent.clear();
                 levelsModeButton.setColor(Color.YELLOW);
@@ -86,6 +88,7 @@ public class LeaderBoard extends UserInterface {
         coopModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 showLeaderBoard = "COOP";
                 scrollableContent.clear();
                 coopModeButton.setColor(Color.YELLOW);
@@ -118,6 +121,7 @@ public class LeaderBoard extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_back.play(1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
         });

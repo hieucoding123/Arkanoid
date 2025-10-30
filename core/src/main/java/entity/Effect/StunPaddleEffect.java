@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import entity.object.Ball;
 import entity.TextureManager;
 import entity.object.Paddle;
@@ -16,6 +17,7 @@ public class StunPaddleEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.sfx_frozen.play();
         if (paddle != null) {
             paddle.activateStun(EFFECT_DURATION);
         }

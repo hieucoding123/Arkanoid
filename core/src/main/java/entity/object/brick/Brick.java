@@ -79,7 +79,7 @@ public class Brick extends MovableObject {
         if (unbreak) {
             return;
         }
-
+        com.main.Game.sfx_pop.play();
         this.hitPoints--;
         if (this.hitPoints == 1) {
             this.texture = TextureManager.brick1HIT;
@@ -108,6 +108,7 @@ public class Brick extends MovableObject {
     //Handle explosion
     public void startExplosion() {
         if (!isExploding && !isDestroyed()) {
+            com.main.Game.sfx_explode.play();
             this.isExploding = true;
             this.explosionTimer = EXPLOSION_DURATION;
             this.setHitPoints(0);

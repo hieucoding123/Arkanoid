@@ -82,6 +82,7 @@ public class ModeMenu extends UserInterface {
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 main.setGameState(GameState.INFI_MODE);
             }
         });
@@ -91,7 +92,8 @@ public class ModeMenu extends UserInterface {
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                main.setLevelSelectionMode(false); // This sets single-player mode
+                com.main.Game.sfx_click.play(0.8f);
+                main.setLevelSelectionMode(false);
             }
         });
 
@@ -100,6 +102,7 @@ public class ModeMenu extends UserInterface {
         coopModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 main.setLevelSelectionMode(true);
             }
         });
@@ -109,6 +112,7 @@ public class ModeMenu extends UserInterface {
         vsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 //System.out.println("VS MODE");
                 main.setGameState(GameState.VS_MODE); // You can uncomment this when ready
             }
@@ -132,6 +136,7 @@ public class ModeMenu extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_back.play(1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
         });

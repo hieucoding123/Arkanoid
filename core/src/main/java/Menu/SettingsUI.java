@@ -104,6 +104,7 @@ public class SettingsUI extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_back.play(1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
         });

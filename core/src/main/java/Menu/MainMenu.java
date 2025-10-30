@@ -89,6 +89,7 @@ public class MainMenu extends UserInterface {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 main.setGameState(GameState.SELECT_MODE);
             }
         });
@@ -98,6 +99,7 @@ public class MainMenu extends UserInterface {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 main.setGameState(GameState.SETTINGS);
                 System.out.println("Settings Clicked");
             }
@@ -113,6 +115,7 @@ public class MainMenu extends UserInterface {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 Gdx.app.exit();
             }
         });
@@ -122,6 +125,7 @@ public class MainMenu extends UserInterface {
         lbButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_click.play(0.8f);
                 main.setGameState(GameState.LEADER_BOARD);
             }
         });

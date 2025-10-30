@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import entity.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
@@ -17,6 +18,7 @@ public class UnbreakBrickEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.sfx_bricked.play();
         ArrayList<Brick> bricks = new ArrayList<>();
         if (bricksMap != null && !bricksMap.getBricks().isEmpty()) {
             for (Brick brick : bricksMap.getBricks()) {

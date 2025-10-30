@@ -110,9 +110,11 @@ public class Ball extends MovableObject {
         if (this.getX() <= Game.padding_left_right
             || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
             this.reverseX();
+            Game.sfx_touchpaddle.play(1.4f);
         }
         if (this.getY() + this.getHeight() >= Game.padding_top) {
             this.reverseY();
+            Game.sfx_touchpaddle.play(1.4f);
         }
         if (this.getY() <= 0) {
             if (ShieldEffect.isShield()) {
@@ -151,6 +153,7 @@ public class Ball extends MovableObject {
                 this.updateVelocity();
 
                 this.setY(paddle.getY() - this.getHeight());
+                Game.sfx_touchpaddle.play(1.4f);
             }
         } else {
             if (this.getDy() < 0 &&
@@ -169,6 +172,7 @@ public class Ball extends MovableObject {
                 this.setAngle(newAngle);
                 this.updateVelocity();
                 this.setY(paddle.getY() + paddle.getHeight());
+                Game.sfx_touchpaddle.play(1.4f);
             }
         }
     }
