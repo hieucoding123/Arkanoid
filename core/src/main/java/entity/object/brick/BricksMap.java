@@ -3,29 +3,35 @@ package entity.object.brick;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
 import entity.TextureManager;
-
+import entity.object.DSU;
+import com.main.Game;
+import com.badlogic.gdx.math.Rectangle;
+import java.util.Random;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BricksMap {
     public final int rows = 15;
     public final int cols = 8;
     public static final int xBeginCoord = 90;
     public static final int yBeginCoord = 810;
-    public static final int brickW = 78;
+    public static final int brickW = 77;
     public static final int brickH = 36;
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
-//    private final int[] r = {-1, 1, 0, 0, -1, -1, 1, 1};
-//    private final int[] c = {0, 0, -1, 1, -1, 1, 1, -1};
-
+    private DSU dsu;
+    private Map<Brick, Integer> brick_to_dsu;
+    private Map<Integer, Brick> dsu_to_birck;
+    private ArrayList<Brick> brick_dsu;
+    private Brick[][] brickdsu;
+    private Map<Integer, float[]> dsuVelocities = new HashMap<>();
+    private Random rand = new Random();
+    private static final float DSU_MOVE_SPEED = 1.5f * 60f;
     public final ArrayList<Brick> bricks;
+    public boolean check_dsu = false;
 
     /**
      * Initialize brick map with map file.
@@ -33,6 +39,10 @@ public class BricksMap {
      */
     public BricksMap(String path) {
         bricks = new ArrayList<>();
+        brick_to_dsu = new HashMap<>();
+        dsu_to_birck = new HashMap<>();
+        brick_dsu = new ArrayList<>();
+        brickdsu = new Brick[rows][cols];
         try {
             InputStream is = getClass().getResourceAsStream(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -41,8 +51,8 @@ public class BricksMap {
                 String[] line = br.readLine().trim().split("\\s+");
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
-                    int radom = (int)(Math.random() * 3);
-                    if (radom == 1 && color != -1) {
+                    int radom = (int)(Math.random() * 10);
+                    if (radom == -1 && color != -1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
@@ -90,12 +100,39 @@ public class BricksMap {
                             color,
                             TextureManager.brick2HIT));
                         bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
+                    } else if (color == 41) {
+                        check_dsu = true;
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            1,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick1HIT));
+                        brick_dsu.add(bricks.get(bricks.size() - 1));
+                        brickdsu[i][j] = bricks.get(bricks.size() - 1);
+                    } else if (color == 42) {
+                        check_dsu = true;
+                        bricks.add(new Brick(
+                            xBeginCoord + j * brickW,
+                            yBeginCoord - i * brickH,
+                            2,
+                            false,
+                            i, j,
+                            color,
+                            TextureManager.brick2HIT));
+                        brick_dsu.add(bricks.get(bricks.size() - 1));
+                        brickdsu[i][j] = bricks.get(bricks.size() - 1);
                     }
                 }
             }
             br.close();
         } catch(IOException e) {
             e.printStackTrace();
+        }
+        if (check_dsu) {
+            buildDsu();
         }
     }
 
@@ -105,6 +142,38 @@ public class BricksMap {
      * @param score Score Manager
      */
     public void update(float delta, ScoreManager score) {
+        if (check_dsu) {
+            if (dsu == null) {
+                buildDsu();
+            }
+            Set<Integer> roots = dsu.get_roots();
+
+            for (int root_id : roots) {
+                float[] velocity = dsuVelocities.get(root_id);
+                if (velocity == null) {
+                    velocity = RandomVelocity(checkRight(root_id), checkLeft(root_id), checkTop(root_id), checkBottom(root_id));
+                    dsuVelocities.put(root_id, velocity);
+                }
+
+                float dx = velocity[0];
+                float dy = velocity[1];
+
+                if (willDsuCollide(root_id, dx, dy, delta)) {
+                    float[] newVelocity = new float[]{-dx, -dy};
+                    dsuVelocities.put(root_id, newVelocity);
+                    dx = newVelocity[0];
+                    dy = newVelocity[1];
+                }
+
+                List<Integer> elementId = dsu.get_elements(root_id);
+                for (int id : elementId) {
+                    Brick brick = dsu_to_birck.get(id);
+                    if (brick != null && !brick.isDestroyed()) {
+                        brick.setVelocity(dx, dy);
+                    }
+                }
+            }
+        }
         Map<Integer, Brick> save_brick = new HashMap<>();
         ArrayList<Brick> bricksNeighbors = new ArrayList<>();
 
@@ -154,6 +223,191 @@ public class BricksMap {
         }
 
         bricks.removeIf(Brick::isDestroyed);
+    }
+
+    public void buildDsu() {
+        brick_dsu.removeIf(Brick::isDestroyed);
+        dsu = new DSU(brick_dsu.size());
+        brick_to_dsu.clear();
+        dsu_to_birck.clear();
+
+        for (int i = 0; i < brick_dsu.size(); i++) {
+            Brick brick = brick_dsu.get(i);
+            brick_to_dsu.put(brick, i);
+            dsu_to_birck.put(i, brick);
+        }
+
+        for (Brick brick : brick_dsu) {
+            int row = brick.getRow();
+            int col = brick.getCol();
+            Integer current = brick_to_dsu.get(brick);
+            if (current == null) {
+                continue;
+            }
+
+            for (int i = 0; i < r.length; i++) {
+                int new_row = row + r[i];
+                int new_col = col + c[i];
+                Brick neighbor = getbrickdsu(new_row, new_col);
+                if (neighbor != null && !neighbor.isDestroyed()) {
+                    if (brick_to_dsu.get(neighbor) != null) {
+                        dsu.set_union(current,  brick_to_dsu.get(neighbor));
+                    }
+                }
+            }
+        }
+
+        Set<Integer> roots = dsu.get_roots();
+        Map<Integer, float[]> old_velocities = new HashMap<>(dsuVelocities);
+        dsuVelocities.clear();
+
+        for (int i : roots) {
+            if (old_velocities.containsKey(i)) {
+                dsuVelocities.put(i, old_velocities.get(i));
+            } else {
+                dsuVelocities.put(i, RandomVelocity(checkRight(i), checkLeft(i), checkTop(i), checkBottom(i)));
+            }
+        }
+    }
+
+    public void onBrickDestroyed(Brick brick) {
+        brickdsu[brick.getRow()][brick.getCol()] = null;
+        buildDsu();
+    }
+
+    public Brick getbrickdsu(int row, int col) {
+        if (row < 0 || row >= rows || col < 0 || col >= cols) {
+            return null;
+        }
+        Brick brick = brickdsu[row][col];
+        if (brick == null || brick.isDestroyed()) {
+            return null;
+        }
+        return brick;
+    }
+
+
+    public float[] RandomVelocity(boolean isRightBlocked, boolean isLeftBlocked, boolean isTopBlocked, boolean isBottomBlocked) {
+        ArrayList<float[]> radom = new ArrayList<>();
+
+        if (!isRightBlocked) radom.add(new float[]{DSU_MOVE_SPEED, 0});
+        if (!isLeftBlocked) radom.add(new float[]{-DSU_MOVE_SPEED, 0});
+        if (!isTopBlocked) radom.add(new float[]{0, DSU_MOVE_SPEED});
+        if (!isBottomBlocked) radom.add(new float[]{0, -DSU_MOVE_SPEED});
+
+        if (radom.isEmpty()) {
+            return new float[]{0, 0};
+        }
+
+        return radom.get(rand.nextInt(radom.size()));
+    }
+
+
+    public boolean checkRight(int root_id) {
+        List<Integer> elementIds = dsu.get_elements(root_id);
+        if (elementIds == null || elementIds.isEmpty()) {
+            return false;
+        }
+        for (int id : elementIds) {
+            Brick brick = dsu_to_birck.get(id);
+            if (brick == null || brick.isDestroyed()) {
+                continue;
+            }
+            if (brick.getX() + brick.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkLeft(int root_id) {
+        List<Integer> elementIds = dsu.get_elements(root_id);
+        if (elementIds == null || elementIds.isEmpty()) {
+            return false;
+        }
+        for (int id : elementIds) {
+            Brick brick = dsu_to_birck.get(id);
+            if (brick == null || brick.isDestroyed()) {
+                continue;
+            }
+            if (brick.getX() <= Game.padding_left_right) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTop(int root_id) {
+        List<Integer> elementIds = dsu.get_elements(root_id);
+        if (elementIds == null || elementIds.isEmpty()) {
+            return false;
+        }
+        for (int id : elementIds) {
+            Brick brick = dsu_to_birck.get(id);
+            if (brick == null || brick.isDestroyed()) {
+                continue;
+            }
+            if (brick.getY() + brick.getHeight() >= Game.padding_top) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkBottom(int root_id) {
+        List<Integer> elementIds = dsu.get_elements(root_id);
+        if (elementIds == null || elementIds.isEmpty()) {
+            return false;
+        }
+        for (int id : elementIds) {
+            Brick brick = dsu_to_birck.get(id);
+            if (brick == null || brick.isDestroyed()) {
+                continue;
+            }
+            if (brick.getY() <= yBeginCoord - brickH * (rows - 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean willDsuCollide(int rootId, float dx, float dy, float delta) {
+        List<Integer> elementIds = dsu.get_elements(rootId);
+
+        for (int id : elementIds) {
+            Brick brick = dsu_to_birck.get(id);
+            if (brick == null || brick.isDestroyed()) continue;
+
+            float nextX = brick.getX() + dx * delta;
+            float nextY = brick.getY() + dy * delta;
+            float width = brick.getWidth();
+            float height = brick.getHeight();
+
+            if (nextX < Game.padding_left_right || nextX + width > Game.SCREEN_WIDTH - Game.padding_left_right) {
+                return true;
+            }
+            if (nextY + height > Game.padding_top || nextY < yBeginCoord - brickH * (rows - 1)) {
+                return true;
+            }
+
+            Rectangle another = new Rectangle(nextX, nextY, width, height);
+
+            for (Brick otherBrick : brick_dsu) {
+                if (otherBrick == null || otherBrick.isDestroyed() || otherBrick == brick) {
+                    continue;
+                }
+
+                Integer otherId = brick_to_dsu.get(otherBrick);
+                if (otherId != null && dsu.find(id) == dsu.find(otherId)) {
+                    continue;
+                }
+
+                if (another.overlaps(otherBrick.getBounds())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     /**
      * Draw bricks on game screen.

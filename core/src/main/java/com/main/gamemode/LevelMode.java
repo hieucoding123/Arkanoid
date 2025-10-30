@@ -100,6 +100,7 @@ public class LevelMode extends GameMode {
                     brick.takeHit();
                     if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
+                        currentMap.onBrickDestroyed(brick);
                         EffectItem newEffectItem = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
