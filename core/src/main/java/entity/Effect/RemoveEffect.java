@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.TextureManager;
@@ -18,6 +19,7 @@ public class RemoveEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_cleareffect,0.8f);
         EffectItem.clear();
         if (paddle != null) {
             paddle.clearEffects();

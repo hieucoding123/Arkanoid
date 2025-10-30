@@ -2,6 +2,7 @@ package entity.object.brick;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.Game;
 import entity.MovableObject;
 import entity.TextureManager;
 
@@ -79,7 +80,7 @@ public class Brick extends MovableObject {
         if (unbreak) {
             return;
         }
-
+        com.main.Game.sfx_pop.play();
         this.hitPoints--;
         if (this.hitPoints == 1) {
             this.texture = TextureManager.brick1HIT;
@@ -108,6 +109,7 @@ public class Brick extends MovableObject {
     //Handle explosion
     public void startExplosion() {
         if (!isExploding && !isDestroyed()) {
+            Game.playSfx(Game.sfx_explode,0.8f);
             this.isExploding = true;
             this.explosionTimer = EXPLOSION_DURATION;
             this.setHitPoints(0);

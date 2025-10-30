@@ -1,4 +1,4 @@
-package ui;
+package Menu;
 
 import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
@@ -89,6 +90,7 @@ public class MainMenu extends UserInterface {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 main.setGameState(GameState.SELECT_MODE);
             }
         });
@@ -98,6 +100,7 @@ public class MainMenu extends UserInterface {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 main.setGameState(GameState.SETTINGS);
                 System.out.println("Settings Clicked");
             }
@@ -113,6 +116,7 @@ public class MainMenu extends UserInterface {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 Gdx.app.exit();
             }
         });
@@ -122,6 +126,7 @@ public class MainMenu extends UserInterface {
         lbButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 main.setGameState(GameState.LEADER_BOARD);
             }
         });

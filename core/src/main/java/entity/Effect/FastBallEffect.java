@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
@@ -18,6 +19,7 @@ public class FastBallEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_fastball,0.8f);
         // Áp dụng hiệu ứng cho TẤT CẢ các quả bóng
         for (Ball ball : balls) {
             ball.activateFast(EFFECT_DURATION);

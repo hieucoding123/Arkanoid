@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
@@ -20,6 +21,7 @@ public class ThreeBallsEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_tripleball,0.8f);
         if (this.isDestroyed() || balls.isEmpty()) {
             return;
         }

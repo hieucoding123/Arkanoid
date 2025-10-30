@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.TextureManager;
@@ -24,6 +25,7 @@ public class RandomEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_random,0.8f);
         int RadomNumber = rand.nextInt(8) + 1;
 
         float x = this.getX();

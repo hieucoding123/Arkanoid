@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 //import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
@@ -62,6 +63,7 @@ public class LeaderBoard extends UserInterface {
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 showLeaderBoard = "INFINITE";
                 scrollableContent.clear();
                 infiModeButton.setColor(Color.YELLOW);
@@ -74,6 +76,7 @@ public class LeaderBoard extends UserInterface {
         levelsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 showLeaderBoard = "LEVELS";
                 scrollableContent.clear();
                 levelsModeButton.setColor(Color.YELLOW);
@@ -86,6 +89,7 @@ public class LeaderBoard extends UserInterface {
         coopModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_click,0.8f);
                 showLeaderBoard = "COOP";
                 scrollableContent.clear();
                 coopModeButton.setColor(Color.YELLOW);
@@ -118,6 +122,7 @@ public class LeaderBoard extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                com.main.Game.sfx_back.play(1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
         });

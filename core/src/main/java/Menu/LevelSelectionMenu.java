@@ -12,11 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 import table.LevelDataHandler;
-import ui.MainMenu;
+import Menu.MainMenu;
 
 import static com.main.GameState.SELECT_MODE;
 
@@ -92,6 +93,7 @@ public class LevelSelectionMenu extends UserInterface {
             levelButton1.setColor(DEFAULT_COLOR);
             levelButton1.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
+                    Game.playSfx(Game.sfx_click,0.8f);
                     main.setGameState(levels[0]);
                 }
                 @Override
@@ -116,6 +118,7 @@ public class LevelSelectionMenu extends UserInterface {
             levelButton2.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    Game.playSfx(Game.sfx_click,0.8f);
                     main.setGameState(levels[1]);
                 }
                 @Override
@@ -140,6 +143,7 @@ public class LevelSelectionMenu extends UserInterface {
             levelButton3.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    Game.playSfx(Game.sfx_click,0.8f);
                     main.setGameState(levels[2]);
                 }
                 @Override
@@ -168,6 +172,7 @@ public class LevelSelectionMenu extends UserInterface {
             levelButton4.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    Game.playSfx(Game.sfx_click,0.8f);
                     main.setGameState(levels[3]);
                 }
                 @Override
@@ -192,6 +197,7 @@ public class LevelSelectionMenu extends UserInterface {
             levelButton5.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    Game.playSfx(Game.sfx_click,0.8f);
                     main.setGameState(levels[4]);
                 }
                 @Override
@@ -215,6 +221,7 @@ public class LevelSelectionMenu extends UserInterface {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Game.playSfx(Game.sfx_back,1.0f);
                 main.setGameState(GameState.SELECT_MODE);
             }
         });

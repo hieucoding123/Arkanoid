@@ -18,6 +18,7 @@ public class BigballEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_bigball,0.8f);
         for (Ball ball : balls) {
             ball.activateBig(EFFECT_DURATION);
             //Left wall

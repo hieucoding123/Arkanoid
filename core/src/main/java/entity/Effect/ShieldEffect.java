@@ -1,5 +1,6 @@
 package entity.Effect;
 
+import com.main.Game;
 import com.main.gamemode.GameMode;
 import entity.TextureManager;
 import entity.object.Ball;
@@ -16,6 +17,7 @@ public class ShieldEffect extends EffectItem {
 
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
+        Game.playSfx(Game.sfx_shield,0.8f);
         shield = true;
         this.setDestroyed(true);
     }
