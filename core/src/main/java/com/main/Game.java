@@ -3,8 +3,11 @@ package com.main;
 import Menu.*;
 import Menu.leaderboard.LeaderBoard;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.main.gamemode.*;
@@ -16,6 +19,15 @@ import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
+import Menu.ModeMenu;
+import Menu.SinglePlayerLevelSelectionMenu;
+import com.main.gamemode.GameMode;
+import com.main.gamemode.InfiniteMode;
+import com.main.gamemode.VsMode;
+import com.main.gamemode.CoopMode;
+import Menu.PauseUI;
+import Menu.SettingsUI;
+import Menu.MainMenu;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -33,6 +45,10 @@ public class Game {
     private ScoreManager scoreManager;
     private ScoreManager scoreManagerP2;
     private GameScreen gameScreen;
+    private PauseUI pauseUI;
+    private ShapeRenderer shapeRenderer;
+    private com.badlogic.gdx.InputProcessor previous;
+    private boolean isPaused = false;
 
     GameMode gameMode;
 
@@ -96,7 +112,8 @@ public class Game {
         padding_left_right = BricksMap.xBeginCoord;
         padding_top = BricksMap.yBeginCoord + BricksMap.brickH;
         delta = Gdx.graphics.getDeltaTime();
-
+        shapeRenderer = new ShapeRenderer();
+        pauseUI = new PauseUI(spriteBatch, this);
         TextureManager.loadTextures();
 
         // Load and play audio
@@ -159,6 +176,19 @@ public class Game {
         }
     }
 
+    public void ContinueGame() {
+        isPaused = !isPaused;
+        if (isPaused) {
+            playSfx(sfx_paused);
+            previous = Gdx.input.getInputProcessor();
+            Gdx.input.setInputProcessor(pauseUI.getStage());
+        } else {
+            // Đang UNPAUSE
+            Gdx.input.setInputProcessor(previous);
+            previous= null;
+        }
+    }
+
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
 
@@ -191,14 +221,28 @@ public class Game {
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
                     gameScreen.render();
+                    if (isPaused) {
+                        Gdx.gl.glEnable(GL20.GL_BLEND);
+                        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+                        shapeRenderer.setProjectionMatrix(camera.combined);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRenderer.setColor(0, 0, 0, 0.5f);
+                        shapeRenderer.rect(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+                        shapeRenderer.end();
+
+                        Gdx.gl.glDisable(GL20.GL_BLEND);
+                        pauseUI.render();
+                    }
                 }
                 break;
         }
     }
 
     public void handleInput() {
-        if (gameMode != null)
+        if (gameMode != null && !isPaused) {
             gameMode.handleInput();
+        }
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.F11)) {
             if (Gdx.graphics.isFullscreen()) {
                 // Nếu đang toàn màn hình, chuyển về chế độ cửa sổ (800x1000)
@@ -207,6 +251,21 @@ public class Game {
                 // Nếu đang ở cửa sổ, chuyển sang toàn màn hình
                 Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
             }
+        }
+        switch (gameState) {
+            case INFI_MODE:
+            case VS_MODE:
+            case LEVEL1:
+            case LEVEL2:
+            case LEVEL3:
+            case LEVEL4:
+            case LEVEL5:
+                if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+                    ContinueGame();
+                }
+                break;
+            default:
+                break;
         }
         //Debug
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.R)) {
@@ -224,6 +283,10 @@ public class Game {
     }
 
     public void update() {
+        if (isPaused) {
+            pauseUI.act(this.delta);
+            return;
+        }
         switch (gameState) {
             case INFI_MODE:
                 gameMode.update(this.delta);
@@ -282,7 +345,12 @@ public class Game {
         ui.dispose();
         gameScreen.dispose();
         TextureManager.dispose();
-
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
+        if (pauseUI != null) {
+            pauseUI.dispose();
+        }
         bgm.dispose();
         sfx_bigball.dispose();
         sfx_bigpaddle.dispose();
