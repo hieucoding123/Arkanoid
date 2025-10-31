@@ -30,5 +30,30 @@
       hScroll: scrollbar-bg,
       hScrollKnob: scrollbar-knob
     }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+    default: {
+      font: default-font,
+      fontColor: white,
+      up: buttonup,
+      down: buttondown,
+      over: buttonhover,
+      focused: buttonhover
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: {
+      font: default-font,
+      fontColor: white
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+    default: {
+      font: default-font,
+      fontColorUnselected: white,
+      fontColorSelected: white,
+      selection: selection,
+      background: textfield-background
+    }
   }
 }

@@ -14,5 +14,9 @@ public enum GameState {
     LEVEL5,
     VS_MODE,
     PLAYING,
-    SETTINGS
+    SETTINGS,
+
+    NETWORK_CONNECTION_MENU,
+    NETWORK_LOBBY,
+    NETWORK_VS
 }

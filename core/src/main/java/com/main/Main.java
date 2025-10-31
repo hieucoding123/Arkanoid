@@ -29,6 +29,10 @@ public class Main extends ApplicationAdapter {
         game.setGameState(newGameState);
     }
 
+    public void startNetworkGame(String severIP, boolean isHost) {
+        game.startNetworkGame(severIP, isHost);
+    }
+
     public void setLevelSelectionMode(boolean isCoop) {
         game.setLevelSelectionMode(isCoop);
     }
