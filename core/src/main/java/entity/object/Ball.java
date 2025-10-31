@@ -147,10 +147,12 @@ public class Ball extends MovableObject {
             this.setX(Game.padding_left_right); // Đẩy bóng ra
             this.reverseX();
             collided = true;
+            angleSpeedAdjustment("VERTICAL");
         } else if (this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
             this.setX(Game.SCREEN_WIDTH - Game.padding_left_right - this.getWidth()); // Đẩy bóng ra
             this.reverseX();
             collided = true;
+            angleSpeedAdjustment("VERTICAL");
         }
 
         // Va chạm tường trên
@@ -158,8 +160,7 @@ public class Ball extends MovableObject {
             this.setY(Game.padding_top - this.getHeight()); // Đẩy bóng ra
             this.reverseY();
             collided = true;
-            // ÁP DỤNG HIỆU ỨNG "PONG" KHI CHẠM TƯỜNG TRÊN
-            angleSpeedAdjustment();
+            angleSpeedAdjustment("HORIZONTAL");
         }
 
         // Va chạm đáy màn hình
@@ -169,6 +170,7 @@ public class Ball extends MovableObject {
                 this.setY(0); // Đẩy bóng ra
                 this.reverseY();
                 collided = true;
+                angleSpeedAdjustment("HORIZONTAL");
             } else {
                 this.setDestroyed(true); // Rớt ra ngoài
             }
@@ -197,6 +199,7 @@ public class Ball extends MovableObject {
 
                 this.setY(paddle.getY() - this.getHeight());
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
+                angleSpeedAdjustment("HORIZONTAL");
             }
         } else {
             if (this.getDy() < 0) {
@@ -211,7 +214,7 @@ public class Ball extends MovableObject {
 //                this.updateVelocity();
                 this.setY(paddle.getY() + paddle.getHeight());
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
-                angleSpeedAdjustment();
+                angleSpeedAdjustment("HORIZONTAL");
             }
         }
     }
@@ -237,6 +240,7 @@ public class Ball extends MovableObject {
             } else {
                 this.setX(this.getX() - overlapX);
             }
+            angleSpeedAdjustment("VERTICAL");
         } else {
             this.reverseY();
             if (vecY > 0) {
@@ -244,21 +248,24 @@ public class Ball extends MovableObject {
             } else {
                 this.setY(this.getY() - overlapY);
             }
+            angleSpeedAdjustment("HORIZONTAL");
         }
 
         return true;
     }
 
-    private void angleSpeedAdjustment() {
-
+    private void angleSpeedAdjustment(String surface) {
         if (SlowEnd > 0 || FastEnd > 0) {
             return;
         }
 
-        float verticalComponent = Math.abs((float)Math.sin(this.angle));
-
-        float speedMultiplier = 1.0f + (1.0f - 0.5f) * (1.0f - verticalComponent);
-
+        float component = 1.0f;
+        if (surface.equals("VERTICAL")) {
+            component = Math.abs((float)Math.cos(this.angle));
+        }else if (surface.equals("HORIZONTAL")) {
+            component = Math.abs((float)Math.sin(this.angle));
+        }
+        float speedMultiplier = 1.0f + (1.0f - 0.5f) * (1.0f - component);
 
         float maxSpeed = (originalspeed * 60f) * 2.0f;
         float newSpeed = (originalspeed * 60f) * speedMultiplier;
@@ -267,7 +274,6 @@ public class Ball extends MovableObject {
         if (newSpeed > this.speed && newSpeed <= maxSpeed) {
             this.setSpeed(newSpeed);
         } else if (newSpeed < this.speed) {
-
             this.setSpeed(newSpeed);
         }
     }
