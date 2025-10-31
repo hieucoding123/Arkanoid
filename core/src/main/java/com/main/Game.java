@@ -1,31 +1,24 @@
 package com.main;
 
+import Menu.*;
 import Menu.leaderboard.LeaderBoard;
-import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.main.gamemode.LevelMode;
+import com.main.gamemode.*;
+import com.main.network.GameClient;
+import com.main.network.GameServer;
+import com.main.network.NetworkProtocol;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
 import entity.TextureManager;
-import Menu.ModeMenu;
-import Menu.SinglePlayerLevelSelectionMenu;
-import com.main.gamemode.GameMode;
-import com.main.gamemode.InfiniteMode;
-import com.main.gamemode.VsMode;
-import com.main.gamemode.CoopMode;
-import Menu.SettingsUI;
-import Menu.MainMenu;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import ui.SettingsUI;
-import ui.MainMenu;
 
 public class Game {
     private OrthographicCamera camera;

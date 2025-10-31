@@ -1,12 +1,9 @@
 package com.main.gamemode;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
-import entity.Effect.ShieldEffect;
 import entity.GameScreen;
 import entity.Player;
 import entity.ScoreManager;

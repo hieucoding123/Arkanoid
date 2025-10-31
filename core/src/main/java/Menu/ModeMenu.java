@@ -113,14 +113,6 @@ public class ModeMenu extends UserInterface {
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
                 //System.out.println("VS MODE");
-                main.setGameState(GameState.VS_MODE);
-            }
-        });
-
-        Button networkButton = new Button(ui_skin);
-        networkButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.NETWORK_CONNECTION_MENU);
             }
         });
@@ -136,9 +128,6 @@ public class ModeMenu extends UserInterface {
         buttonTable.row();
 
         buttonTable.add(vsModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
-
-        buttonTable.add(networkButton).width(220).height(72).padBottom(20);
         buttonTable.row();
 
         //Back Button
