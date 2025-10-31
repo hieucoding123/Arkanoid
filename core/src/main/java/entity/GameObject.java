@@ -149,4 +149,8 @@ public abstract class GameObject {
     public boolean isDestroyed() {
         return this.isDestroyed;
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
 }

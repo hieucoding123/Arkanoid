@@ -1,5 +1,6 @@
 package com.main.network;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
@@ -169,7 +170,7 @@ public class NetworkProtocol {
         public float height;
         public int hitPoints;
         public boolean isDestroyed;
-        public int brickType;
+        public boolean isExploding;
 
         public BrickState() {}
     }

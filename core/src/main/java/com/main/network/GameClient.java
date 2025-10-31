@@ -24,7 +24,7 @@ public class GameClient {
 
     public GameClient(GameClientListener listener) {
         this.listener = listener;
-        client = new Client(16384, 8192);
+        client = new Client(131072, 65536);
         NetworkProtocol.register(client);
     }
 

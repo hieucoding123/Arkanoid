@@ -68,7 +68,9 @@ public class Brick extends MovableObject {
 
     @Override
     public void draw(SpriteBatch batch) {
-        if (isDestroyed()) return;
+        if (isDestroyed()) {
+            return;
+        }
         if (isExploding) {
             batch.draw(explosionTexture, getX(), getY(), getWidth(), getHeight());
         } else {
@@ -156,5 +158,9 @@ public class Brick extends MovableObject {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public boolean isExploding() {
+        return this.isExploding;
     }
 }

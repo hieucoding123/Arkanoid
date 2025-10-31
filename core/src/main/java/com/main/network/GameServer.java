@@ -28,7 +28,7 @@ public class GameServer {
     private String hostName = "Server";
 
     public GameServer() {
-        server = new Server(16384, 8192);
+        server = new Server(131072, 65536);
         playerConnections = new HashMap<>();
         playersReady = new boolean[2];
         NetworkProtocol.register(server);
@@ -110,6 +110,9 @@ public class GameServer {
                 brickState.width = brick.getWidth();
                 brickState.height = brick.getHeight();
                 brickState.isDestroyed = brick.isDestroyed();
+                brickState.hitPoints = brick.gethitPoints();
+//                brickState.texture = brick.getTexture();
+                brickState.isExploding = brick.isExploding();
                 update.bricks.add(brickState);
             }
         }

@@ -15,23 +15,16 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NetworkVsMode extends GameMode implements GameClient.GameClientListener {
     private GameClient client;
     private GameScreen gameScreen;
     private ScoreManager scoreManager;
-//    private Paddle paddle1;
-//    private Paddle paddle2;
     private int mPNumber;
     private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
-
-//    private ArrayList<Ball> renderballs;
-//    private Paddle renderPaddle1;
-//    private Paddle renderPaddle2;
-
-    private ArrayList<BricksMap> brickMaps;
-    private BricksMap currentMap;
+    private ArrayList<Brick> localBricks;
 
     public NetworkVsMode(Player player, ScoreManager scoreManager, GameScreen gameScreen,
                          String serverIP, boolean isHost, GameClient existingClient) {
@@ -40,35 +33,23 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         this.scoreManager = scoreManager;
         this.gameScreen = gameScreen;
         this.isHost = isHost;
-
         client = existingClient;
         client.setListener(this);
-
-        create();
+        gameScreen.create();
+        localBricks =  new ArrayList<>();
     }
 
     @Override
     public void create() {
-        gameScreen.create();
-
-//        renderPaddle1 = new Paddle(100, 100, TextureManager.paddleTexture);
-//        renderPaddle2 = new Paddle(500, 100, TextureManager.paddleTexture);
-        brickMaps = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
-            String mapPath = "/maps/map_vs" + i + ".txt";
-            brickMaps.add(new BricksMap(mapPath));
-        }
-        currentMap = brickMaps.get(0);
     }
 
     @Override
     public void update(float delta) {
-        handleInput();
     }
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-//        handleInput();
+        handleInput();
         update(delta);
         draw(sp);
     }
@@ -94,13 +75,9 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
-        if (currentState == null)
+        if (currentState == null) {
             return;
-
-        if (currentState.currentRound > 0 && currentState.currentRound <= brickMaps.size()) {
-            currentMap = brickMaps.get(currentState.currentRound - 1);
         }
-
         for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
             if (paddle.pNumber == 1)
                 sp.draw(TextureManager.paddleTexture, paddle.x,  paddle.y, paddle.width, paddle.height);
@@ -113,9 +90,8 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
                 sp.draw(TextureManager.ballTexture, ball.x, ball.y, ball.width, ball.height);
             }
         }
-
-        if (currentMap != null) {
-            currentMap.draw(sp);
+        for (Brick brick : localBricks) {
+            brick.draw(sp);
         }
     }
 
@@ -127,19 +103,22 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void onGameStateUpdated(NetworkProtocol.GameStateUpdate state) {
-        this.currentState = state;
-        if (currentMap != null && state.bricks != null) {
-            for (NetworkProtocol.BrickState brickState : state.bricks) {
-                for (int i = 0; i < state.bricks.size(); i++) {
-                    currentMap.getBricks().get(i).setDestroyed(state.bricks.get(i).isDestroyed);
-                    currentMap.getBricks().get(i).setHitPoints(state.bricks.get(i).hitPoints);
-                }
+        Gdx.app.postRunnable(() -> {
+            this.currentState = state;
+            localBricks.clear();
+            for (NetworkProtocol.BrickState brickState : currentState.bricks) {
+                Brick brick = new Brick(
+                    brickState.x, brickState.y,
+                    brickState.hitPoints, brickState.isExploding,
+                    0, 0, 0, TextureManager.brick1HIT
+                );
+                localBricks.add(brick);
             }
-        }
 
-        if (state.isGameOver) {
-            this.setEnd(true);
-        }
+            if (state.isGameOver) {
+                this.setEnd(true);
+            }
+        });
     }
 
     @Override
