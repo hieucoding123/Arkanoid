@@ -89,8 +89,6 @@ public class VsMode extends GameMode {
     }
 
     public void startRound(int roundNum) {
-        System.out.println("p1: " + roundsWonP1);
-        System.out.println("p2: " + roundsWonP2);
         this.currentRound = roundNum;
         this.currentMap = brickMap.get(currentRound - 1);
 
@@ -150,6 +148,9 @@ public class VsMode extends GameMode {
                 roundsWonP2++;
             }
         }
+
+        System.out.println("p1: " + roundsWonP1);
+        System.out.println("p2: " + roundsWonP2);
 
         if (roundsWonP1 == 2 || roundsWonP2 == 2 || currentRound == MAX_ROUNDS) {
             gameOver();
@@ -230,13 +231,13 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.3, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
+                                0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0.3, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
+                                0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }

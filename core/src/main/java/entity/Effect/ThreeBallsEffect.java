@@ -30,10 +30,6 @@ public class ThreeBallsEffect extends EffectItem {
         if (this.isDestroyed() || balls.isEmpty()) {
             return;
         }
-
-        if (paddle.isFlipped()) {
-            this.setVelocity(0, -this.getDy());
-        }
         Ball originalBall = null;
         if (this.triggeringBall != null || balls.contains(this.triggeringBall)) {
             originalBall = this.triggeringBall;

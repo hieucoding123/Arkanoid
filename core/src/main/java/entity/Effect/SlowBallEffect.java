@@ -25,9 +25,6 @@ public class SlowBallEffect extends EffectItem {
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         Game.playSfx(Game.sfx_slowball,0.8f);
-        if (paddle.isFlipped()) {
-            this.setVelocity(0, -this.getDy());
-        }
         if (this.triggeringBall != null) {
             this.triggeringBall.activateSlow(EFFECT_DURATION);
         } else {
