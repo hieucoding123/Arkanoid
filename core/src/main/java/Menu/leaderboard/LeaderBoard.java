@@ -18,14 +18,21 @@ import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
+import table.CoopDataHandler;
 import table.InfiDataHandler;
+import table.LevelDataHandler;
 
 import java.util.ArrayList;
 
 public class LeaderBoard extends UserInterface {
     private Table scrollableContent;
-    private String showLeaderBoard = "";
+    private String showLeaderBoard = "INFINITE";
     private ArrayList<String> data;
+
+    private Label coopModeButton;
+    private Label infiModeButton;
+    private Label levelsModeButton;
+
     public LeaderBoard(Main main, Player player) {
         super(main, player);
     }
@@ -56,20 +63,24 @@ public class LeaderBoard extends UserInterface {
         Main main = this.getMain();
 
         //Buttons
-        Label coopModeButton = new Label("Co-op", whiteText);
-        Label infiModeButton = new Label("Infinite", whiteText);
-        Label levelsModeButton = new Label("Singleplayer", whiteText);
+        coopModeButton = new Label("Co-op", whiteText);
+        infiModeButton = new Label("Infinite", whiteText);
+        levelsModeButton = new Label("Singleplayer", whiteText);
+
+        infiModeButton.setColor(Color.YELLOW);
 
         //Inf button
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
-                showLeaderBoard = "INFINITE";
-                scrollableContent.clear();
-                infiModeButton.setColor(Color.YELLOW);
-                levelsModeButton.setColor(Color.WHITE);
-                coopModeButton.setColor(Color.WHITE);
+                if (!showLeaderBoard.equals("INFINITE")) {
+                    showLeaderBoard = "INFINITE";
+                    loadInfiniteTable();
+                    infiModeButton.setColor(Color.YELLOW);
+                    levelsModeButton.setColor(Color.WHITE);
+                    coopModeButton.setColor(Color.WHITE);
+                }
             }
         });
 
@@ -78,11 +89,14 @@ public class LeaderBoard extends UserInterface {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
-                showLeaderBoard = "LEVELS";
-                scrollableContent.clear();
-                levelsModeButton.setColor(Color.YELLOW);
-                coopModeButton.setColor(Color.WHITE);
-                infiModeButton.setColor(Color.WHITE);
+                if (!showLeaderBoard.equals("LEVELS")) {
+                    showLeaderBoard = "LEVELS";
+                    scrollableContent.clear();
+                    loadLevelModeTable();
+                    levelsModeButton.setColor(Color.YELLOW);
+                    coopModeButton.setColor(Color.WHITE);
+                    infiModeButton.setColor(Color.WHITE);
+                }
             }
         });
 
@@ -91,11 +105,14 @@ public class LeaderBoard extends UserInterface {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
-                showLeaderBoard = "COOP";
-                scrollableContent.clear();
-                coopModeButton.setColor(Color.YELLOW);
-                infiModeButton.setColor(Color.WHITE);
-                levelsModeButton.setColor(Color.WHITE);
+                if (!showLeaderBoard.equals("COOP")) {
+                    showLeaderBoard = "COOP";
+                    scrollableContent.clear();
+                    loadCoopModeTable();
+                    coopModeButton.setColor(Color.YELLOW);
+                    infiModeButton.setColor(Color.WHITE);
+                    levelsModeButton.setColor(Color.WHITE);
+                }
             }
         });
 
@@ -115,7 +132,7 @@ public class LeaderBoard extends UserInterface {
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
 
-        mainTable.add(scrollPane).expandY().width(800).height(400).pad(20);
+        mainTable.add(scrollPane).expandY().width(800).height(400).pad(10);
         mainTable.row();
 
         //Back Button
@@ -141,16 +158,11 @@ public class LeaderBoard extends UserInterface {
         this.getStage().addActor(backButton);
 
         mainTable.add(buttonTable);
-    }
-
-    public void update() {
-        if (showLeaderBoard.equals("INFINITE")) {
-            loadInfiniteTable();
-            showLeaderBoard = "";
-        }
+        loadInfiniteTable();
     }
 
     private void loadInfiniteTable() {
+        scrollableContent.clear();
         data = InfiDataHandler.getLeaderboardData();
         Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
         Label nameHeader = new Label("Name", whiteText);
@@ -162,8 +174,8 @@ public class LeaderBoard extends UserInterface {
         timeHeader.setFontScale(0.8f);
 
         scrollableContent.add(nameHeader).width(200).pad(10).left();
-        scrollableContent.add(scoreHeader).width(150).pad(10).right();
-        scrollableContent.add(timeHeader).width(150).pad(10).right();
+        scrollableContent.add(scoreHeader).width(200).pad(10).left();
+        scrollableContent.add(timeHeader).width(200).pad(10).left();
         scrollableContent.row();
 
         for (int i = 0; i < data.size(); i++) {
@@ -186,8 +198,102 @@ public class LeaderBoard extends UserInterface {
             score.setFontScale(0.7f);
             time.setFontScale(0.7f);
             scrollableContent.add(name).width(200).pad(5).left();
-            scrollableContent.add(score).width(150).pad(5).right();
-            scrollableContent.add(time).width(150).pad(5).right();
+            scrollableContent.add(score).width(200).pad(5).right();
+            scrollableContent.add(time).width(200).pad(5).right();
+            scrollableContent.row();
+        }
+    }
+
+    private void loadLevelModeTable() {
+        scrollableContent.clear();
+        data = LevelDataHandler.getLeaderboardData();
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+
+        Label nameHeader = new Label("Name", whiteText);
+        Label levelHeader = new Label("Level Max", whiteText);
+        Label scoreHeader = new Label("Total Score", whiteText);
+
+        nameHeader.setFontScale(0.8f);
+        levelHeader.setFontScale(0.8f);
+        scoreHeader.setFontScale(0.8f);
+
+        scrollableContent.add(nameHeader).width(200).pad(10).left();
+        scrollableContent.add(levelHeader).width(200).pad(10).right();
+        scrollableContent.add(scoreHeader).width(200).pad(10).right();
+        scrollableContent.row();
+
+        for (int i = 0; i < data.size(); i++) {
+            Label.LabelStyle textStyle;
+
+            if (i == 0) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.GOLD);
+            } else if (data.size() > 1 && i == 1) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.LIGHT_GRAY);
+            } else if (data.size() > 2 && i == 2) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.ORANGE);
+            } else {
+                textStyle = whiteText;
+            }
+
+            String[] line = data.get(i).split(",");
+            Label name = new Label(line[0], textStyle);
+            Label level = new Label(line[1], textStyle);
+            Label score = new Label(line[2], textStyle);
+
+            name.setFontScale(0.7f);
+            level.setFontScale(0.7f);
+            score.setFontScale(0.7f);
+
+            scrollableContent.add(name).width(200).pad(5).left();
+            scrollableContent.add(level).width(200).pad(5).right();
+            scrollableContent.add(score).width(200).pad(5).right();
+            scrollableContent.row();
+        }
+    }
+
+    private void loadCoopModeTable() {
+        scrollableContent.clear();
+        data = CoopDataHandler.getLeaderboardData();
+        Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
+
+        Label nameHeader = new Label("Name", whiteText);
+        Label levelHeader = new Label("Level Max", whiteText);
+        Label scoreHeader = new Label("Total Score", whiteText);
+
+        nameHeader.setFontScale(0.8f);
+        levelHeader.setFontScale(0.8f);
+        scoreHeader.setFontScale(0.8f);
+
+        scrollableContent.add(nameHeader).width(200).pad(10).left();
+        scrollableContent.add(levelHeader).width(200).pad(10).right();
+        scrollableContent.add(scoreHeader).width(200).pad(10).right();
+        scrollableContent.row();
+
+        for (int i = 0; i < data.size(); i++) {
+            Label.LabelStyle textStyle;
+
+            if (i == 0) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.GOLD);
+            } else if (data.size() > 1 && i == 1) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.LIGHT_GRAY);
+            } else if (data.size() > 2 && i == 2) {
+                textStyle = new Label.LabelStyle(this.getFont(), Color.ORANGE);
+            } else {
+                textStyle = whiteText;
+            }
+
+            String[] line = data.get(i).split(",");
+            Label name = new Label(line[0], textStyle);
+            Label level = new Label(line[1], textStyle);
+            Label score = new Label(line[2], textStyle);
+
+            name.setFontScale(0.7f);
+            level.setFontScale(0.7f);
+            score.setFontScale(0.7f);
+
+            scrollableContent.add(name).width(200).pad(5).left();
+            scrollableContent.add(level).width(200).pad(5).right();
+            scrollableContent.add(score).width(200).pad(5).right();
             scrollableContent.row();
         }
     }

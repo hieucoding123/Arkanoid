@@ -65,7 +65,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
 
         this.setStage(new Stage(
-            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
+            new FitViewport(800, 1000))
         );
 
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));

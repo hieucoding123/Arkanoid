@@ -15,7 +15,7 @@ import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import entity.GameScreen;
-import entity.Effect.EffectItem;
+import Menu.CoopPlayerLevelSelectionMenu;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
@@ -459,7 +459,12 @@ public class Game {
                 isCoopSelection = false;
                 break;
             case LEVELS_SELECTION:
-                ui = new SinglePlayerLevelSelectionMenu(main, this.player);
+                if (isCoopSelection) {
+                    ui = new CoopPlayerLevelSelectionMenu(main, this.player);
+                } else {
+                    // Nếu là Single, dùng menu cũ
+                    ui = new SinglePlayerLevelSelectionMenu(main, this.player);
+                }
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;

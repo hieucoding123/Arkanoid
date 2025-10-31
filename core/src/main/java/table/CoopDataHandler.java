@@ -12,8 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class LevelDataHandler extends DataHandler {
-    private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS level_scores ("
+public class CoopDataHandler extends DataHandler {
+    private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS coop_scores ("
         + " playerName TEXT PRIMARY KEY NOT NULL,"
         + " level1 REAL DEFAULT 0,"
         + " level2 REAL DEFAULT 0,"
@@ -48,8 +48,8 @@ public class LevelDataHandler extends DataHandler {
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
 
-        String sqlInsert = "INSERT OR IGNORE INTO level_scores (playerName) VALUES (?);";
-        String sqlSelect = "SELECT maxLevelUnlocked FROM level_scores WHERE playerName = ?";
+        String sqlInsert = "INSERT OR IGNORE INTO coop_scores (playerName) VALUES (?);";
+        String sqlSelect = "SELECT maxLevelUnlocked FROM coop_scores WHERE playerName = ?";
 
         try (Connection conn = DriverManager.getConnection(getUrlDatabase())) {
             conn.setAutoCommit(true); // auto save change
@@ -88,16 +88,16 @@ public class LevelDataHandler extends DataHandler {
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
 
-        String sqlInsert = "INSERT OR IGNORE INTO level_scores (playerName) VALUES (?);";
+        String sqlInsert = "INSERT OR IGNORE INTO coop_scores (playerName) VALUES (?);";
 
-        String sqlUpdateScore = "UPDATE level_scores SET level" + levelNumber + " = ? "
+        String sqlUpdateScore = "UPDATE coop_scores SET level" + levelNumber + " = ? "
             + "WHERE playerName = ? AND level" + levelNumber + " < ?;";
 
-        String sqlUpdateTotal = "UPDATE level_scores SET total = (level1 + level2 + level3 + level4 + level5) "
+        String sqlUpdateTotal = "UPDATE coop_scores SET total = (level1 + level2 + level3 + level4 + level5) "
             + "WHERE playerName = ?;";
 
         // Update level unlocked
-        String sqlUpdateMaxLevel = "UPDATE level_scores SET maxLevelUnlocked = ? "
+        String sqlUpdateMaxLevel = "UPDATE coop_scores SET maxLevelUnlocked = ? "
             + "WHERE playerName = ? AND maxLevelUnlocked = ?";
 
 
@@ -155,7 +155,7 @@ public class LevelDataHandler extends DataHandler {
             return 0;
         }
         loadDriverIfNeeded();
-        String sqlSelect = "SELECT total FROM level_scores WHERE playerName = ?";
+        String sqlSelect = "SELECT total FROM coop_scores WHERE playerName = ?";
         try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
             pstmtSelect.setString(1, playerName);
@@ -177,7 +177,7 @@ public class LevelDataHandler extends DataHandler {
         loadDriverIfNeeded();
 
         String levelColumn = "level" + levelNumber;
-        String sqlSelect = "SELECT " + levelColumn + " FROM level_scores WHERE playerName = ?";
+        String sqlSelect = "SELECT " + levelColumn + " FROM coop_scores WHERE playerName = ?";
 
         try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
@@ -201,7 +201,7 @@ public class LevelDataHandler extends DataHandler {
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
 
-        String sqlSelect = "SELECT playerName, maxLevelUnlocked, total FROM level_scores ORDER BY total DESC LIMIT 20";
+        String sqlSelect = "SELECT playerName, maxLevelUnlocked, total FROM coop_scores ORDER BY total DESC LIMIT 20";
 
         try (Connection conn = DriverManager.getConnection(getUrlDatabase());
              Statement stmt = conn.createStatement()) {
@@ -229,6 +229,6 @@ public class LevelDataHandler extends DataHandler {
 
     @Hidden
     public static String getUrlDatabase() {
-        return "jdbc:sqlite:leaderBoard/level_scores.db";
+        return "jdbc:sqlite:leaderBoard/coop_scores.db";
     }
 }

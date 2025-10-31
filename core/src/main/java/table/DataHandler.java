@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 
 public class DataHandler {
-    private static final String URL_DATABASE = "jdbc:sqlite:leaderBoard/level_scores.db";
+//    private static final String URL_DATABASE = "jdbc:sqlite:leaderBoard/level_scores.db";
     private static boolean isLoaded = false;
 
     private static void loadDriverIfNeeded() {
@@ -35,6 +35,7 @@ public class DataHandler {
     }
 
     public static String getUrlDatabase() {
-        return URL_DATABASE;
+        return null;
     }
+
 }

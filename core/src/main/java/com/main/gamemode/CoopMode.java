@@ -16,6 +16,7 @@ import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
+import table.CoopDataHandler;
 
 import java.util.ArrayList;
 
@@ -169,6 +170,19 @@ public class CoopMode extends GameMode {
             }
         }
         balls.removeIf(Ball::isDestroyed);
+        if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
+            this.setEnd(true);
+            double levelscore = this.scoreManager.getScore();
+            double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
+
+            double total_score = levelscore + bonusscore;
+            if (total_score < 0) total_score = 0;
+
+            if (currentMap.getBricks().isEmpty() && !this.isEnd())
+                CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            else
+                CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package table;
 
 import com.badlogic.gdx.Gdx;
+import jdk.internal.vm.annotation.Hidden;
 
 import java.io.File;
 import java.sql.*;
@@ -26,9 +27,11 @@ public class InfiDataHandler extends DataHandler {
     }
 
     public static void addScore(String pName, double score, double time) {
+        if (pName == null || pName.isEmpty() || pName.equals("Enter name")) {
+            pName = "Guest";
+        }
         loadDriverIfNeeded();
         new File("leaderBoard").mkdirs();
-
 //        String sqlUpsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?);";
         String sqlUpsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?) "
             + "ON CONFLICT(playerName) DO UPDATE SET " // Nếu playerName đã tồn tại...
@@ -94,5 +97,10 @@ public class InfiDataHandler extends DataHandler {
             Gdx.app.error("Database", "Get Game Leaderboard Data Error", e);
         }
         return leaderboard;
+    }
+
+    @Hidden
+    public static String getUrlDatabase() {
+        return "jdbc:sqlite:leaderBoard/infinite_scores.db";
     }
 }
