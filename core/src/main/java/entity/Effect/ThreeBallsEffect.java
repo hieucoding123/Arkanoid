@@ -34,11 +34,11 @@ public class ThreeBallsEffect extends EffectItem {
         }
 
         Ball ball1 = new Ball(originalBall);
-        ball1.setAngle(originalBallAngle + 0.5f);
+        ball1.setAngle(originalBallAngle + (float)Math.random());
         ball1.updateVelocity();
 
         Ball ball2 = new Ball(originalBall);
-        ball2.setAngle(originalBallAngle - 0.5f);
+        ball2.setAngle(originalBallAngle - (float)Math.random());
         ball2.updateVelocity();
 
         balls.add(ball1);
