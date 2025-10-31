@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,6 +43,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
 
     private Label.LabelStyle readyStyle;
     private Label.LabelStyle notReadyStyle;
+
+    private TextButtonStyle textOnlyButtonStyle;
 
     public NetworkLobby(Main main, Player player, GameClient client, boolean isHost) {
         super(main, player);
@@ -75,6 +78,19 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
 
         readyStyle = new Label.LabelStyle(this.getFont(), Color.GREEN);
         notReadyStyle = new Label.LabelStyle(this.getFont(), Color.RED);
+
+        textOnlyButtonStyle = new TextButtonStyle();
+        textOnlyButtonStyle.font = this.getFont();
+
+        textOnlyButtonStyle.up = null;
+        textOnlyButtonStyle.down = null;
+        textOnlyButtonStyle.over = null;
+        textOnlyButtonStyle.disabled = null;
+
+        textOnlyButtonStyle.fontColor = Color.WHITE;         // Normal
+        textOnlyButtonStyle.overFontColor = Color.YELLOW;    // Hover
+        textOnlyButtonStyle.downFontColor = Color.YELLOW;    // Click
+        textOnlyButtonStyle.disabledFontColor = Color.GRAY;  // Disable
 
         Table mainTable = new Table();
         mainTable.setFillParent(true);
@@ -151,7 +167,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     }
 
     private TextButton createQuitButton() {
-        TextButton button = new TextButton("QUIT", this.getSkin());
+        TextButton button = new TextButton("QUIT", textOnlyButtonStyle);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -162,9 +178,9 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     }
 
     private TextButton createReadyButton() {
-        TextButton button = new TextButton("READY", this.getSkin());
+        TextButton button = new TextButton("READY", textOnlyButtonStyle);
         button.setDisabled(true);
-        button.setColor(Color.GRAY);
+
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -183,7 +199,6 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             client.sendReady();
             if (myReadyButton != null) {
                 myReadyButton.setDisabled(true);
-                myReadyButton.setColor(Color.GRAY);
             }
 //            updateWaittingMessage();
         }
@@ -237,12 +252,10 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             // Kích hoạt nút NẾU: Cả 2 đã kết nối VÀ client này chưa nhấn Ready
             if (allPlayersConnected && !myReady) {
                 myReadyButton.setDisabled(false);
-                myReadyButton.setColor(Color.WHITE); // Trở lại màu bình thường
             }
             // Vô hiệu hóa nút NẾU: Một trong hai chưa kết nối HOẶC client này đã nhấn Ready rồi
             else {
                 myReadyButton.setDisabled(true);
-                myReadyButton.setColor(Color.GRAY);
             }
         }
         updateWaittingMessage();
@@ -291,7 +304,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onMessage(String message) {
         System.out.println("Lobby message: " + message);
 
-            if (message.startsWith("PLAYER_DISCONNECTED:")) {
+        if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");
 

@@ -9,12 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.main.GameState;
 import com.main.Main;
 import com.main.network.NetworkProtocol;
@@ -43,7 +42,7 @@ public class NetworkConnectionMenu extends  UserInterface{
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
 
         this.setStage(new Stage(
-            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))
+            new FitViewport(800, 1000))
         );
 
         this.setFont(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
@@ -57,76 +56,139 @@ public class NetworkConnectionMenu extends  UserInterface{
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         this.getStage().addActor(mainTable);
-
-        //Background
         mainTable.setBackground(
             new TextureRegionDrawable(new TextureRegion(this.getBGTexture()))
         );
 
+        // TITLE LABEL
         Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
-
         Label titleLabel = new Label("Network Multiplayer", LBStyle);
         titleLabel.setFontScale(1f);
-        mainTable.add(titleLabel).padBottom(40).padTop(30);
-        mainTable.row();
+        titleLabel.pack();
 
-        Table buttonTable = new Table();
+        // STATUS LABEL
+        statusLabel = new Label("", this.getSkin());
+        statusLabel.setColor(Color.YELLOW);
+        statusLabel.pack();
+
+        // BUTTON STYLE
+        TextButtonStyle textOnlyButtonStyle = new TextButtonStyle(this.getSkin().get(TextButtonStyle.class));
+        textOnlyButtonStyle.up = null;
+        textOnlyButtonStyle.down = null;
+        textOnlyButtonStyle.over = null;
+        textOnlyButtonStyle.checked = null;
+        textOnlyButtonStyle.overFontColor = Color.YELLOW;
+        textOnlyButtonStyle.downFontColor = Color.YELLOW;
 
         // HOST BUTTON
-        TextButton hostButton = new TextButton("Host Game", this.getSkin());
+        TextButton hostButton = new TextButton("Host Game", textOnlyButtonStyle);
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 hostGame();
             }
         });
+        hostButton.pack();
 
+        // SERVER LIST
         serversList = new List<>(this.getSkin());
         serversListScrollPane = new ScrollPane(serversList, this.getSkin());
         serversListScrollPane.setFadeScrollBars(false);
+        serversListScrollPane.setSize(270, 130);
+        serversListScrollPane.setDebug(true);
 
         // REFRESH BUTTON
-        TextButton refreshButton = new TextButton("Refresh List", this.getSkin());
+        TextButton refreshButton = new TextButton("Refresh List", textOnlyButtonStyle);
         refreshButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 discoverServers();
             }
         });
+        refreshButton.pack();
 
-        TextButton joinButton = new TextButton("Join Game", this.getSkin());
+        // JOIN BUTTON
+        TextButton joinButton = new TextButton("Join Game", textOnlyButtonStyle);
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 joinGame();
             }
         });
+        joinButton.pack();
 
         Main main = this.getMain();
-
-        statusLabel = new Label("", this.getSkin());
-        statusLabel.setColor(Color.YELLOW);
-        buttonTable.add(statusLabel).padTop(20).row();
-
-        TextButton backButton = new TextButton("Back", this.getSkin());
+        TextButton backButton = new TextButton("Back", textOnlyButtonStyle);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 main.setGameState(GameState.SELECT_MODE);
             }
         });
-        buttonTable.add(hostButton).padBottom(20).padTop(30).row();
-        buttonTable.add(serversListScrollPane).width(300).height(150).padBottom(10).row();
-        buttonTable.add(refreshButton).padBottom(20).row();
-        buttonTable.add(joinButton).padBottom(40).padTop(30).row();
-        buttonTable.add(backButton).padBottom(40).padTop(30).row();
+        backButton.pack();
 
-        mainTable.add(buttonTable);
+        //Set up position
+        float stageWidth = this.getStage().getWidth();
+        float stageHeight = this.getStage().getHeight();
+        float currentY;
+
+        currentY = stageHeight - 250 - titleLabel.getHeight();
+        titleLabel.setPosition(
+            (stageWidth / 2f) - (titleLabel.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(titleLabel);
+
+        currentY = currentY - 80 - hostButton.getHeight();
+        hostButton.setPosition(
+            (stageWidth / 2f) - (hostButton.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(hostButton);
+
+        currentY = currentY - 40 - serversListScrollPane.getHeight();
+        serversListScrollPane.setPosition(
+            (stageWidth / 2f) - (serversListScrollPane.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(serversListScrollPane);
+
+        currentY = currentY - 60 - refreshButton.getHeight();
+        refreshButton.setPosition(
+            (stageWidth / 2f) - (refreshButton.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(refreshButton);
+
+        currentY = currentY - 40 - joinButton.getHeight();
+        joinButton.setPosition(
+            (stageWidth / 2f) - (joinButton.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(joinButton);
+
+        currentY = currentY - 40 - backButton.getHeight();
+        backButton.setPosition(
+            (stageWidth / 2f) - (backButton.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(backButton);
+
+        statusLabel.setPosition(
+            (stageWidth / 2f) - (statusLabel.getWidth() / 2f),
+            titleLabel.getY() - 20 - statusLabel.getHeight()
+        );
+        this.getStage().addActor(statusLabel);
     }
-
     // Discovering servers by send UDP
     private void discoverServers() {
         statusLabel.setText("Discovering Servers...");
+        statusLabel.pack();
+        statusLabel.setPosition(
+            (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+            statusLabel.getY()
+        );
+
         foundServers.clear();
         serversList.clearItems();
 
@@ -141,10 +203,11 @@ public class NetworkConnectionMenu extends  UserInterface{
             tempClient.close();
 
             Gdx.app.postRunnable(() -> {
+                String text = "";
                 if (hosts.isEmpty()) {
-                    statusLabel.setText("No servers found. Host one!");
+                    text = "No servers found. Host one!";
                 }else {
-                    statusLabel.setText("Found " + hosts.size() + " server(s)!");
+                    text = "Found " + hosts.size() + " server(s)!";
                     ArrayList<String> displayItems = new ArrayList<>();
                     for (InetAddress host : hosts) {
                         String IP = host.getHostAddress();
@@ -156,6 +219,13 @@ public class NetworkConnectionMenu extends  UserInterface{
                     }
                     serversList.setItems(displayItems.toArray(new String[0]));
                 }
+
+                statusLabel.setText(text);
+                statusLabel.pack();
+                statusLabel.setPosition(
+                    (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                    statusLabel.getY()
+                );
             });
 
         }).start();
@@ -164,38 +234,62 @@ public class NetworkConnectionMenu extends  UserInterface{
     // Join game -> Client
     private void joinGame() {
         String selectedDisplayName = serversList.getSelected();
+        String text = "";
+
         if (selectedDisplayName == null) {
-            statusLabel.setText("Please Select Server!");
-            return;
-        }
+            text = "Please Select Server!";
+        } else {
+            InetAddress host = foundServers.get(selectedDisplayName);
+            if (host == null) {
+                text = "Error joining server!. Please refresh";
+            } else {
+                String IP = host.getHostAddress();
+                text = "Connected to: " + IP;
 
-        InetAddress host = foundServers.get(selectedDisplayName);
-        if (host == null) {
-            statusLabel.setText("Error joining server!. Please refresh");
-            return;
-        }
-
-        String IP = host.getHostAddress();
-        statusLabel.setText("Connected to: " + IP);
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);      // Connection delay
-                Gdx.app.postRunnable(() -> {
-                    statusLabel.setText("Connected! Staring game...");
-                    getMain().startNetworkGame(IP, false);
-                });
-            } catch (Exception e) {
-                Gdx.app.postRunnable(() -> {
-                    statusLabel.setText("Failed to connect!");
-                });
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(500);      // Connection delay
+                        Gdx.app.postRunnable(() -> {
+                            statusLabel.setText("Connected! Staring game...");
+                            statusLabel.pack();
+                            statusLabel.setPosition(
+                                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                                statusLabel.getY()
+                            );
+                            getMain().startNetworkGame(IP, false);
+                        });
+                    } catch (Exception e) {
+                        Gdx.app.postRunnable(() -> {
+                            statusLabel.setText("Failed to connect!");
+                            statusLabel.pack();
+                            statusLabel.setPosition(
+                                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                                statusLabel.getY()
+                            );
+                        });
+                    }
+                }).start();
             }
-        }).start();
+        }
+
+        if (!text.isEmpty()) {
+            statusLabel.setText(text);
+            statusLabel.pack();
+            statusLabel.setPosition(
+                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                statusLabel.getY()
+            );
+        }
     }
 
     private void
     hostGame() {
         statusLabel.setText("Staring sever...");
+        statusLabel.pack();
+        statusLabel.setPosition(
+            (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+            statusLabel.getY()
+        );
         isHosting = true;
 
         new Thread(() -> {
@@ -203,11 +297,21 @@ public class NetworkConnectionMenu extends  UserInterface{
                 String localIP = NetworkUtils.getLocalIpAddress();
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Sever started! Waiting for players...");
+                    statusLabel.pack();
+                    statusLabel.setPosition(
+                        (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                        statusLabel.getY()
+                    );
                     this.getMain().startNetworkGame(localIP, true);
                 });
             } catch (Exception e) {
                 Gdx.app.postRunnable(() -> {
                     statusLabel.setText("Failed to start sever!");
+                    statusLabel.pack();
+                    statusLabel.setPosition(
+                        (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                        statusLabel.getY()
+                    );
                 });
             }
         }).start();
