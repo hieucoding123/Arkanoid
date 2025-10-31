@@ -100,6 +100,13 @@ public class VsMode extends GameMode {
 
         paddle1.clearEffects();
         paddle2.clearEffects();
+
+        paddle1.setX(Game.SCREEN_WIDTH / 2f - 48);
+        paddle1.setY(50);
+
+        paddle2.setX(Game.SCREEN_WIDTH / 2f - 48);
+        paddle2.setY(800);
+
         EffectItem.clear();
         resetBalls();
     }
