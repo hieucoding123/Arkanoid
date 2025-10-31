@@ -28,9 +28,9 @@ public class InfiniteMode extends GameMode {
     private int currentIdx;
     private float timePlayed;
     private int lives;
-    private final double baseItemChance = 0.08;
+    private final double baseItemChance = 0.07;
     private final double minItemChance = 0.001;
-    private final double decayPerLevel = 0.005;
+    private final double decayPerLevel = 0.007;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
