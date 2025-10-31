@@ -1,6 +1,7 @@
 package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
+import entity.Effect.EffectItem;
 import entity.MovableObject;
 
 public class Paddle extends MovableObject {
@@ -81,6 +82,8 @@ public class Paddle extends MovableObject {
         this.expandEnd = 0;
         this.StunEnd = 0;
         this.setScale(1.0f, 1.0f);
+        this.shieldActive = false;
+        this.shieldTimer = 0;
     }
 
     public void moveRight() {
@@ -136,13 +139,4 @@ public class Paddle extends MovableObject {
         return 0;
     }
 
-    public void resetEffect() {
-        this.expandEnd = 0;
-        this.setScale(1.0f, 1.0f);
-
-        this.shieldActive = false;
-        this.shieldTimer = 0;
-
-        this.StunEnd = 0;
-    }
 }

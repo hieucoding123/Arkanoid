@@ -100,8 +100,8 @@ public class VsMode extends GameMode {
         this.scoreManagerP1.setScore(0.0d);
         this.scoreManagerP2.setScore(0.0d);
 
-        paddle1.resetEffect();
-        paddle2.resetEffect();
+        paddle1.clearEffects();
+        paddle2.clearEffects();
         EffectItem.clear();
         resetBalls();
     }
@@ -137,12 +137,18 @@ public class VsMode extends GameMode {
         return isGameEnded;
     }
 
-    public void endRound() {
+    public void endRound(int winner) {
         isPaused = true;
-        if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
+        if (winner == 1) {
             roundsWonP1++;
-        } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
+        } else if (winner == 2) {
             roundsWonP2++;
+        } else if (winner == 0) {
+            if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
+                roundsWonP1++;
+            } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
+                roundsWonP2++;
+            }
         }
 
         if (roundsWonP1 == 2 || roundsWonP2 == 2 || currentRound == MAX_ROUNDS) {
@@ -176,7 +182,7 @@ public class VsMode extends GameMode {
         }
 
         if (roundTimer <= 0) {
-            endRound();
+            endRound(0);
             return;
         }
 
@@ -193,6 +199,16 @@ public class VsMode extends GameMode {
         for (Ball ball : balls) {
             ball.setIn1v1(true);
             ball.update(delta);
+
+            if (ball == ballP1 && ball.isDestroyed()) {
+                endRound(2);
+                return;
+            }
+
+            if (ball == ballP2 && ball.isDestroyed()) {
+                endRound(1);
+                return;
+            }
 
             if (ball.checkCollision(paddle1)) {
                 ball.collisionWith(paddle1);
@@ -214,21 +230,30 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.5, 0.2, 0, 0, 0, 0, 0, 0, 0, 0.2);
+                                0.3, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0.5, 0.2, 0, 0, 0, 0, 0, 0, 0, 0.2);
+                                0.3, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }
 
                         }
+
                         if (newEffectItem != null) {
                            EffectItem.addEffectItem(newEffectItem);
-                       }
+                        }
+
+//                        if (newEffectItem instanceof ShieldEffect) {
+//                            if (ball.getLastHitBy() == 1) {
+//                                paddle1.activateShield(newEffectItem);
+//                            } else if (ball.getLastHitBy() == 2) {
+//                                paddle2.activateShield(newEffectItem);
+//                            }
+//                        }
 
                         if (ball.getLastHitBy() == 1) {
                             scoreManagerP1.comboScore(brick);
@@ -242,6 +267,7 @@ public class VsMode extends GameMode {
                         brick.setDestroyed(true);
 //                        }
                     }
+
                     float ballCenterX = ball.getX() + ball.getWidth() / 2f;
                     float ballCenterY = ball.getY() + ball.getHeight() / 2f;
                     //Bottom and top collision
@@ -257,6 +283,7 @@ public class VsMode extends GameMode {
                         ball.reverseY();
                         ball.reverseX();
                     }
+
                     break;
                 }
             }
@@ -265,7 +292,7 @@ public class VsMode extends GameMode {
         balls.removeIf(Ball::isDestroyed);
 
         if (currentMap.getSize() == 0 || balls.isEmpty()) {
-            endRound();
+            endRound(0);
         }
     }
 
