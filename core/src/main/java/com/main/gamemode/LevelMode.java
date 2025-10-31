@@ -93,13 +93,15 @@ public class LevelMode extends GameMode {
         }
         for (Ball ball : balls) {
             ball.update(delta);
+            // Check Collision
             ball.collisionWith(paddle);
-
+            ball.handleWallCollision();
             for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
+                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
+                        currentMap.onBrickDestroyed(brick);
                         EffectItem newEffectItem = null;
                         if (mapIndex == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
@@ -127,21 +129,6 @@ public class LevelMode extends GameMode {
                         } else {
                             brick.setDestroyed(true);
                         }
-                    }
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
                     }
                     break;
                 }

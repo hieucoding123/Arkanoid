@@ -30,17 +30,17 @@ public class ScoreManager {
     }
 
     public void addScore(Brick brick) {
-        if (brick.getColor() == 1) {
+        if (brick.getColor() == 1 || brick.getColor() == 2 || brick.getColor() == 31 ||  brick.getColor() == 41) {
             score += 100.0d;
-        } else if (brick.getColor() == 0) {
+        } else if (brick.getColor() == 0 ||  brick.getColor() == 32 || brick.getColor() == 33 ||  brick.getColor() == 42) {
             score += 200.0d;
         }
     }
 
     public void comboScore(Brick brick) {
-        if (brick.getColor() == 1) {
+        if (brick.getColor() == 1 || brick.getColor() == 2 || brick.getColor() == 31 ||  brick.getColor() == 41) {
             score += 100.0d;
-        } else if (brick.getColor() == 0) {
+        } else if (brick.getColor() == 0 ||  brick.getColor() == 32 || brick.getColor() == 33 ||  brick.getColor() == 42) {
             score += 200.0d;
         }
 

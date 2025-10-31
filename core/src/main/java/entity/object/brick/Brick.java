@@ -149,4 +149,12 @@ public class Brick extends MovableObject {
             }
         }
     }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
 }

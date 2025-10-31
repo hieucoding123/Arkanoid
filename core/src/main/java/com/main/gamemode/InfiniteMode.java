@@ -28,6 +28,9 @@ public class InfiniteMode extends GameMode {
     private int currentIdx;
     private float timePlayed;
     private int lives;
+    private final double baseItemChance = 0.07;
+    private final double minItemChance = 0.001;
+    private final double decayPerLevel = 0.007;
 
     public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
         super();
@@ -85,7 +88,9 @@ public class InfiniteMode extends GameMode {
             EffectItem.clear();
             this.getPlayer().setScore(this.scoreManager.getScore());
             this.getPlayer().setTimePlayed(this.timePlayed);
-            InfiDataHandler.addScore(getPlayer().getName(), getPlayer().getScore(), getPlayer().getTimePlayed());
+            InfiDataHandler.addScore(
+                getPlayer().getName(), getPlayer().getScore(), getPlayer().getTimePlayed()
+            );
         }
 
         if (followPaddle) {       // follow paddle
@@ -96,14 +101,26 @@ public class InfiniteMode extends GameMode {
         for (Ball ball : balls) {
             ball.update(delta);
             ball.collisionWith(paddle);
-
+            ball.handleWallCollision();
             for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
+                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
                     if (brick.gethitPoints() == 0) {
-
-                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5);
+                        double chance = generateChance();
+                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
+                            brick, paddle, ball,
+                            chance * 1,
+                            chance * 4,
+                            chance * 5,
+                            chance * 2,
+                            chance * 3,
+                            chance * 6,
+                            chance * 7,
+                            chance * 8,
+                            chance * 9,
+                            chance * 10
+                        );
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }
@@ -114,27 +131,13 @@ public class InfiniteMode extends GameMode {
                             brick.setDestroyed(true);
                         }
                     }
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
-                    }
                     break;
                 }
             }
         }
         balls.removeIf(Ball::isDestroyed);
         if (currentMap.getBricks().isEmpty()) {
+            lives = Math.min(lives + 1, 3);
             currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
             currentMap =  new BricksMap(maps.get(currentIdx));
             EffectItem.clear();
@@ -184,5 +187,11 @@ public class InfiniteMode extends GameMode {
     @Override
     public Paddle getPaddle1() {
         return this.paddle;
+    }
+
+    private double generateChance() {
+        double chance = baseItemChance - decayPerLevel * currentIdx;
+
+        return Math.max(chance, minItemChance);
     }
 }

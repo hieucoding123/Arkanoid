@@ -117,6 +117,13 @@ public abstract class GameObject {
         return this.orgHeight * this.scaleHeight;
     }
 
+    public float getCenterX() {
+        return this.getX() + this.getWidth() / 2;
+    }
+    public float getCenterY() {
+        return this.getY() + this.getHeight() / 2;
+    }
+
     /**
      * set scale of object.
      * @param scaleWidth scale width of object

@@ -200,6 +200,29 @@ public class VsMode extends GameMode {
         for (Ball ball : balls) {
             ball.setIn1v1(true);
             ball.update(delta);
+            ball.handleWallCollision();
+
+            if (ball.getY() <= 0) {
+                if (paddle1.hasShield()) {
+                    ball.setY(0);
+                    ball.reverseY();
+                    Game.playSfx(Game.sfx_touchpaddle, 1.2f);
+                    ball.angleSpeedAdjustment("HORIZONTAL");
+                    paddle1.setShieldActive(false);
+                } else {
+                    ball.setDestroyed(true);
+                }
+            } else if (ball.getY() + ball.getHeight() >= Game.padding_top) {
+                if (paddle2.hasShield()) {
+                    ball.setY(Game.padding_top - ball.getHeight());
+                    ball.reverseY();
+                    Game.playSfx(Game.sfx_touchpaddle, 1.2f);
+                    ball.angleSpeedAdjustment("HORIZONTAL");
+                    paddle2.setShieldActive(false);
+                } else {
+                    ball.setDestroyed(true);
+                }
+            }
 
             if (ball == ballP1 && ball.isDestroyed()) {
                 endRound(2);
@@ -231,13 +254,13 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
+                                0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0, 0, 0, 0, 0, 0, 0.3, 0.3, 0.3, 0);
+                                0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }
