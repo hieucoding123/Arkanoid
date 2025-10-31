@@ -23,5 +23,21 @@
       selection: selection,
       "messageFontColor": white
     }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+    default: {
+      font: default-font,
+      fontColor: white,
+      up: buttonup,
+      down: buttondown,
+      over: buttonhover,
+      focused: buttonhover
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: {
+      font: default-font,
+      fontColor: white
+    }
   }
 }

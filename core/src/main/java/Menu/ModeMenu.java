@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,6 +22,7 @@ public class ModeMenu extends UserInterface {
     private Skin levelsSkin;
     private Skin coopSkin;
     private Skin vsModeSkin;
+    private Skin ui_skin;
 
     public ModeMenu(Main main, Player player) {
         super(main, player);
@@ -39,7 +37,7 @@ public class ModeMenu extends UserInterface {
         this.levelsSkin = new Skin(Gdx.files.internal("ui/Singleplayerbutton.json"));
         this.coopSkin = new Skin(Gdx.files.internal("ui/CoopButton.json"));
         this.vsModeSkin = new Skin(Gdx.files.internal("ui/vsmodebutton.json"));
-
+        this.ui_skin = new Skin(Gdx.files.internal("ui-skin/ui-skin.json"));
         //Set def skin
         this.setSkin(this.infiniteSkin);
 
@@ -115,7 +113,15 @@ public class ModeMenu extends UserInterface {
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
                 //System.out.println("VS MODE");
-                main.setGameState(GameState.VS_MODE); // You can uncomment this when ready
+                main.setGameState(GameState.VS_MODE);
+            }
+        });
+
+        Button networkButton = new Button(ui_skin);
+        networkButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                main.setGameState(GameState.NETWORK_CONNECTION_MENU);
             }
         });
 
@@ -130,6 +136,9 @@ public class ModeMenu extends UserInterface {
         buttonTable.row();
 
         buttonTable.add(vsModeButton).width(220).height(72).padBottom(20);
+        buttonTable.row();
+
+        buttonTable.add(networkButton).width(220).height(72).padBottom(20);
         buttonTable.row();
 
         //Back Button

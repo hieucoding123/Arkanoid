@@ -10,6 +10,7 @@ dependencies {
   api "com.github.tommyettinger:libgdx-utils-box2d:$utilsBox2dVersion"
   api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
   api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+  api "com.esotericsoftware:kryonet:2.22.0-RC1"
   implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
   implementation "org.xerial:sqlite-jdbc:3.41.2.1"

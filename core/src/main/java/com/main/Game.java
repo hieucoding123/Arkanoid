@@ -24,6 +24,8 @@ import Menu.MainMenu;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import ui.SettingsUI;
+import ui.MainMenu;
 
 public class Game {
     private OrthographicCamera camera;
@@ -73,6 +75,11 @@ public class Game {
 
     public static final float MAX_MUSIC_VOLUME = 0.3f;
     public static final float MAX_SFX_VOLUME = 1.5f;
+
+    private GameServer gameServer;
+    private String networkServerIP;
+    private boolean isNetworkHost;
+    private GameClient networkClient;
 
     public Game(Main main) {
         this.main = main;
@@ -166,6 +173,8 @@ public class Game {
             case MAIN_MENU:
             case LEADER_BOARD:
             case SETTINGS:
+            case NETWORK_CONNECTION_MENU:
+            case NETWORK_LOBBY:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -176,6 +185,7 @@ public class Game {
                 break;
             case INFI_MODE:
             case VS_MODE:
+            case NETWORK_VS:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
@@ -212,6 +222,10 @@ public class Game {
             System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
         }
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+            if (gameServer != null) {
+                gameServer.stop();
+            }
+            networkClient.disconnect();
             setGameState(GameState.MAIN_MENU);
         }
     }
@@ -242,10 +256,35 @@ public class Game {
             case LEADER_BOARD:
                 ui.update();
                 break;
+            case NETWORK_VS:
+                if (gameMode != null) {
+                    gameMode.update(this.delta);
+                }
+                if (isNetworkHost && gameServer != null) {
+                    gameServer.update(this.delta);
+                }
+                if (gameMode != null && gameMode.isEnd()) {
+                    stopNetworkGame();
+                    setGameState(GameState.NETWORK_CONNECTION_MENU);
+                }
+                break;
+            case NETWORK_LOBBY:
+                break;
+        }
+    }
+
+    private void stopNetworkGame() {
+        if (gameServer != null) {
+            gameServer.stop();
+            gameServer = null;
+        }
+        if (gameMode instanceof NetworkVsMode) {
+            ((NetworkVsMode) gameMode).dispose();
         }
     }
 
     public void dispose() {
+        stopNetworkGame();
         spriteBatch.dispose();
         ui.dispose();
         gameScreen.dispose();
@@ -307,6 +346,16 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case NETWORK_CONNECTION_MENU:
+                ui = new NetworkConnectionMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case NETWORK_LOBBY:
+                ui = new NetworkLobby(main, this.player, networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             default:
                 playGame();
         }
@@ -356,6 +405,106 @@ public class Game {
             case VS_MODE:
                 gameMode = new VsMode(this.player, this.player2, gameScreen, this.scoreManager, this.scoreManagerP2);
                 break;
+            case NETWORK_VS:
+                playNetworkGame();
+                break;
+        }
+    }
+
+    private void playNetworkGame() {
+        gameMode = new NetworkVsMode(
+            player, scoreManager, gameScreen,
+            networkServerIP, isNetworkHost, networkClient
+        );
+        if (isNetworkHost && gameServer != null) {
+            VsMode severGameMode = new  VsMode(player, player2, gameScreen,
+                scoreManager, scoreManagerP2);
+            gameServer.setGameMode(severGameMode);
+        }
+
+    }
+
+    public void startNetworkGame(String severIP, boolean isHost) {
+        this.networkServerIP = severIP;
+        this.isNetworkHost = isHost;
+
+        if (isHost) {
+            startGameServer();
+        }
+
+        try {
+            networkClient = new GameClient(new GameClient.GameClientListener() {
+                @Override
+                public void onConnected(int pNumber) {
+                    System.out.println("Connected to server as Player " + pNumber);
+                }
+
+                @Override
+                public void onGameStateUpdated(NetworkProtocol.GameStateUpdate state) {
+
+                }
+
+                @Override
+                public void onGameStarted() {
+
+                }
+
+                @Override
+                public void onDisconnected(String reason) {
+
+                }
+
+                @Override
+                public void onMessage(String message) {
+
+                }
+
+                @Override
+                public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
+                    System.out.println("Lobby update: P1=" + update.p1Connected +
+                    " P2=" + update.p2Connected +
+                    " P1Ready=" + update.p1Ready +
+                    " P2Ready=" + update.p2Ready);
+                }
+            });
+            networkClient.connect(severIP, player.getName(), NetworkProtocol.GameMode.VS);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Gdx.app.postRunnable(() -> {
+                    setGameState(GameState.NETWORK_LOBBY);
+                });
+            }).start();
+        } catch (Exception e) {
+            System.err.println("Failed to connect: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void startGameServer() {
+        try {
+            gameServer = new GameServer();
+            gameServer.start();
+
+            new Thread(() -> {
+                while (gameServer != null) {
+                    float delta = 1/60f;
+                    gameServer.update(delta);
+
+                    try {
+                        Thread.sleep(16);   // ~ 60 fps
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }).start();
+            System.out.println("Game server started successfully");
+        } catch (Exception e) {
+            System.err.println("Failed to connect: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
