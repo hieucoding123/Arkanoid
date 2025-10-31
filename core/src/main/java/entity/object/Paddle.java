@@ -139,4 +139,19 @@ public class Paddle extends MovableObject {
         return 0;
     }
 
+    public long getExpandEnd() {
+        return expandEnd;
+    }
+
+    public long getStunEnd() {
+        return StunEnd;
+    }
+
+    public void setExpandEnd(long expandEnd) {
+        this.expandEnd = expandEnd;
+    }
+
+    public void setStunEnd(long stunEnd) {
+        this.StunEnd = stunEnd;
+    }
 }

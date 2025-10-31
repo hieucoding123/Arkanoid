@@ -30,6 +30,10 @@ public abstract class EffectItem extends MovableObject {
         items.add(this);
     }
 
+    public static ArrayList<EffectItem> getItems() {
+        return items;
+    }
+
     /**
      * Apply effect.
      */

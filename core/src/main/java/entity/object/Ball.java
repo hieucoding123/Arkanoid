@@ -341,4 +341,32 @@ public class Ball extends MovableObject {
         }
         return 0;
     }
+
+    public float getOriginalSpeed() {
+        return this.originalspeed;
+    }
+
+    public long getBigEnd() {
+        return this.BigEnd;
+    }
+
+    public long getSlowEnd() {
+        return this.SlowEnd;
+    }
+
+    public long getFastEnd() {
+        return this.FastEnd;
+    }
+
+    public void setBigEnd(long bigEnd) {
+        this.BigEnd = bigEnd;
+    }
+
+    public void setSlowEnd(long slowEnd) {
+        this.SlowEnd = slowEnd;
+    }
+
+    public void setFastEnd(long fastEnd) {
+        this.FastEnd = fastEnd;
+    }
 }

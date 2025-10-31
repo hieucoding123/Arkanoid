@@ -193,4 +193,24 @@ public class LevelMode extends GameMode {
         return this.paddle;
     }
 
+    public Object getLevelNumber() {
+        return  this.levelNumber;
+    }
+
+    @Override
+    public double getTimePlayed() {
+        return this.timePlayed;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+    @Override
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+    @Override
+    public void setTimePlayed(double time) {
+        this.timePlayed = time;
+    }
 }

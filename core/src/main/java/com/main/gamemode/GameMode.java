@@ -1,6 +1,7 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.dongbat.jbump.Collisions;
 import com.main.input.IngameInputHandler;
 import entity.Player;
 import entity.object.Ball;
@@ -133,4 +134,20 @@ public abstract class GameMode {
         }
         System.out.println("----------------------------");
     }
+
+    public boolean isFollowPaddle() {
+        return followPaddle;
+    }
+
+    public ArrayList<Ball> getBalls() { return this.balls; }
+
+    public BricksMap getCurrentMap() { return null; }
+
+    public void setLives(int lives) {}
+
+    public double getTimePlayed() { return 0.0; }
+
+    public void setTimePlayed(double time) {}
+
+    public void setFollowPaddle(boolean follow) { this.followPaddle = follow; }
 }

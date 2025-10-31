@@ -223,4 +223,25 @@ public class CoopMode extends GameMode {
         return this.paddle2;
     }
 
+    public Object getLevelNumber() {
+        return this.levelNumber;
+    }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    @Override
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+    @Override
+    public void setTimePlayed(double time) {
+        this.timePlayed = time;
+    }
+
+    @Override
+    public double getTimePlayed() {
+        return this.timePlayed;
+    }
 }

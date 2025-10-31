@@ -15,6 +15,7 @@ import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import entity.GameScreen;
+import entity.Effect.EffectItem;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
@@ -28,6 +29,7 @@ import com.main.gamemode.CoopMode;
 import Menu.PauseUI;
 import Menu.SettingsUI;
 import Menu.MainMenu;
+import com.main.GameSaveManager;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -49,6 +51,9 @@ public class Game {
     private ShapeRenderer shapeRenderer;
     private com.badlogic.gdx.InputProcessor previous;
     private boolean isPaused = false;
+    private boolean isResumingFromSave = false;
+    private int currentLives = 3;
+    private double currentTimePlayed = 0.0;
 
     GameMode gameMode;
 
@@ -176,16 +181,43 @@ public class Game {
         }
     }
 
+    private boolean isCurrentModeSaveable() {
+        if (gameMode == null) return false;
+        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode);
+    }
+
+    private void updateTimeLive() {
+        if (gameMode == null) return;
+
+        if (gameMode instanceof LevelMode) {
+            currentLives = ((LevelMode) gameMode).getLives();
+            currentTimePlayed = ((LevelMode) gameMode).getTimePlayed();
+        } else if (gameMode instanceof CoopMode) {
+            currentLives = ((CoopMode) gameMode).getLives();
+            currentTimePlayed = ((CoopMode) gameMode).getTimePlayed();
+        } else if (gameMode instanceof InfiniteMode) {
+            currentLives = ((InfiniteMode) gameMode).getLives();
+            currentTimePlayed = ((InfiniteMode) gameMode).getTimePlayed();
+        }
+    }
+
     public void ContinueGame() {
         isPaused = !isPaused;
         if (isPaused) {
             playSfx(sfx_paused);
+            if (isCurrentModeSaveable() && !isResumingFromSave) {
+                updateTimeLive();
+                GameSaveManager.saveGame(player, gameMode, gameState, scoreManager, currentLives, currentTimePlayed, isCoopSelection);
+            }
             previous = Gdx.input.getInputProcessor();
             Gdx.input.setInputProcessor(pauseUI.getStage());
         } else {
-            // Đang UNPAUSE
             Gdx.input.setInputProcessor(previous);
             previous= null;
+            if (isResumingFromSave) {
+                GameSaveManager.deleteSave(player, gameState, isCoopSelection);
+                isResumingFromSave = false;
+            }
         }
     }
 
@@ -220,6 +252,8 @@ public class Game {
                     spriteBatch.begin();
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
+                    gameScreen.setLives(currentLives);
+                    gameScreen.setTime(currentTimePlayed);
                     gameScreen.render();
                     if (isPaused) {
                         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -290,6 +324,7 @@ public class Game {
         switch (gameState) {
             case INFI_MODE:
                 gameMode.update(this.delta);
+                updateTimeLive();
                 if (gameMode.isEnd()) {
                     setGameState(GameState.SELECT_MODE);
                 }
@@ -300,7 +335,9 @@ public class Game {
             case LEVEL4:
             case LEVEL5:
                 gameMode.update(this.delta);
+                updateTimeLive();
                 if (gameMode.isEnd()) {
+                    GameSaveManager.deleteSave(player, gameState, isCoopSelection);
                     setGameState(GameState.LEVELS_SELECTION);
                 }
                 break;
@@ -340,6 +377,10 @@ public class Game {
     }
 
     public void dispose() {
+        if (gameMode != null && !gameMode.isEnd() && !isPaused && isCurrentModeSaveable()) {
+            updateTimeLive();
+            GameSaveManager.saveGame(player, gameMode, gameState, scoreManager, currentLives, currentTimePlayed, isCoopSelection);
+        }
         stopNetworkGame();
         spriteBatch.dispose();
         ui.dispose();
@@ -377,8 +418,23 @@ public class Game {
     }
 
     public void setGameState(GameState newGameState) {
+        if (this.gameMode != null) {
+            this.gameMode = null;
+        }
+        isPaused = false;
+        isResumingFromSave = false;
+        scoreManager.resetScore();
+        currentLives = 3;
+        currentTimePlayed = 0.0;
+        if (pauseUI != null) {
+            pauseUI.dispose();
+        }
+        pauseUI = new PauseUI(spriteBatch, this);
+        if (ui != null) {
+            ui.dispose();
+            ui = null;
+        }
         gameState = newGameState;
-
         switch (gameState) {
             case MAIN_MENU:
                 ui = new MainMenu(main, this.player);
@@ -424,6 +480,11 @@ public class Game {
 
     private void playGame() {
         viewport.apply();
+        if (GameSaveManager.isSaveableGameMode(gameState)) {
+            isResumingFromSave = GameSaveManager.HaveToSave(this.player, gameState, isCoopSelection);
+        } else {
+            isResumingFromSave = false;
+        }
         switch (gameState) {
             case INFI_MODE:
                 gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
@@ -469,6 +530,16 @@ public class Game {
             case NETWORK_VS:
                 playNetworkGame();
                 break;
+        }
+        if (isResumingFromSave) {
+            GameSaveManager.loadGame(this.player,gameMode, gameState, scoreManager, isCoopSelection);
+            updateTimeLive();
+            isPaused = true;
+            if (pauseUI != null) pauseUI.dispose();
+            pauseUI = new PauseUI(spriteBatch, this);
+            previous = Gdx.input.getInputProcessor();
+            Gdx.input.setInputProcessor(pauseUI.getStage());
+
         }
     }
 
@@ -567,5 +638,19 @@ public class Game {
             System.err.println("Failed to connect: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public void NewGame() {
+        if (isCurrentModeSaveable()) {
+            GameSaveManager.deleteSave(player, gameState, isCoopSelection);
+        }
+        if (gameMode != null) {
+            entity.Effect.EffectItem.clear();
+        }
+        gameMode = null;
+        scoreManager.resetScore();
+        playGame();
+        isPaused = false;
+        previous = null;
     }
 }

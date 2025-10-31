@@ -68,4 +68,20 @@ public class ScoreManager {
     public void clearedLevel() {
         score += 1000.0d;
     }
+
+    public int getComboCount() {
+        return comboCount;
+    }
+
+    public long getLastHitTime() {
+        return lastHitTime;
+    }
+
+    public void setComboCount(int cntCombo) {
+        this.comboCount = cntCombo;
+    }
+
+    public void setLastHitTime(long timeLastHit) {
+        this.lastHitTime = timeLastHit;
+    }
 }

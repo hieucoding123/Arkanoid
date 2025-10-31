@@ -194,4 +194,23 @@ public class InfiniteMode extends GameMode {
 
         return Math.max(chance, minItemChance);
     }
+
+    public int getLives() {
+        return this.lives;
+    }
+
+    @Override
+    public double getTimePlayed() {
+        return this.timePlayed;
+    }
+
+    @Override
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    @Override
+    public void setTimePlayed(double time) {
+        this.timePlayed = (float)time;
+    }
 }

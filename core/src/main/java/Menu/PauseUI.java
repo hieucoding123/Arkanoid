@@ -21,12 +21,15 @@ public class PauseUI {
         stage = new Stage(viewport, batch);
         Label.LabelStyle WhiteStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")), Color.WHITE);
         Label resumeLabel = new Label("RESUME", WhiteStyle);
+        Label newGameLabel = new Label("NEW GAME", WhiteStyle);
         resumeLabel.setFontScale(1.5f);
+        newGameLabel.setFontScale(1.5f);
         resumeLabel.pack();
+        newGameLabel.pack();
 
         resumeLabel.setPosition(
             (viewport.getWorldWidth() / 2f) - (resumeLabel.getWidth() / 2f),
-            (viewport.getWorldHeight() / 2f) - (resumeLabel.getHeight() / 2f)
+            (viewport.getWorldHeight() / 2f) - (resumeLabel.getHeight() / 2f) + 50
         );
 
         resumeLabel.addListener(new ClickListener() {
@@ -47,7 +50,30 @@ public class PauseUI {
             }
         });
 
+        newGameLabel.setPosition(
+            (viewport.getWorldWidth() / 2f) - (newGameLabel.getWidth() / 2f),
+            (viewport.getWorldHeight() / 2f) - (newGameLabel.getHeight() / 2f) - 50
+        );
+
+        newGameLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (game != null) {
+                    game.NewGame();
+                }
+            }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                newGameLabel.setColor(Color.YELLOW);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                newGameLabel.setColor(Color.WHITE);
+            }
+        });
+
         stage.addActor(resumeLabel);
+        stage.addActor(newGameLabel);
     }
 
     public Stage getStage() {
