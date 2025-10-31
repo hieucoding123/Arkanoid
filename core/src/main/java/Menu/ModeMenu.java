@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -138,9 +139,17 @@ public class ModeMenu extends UserInterface {
                 Game.playSfx(Game.sfx_back,1.0f);
                 main.setGameState(GameState.MAIN_MENU);
             }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                backButton.setColor(Color.YELLOW);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                backButton.setColor(Color.WHITE);
+            }
         });
 
-        backButton.setPosition(0, 0);
+        backButton.setPosition(10, 0);
         backButton.setFontScale(0.6f);
         this.getStage().addActor(backButton);
 

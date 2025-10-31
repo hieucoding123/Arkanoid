@@ -224,9 +224,17 @@ public class LevelSelectionMenu extends UserInterface {
                 Game.playSfx(Game.sfx_back,1.0f);
                 main.setGameState(GameState.SELECT_MODE);
             }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                backButton.setColor(HOVER_COLOR);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                backButton.setColor(DEFAULT_COLOR);
+            }
         });
 
-        backButton.setPosition(0, 0);
+        backButton.setPosition(10, 0);
         backButton.setFontScale(0.6f);
         this.getStage().addActor(backButton);
 
