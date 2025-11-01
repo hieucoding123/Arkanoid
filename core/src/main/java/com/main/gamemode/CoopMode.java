@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.components.CollisionManager;
 import com.main.components.IngameInputHandler;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
@@ -109,67 +110,60 @@ public class CoopMode extends GameMode {
 
         for (Ball ball : balls) {
             ball.update(delta);
-            ball.collisionWith(paddle1);
-            ball.collisionWith(paddle2);
+        }
 
-            for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
-                    brick.takeHit();
-                    if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
-                    if (brick.gethitPoints() == 0) {
-                        EffectItem newEffectItem = null;
-//                        EffectItem newEffectItem1 = null;
-//                        EffectItem newEffectItem2 = null;
-                        if (mapIndex == 1) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.05, 0.05, 0.05, 0.05, 1, 0.12, 0.14, 0.16, 0.18, 0.20);
-                        } else if  (mapIndex == 2) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.04, 0.05, 0.05, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18);
-                        } else if (mapIndex == 3) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.03, 0.05, 0.05, 0.05, 0.06, 0.08, 0.10, 0.12, 0.14, 0.15);
-                        } else if (mapIndex == 4) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.03, 0.05, 0.05, 0.05, 0.05, 0.07, 0.08, 0.09, 0.10, 0.12);
-                        } else {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.02, 0.05, 0.05, 0.05, 0.04, 0.05, 0.06, 0.07, 0.08, 0.10);
-                        }
-
-                        if (newEffectItem != null) {
-                            EffectItem.addEffectItem(newEffectItem);
-                        }
-
-
-                        scoreManager.comboScore(brick);
-                        if (brick.getExplosion()) {
-                            brick.startExplosion();
-                        } else {
-                            brick.setDestroyed(true);
-                        }
-                    }
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
-                    }
-                    break;
+        final int SOLVER_ITERATIONS = 5;
+        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
+            for (int i = 0; i < balls.size(); i++) {
+                Ball ball1 = balls.get(i);
+                for (int j = i + 1; j < balls.size(); j++) {
+                    Ball ball2 = balls.get(j);
+                    CollisionManager.handleBallBallCollision(ball1, ball2);
                 }
             }
         }
+
+        for (Ball ball : balls) {
+            CollisionManager.handleBallBoundaryCollision(ball);
+            CollisionManager.handleBallPaddleCollision(ball, paddle1);
+            CollisionManager.handleBallPaddleCollision(ball, paddle2);
+
+            Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
+
+            if (hitBrick != null && hitBrick.gethitPoints() == 0) {
+                EffectItem newEffectItem = null;
+                if (mapIndex == 1) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                } else if  (mapIndex == 2) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                        0.04, 0.05, 0.05, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18);
+                } else if (mapIndex == 3) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                        0.03, 0.05, 0.05, 0.05, 0.06, 0.08, 0.10, 0.12, 0.14, 0.15);
+                } else if (mapIndex == 4) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                        0.03, 0.05, 0.05, 0.05, 0.05, 0.07, 0.08, 0.09, 0.10, 0.12);
+                } else {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                        0.02, 0.05, 0.05, 0.05, 0.04, 0.05, 0.06, 0.07, 0.08, 0.10);
+                }
+
+                if (newEffectItem != null) {
+                    EffectItem.addEffectItem(newEffectItem);
+                }
+
+                scoreManager.comboScore(hitBrick);
+                if (hitBrick.getExplosion()) {
+                    hitBrick.startExplosion();
+                } else {
+                    hitBrick.setDestroyed(true);
+                }
+            }
+        }
+
         balls.removeIf(Ball::isDestroyed);
+
         if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
