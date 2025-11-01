@@ -18,11 +18,17 @@ public class IngameInputHandler extends InputAdapter {
     private boolean paddle1Shift = false;
     private boolean paddle2Shift = false;
 
+    /**
+     * Input Handler constructor for a game mode.
+     * @param currentMode the game mode
+     */
     public IngameInputHandler(GameMode currentMode) {
         this.currentMode = currentMode;
     }
 
-    //Call this after passing down paddle entities
+    /**
+     * Process movement method.
+     */
     public void processMovement() {
 
         Paddle p1 = currentMode.getPaddle1();
@@ -48,6 +54,11 @@ public class IngameInputHandler extends InputAdapter {
         }
     }
 
+    /**
+     * Flag toggle for key press.
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return held down keycode or not and handled flag toggling.
+     */
     @Override
     public boolean keyDown(int keycode) {
 
@@ -87,6 +98,11 @@ public class IngameInputHandler extends InputAdapter {
         return false;
     }
 
+    /**
+     * Flag toggle for key release.
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return held down keycode or not and handled flag toggling.
+     */
     @Override
     public boolean keyUp(int keycode) {
 

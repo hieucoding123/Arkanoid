@@ -91,15 +91,14 @@ public class GameScreen {
         clockImage.setPosition(TIME_X, TIME_Y+5);
 
         // Position labels next to icons
-        // We use ICON_SIZE now instead of heartImage.getWidth() or clockImage.getWidth()
         livesLabel.setPosition(LIVES_X + ICON_SIZE + ICON_LABEL_PADDING, LIVES_Y);
         timeLabel.setPosition(TIME_X + ICON_SIZE + ICON_LABEL_PADDING, TIME_Y);
 
         // Add actors to stage
         stage.addActor(scoreLabel);
-        stage.addActor(heartImage); // Add heart icon
+        stage.addActor(heartImage);
         stage.addActor(livesLabel);
-        stage.addActor(clockImage); // Add clock icon
+        stage.addActor(clockImage);
         stage.addActor(timeLabel);
     }
 
@@ -141,8 +140,8 @@ public class GameScreen {
         if (stage != null) stage.dispose();
         if (skin != null) skin.dispose();
         if (font != null) font.dispose();
-        if (heartTexture != null) heartTexture.dispose(); // Dispose texture
-        if (clockTexture != null) clockTexture.dispose(); // Dispose texture
+        if (heartTexture != null) heartTexture.dispose();
+        if (clockTexture != null) clockTexture.dispose();
     }
 
     // Getter

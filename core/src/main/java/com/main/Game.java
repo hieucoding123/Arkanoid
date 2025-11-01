@@ -128,6 +128,9 @@ public class Game {
         this.setGameState(GameState.MAIN_MENU);
     }
 
+    /**
+     * Loads audio assets.
+     */
     private void loadAudio() {
         //BGM
         bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm2.mp3"));
@@ -151,7 +154,7 @@ public class Game {
         sfx_click = Gdx.audio.newSound(Gdx.files.internal("sound/click.mp3"));
         sfx_back = Gdx.audio.newSound(Gdx.files.internal("sound/back.mp3"));
 
-        //Unimplemented
+        //Game state sfx
         sfx_win = Gdx.audio.newSound(Gdx.files.internal("sound/win.mp3"));
         sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
     }
@@ -162,10 +165,19 @@ public class Game {
         }
     }
 
+    /**
+     * Plays a sound effect at the default global volume.
+     * @param sfx The Sound object to be played.
+     */
     public static void playSfx(Sound sfx) {
         sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
     }
 
+    /**
+     * Plays a sound effect with a volume relative to the default global volume.
+     * @param sfx The Sound object to be played.
+     * @param relativeVolume A multiplier for the global volume
+     */
     public static void playSfx(Sound sfx, float relativeVolume) {
         float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
         sfx.play(finalVolume);

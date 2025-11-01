@@ -11,7 +11,10 @@ import entity.object.brick.BricksMap;
 public class CollisionManager {
 
     /**
-     * Checks if two circles (Balls) are overlapping.
+     * Circle-Circle overlapping detection.
+     * @param ball1 the round obj 1 (only the balls in the game are rounded)
+     * @param ball2 the round obj 2 (only the balls in the game are rounded)
+     * @return if there was overlapping of obj 1 and obj 2 or not.
      */
     public static boolean checkCircleCircle(Ball ball1, Ball ball2) {
         float dx = ball2.getCenterX() - ball1.getCenterX();
@@ -26,7 +29,10 @@ public class CollisionManager {
     }
 
     /**
-     * Checks if a circle (Ball) and a rectangle (GameObject) are overlapping.
+     * Circle-AABB overlapping detection.
+     * @param ball the round obj 1 (only the balls in the game are rounded)
+     * @param rect rectangle obj 2
+     * @return if there was overlapping of obj 1 and obj 2 or not.
      */
     public static boolean checkCircleRect(Ball ball, GameObject rect) {
         float testX = ball.getCenterX();
@@ -52,7 +58,10 @@ public class CollisionManager {
     }
 
     /**
-     * Checks if two Axis-Aligned Bounding Boxes (Rectangles) are overlapping.
+     * AABB overlapping detection.
+     * @param rect1 rectangle obj 1.
+     * @param rect2 rectangle obj 2.
+     * @return if there was overlapping of obj 1 and obj 2 or not.
      */
     public static boolean checkRectRect(GameObject rect1, GameObject rect2) {
         return rect1.getX() < rect2.getX() + rect2.getWidth() &&
@@ -62,7 +71,10 @@ public class CollisionManager {
     }
 
 
-
+    /**
+     * Handle Ball and 4 sides of game screen collision.
+     * @param ball the ball.
+     */
     public static void handleBallBoundaryCollision(Ball ball) {
         // Left wall
         if (ball.getX() <= Game.padding_left_right) {
@@ -97,8 +109,12 @@ public class CollisionManager {
         }
     }
 
+
     /**
-     * Handles the physics response for a ball-paddle collision.
+     * Handle Ball and Paddle bounce collision.
+     * @param ball the ball that touched the paddle.
+     * @param paddle the paddle that was touched.
+     * @return if there was a collision handled or not.
      */
     public static boolean handleBallPaddleCollision(Ball ball, Paddle paddle) {
         if (!checkCircleRect(ball, paddle)) {
@@ -136,8 +152,12 @@ public class CollisionManager {
         return false;
     }
 
+
     /**
-     * Handles the response for a ball-brick collision.
+     * Handle Brick hit collision.
+     * @param ball the ball that hits the brick
+     * @param currentMap list of brick.
+     * @return the brick that was hit and handled.
      */
     public static Brick handleBallBrickHit(Ball ball, BricksMap currentMap) {
         for (Brick brick : currentMap.getBricks()) {
@@ -179,7 +199,10 @@ public class CollisionManager {
     }
 
     /**
-     * Handles the bounce physics response for a ball-ball collision using checkCircleCircle.
+     * Handle Ball-ball collision.
+     * @param ball1 ball 1 entity
+     * @param ball2 ball 2 entity
+     * @return true if there was handled collision, false if not
      */
     public static boolean handleBallBallCollision(Ball ball1, Ball ball2) {
         // detection
