@@ -434,6 +434,9 @@ public class Ball extends MovableObject {
 
     /**
      * Sets the velocity and updates the internal angle and speed fields to match.
+     *
+     * @param dx The new horizontal velocity.
+     * @param dy The new vertical velocity.
      */
     public void setVelocityAndUpdateAngle(float dx, float dy) {
         this.dx = dx;

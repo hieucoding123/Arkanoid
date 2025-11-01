@@ -14,8 +14,8 @@ import com.main.gamemode.*;
 import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
-import entity.GameScreen;
 import Menu.CoopPlayerLevelSelectionMenu;
+import entity.Effect.EffectItem;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
@@ -29,14 +29,10 @@ import com.main.gamemode.CoopMode;
 import Menu.PauseUI;
 import Menu.SettingsUI;
 import Menu.MainMenu;
-import com.main.GameSaveManager;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
-/**
- * Main game class that handles rendering, updating, and managing game modes, menus, and network logic.
- */
 public class Game {
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -90,7 +86,7 @@ public class Game {
     public static float musicVolumePercent = 1.0f;
     public static float sfxVolumePercent = 1.0f;
 
-    public static final float MAX_MUSIC_VOLUME = 0.3f;
+    public static final float MAX_MUSIC_VOLUME = 0.05f;
     public static final float MAX_SFX_VOLUME = 1.5f;
 
     private GameServer gameServer;
@@ -98,16 +94,11 @@ public class Game {
     private boolean isNetworkHost;
     private GameClient networkClient;
 
-    /**
-     * Creates a new Game instance.
-     * @param main the main application reference
-     */
     public Game(Main main) {
         this.main = main;
         this.init();
     }
 
-    /** Initializes the game components and loads assets. */
     public void init() {
         player = new Player();
         player2 = new Player();
@@ -138,7 +129,9 @@ public class Game {
         this.setGameState(GameState.MAIN_MENU);
     }
 
-    /** Loads background music and sound effects. */
+    /**
+     * Loads audio assets.
+     */
     private void loadAudio() {
         //BGM
         bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm2.mp3"));
@@ -162,12 +155,11 @@ public class Game {
         sfx_click = Gdx.audio.newSound(Gdx.files.internal("sound/click.mp3"));
         sfx_back = Gdx.audio.newSound(Gdx.files.internal("sound/back.mp3"));
 
-        //Unimplemented
+        //Game state sfx
         sfx_win = Gdx.audio.newSound(Gdx.files.internal("sound/win.mp3"));
         sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
     }
 
-    /** Updates the global music volume. */
     public static void updateMusicVolume() {
         if (bgm != null) {
             bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
@@ -175,46 +167,44 @@ public class Game {
     }
 
     /**
-     * Plays a sound effect at full SFX volume.
-     * @param sfx the sound to play
+     * Plays a sound effect at the default global volume.
+     * @param sfx The Sound object to be played.
      */
     public static void playSfx(Sound sfx) {
         sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
     }
 
     /**
-     * Plays a sound effect with relative volume.
-     * @param sfx the sound to play
-     * @param relativeVolume the volume multiplier (0.0–1.0)
+     * Plays a sound effect with a volume relative to the default global volume.
+     * @param sfx The Sound object to be played.
+     * @param relativeVolume A multiplier for the global volume
      */
     public static void playSfx(Sound sfx, float relativeVolume) {
         float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
         sfx.play(finalVolume);
     }
 
-    /**
-     * Adjusts the game viewport on window resize.
-     * @param width new window width
-     * @param height new window height
-     */
     public void resize(int width, int height) {
         viewport.update(width, height, true);
 //        gameScreen.resize(width, height);
         if (ui != null) {
             ui.resize(width, height);
         }
+
+        if (pauseUI != null) {
+            pauseUI.resize(width, height);
+        }
+
+        if (gameMode != null) {
+            gameMode.resize(width, height);
+        }
     }
 
-    /**
-     * Checks if the current game mode can be saved.
-     * @return true if the mode supports saving, false otherwise
-     */
     private boolean isCurrentModeSaveable() {
         if (gameMode == null) return false;
-        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode);
+        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode || gameMode instanceof InfiniteMode);
     }
 
-    /** Updates the stored number of lives and time played. */
     private void updateTimeLive() {
         if (gameMode == null) return;
 
@@ -230,7 +220,6 @@ public class Game {
         }
     }
 
-    /** Toggles between pause and resume states, saving progress if applicable. */
     public void ContinueGame() {
         isPaused = !isPaused;
         if (isPaused) {
@@ -251,7 +240,6 @@ public class Game {
         }
     }
 
-    /** Renders the current game state or UI to the screen. */
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
 
@@ -261,6 +249,7 @@ public class Game {
             case SETTINGS:
             case NETWORK_CONNECTION_MENU:
             case NETWORK_LOBBY:
+            case GAME_OVER:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -270,7 +259,6 @@ public class Game {
                 }
                 break;
             case INFI_MODE:
-            case VS_MODE:
             case NETWORK_VS:
             case LEVEL1:
             case LEVEL2:
@@ -283,9 +271,6 @@ public class Game {
                     spriteBatch.begin();
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
-//                    gameScreen.setLives(currentLives);
-//                    gameScreen.setTime(currentTimePlayed);
-//                    gameScreen.render();
                     if (isPaused) {
                         Gdx.gl.glEnable(GL20.GL_BLEND);
                         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -304,7 +289,6 @@ public class Game {
         }
     }
 
-    /** Handles global input, pause, and debug controls. */
     public void handleInput() {
         if (gameMode != null && !isPaused) {
             gameMode.handleInput();
@@ -320,13 +304,12 @@ public class Game {
         }
         switch (gameState) {
             case INFI_MODE:
-            case VS_MODE:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
             case LEVEL4:
             case LEVEL5:
-                if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     ContinueGame();
                 }
                 break;
@@ -339,7 +322,7 @@ public class Game {
             int y_from_bottom = Gdx.graphics.getHeight() - Gdx.input.getY();
             System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
         }
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.P)) {
             if (gameServer != null) {
                 gameServer.stop();
             }
@@ -348,7 +331,6 @@ public class Game {
         }
     }
 
-    /** Updates the logic of the current game state. */
     public void update() {
         if (isPaused) {
             pauseUI.act(this.delta);
@@ -374,11 +356,6 @@ public class Game {
                     setGameState(GameState.LEVELS_SELECTION);
                 }
                 break;
-            case VS_MODE:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.SELECT_MODE);
-                }
             case LEADER_BOARD:
                 ui.update();
                 break;
@@ -390,16 +367,16 @@ public class Game {
                     gameServer.update(this.delta);
                 }
                 if (gameMode != null && gameMode.isEnd()) {
-                    stopNetworkGame();
-                    setGameState(GameState.NETWORK_CONNECTION_MENU);
+                    setGameState(GameState.GAME_OVER);
                 }
+                break;
+            case GAME_OVER:
                 break;
             case NETWORK_LOBBY:
                 break;
         }
     }
 
-    /** Stops and cleans up the network game server and client. */
     private void stopNetworkGame() {
         if (gameServer != null) {
             gameServer.stop();
@@ -410,7 +387,6 @@ public class Game {
         }
     }
 
-    /** Disposes all resources and saves game state if needed. */
     public void dispose() {
         if (gameMode != null && !gameMode.isEnd() && !isPaused && isCurrentModeSaveable()) {
             updateTimeLive();
@@ -427,6 +403,7 @@ public class Game {
         if (pauseUI != null) {
             pauseUI.dispose();
         }
+        EffectItem.clear();
         bgm.dispose();
         sfx_bigball.dispose();
         sfx_bigpaddle.dispose();
@@ -447,19 +424,11 @@ public class Game {
         sfx_touchpaddle.dispose();
     }
 
-    /**
-     * Sets the game to level selection mode.
-     * @param isCoop true if in co-op selection, false for single-player
-     */
     public void setLevelSelectionMode(boolean isCoop) {
         this.isCoopSelection = isCoop;
         setGameState(GameState.LEVELS_SELECTION);
     }
 
-    /**
-     * Changes the active game state and loads corresponding UI or mode.
-     * @param newGameState the target game state
-     */
     public void setGameState(GameState newGameState) {
         if (this.gameMode != null) {
             this.gameMode = null;
@@ -496,6 +465,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SELECT_MODE:
+                if (gameServer != null) stopNetworkGame();
                 ui = new ModeMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
@@ -512,6 +482,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case NETWORK_CONNECTION_MENU:
+                if (gameServer != null) stopNetworkGame();
                 ui = new NetworkConnectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
@@ -521,13 +492,20 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case GAME_OVER:
+                ui = new GameOver(
+                    main, player, (int)player.getScore(), (int)player2.getScore(),
+                    networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             default:
                 playGame();
         }
     }
 
-    /** Starts gameplay for the current game mode. */
     private void playGame() {
+        EffectItem.clear();
         viewport.apply();
         if (GameSaveManager.isSaveableGameMode(gameState)) {
             isResumingFromSave = GameSaveManager.HaveToSave(this.player, gameState, isCoopSelection);
@@ -573,9 +551,6 @@ public class Game {
                     gameMode = new LevelMode(this.player, scoreManager, 5);
                 }
                 break;
-            case VS_MODE:
-                gameMode = new VsMode(this.player, this.player2, this.scoreManager, this.scoreManagerP2);
-                break;
             case NETWORK_VS:
                 playNetworkGame();
                 break;
@@ -592,24 +567,17 @@ public class Game {
         }
     }
 
-    /** Initializes the client-side network versus mode. */
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, networkServerIP, isNetworkHost, networkClient
+            player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
-            VsMode severGameMode = new  VsMode(player, player2,
-                scoreManager, scoreManagerP2);
+            VsMode severGameMode = new  VsMode(scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);
         }
 
     }
 
-    /**
-     * Starts a new network game as host or client.
-     * @param severIP the server IP address
-     * @param isHost true if starting as host, false if connecting as client
-     */
     public void startNetworkGame(String severIP, boolean isHost) {
         this.networkServerIP = severIP;
         this.isNetworkHost = isHost;
@@ -670,7 +638,6 @@ public class Game {
         }
     }
 
-    /** Starts the local game server for hosting a network match. */
     private void startGameServer() {
         try {
             gameServer = new GameServer();
@@ -695,7 +662,6 @@ public class Game {
         }
     }
 
-    /** Resets and starts a new game, clearing effects and scores. */
     public void NewGame() {
         if (isCurrentModeSaveable()) {
             GameSaveManager.deleteSave(player, gameState, isCoopSelection);
@@ -708,5 +674,36 @@ public class Game {
         playGame();
         isPaused = false;
         previous = null;
+    }
+
+    public void ReturnMenu() {
+        isPaused = false;
+        if (previous != null) {
+            Gdx.input.setInputProcessor(previous);
+            previous = null;
+        } else if (ui != null) {
+            Gdx.input.setInputProcessor(ui.getStage());
+        }
+        if (isCurrentModeSaveable()) {
+            isResumingFromSave = false;
+        }
+        EffectItem.clear();
+        GameState state;
+        if (gameState == GameState.INFI_MODE) {
+            state = GameState.SELECT_MODE;
+        } else if (GameSaveManager.isSaveableGameMode(gameState)) {
+            state = GameState.LEVELS_SELECTION;
+        } else {
+            state = GameState.SELECT_MODE;
+        }
+        setGameState(state);
+    }
+
+    public Main getMain() {
+        return this.main;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }

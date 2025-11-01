@@ -25,7 +25,6 @@ public class UserInterface extends ApplicationAdapter {
     private BitmapFont font;
     private Player player;
 
-    // ... (Constructor, create, resize, render, dispose, update, setters/getters) ...
 
     public UserInterface(Main main, Player player) {
         this.main = main;
@@ -112,11 +111,8 @@ public class UserInterface extends ApplicationAdapter {
         return player;
     }
 
-    // --- NEW BASE METHOD ---
     /**
-     * Creates a hoverable and clickable Label that can be conditionally disabled.
-     * Uses the default font with WHITE color and YELLOW hover color.
-     * (This is the new detailed base method)
+     * Constructor for enabled conditionally label button that has all params.
      *
      * @param text The text to display on the label.
      * @param clickSound The sound to play on click.
@@ -167,9 +163,7 @@ public class UserInterface extends ApplicationAdapter {
     }
 
     /**
-     * Creates a hoverable and clickable Label that can be conditionally disabled.
-     * Uses default click sound (Game.sfx_click, 0.8f).
-     * Uses default font with WHITE/YELLOW colors.
+     * Constructor for enabled conditionally label button that has 3 params.
      *
      * @param text The text to display.
      * @param unlocked If false, the label will be gray and non-interactive.
@@ -183,7 +177,6 @@ public class UserInterface extends ApplicationAdapter {
         final Sound CLICK_SOUND = Game.sfx_click;
         final float CLICK_VOLUME = 0.8f;
 
-        // Call the NEW base method
         return createClickableLabel(
             text,
             CLICK_SOUND, CLICK_VOLUME,
@@ -193,24 +186,29 @@ public class UserInterface extends ApplicationAdapter {
     }
 
     /**
-     * Creates a simple hoverable and clickable Label. (Always unlocked)
-     * Uses default font with WHITE/YELLOW colors.
+     * Constructor for enabled unconditionally label button that has 4 params.
+     * @param text The text to display.
+     * @param clickSound The sound to play on click.
+     * @param soundVolume The volume for the click sound.
+     * @param clickAction The action to run on click.
+     * @return A new Label instance.
      */
     public Label createClickableLabel(String text,
                                       final Sound clickSound, final float soundVolume,
                                       final Runnable clickAction) {
-        // Call the NEW base method, passing 'true' for unlocked
         return createClickableLabel(
             text,
             clickSound, soundVolume,
-            true, // unlocked
+            true,
             clickAction
         );
     }
 
     /**
-     * Creates a simple hoverable and clickable Label with default settings. (Always unlocked)
-     * Uses default font with WHITE/YELLOW colors.
+     * Constructor for enabled unconditionally label button that has 2 params.
+     * @param text The text to display.
+     * @param clickAction The action to run on click.
+     * @return A new Label instance.
      */
     public Label createClickableLabel(String text, final Runnable clickAction) {
         final Sound CLICK_SOUND = Game.sfx_click;
@@ -225,7 +223,11 @@ public class UserInterface extends ApplicationAdapter {
     }
 
     /**
-     * Creates a simple hoverable and clickable Label with default settings but a custom sound.
+     * Constructor for enabled unconditionally label button that has 3 params.
+     * @param text The text to display.
+     * @param clickSound The sound to play on click.
+     * @param clickAction The action to run on click.
+     * @return A new Label instance.
      */
     public Label createClickableLabel(String text, final Sound clickSound, final Runnable clickAction) {
         final float CLICK_VOLUME = 0.8f;

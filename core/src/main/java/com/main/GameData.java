@@ -24,6 +24,7 @@ public class GameData {
     public ArrayList<BrickData> bricks;
     public ArrayList<EffectItemData> effectItems;
     public Object levelNumber;
+    public int infiMapIndex;
 
     /** Default constructor initializing empty lists for game objects. */
     public GameData() {

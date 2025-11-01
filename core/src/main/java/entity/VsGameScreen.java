@@ -95,7 +95,7 @@ public class VsGameScreen {
 
         scoreLabel2.setText(String.valueOf(p2Score));
         scoreLabel2.pack(); // Recalc size
-        scoreLabel2.setPosition(RSCORE2_X - scoreLabel2.getPrefWidth(), SCORE2_Y - scoreLabel2.getPrefHeight());
+        scoreLabel2.setPosition(RSCORE2_X, SCORE2_Y - scoreLabel2.getPrefHeight());
 
         timeLabel.setText(formatTime(times));
         viewport.apply(true);
@@ -135,7 +135,9 @@ public class VsGameScreen {
         if (font != null) font.dispose();
         if (clockTexture != null) clockTexture.dispose();
     }
+
     public Stage getStage() {
         return stage;
     }
+
 }

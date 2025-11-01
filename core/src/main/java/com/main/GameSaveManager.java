@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.main.gamemode.CoopMode;
 import com.main.gamemode.GameMode;
+import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.LevelMode;
 import entity.Player;
 import entity.object.Ball;
@@ -30,7 +31,7 @@ public class GameSaveManager {
      */
     static boolean isSaveableGameMode(GameState state) {
         if (state == GameState.LEVEL1 ||  state == GameState.LEVEL2 || state == GameState.LEVEL3
-            || state == GameState.LEVEL4 || state == GameState.LEVEL5) {
+            || state == GameState.LEVEL4 || state == GameState.LEVEL5 || state == GameState.INFI_MODE) {
             return true;
         } else {
             return false;
@@ -125,6 +126,8 @@ public class GameSaveManager {
             data.levelNumber = ((LevelMode) gameMode).getLevelNumber();
         } else if (gameMode instanceof CoopMode) {
             data.levelNumber = ((CoopMode) gameMode).getLevelNumber();
+        } else if (gameMode instanceof InfiniteMode) {
+            data.levelNumber = ((InfiniteMode) gameMode).getLevelNumber();
         }
 
         Paddle p1 = gameMode.getPaddle1();

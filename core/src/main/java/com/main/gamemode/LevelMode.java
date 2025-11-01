@@ -19,28 +19,18 @@ import table.LevelDataHandler;
 
 import java.util.ArrayList;
 
-/**
- * Represents the single-level gameplay mode where the player clears a predefined brick map.
- */
 public class LevelMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
     private Paddle paddle;
     private BricksMap currentMap;
     private ScoreManager scoreManager;
-    private GameScreen gameScreen;
+    GameScreen gameScreen;
     private EffectFactory effectFactory;
     private int levelNumber;
     private int mapIndex;
     private int lives;
     private double timePlayed;
 
-    /**
-     * Creates a new LevelMode instance.
-     *
-     * @param player the current player
-     * @param scoreManager the score manager for tracking points
-     * @param levelNumber the level index to load
-     */
     public LevelMode(Player player, ScoreManager scoreManager, int levelNumber) {
         super();
         bricksMaps = new ArrayList<>();
@@ -55,7 +45,6 @@ public class LevelMode extends GameMode {
         create();
     }
 
-    /** Initializes maps, paddle, and input for this mode. */
     @Override
     public void create() {
         gameScreen.create();
@@ -84,11 +73,6 @@ public class LevelMode extends GameMode {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
-    /**
-     * Updates ball physics, effects, brick collisions, and level completion.
-     *
-     * @param delta time elapsed since the last frame (in seconds)
-     */
     @Override
     public void update(float delta) {
         if (this.isEnd()) return;
@@ -99,11 +83,12 @@ public class LevelMode extends GameMode {
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle, null, balls);
             this.reset();
             this.lives--;
         }
 
-        if (followPaddle) {
+        if (followPaddle) {       // follow paddle
             balls.get(0).setX(paddle.getX() + (paddle.getWidth() / 2f) - balls.get(0).getWidth() / 2f);
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
@@ -113,8 +98,9 @@ public class LevelMode extends GameMode {
             ball.update(delta);
         }
 
-        // Ball collision resolution
+        // Ball separation if multiple collision detected
         final int SOLVER_ITERATIONS = 5;
+        // Ball Collision
         for (int k = 0; k < SOLVER_ITERATIONS; k++) {
             for (int i = 0; i < balls.size(); i++) {
                 Ball ball1 = balls.get(i);
@@ -125,15 +111,14 @@ public class LevelMode extends GameMode {
             }
         }
 
-        // Ball collisions with environment
+        // Env collision
         for (Ball ball : balls) {
             CollisionManager.handleBallBoundaryCollision(ball);
             CollisionManager.handleBallPaddleCollision(ball, paddle);
             Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
 
             if (hitBrick != null && hitBrick.gethitPoints() == 0) {
-                EffectItem newEffectItem;
-                // Item spawn rates vary by map index
+                EffectItem newEffectItem = null;
                 if (mapIndex == 1) {
                     newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
@@ -156,32 +141,33 @@ public class LevelMode extends GameMode {
                 }
 
                 scoreManager.comboScore(hitBrick);
-                if (hitBrick.getExplosion()) hitBrick.startExplosion();
-                else hitBrick.setDestroyed(true);
+                if (hitBrick.getExplosion()) {
+                    hitBrick.startExplosion();
+                } else {
+                    hitBrick.setDestroyed(true);
+                }
             }
         }
-
         balls.removeIf(Ball::isDestroyed);
 
-        // Check win/loss conditions
         if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
             double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
-            double total_score = Math.max(0, levelscore + bonusscore);
-            boolean cleared = currentMap.getBricks().isEmpty();
-            LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), cleared);
-        }
 
+            double total_score = levelscore + bonusscore;
+            if (total_score < 0) total_score = 0;
+
+            boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
+            if (playerWon) {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            } else {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            }
+        }
         printActiveEffects(delta);
     }
 
-    /**
-     * Renders all entities and UI on the screen.
-     *
-     * @param sp the SpriteBatch used for drawing
-     * @param delta time elapsed since the last frame (in seconds)
-     */
     @Override
     public void render(SpriteBatch sp, float delta) {
         this.draw(sp);
@@ -190,17 +176,11 @@ public class LevelMode extends GameMode {
         gameScreen.render();
     }
 
-    /** Handles player input through the input handler. */
     @Override
     public void handleInput() {
         inputHandler.processMovement();
     }
 
-    /**
-     * Draws background, bricks, paddle, balls, and effect visuals.
-     *
-     * @param sp the SpriteBatch to draw with
-     */
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
@@ -218,7 +198,6 @@ public class LevelMode extends GameMode {
         paddle.draw(sp);
     }
 
-    /** Resets paddle and ball positions after a lost life. */
     public void reset() {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,
@@ -229,53 +208,38 @@ public class LevelMode extends GameMode {
         followPaddle = true;
     }
 
-    /**
-     * @return the primary paddle used in this mode
-     */
     @Override
     public Paddle getPaddle1() {
         return this.paddle;
     }
 
-    /**
-     * @return the level number associated with this mode
-     */
     public Object getLevelNumber() {
         return  this.levelNumber;
     }
 
-    /**
-     * @return the total time played for this level
-     */
     @Override
     public double getTimePlayed() {
         return this.timePlayed;
     }
 
-    /**
-     * @return remaining player lives
-     */
     public int getLives() {
         return this.lives;
     }
 
-    /**
-     * Sets the remaining lives.
-     *
-     * @param lives number of lives to set
-     */
     @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
 
-    /**
-     * Sets the total time played.
-     *
-     * @param time total time in seconds
-     */
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = time;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 }

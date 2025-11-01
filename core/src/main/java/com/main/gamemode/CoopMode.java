@@ -18,6 +18,7 @@ import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import table.CoopDataHandler;
+import table.LevelDataHandler;
 
 import java.util.ArrayList;
 
@@ -114,6 +115,7 @@ public class CoopMode extends GameMode {
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle1, paddle2, balls);
             this.lives--;
             this.reset();
         }
@@ -188,10 +190,12 @@ public class CoopMode extends GameMode {
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
 
-            if (currentMap.getBricks().isEmpty() && !this.isEnd())
+            boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
+            if (playerWon) {
                 CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            else
+            } else {
                 CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            }
         }
     }
 
@@ -308,5 +312,12 @@ public class CoopMode extends GameMode {
     @Override
     public double getTimePlayed() {
         return this.timePlayed;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 }

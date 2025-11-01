@@ -126,4 +126,24 @@ public abstract class EffectItem extends MovableObject {
     public static void clear() {
         items.clear();
     }
+
+    public static void ClearAllEffect(Paddle p1, Paddle p2, ArrayList<Ball> balls) {
+        items.clear();
+        if (p1 != null) {
+            p1.clearEffects();
+        }
+        if (p2 != null) {
+            p2.clearEffects();
+        }
+
+        if (balls != null) {
+            for (Ball ball : balls) {
+                if (ball != null) {
+                    ball.clearEffects();
+                }
+            }
+        }
+
+        ShieldEffect.setShield();
+    }
 }

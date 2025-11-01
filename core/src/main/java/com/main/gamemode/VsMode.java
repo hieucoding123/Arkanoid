@@ -2,10 +2,6 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import entity.Effect.EffectFactory;
-import entity.Effect.EffectItem;
-import entity.GameScreen;
-import entity.Player;
 import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
@@ -15,19 +11,12 @@ import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
-/**
- * Handles versus mode gameplay logic between two players.
- */
 public class VsMode extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
-    //private static final double VS_POINT_VALUE = 100.0;
 
-    private Player player1;
-    private Player player2;
     private Paddle paddle1;
     private Paddle paddle2;
-    private EffectFactory effectFactory;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
     private ArrayList<Ball> balls;
@@ -44,31 +33,18 @@ public class VsMode extends GameMode {
     private ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    /**
-     * Creates a new Versus Mode between two players.
-     *
-     * @param p1 Player 1
-     * @param p2 Player 2
-     * @param scoreManagerP1 Score manager for Player 1
-     * @param scoreManagerP2 Score manager for Player 2
-     */
-    public VsMode(Player p1, Player p2,
-                  ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    public VsMode(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
-        this.player1 = p1;
-        this.player2 = p2;
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
 
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
-        this.effectFactory  = new EffectFactory();
         balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();
     }
 
-    /** Initializes the VS mode with maps and paddles. */
     @Override
     public void create() {
 
@@ -83,11 +59,6 @@ public class VsMode extends GameMode {
         startRound(1);
     }
 
-    /**
-     * Starts a specific round.
-     *
-     * @param roundNum round number to start
-     */
     public void startRound(int roundNum) {
         this.currentRound = roundNum;
         this.currentMap = brickMap.get(currentRound - 1);
@@ -110,7 +81,6 @@ public class VsMode extends GameMode {
         resetBalls();
     }
 
-    /** Resets both players’ balls to their paddle positions. */
     public void resetBalls() {
         balls.clear();
 
@@ -132,22 +102,16 @@ public class VsMode extends GameMode {
         balls.add(ballP2);
     }
 
-    /** Ends the game completely. */
     private void gameOver() {
         isPaused = true;
         isGameEnded = true;
     }
 
-    /**
-     * Checks if the game has ended.
-     * @return true if game ended, false otherwise
-     */
     @Override
     public boolean isEnd() {
         return isGameEnded;
     }
 
-    /** Ends the current round and determines who won it. */
     public void endRound() {
         isPaused = true;
         if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
@@ -165,24 +129,16 @@ public class VsMode extends GameMode {
             startRound(currentRound + 1);
         }
     }
-
-    /**
-     * Updates all game objects and handles round progression.
-     *
-     * @param delta time since last frame
-     */
     @Override
     public void update(float delta) {
 //        handleInput();
 
-        //Paddle 1 flow status.
         if (flowPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
             ballP1.setY(paddle1.getY() + paddle1.getHeight());
             ballP1.setAngle((float)Math.PI / 2f);
         }
 
-        //Paddle 2 flow status.
         if (flowPaddle2) {
             ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP2.getWidth() / 2f);
             ballP2.setY(paddle2.getY() - ballP2.getHeight());
@@ -207,7 +163,7 @@ public class VsMode extends GameMode {
 
         currentMap.update(delta);
 
-        //Update ball during gameplay.
+
         for (Ball ball : balls) {
             ball.setIn1v1(true);
             ball.update(delta);
@@ -233,7 +189,6 @@ public class VsMode extends GameMode {
                 return;
             }
 
-            //Check collision with each paddle.
             if (ball.checkCollision(paddle1)) {
                 ball.collisionWith(paddle1);
                 ball.setLastHitBy(1);
@@ -243,7 +198,6 @@ public class VsMode extends GameMode {
                 ball.setLastHitBy(2);
             }
 
-            //Check collision with bricks.
             for (Brick brick : currentMap.getBricks()) {
                 if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
@@ -279,27 +233,16 @@ public class VsMode extends GameMode {
     @Override
     public void draw(SpriteBatch sp) {}
 
-    /**
-     * @return Player 1 paddle
-     */
     @Override
     public Paddle getPaddle1() {
         return this.paddle1;
     }
 
-    /**
-     * @return Player 2 paddle
-     */
     @Override
     public Paddle getPaddle2() {
         return this.paddle2;
     }
 
-    /**
-     * Launches the ball for a given player.
-     *
-     * @param pNumber player number (1 or 2)
-     */
     public void launchBall(int pNumber) {
         if (isPaused) {
             isPaused = false;
@@ -314,61 +257,29 @@ public class VsMode extends GameMode {
         }
     }
 
-    /**
-     * @return list of balls in play
-     */
     public ArrayList<Ball> balls() { return this.balls;  }
-
-    /**
-     * @return current map
-     */
     public BricksMap getCurrentMap() { return this.currentMap; }
-
-    /**
-     * @return current round number
-     */
     public int getCurrentRound() {
         return this.currentRound;
     }
 
-    /**
-     * @return remaining time in current round
-     */
     public float getRoundTimer() {
         return this.roundTimer;
     }
 
-    /**
-     * @return Player 1 score manager
-     */
     public ScoreManager getScoreManagerP1() {
         return this.scoreManagerP1;
     }
 
-    /**
-     * @return Player 2 score manager
-     */
     public ScoreManager getScoreManagerP2() {
         return this.scoreManagerP2;
     }
-
-    /**
-     * @return true if game over, false otherwise
-     */
     public boolean getIsGameOver() {
         return (roundsWonP1 == 2 || roundsWonP2 == 2 || (currentRound == MAX_ROUNDS && roundTimer <= 0));
     }
-
-    /**
-     * @return number of rounds won by Player 1
-     */
     public int p1Wins() {
         return roundsWonP1;
     }
-
-    /**
-     * @return number of rounds won by Player 2
-     */
     public int p2Wins() {
         return roundsWonP2;
     }

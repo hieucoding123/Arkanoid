@@ -12,11 +12,11 @@ public enum GameState {
     LEVEL3,
     LEVEL4,
     LEVEL5,
-    VS_MODE,
     PLAYING,
     SETTINGS,
 
     NETWORK_CONNECTION_MENU,
     NETWORK_LOBBY,
-    NETWORK_VS
+    NETWORK_VS,
+    GAME_OVER
 }

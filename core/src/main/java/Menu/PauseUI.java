@@ -8,94 +8,110 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table; // Import Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.main.Game;
 
-public class PauseUI {
-    private Stage stage;
+
+public class PauseUI extends UserInterface {
+    private Table table;
 
     public PauseUI(SpriteBatch batch, final Game game) {
+        super(game.getMain(), game.getPlayer());
+
         Viewport viewport = new FitViewport(800, 1000);
-        stage = new Stage(viewport, batch);
-        Label.LabelStyle WhiteStyle = new Label.LabelStyle(new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")), Color.WHITE);
-        Label resumeLabel = new Label("RESUME", WhiteStyle);
-        Label newGameLabel = new Label("NEW GAME", WhiteStyle);
-        resumeLabel.setFontScale(1.5f);
-        newGameLabel.setFontScale(1.5f);
-        resumeLabel.pack();
-        newGameLabel.pack();
+        Stage stage = new Stage(viewport, batch);
+        setStage(stage);
 
-        resumeLabel.setPosition(
-            (viewport.getWorldWidth() / 2f) - (resumeLabel.getWidth() / 2f),
-            (viewport.getWorldHeight() / 2f) - (resumeLabel.getHeight() / 2f) + 50
-        );
+        BitmapFont font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
+        setFont(font);
 
-        resumeLabel.addListener(new ClickListener() {
+        table = new Table();
+        table.setFillParent(true);
+
+        Label resumeLabel = createClickableLabel("RESUME", new Runnable() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void run() {
                 if (game != null) {
                     game.ContinueGame();
                 }
             }
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                resumeLabel.setColor(Color.YELLOW);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                resumeLabel.setColor(Color.WHITE);
-            }
         });
 
-        newGameLabel.setPosition(
-            (viewport.getWorldWidth() / 2f) - (newGameLabel.getWidth() / 2f),
-            (viewport.getWorldHeight() / 2f) - (newGameLabel.getHeight() / 2f) - 50
-        );
-
-        newGameLabel.addListener(new ClickListener() {
+        Label newGameLabel = createClickableLabel("NEW GAME", new Runnable() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void run() {
                 if (game != null) {
                     game.NewGame();
                 }
             }
+        });
+
+        Label returnLabel = createClickableLabel("RETURN TO MENU", new Runnable() {
             @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                newGameLabel.setColor(Color.YELLOW);
-            }
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                newGameLabel.setColor(Color.WHITE);
+            public void run() {
+                if (game != null) {
+                    game.ReturnMenu();
+                }
             }
         });
 
-        stage.addActor(resumeLabel);
-        stage.addActor(newGameLabel);
-    }
 
-    public Stage getStage() {
-        return stage;
+        Label.LabelStyle redStyle = new Label.LabelStyle(font, Color.RED);
+        final Label quitLabel = new Label("QUIT GAME", redStyle);
+        final Color HOVER_COLOR = Color.YELLOW;
+        final Color DEFAULT_COLOR = Color.RED;
+
+        quitLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                quitLabel.setColor(HOVER_COLOR);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                quitLabel.setColor(DEFAULT_COLOR);
+            }
+        });
+
+
+        float fontScale = 1.5f;
+        resumeLabel.setFontScale(fontScale);
+        newGameLabel.setFontScale(fontScale);
+        returnLabel.setFontScale(fontScale);
+        quitLabel.setFontScale(fontScale);
+
+        float buttonPadding = 80f;
+
+        table.add(resumeLabel).padBottom(buttonPadding).row();
+        table.add(newGameLabel).padBottom(buttonPadding).row();
+        table.add(returnLabel).padBottom(buttonPadding).row();
+        table.add(quitLabel).row();
+
+        stage.addActor(table);
     }
 
     public void act(float delta) {
-        if (stage != null) {
-            stage.act(delta);
+        if (getStage() != null) {
+            getStage().act(delta);
         }
     }
 
+    /**
+     * Overrides UserInterface.render() to only draw the stage.
+     * This prevents clearing the screen, so it acts as an overlay.
+     */
+    @Override
     public void render() {
-        if (stage != null) {
-            stage.getViewport().apply();
-            stage.draw();
+        if (getStage() != null) {
+            getStage().getViewport().apply();
+            getStage().draw();
         }
     }
 
-    public void dispose() {
-        if (stage != null) {
-            stage.dispose();
-        }
-    }
 }

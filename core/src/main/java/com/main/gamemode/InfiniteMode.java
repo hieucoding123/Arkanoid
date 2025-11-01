@@ -103,6 +103,7 @@ public class InfiniteMode extends GameMode {
         // Handle ball loss and game over
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle, null, balls);
             this.reset();
             this.lives--;
             this.setEnd(lives == 0);
@@ -286,5 +287,16 @@ public class InfiniteMode extends GameMode {
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = (float)time;
+    }
+
+    public Object getLevelNumber() {
+        return this.currentIdx;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 }

@@ -182,8 +182,8 @@ public abstract class GameMode {
         if (balls != null && !balls.isEmpty()) {
             for (int i = 0; i < balls.size(); i++) {
                 Ball ball = balls.get(i);
-                long bigTime = ball.getTimeBigWEffect();   //
-                long slowTime = ball.getTimeSlowEffect();  //
+                long bigTime = ball.getTimeBigWEffect();
+                long slowTime = ball.getTimeSlowEffect();
                 long fastTime = ball.getTimeFastEffect();
 
                 if (bigTime > 0) {
@@ -243,4 +243,8 @@ public abstract class GameMode {
      * @param follow true to follow paddle, false to release.
      */
     public void setFollowPaddle(boolean follow) { this.followPaddle = follow; }
+
+    public void resize (int width, int height) {
+
+    }
 }
