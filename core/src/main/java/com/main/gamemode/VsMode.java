@@ -22,11 +22,11 @@ public class VsMode extends GameMode {
 
     private Paddle paddle1;
     private Paddle paddle2;
-    private EffectFactory effectFactory;
-    private GameScreen gameScreen;
-    private ArrayList<BricksMap> brickMap;
+    private final EffectFactory effectFactory;
+    private final GameScreen gameScreen;
+    private final ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
-    private ArrayList<Ball> balls;
+    private final ArrayList<Ball> balls;
     private Ball ballP1;
     private Ball ballP2;
     private int currentRound;
@@ -36,8 +36,8 @@ public class VsMode extends GameMode {
     private boolean flowPaddle2;
     private int roundsWonP1;
     private int roundsWonP2;
-    private ScoreManager scoreManagerP1;
-    private ScoreManager scoreManagerP2;
+    private final ScoreManager scoreManagerP1;
+    private final ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
     public VsMode (GameScreen gameScreen,

@@ -17,9 +17,9 @@ public class NetworkVsModeLogic extends GameMode {
 
     private Paddle paddle1;
     private Paddle paddle2;
-    private ArrayList<BricksMap> brickMap;
+    private final ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
-    private ArrayList<Ball> balls;
+    private final ArrayList<Ball> balls;
     private Ball ballP1;
     private Ball ballP2;
     private int currentRound;
@@ -29,8 +29,8 @@ public class NetworkVsModeLogic extends GameMode {
     private boolean flowPaddle2;
     private int roundsWonP1;
     private int roundsWonP2;
-    private ScoreManager scoreManagerP1;
-    private ScoreManager scoreManagerP2;
+    private final ScoreManager scoreManagerP1;
+    private final ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
     public NetworkVsModeLogic(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {

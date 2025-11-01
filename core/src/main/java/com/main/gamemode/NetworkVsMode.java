@@ -2,30 +2,23 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.main.components.IngameInputHandler;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
 import entity.*;
-import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
-import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class NetworkVsMode extends GameMode implements GameClient.GameClientListener {
-    private GameClient client;
-    private VsGameScreen gameScreen;
-    private ScoreManager scoreManager;
+    private final GameClient client;
+    private final VsGameScreen gameScreen;
     private int mPNumber;
-    private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
-    private ArrayList<Brick> localBricks;
-    private Player player2;
+    private final ArrayList<Brick> localBricks;
+    private final Player player2;
 
     public NetworkVsMode(Player player1, Player player2,
                          String serverIP, boolean isHost, GameClient existingClient) {
@@ -33,7 +26,6 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         this.setPlayer(player1);
         this.player2 = player2;
         this.gameScreen = new VsGameScreen();
-        this.isHost = isHost;
         client = existingClient;
         client.setListener(this);
         mPNumber = client.getMyPNumber();
@@ -168,11 +160,6 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     @Override
     public Paddle getPaddle1() {
         return null;        // Client don't manage paddle
-    }
-
-    @Override
-    public Paddle getPaddle2() {
-        return null;
     }
 
     public void dispose() {

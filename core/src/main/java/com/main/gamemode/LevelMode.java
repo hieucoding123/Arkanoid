@@ -23,10 +23,10 @@ public class LevelMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
     private Paddle paddle;
     private BricksMap currentMap;
-    private ScoreManager scoreManager;
+    private final ScoreManager scoreManager;
     GameScreen gameScreen;
-    private EffectFactory effectFactory;
-    private int levelNumber;
+    private final EffectFactory effectFactory;
+    private final int levelNumber;
     private int mapIndex;
     private int lives;
     private double timePlayed;
@@ -118,7 +118,7 @@ public class LevelMode extends GameMode {
             Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
 
             if (hitBrick != null && hitBrick.gethitPoints() == 0) {
-                EffectItem newEffectItem = null;
+                EffectItem newEffectItem;
                 if (mapIndex == 1) {
                     newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
@@ -153,17 +153,13 @@ public class LevelMode extends GameMode {
         if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
-            double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
+            double bonusscore = (300.0 - this.timePlayed) * (levelscore / 300.0);
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
 
             boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
-            if (playerWon) {
-                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            } else {
-                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
-            }
+            LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (int)(total_score), playerWon);
         }
 //        printActiveEffects(delta);
     }
