@@ -109,7 +109,7 @@ public class ModeMenu extends UserInterface {
             public void clicked(InputEvent event, float x, float y) {
                 Game.playSfx(Game.sfx_click,0.8f);
                 //System.out.println("VS MODE");
-                main.setGameState(GameState.NETWORK_CONNECTION_MENU);
+                main.setGameState(GameState.VS_MENU);
             }
         });
 

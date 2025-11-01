@@ -2,10 +2,12 @@ package com.main;
 
 public enum GameState {
     MAIN_MENU,
+    VS_MENU,
     SELECT_MODE,
     LEADER_BOARD,
     INFI_MODE,
     LEVELS_MODE,
+    VS_MODE,
     LEVELS_SELECTION,
     LEVEL1,
     LEVEL2,

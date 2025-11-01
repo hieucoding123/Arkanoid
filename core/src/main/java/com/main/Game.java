@@ -254,6 +254,7 @@ public class Game {
             case NETWORK_CONNECTION_MENU:
             case NETWORK_LOBBY:
             case GAME_OVER:
+            case VS_MENU:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -266,6 +267,7 @@ public class Game {
                 }
                 break;
             case INFI_MODE:
+            case VS_MODE:
             case NETWORK_VS:
             case LEVEL1:
             case LEVEL2:
@@ -311,6 +313,7 @@ public class Game {
         }
         switch (gameState) {
             case INFI_MODE:
+            case VS_MODE:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
@@ -390,6 +393,9 @@ public class Game {
                 if (gameMode != null && gameMode.isEnd()) {
                     setGameState(GameState.GAME_OVER);
                 }
+                break;
+            case VS_MODE:
+                gameMode.update(this.delta);
                 break;
             case GAME_OVER:
                 break;
@@ -503,6 +509,11 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case VS_MENU:
+                ui = new VsMenu(main, this.player);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             case NETWORK_CONNECTION_MENU:
                 if (gameServer != null) stopNetworkGame();
                 ui = new NetworkConnectionMenu(main, this.player);
@@ -583,6 +594,9 @@ public class Game {
                 } else {
                     gameMode = new LevelMode(this.player, scoreManager, 5);
                 }
+                break;
+            case VS_MODE:
+                gameMode = new VsMode(scoreManager, scoreManagerP2);
                 break;
             case NETWORK_VS:
                 playNetworkGame();

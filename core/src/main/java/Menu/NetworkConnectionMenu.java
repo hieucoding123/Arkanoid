@@ -118,7 +118,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             null,
             0f,
             true,
-            () -> main.setGameState(GameState.SELECT_MODE)
+            () -> main.setGameState(GameState.VS_MENU)
         );
         backButton.pack();
 
