@@ -29,7 +29,7 @@ public class PauseUI {
 
         resumeLabel.setPosition(
             (viewport.getWorldWidth() / 2f) - (resumeLabel.getWidth() / 2f),
-            (viewport.getWorldHeight() / 2f) - (resumeLabel.getHeight() / 2f) + 50
+            (viewport.getWorldHeight() / 2f) - (resumeLabel.getHeight() / 2f) + 120
         );
 
         resumeLabel.addListener(new ClickListener() {
@@ -52,7 +52,7 @@ public class PauseUI {
 
         newGameLabel.setPosition(
             (viewport.getWorldWidth() / 2f) - (newGameLabel.getWidth() / 2f),
-            (viewport.getWorldHeight() / 2f) - (newGameLabel.getHeight() / 2f) - 50
+            (viewport.getWorldHeight() / 2f) - (newGameLabel.getHeight() / 2f) + 40
         );
 
         newGameLabel.addListener(new ClickListener() {
@@ -72,8 +72,56 @@ public class PauseUI {
             }
         });
 
+        Label returnLabel = new Label("RETURN TO MENU", WhiteStyle);
+        returnLabel.setFontScale(1.5f);
+        returnLabel.pack();
+        returnLabel.setPosition(
+            (viewport.getWorldWidth() / 2f) - (returnLabel.getWidth() / 2f),
+            (viewport.getWorldHeight() / 2f) - (returnLabel.getHeight() / 2f) - 40
+        );
+        returnLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (game != null) {
+                    game.ReturnMenu();
+                }
+            }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                returnLabel.setColor(Color.YELLOW);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                returnLabel.setColor(Color.WHITE);
+            }
+        });
+
+        Label quitLabel = new Label("QUIT GAME", WhiteStyle);
+        quitLabel.setFontScale(1.5f);
+        quitLabel.pack();
+        quitLabel.setPosition(
+            (viewport.getWorldWidth() / 2f) - (quitLabel.getWidth() / 2f),
+            (viewport.getWorldHeight() / 2f) - (quitLabel.getHeight() / 2f) - 120
+        );
+        quitLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                quitLabel.setColor(Color.YELLOW);
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                quitLabel.setColor(Color.WHITE);
+            }
+        });
+
         stage.addActor(resumeLabel);
         stage.addActor(newGameLabel);
+        stage.addActor(returnLabel);
+        stage.addActor(quitLabel);
     }
 
     public Stage getStage() {

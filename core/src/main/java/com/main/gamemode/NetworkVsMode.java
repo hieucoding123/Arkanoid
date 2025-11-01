@@ -74,7 +74,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
+        sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
         if (currentState == null) {
             return;
         }
