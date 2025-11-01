@@ -251,7 +251,6 @@ public class Game {
                 }
                 break;
             case INFI_MODE:
-            case VS_MODE:
             case NETWORK_VS:
             case LEVEL1:
             case LEVEL2:
@@ -349,11 +348,6 @@ public class Game {
                     setGameState(GameState.LEVELS_SELECTION);
                 }
                 break;
-            case VS_MODE:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.SELECT_MODE);
-                }
             case LEADER_BOARD:
                 ui.update();
                 break;
@@ -549,9 +543,6 @@ public class Game {
                     gameMode = new LevelMode(this.player, scoreManager, 5);
                 }
                 break;
-            case VS_MODE:
-                gameMode = new VsMode(this.player, this.player2, this.scoreManager, this.scoreManagerP2);
-                break;
             case NETWORK_VS:
                 playNetworkGame();
                 break;
@@ -573,8 +564,7 @@ public class Game {
             player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
-            VsMode severGameMode = new  VsMode(player, player2,
-                scoreManager, scoreManagerP2);
+            VsMode severGameMode = new  VsMode(scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);
         }
 
@@ -691,7 +681,7 @@ public class Game {
         }
         EffectItem.clear();
         GameState state;
-        if (gameState == GameState.INFI_MODE || gameState == GameState.VS_MODE) {
+        if (gameState == GameState.INFI_MODE) {
             state = GameState.SELECT_MODE;
         } else if (GameSaveManager.isSaveableGameMode(gameState)) {
             state = GameState.LEVELS_SELECTION;
