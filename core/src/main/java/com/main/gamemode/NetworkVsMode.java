@@ -2,8 +2,10 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.components.IngameInputHandler;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
 import entity.*;

@@ -4,7 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.main.gamemode.GameMode;
-import com.main.gamemode.VsMode;
+import com.main.gamemode.NetworkVsModeLogic;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
@@ -71,8 +71,8 @@ public class GameServer {
     }
 
     private void broadcastGameState() {
-        if (!(mode instanceof VsMode))  return;
-        VsMode vsMode =  (VsMode)mode;
+        if (!(mode instanceof NetworkVsModeLogic))  return;
+        NetworkVsModeLogic networkVsModeLogic =  (NetworkVsModeLogic)mode;
 
         NetworkProtocol.GameStateUpdate update = new NetworkProtocol.GameStateUpdate();
 
@@ -91,7 +91,7 @@ public class GameServer {
         }
 
         // Update balls
-        for (Ball ball : vsMode.balls()) {
+        for (Ball ball : networkVsModeLogic.balls()) {
             NetworkProtocol.BallState ballState = new NetworkProtocol.BallState();
             ballState.x = ball.getX();
             ballState.y = ball.getY();
@@ -102,8 +102,8 @@ public class GameServer {
             update.balls.add(ballState);
         }
         // Update bricks
-        if (vsMode.getCurrentMap() != null) {
-            for (Brick brick : vsMode.getCurrentMap().getBricks()) {
+        if (networkVsModeLogic.getCurrentMap() != null) {
+            for (Brick brick : networkVsModeLogic.getCurrentMap().getBricks()) {
                 NetworkProtocol.BrickState brickState = new NetworkProtocol.BrickState();
                 brickState.x = brick.getX();
                 brickState.y = brick.getY();
@@ -117,13 +117,13 @@ public class GameServer {
             }
         }
         // Update game status
-        update.p1Score = vsMode.getScoreManagerP1().getScore();
-        update.p1Wins = vsMode.p1Wins();
-        update.p2Score = vsMode.getScoreManagerP2().getScore();
-        update.p2Wins = vsMode.p2Wins();
-        update.roundTimer = vsMode.getRoundTimer();
-        update.currentRound = vsMode.getCurrentRound();
-        update.isGameOver = vsMode.getIsGameOver();
+        update.p1Score = networkVsModeLogic.getScoreManagerP1().getScore();
+        update.p1Wins = networkVsModeLogic.p1Wins();
+        update.p2Score = networkVsModeLogic.getScoreManagerP2().getScore();
+        update.p2Wins = networkVsModeLogic.p2Wins();
+        update.roundTimer = networkVsModeLogic.getRoundTimer();
+        update.currentRound = networkVsModeLogic.getCurrentRound();
+        update.isGameOver = networkVsModeLogic.getIsGameOver();
         // ...
         server.sendToAllTCP(update);
     }
@@ -219,11 +219,11 @@ public class GameServer {
     private void handlePlayerInput(Connection connection, NetworkProtocol.PlayerInput input) {
         if (!gameStarted || mode == null)
             return;
-        VsMode vsMode = (VsMode)mode;
+        NetworkVsModeLogic networkVsModeLogic = (NetworkVsModeLogic)mode;
 
         int pNumber = playerConnections.get(connection);
 
-        Paddle paddle = (pNumber == 1) ? vsMode.getPaddle1() : vsMode.getPaddle2();
+        Paddle paddle = (pNumber == 1) ? networkVsModeLogic.getPaddle1() : networkVsModeLogic.getPaddle2();
         if (paddle == null) return;
 
         switch (input.inputType) {
@@ -237,7 +237,7 @@ public class GameServer {
                 paddle.setVelocity(0, 0);
                 break;
             case LAUNCH_BALL:
-                vsMode.launchBall(pNumber);
+                networkVsModeLogic.launchBall(pNumber);
                 break;
         }
     }
