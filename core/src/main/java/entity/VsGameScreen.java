@@ -135,7 +135,9 @@ public class VsGameScreen {
         if (font != null) font.dispose();
         if (clockTexture != null) clockTexture.dispose();
     }
+
     public Stage getStage() {
         return stage;
     }
+
 }

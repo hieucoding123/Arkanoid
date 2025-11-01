@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent; // Keep this import
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-// import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle; // No longer needed
-// import com.badlogic.gdx.scenes.scene2d.utils.ClickListener; // No longer needed
+import com.badlogic.gdx.scenes.scene2d.ui.TextField; // <-- IMPORT ADDED
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
@@ -28,6 +27,7 @@ public class NetworkConnectionMenu extends  UserInterface{
     private List<String> serversList;
     private ScrollPane serversListScrollPane;
     private HashMap<String, InetAddress> foundServers;
+    private TextField ipAddressField; // <-- VARIABLE ADDED
 
     private Label statusLabel;
     private boolean isHosting;
@@ -98,6 +98,11 @@ public class NetworkConnectionMenu extends  UserInterface{
         );
         refreshButton.pack();
 
+        // --- NEW: IP ADDRESS TEXT FIELD ---
+        ipAddressField = new TextField("", this.getSkin());
+        ipAddressField.setMessageText("Or Enter IP Address...");
+        ipAddressField.setSize(270, 40); // Set size similar to server list width
+
         // Join button
         Label joinButton = createClickableLabel(
             "Join Game",
@@ -120,7 +125,7 @@ public class NetworkConnectionMenu extends  UserInterface{
         );
         backButton.pack();
 
-        //Set up position
+        // --- Set up position ---
         float stageWidth = this.getStage().getWidth();
         float stageHeight = this.getStage().getHeight();
         float currentY;
@@ -153,7 +158,16 @@ public class NetworkConnectionMenu extends  UserInterface{
         );
         this.getStage().addActor(refreshButton);
 
-        currentY = currentY - 40 - joinButton.getHeight();
+        // --- NEW: Position IP Field ---
+        currentY = currentY - 20 - ipAddressField.getHeight(); // Add padding
+        ipAddressField.setPosition(
+            (stageWidth / 2f) - (ipAddressField.getWidth() / 2f),
+            currentY
+        );
+        this.getStage().addActor(ipAddressField);
+
+        // --- Adjust Y for elements below ---
+        currentY = currentY - 20 - joinButton.getHeight(); // Was 40, now 20
         joinButton.setPosition(
             (stageWidth / 2f) - (joinButton.getWidth() / 2f),
             currentY
@@ -185,6 +199,7 @@ public class NetworkConnectionMenu extends  UserInterface{
 
         foundServers.clear();
         serversList.clearItems();
+        ipAddressField.setText(""); // <-- Clear text field on refresh
 
         new Thread(() -> {
             // Client for discovering
@@ -225,45 +240,30 @@ public class NetworkConnectionMenu extends  UserInterface{
         }).start();
     }
 
-    // Join game -> Client
+    // --- REWRITTEN: Join game -> Client ---
     private void joinGame() {
+        String enteredIP = ipAddressField.getText();
         String selectedDisplayName = serversList.getSelected();
         String text = "";
 
-        if (selectedDisplayName == null) {
-            text = "Please Select Server!";
-        } else {
+        if (enteredIP != null && !enteredIP.isEmpty()) {
+            // Priority 1: Use the text field IP
+            text = "Connecting to: " + enteredIP;
+            connectToHost(enteredIP);
+
+        } else if (selectedDisplayName != null) {
+            // Priority 2: Use the selected server from the list
             InetAddress host = foundServers.get(selectedDisplayName);
             if (host == null) {
                 text = "Error joining server!. Please refresh";
             } else {
                 String IP = host.getHostAddress();
-                text = "Connected to: " + IP;
-
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(500);      // Connection delay
-                        Gdx.app.postRunnable(() -> {
-                            statusLabel.setText("Connected! Staring game...");
-                            statusLabel.pack();
-                            statusLabel.setPosition(
-                                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
-                                statusLabel.getY()
-                            );
-                            getMain().startNetworkGame(IP, false);
-                        });
-                    } catch (Exception e) {
-                        Gdx.app.postRunnable(() -> {
-                            statusLabel.setText("Failed to connect!");
-                            statusLabel.pack();
-                            statusLabel.setPosition(
-                                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
-                                statusLabel.getY()
-                            );
-                        });
-                    }
-                }).start();
+                text = "Connecting to: " + IP;
+                connectToHost(IP);
             }
+        } else {
+            // No selection and no IP entered
+            text = "Please Select Server or Enter IP!";
         }
 
         if (!text.isEmpty()) {
@@ -276,6 +276,34 @@ public class NetworkConnectionMenu extends  UserInterface{
         }
     }
 
+    // --- NEW: Helper method to handle connection logic ---
+    private void connectToHost(String ipAddress) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);      // Connection delay
+                Gdx.app.postRunnable(() -> {
+                    statusLabel.setText("Connected! Staring game...");
+                    statusLabel.pack();
+                    statusLabel.setPosition(
+                        (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                        statusLabel.getY()
+                    );
+                    getMain().startNetworkGame(ipAddress, false);
+                });
+            } catch (Exception e) {
+                Gdx.app.postRunnable(() -> {
+                    statusLabel.setText("Failed to connect to " + ipAddress);
+                    statusLabel.pack();
+                    statusLabel.setPosition(
+                        (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+                        statusLabel.getY()
+                    );
+                });
+            }
+        }).start();
+    }
+
+
     private void
     hostGame() {
         statusLabel.setText("Staring sever...");
@@ -285,6 +313,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             statusLabel.getY()
         );
         isHosting = true;
+        ipAddressField.setText(""); // <-- Clear text field when hosting
 
         new Thread(() -> {
             try {

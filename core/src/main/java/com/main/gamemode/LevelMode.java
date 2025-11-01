@@ -157,8 +157,13 @@ public class LevelMode extends GameMode {
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
-            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            else LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+
+            boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
+            if (playerWon) {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            } else {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            }
         }
         printActiveEffects(delta);
     }
@@ -211,6 +216,7 @@ public class LevelMode extends GameMode {
     public Object getLevelNumber() {
         return  this.levelNumber;
     }
+
     @Override
     public double getTimePlayed() {
         return this.timePlayed;
@@ -219,12 +225,21 @@ public class LevelMode extends GameMode {
     public int getLives() {
         return this.lives;
     }
+
     @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
+
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = time;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 }
