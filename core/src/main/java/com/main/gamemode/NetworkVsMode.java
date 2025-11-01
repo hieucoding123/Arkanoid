@@ -22,11 +22,13 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
     private ArrayList<Brick> localBricks;
+    private Player player2;
 
-    public NetworkVsMode(Player player,
+    public NetworkVsMode(Player player1, Player player2,
                          String serverIP, boolean isHost, GameClient existingClient) {
         super();
-        this.setPlayer(player);
+        this.setPlayer(player1);
+        this.player2 = player2;
         this.gameScreen = new VsGameScreen();
         this.isHost = isHost;
         client = existingClient;
@@ -72,7 +74,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
+        sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
         if (currentState == null) {
             return;
         }
@@ -114,6 +116,8 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
             }
             gameScreen.setTime(state.roundTimer);
             gameScreen.setScores(state.p1Score, state.p1Wins, state.p2Score, state.p2Wins);
+            getPlayer().setScore(state.p1Score);
+            player2.setScore(state.p2Score);
 
             if (state.isGameOver) {
                 this.setEnd(true);

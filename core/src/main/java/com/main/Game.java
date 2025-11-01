@@ -229,6 +229,7 @@ public class Game {
             case SETTINGS:
             case NETWORK_CONNECTION_MENU:
             case NETWORK_LOBBY:
+            case GAME_OVER:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -251,9 +252,6 @@ public class Game {
                     spriteBatch.begin();
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
-//                    gameScreen.setLives(currentLives);
-//                    gameScreen.setTime(currentTimePlayed);
-//                    gameScreen.render();
                     if (isPaused) {
                         Gdx.gl.glEnable(GL20.GL_BLEND);
                         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -355,9 +353,10 @@ public class Game {
                     gameServer.update(this.delta);
                 }
                 if (gameMode != null && gameMode.isEnd()) {
-                    stopNetworkGame();
-                    setGameState(GameState.NETWORK_CONNECTION_MENU);
+                    setGameState(GameState.GAME_OVER);
                 }
+                break;
+            case GAME_OVER:
                 break;
             case NETWORK_LOBBY:
                 break;
@@ -452,6 +451,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SELECT_MODE:
+                if (gameServer != null) stopNetworkGame();
                 ui = new ModeMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
@@ -468,12 +468,20 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case NETWORK_CONNECTION_MENU:
+                if (gameServer != null) stopNetworkGame();
                 ui = new NetworkConnectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case NETWORK_LOBBY:
                 ui = new NetworkLobby(main, this.player, networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case GAME_OVER:
+                ui = new GameOver(
+                    main, player, (int)player.getScore(), (int)player2.getScore(),
+                    networkClient, isNetworkHost);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
@@ -550,7 +558,7 @@ public class Game {
 
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, networkServerIP, isNetworkHost, networkClient
+            player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
             VsMode severGameMode = new  VsMode(player, player2,
