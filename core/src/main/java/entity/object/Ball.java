@@ -173,30 +173,31 @@ public class Ball extends MovableObject {
             collided = true;
             angleSpeedAdjustment("VERTICAL");
         }
-        if (isIn1v1()) {
-            //Xu ly o VsMode.
-        } else {
-            // Va chạm tường trên
-            if (this.getY() + this.getHeight() >= Game.padding_top) {
-                this.setY(Game.padding_top - this.getHeight()); // Đẩy bóng ra
+        // Va chạm tường trên
+        if (this.getY() + this.getHeight() >= Game.padding_top) {
+            this.setY(Game.padding_top - this.getHeight()); // Đẩy bóng ra
+            this.reverseY();
+            collided = true;
+            angleSpeedAdjustment("HORIZONTAL");
+            if (this.isIn1v1())
+                this.setDestroyed(true);
+        }
+
+        // Va chạm đáy màn hình
+        if (this.getY() <= 0) {
+            if (ShieldEffect.isShield()) {
+                ShieldEffect.setShield();
+                this.setY(0); // Đẩy bóng ra
                 this.reverseY();
                 collided = true;
                 angleSpeedAdjustment("HORIZONTAL");
+            } else {
+                this.setDestroyed(true); // Rớt ra ngoài
             }
-
-            // Va chạm đáy màn hình
-            if (this.getY() <= 0) {
-                if (ShieldEffect.isShield()) {
-                    ShieldEffect.setShield();
-                    this.setY(0); // Đẩy bóng ra
-                    this.reverseY();
-                    collided = true;
-                    angleSpeedAdjustment("HORIZONTAL");
-                } else {
-                    this.setDestroyed(true); // Rớt ra ngoài
-                }
-            }
+            if (isIn1v1())
+                this.setDestroyed(true);
         }
+
 
         if (collided) {
             Game.playSfx(Game.sfx_touchpaddle, 1.2f);

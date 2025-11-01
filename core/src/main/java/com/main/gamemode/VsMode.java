@@ -67,20 +67,9 @@ public class VsMode extends GameMode {
             String mapPath = "/maps/map_vs" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
         }
-//        currentMap = brickMap.get(0);
-//        currentRound = 1;
+
         paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture, false);
         paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 800, TextureManager.flippedpaddleTexture, true);
-//        balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
-//            paddle1.getY() + paddle1.getHeight(),
-//            TextureManager.ballTexture,
-//            10.0f)
-//        );
-//        balls.add(new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
-//            paddle2.getY() + paddle2.getHeight(),
-//            TextureManager.ballTexture,
-//            10.0f)
-//        );
 
         startRound(1);
     }
@@ -104,7 +93,6 @@ public class VsMode extends GameMode {
         paddle2.setX(Game.SCREEN_WIDTH / 2f - 48);
         paddle2.setY(800);
 
-        EffectItem.clear();
         resetBalls();
     }
 
@@ -124,8 +112,8 @@ public class VsMode extends GameMode {
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
             paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
-            10.0f);
-        ballP2.setVelocity(0, -10.0f);
+            5.0f);
+        ballP2.setVelocity(0, -5.0f);
         balls.add(ballP2);
     }
 
@@ -139,22 +127,16 @@ public class VsMode extends GameMode {
         return isGameEnded;
     }
 
-    public void endRound(int winner) {
+    public void endRound() {
         isPaused = true;
-        if (winner == 1) {
+        if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
             roundsWonP1++;
-        } else if (winner == 2) {
+        } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
             roundsWonP2++;
-        } else if (winner == 0) {
-            if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
-                roundsWonP1++;
-            } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
-                roundsWonP2++;
-            }
         }
 
-        System.out.println("p1: " + roundsWonP1);
-        System.out.println("p2: " + roundsWonP2);
+        System.out.println("p1: " + scoreManagerP1.getScore());
+        System.out.println("p2: " + scoreManagerP2.getScore());
 
         if (roundsWonP1 == 2 || roundsWonP2 == 2 || currentRound == MAX_ROUNDS) {
             gameOver();
@@ -187,54 +169,38 @@ public class VsMode extends GameMode {
         }
 
         if (roundTimer <= 0) {
-            endRound(0);
+            endRound();
             return;
         }
 
         paddle1.update(delta);
         paddle2.update(delta);
 
-//        EffectItem.updateEffectItems(paddle1, this.balls, delta);
-//        EffectItem.updateEffectItems(paddle2, this.balls, delta);
         currentMap.update(delta);
-        EffectItem.moveItems(delta);
-        EffectItem.effectCollision(paddle1, this.balls, currentMap);
-        EffectItem.effectCollision(paddle2, this.balls, currentMap);
+
 
         for (Ball ball : balls) {
             ball.setIn1v1(true);
             ball.update(delta);
             ball.handleWallCollision();
 
-            if (ball.getY() <= 0) {
-                if (paddle1.hasShield()) {
-                    ball.setY(0);
-                    ball.reverseY();
-                    Game.playSfx(Game.sfx_touchpaddle, 1.2f);
-                    ball.angleSpeedAdjustment("HORIZONTAL");
-                    paddle1.setShieldActive(false);
-                } else {
-                    ball.setDestroyed(true);
-                }
-            } else if (ball.getY() + ball.getHeight() >= Game.padding_top) {
-                if (paddle2.hasShield()) {
-                    ball.setY(Game.padding_top - ball.getHeight());
-                    ball.reverseY();
-                    Game.playSfx(Game.sfx_touchpaddle, 1.2f);
-                    ball.angleSpeedAdjustment("HORIZONTAL");
-                    paddle2.setShieldActive(false);
-                } else {
-                    ball.setDestroyed(true);
-                }
-            }
-
             if (ball == ballP1 && ball.isDestroyed()) {
-                endRound(2);
+                ball.setDestroyed(false);
+                ball.setX(paddle1.getX() + paddle1.getWidth() / 2f - 12);
+                ball.setY(paddle1.getY() + paddle1.getHeight());
+                paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
+                paddle1.setY(50);
+                flowPaddle1 = true;
                 return;
             }
 
             if (ball == ballP2 && ball.isDestroyed()) {
-                endRound(1);
+                ball.setDestroyed(false);
+                ball.setX(paddle2.getX() + paddle2.getWidth() / 2f - 12);
+                ball.setY(paddle2.getY() - ball.getHeight());
+                paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
+                paddle1.setY(800);
+                flowPaddle2 = true;
                 return;
             }
 
@@ -248,70 +214,19 @@ public class VsMode extends GameMode {
             }
 
             for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
+                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig()) {
                         brick.setHitPoints(0);
                     }
                     if (brick.gethitPoints() == 0) {
-                        //Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
-                        EffectItem newEffectItem = null;
-                        if (ball.getLastHitBy() == 1) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0);
-                            if (newEffectItem != null) {
-                                newEffectItem.setVelocity(0, -60f);
-                            }
-                        } else if (ball.getLastHitBy() == 2){
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0);
-                            if (newEffectItem != null) {
-                                newEffectItem.setVelocity(0, 60f);
-                            }
-
-                        }
-
-                        if (newEffectItem != null) {
-                           EffectItem.addEffectItem(newEffectItem);
-                        }
-
-//                        if (newEffectItem instanceof ShieldEffect) {
-//                            if (ball.getLastHitBy() == 1) {
-//                                paddle1.activateShield(newEffectItem);
-//                            } else if (ball.getLastHitBy() == 2) {
-//                                paddle2.activateShield(newEffectItem);
-//                            }
-//                        }
-
                         if (ball.getLastHitBy() == 1) {
                             scoreManagerP1.comboScore(brick);
                         } else {
                             scoreManagerP2.comboScore(brick);
                         }
-
-//                        if (brick.getExplosion()) {
-//                            brick.startExplosion();
-//                        } else {
                         brick.setDestroyed(true);
-//                        }
                     }
-
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
-                    }
-
                     break;
                 }
             }
@@ -319,8 +234,8 @@ public class VsMode extends GameMode {
         }
         balls.removeIf(Ball::isDestroyed);
 
-        if (currentMap.getSize() == 0 || balls.isEmpty()) {
-            endRound(0);
+        if (currentMap.getSize() == 0) {
+            endRound();
         }
     }
 
