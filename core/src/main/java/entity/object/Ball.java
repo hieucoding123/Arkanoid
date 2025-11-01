@@ -24,6 +24,7 @@ public class Ball extends MovableObject {
     private static final float HITBOX_SHRINK_PIXELS = 1.0f;
 
     private boolean in1v1 = false;
+    private boolean in1v1Online = false;
 
     /**
      * Constructor for ball.
@@ -87,6 +88,22 @@ public class Ball extends MovableObject {
      */
     public void setIn1v1(boolean in1v1) {
         this.in1v1 = in1v1;
+    }
+
+    /**
+     * Check 1v1 status for online mode.
+     * @return 1v1 status to be checked
+     */
+    public boolean isIn1v1Online() {
+        return this.in1v1Online;
+    }
+
+    /**
+     * Set 1v1 status for online mode.
+     * @param in1v1Online 1v1 status to be set
+     */
+    public void setIn1v1Online(boolean in1v1Online) {
+        this.in1v1Online = in1v1Online;
     }
 
     /**
@@ -187,8 +204,8 @@ public class Ball extends MovableObject {
                 this.reverseY();
                 collided = true;
                 angleSpeedAdjustment("HORIZONTAL");
-//            if (this.isIn1v1())
-//                this.setDestroyed(true);
+            if (this.isIn1v1Online())
+                this.setDestroyed(true);
             }
 
             // Va chạm đáy màn hình
@@ -202,8 +219,8 @@ public class Ball extends MovableObject {
                 } else {
                     this.setDestroyed(true); // Rớt ra ngoài
                 }
-//            if (isIn1v1())
-//                this.setDestroyed(true);
+            if (isIn1v1Online())
+                this.setDestroyed(true);
             }
         }
 

@@ -165,7 +165,7 @@ public class NetworkVsModeLogic extends GameMode {
 
 
         for (Ball ball : balls) {
-            ball.setIn1v1(true);
+            ball.setIn1v1Online(true);
             ball.update(delta);
             ball.handleWallCollision();
 
