@@ -62,6 +62,7 @@ public class Game {
     private Player player2;
 
     private boolean isCoopSelection = false;
+    private boolean isVsOffline = false;
 
     public static Music bgm;
     public static Sound sfx_bigball;
@@ -585,8 +586,13 @@ public class Game {
                 }
                 break;
             case NETWORK_VS:
-                playNetworkGame();
+                if (isVsOffline) {
+                    gameMode = new VsMode(scoreManager, scoreManagerP2);
+                } else {
+                    playNetworkGame();
+                }
                 break;
+
         }
         if (isResumingFromSave) {
             GameSaveManager.loadGame(this.player,gameMode, gameState, scoreManager, isCoopSelection);
@@ -596,7 +602,6 @@ public class Game {
             pauseUI = new PauseUI(spriteBatch, this);
             previous = Gdx.input.getInputProcessor();
             Gdx.input.setInputProcessor(pauseUI.getStage());
-
         }
     }
 
