@@ -289,4 +289,10 @@ public class VsMode extends GameMode {
     public boolean getIsGameOver() {
         return (roundsWonP1 == 2 || roundsWonP2 == 2 || (currentRound == MAX_ROUNDS && roundTimer <= 0));
     }
+    public int p1Wins() {
+        return roundsWonP1;
+    }
+    public int p2Wins() {
+        return roundsWonP2;
+    }
 }

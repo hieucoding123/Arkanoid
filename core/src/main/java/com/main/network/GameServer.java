@@ -118,7 +118,9 @@ public class GameServer {
         }
         // Update game status
         update.p1Score = vsMode.getScoreManagerP1().getScore();
+        update.p1Wins = vsMode.p1Wins();
         update.p2Score = vsMode.getScoreManagerP2().getScore();
+        update.p2Wins = vsMode.p2Wins();
         update.roundTimer = vsMode.getRoundTimer();
         update.currentRound = vsMode.getCurrentRound();
         update.isGameOver = vsMode.getIsGameOver();

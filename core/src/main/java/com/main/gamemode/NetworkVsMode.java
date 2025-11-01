@@ -112,9 +112,8 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
                 );
                 localBricks.add(brick);
             }
-
             gameScreen.setTime(state.roundTimer);
-            gameScreen.setScores(state.p1Score, state.p2Score);
+            gameScreen.setScores(state.p1Score, state.p1Wins, state.p2Score, state.p2Wins);
 
             if (state.isGameOver) {
                 this.setEnd(true);

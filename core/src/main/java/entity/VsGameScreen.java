@@ -20,8 +20,12 @@ public class VsGameScreen {
 
     private Label scoreLabel1;
     private double p1Score;
+    private int p1Wins;
     private double p2Score;
     private Label scoreLabel2;
+    private int p2Wins;
+    private String result;
+    private Label resultLabel1;
     private Label timeLabel;
 
     // Textures and Images for icons
@@ -39,10 +43,15 @@ public class VsGameScreen {
     private final float ICON_LABEL_PADDING = 5f; // Padding between icon and label
     private final float ICON_SIZE = 25f;
 
+    private final float RESULT_X = 500f;
+    private final float RESULT_Y = 970f;
+
     public VsGameScreen() {
         this.times = 0.0;
         this.p1Score = 0.0;
         this.p2Score = 0.0;
+        this.p1Wins = 0;
+        this.p2Wins = 0;
     }
 
     public void create() {
@@ -61,6 +70,9 @@ public class VsGameScreen {
         scoreLabel1.setColor(Color.GREEN);
         scoreLabel2 = new Label("0.0", skin);
         scoreLabel2.setColor(Color.BLUE);
+        result = p1Wins + " - " + p2Wins;
+        resultLabel1 = new Label(result, skin);
+        resultLabel1.setColor(Color.GOLD);
         timeLabel = new Label(String.valueOf(this.times), skin);
 
         clockTexture = new Texture(Gdx.files.internal("images/clock.png"));
@@ -109,9 +121,12 @@ public class VsGameScreen {
         }
     }
 
-    public void setScores(double p1Score, double p2Score) {
+    public void setScores(double p1Score, int p1Wins, double p2Score, int p2Wins) {
         this.p1Score = p1Score;
+        this.p1Wins = p1Wins;
         this.p2Score = p2Score;
+        this.p2Wins = p2Wins;
+        result = p1Wins + " - " + p2Wins;
     }
 
     public void dispose() {

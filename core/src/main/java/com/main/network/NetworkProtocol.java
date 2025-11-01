@@ -87,7 +87,8 @@ public class NetworkProtocol {
         public ArrayList<BrickState> bricks;
         public double p1Score;
         public double p2Score;
-        public int p1Lives;
+        public int p1Wins;
+        public int p2Wins;
         public int p2Lives;
         public float roundTimer;
         public int currentRound;
