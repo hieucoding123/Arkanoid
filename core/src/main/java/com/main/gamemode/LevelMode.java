@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.components.CollisionManager;
 import com.main.components.IngameInputHandler;
 import entity.Effect.*;
 import entity.GameScreen;
@@ -91,46 +92,58 @@ public class LevelMode extends GameMode {
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
+
         for (Ball ball : balls) {
             ball.update(delta);
-            // Check Collision
-            ball.collisionWith(paddle);
-            ball.handleWallCollision();
-            for (Brick brick : currentMap.getBricks()) {
-                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
-                    brick.takeHit();
-                    if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
-                    if (brick.gethitPoints() == 0) {
-                        currentMap.onBrickDestroyed(brick);
-                        EffectItem newEffectItem = null;
-                        if (mapIndex == 1) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.05, 0.05, 0.05, 0.05, 0.05, 0.14, 0.16, 0.18, 0.20, 0.05);
-                        } else if  (mapIndex == 2) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.04, 0.05, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18, 0.05);
-                        } else if (mapIndex == 3) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.03, 0.05,0.05 ,  0.06, 0.08, 0.10, 0.12, 0.14, 0.15, 0.05);
-                        } else if (mapIndex == 4) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.03, 0.05,0.05,0.05, 0.07, 0.08, 0.09, 0.10, 0.12, 0.05);
-                        } else {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle, ball,
-                                0.02, 0.05,0.05,  0.04, 0.05, 0.06, 0.07, 0.08, 0.10, 0.05);
-                        }
+        }
 
-                        if (newEffectItem != null) {
-                            EffectItem.addEffectItem(newEffectItem);
-                        }
-                        scoreManager.comboScore(brick);
-                        if (brick.getExplosion()) {
-                            brick.startExplosion();
-                        } else {
-                            brick.setDestroyed(true);
-                        }
-                    }
-                    break;
+        // Ball separation if multiple collision detected
+        final int SOLVER_ITERATIONS = 5;
+        // Ball Collision
+        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
+            for (int i = 0; i < balls.size(); i++) {
+                Ball ball1 = balls.get(i);
+                for (int j = i + 1; j < balls.size(); j++) {
+                    Ball ball2 = balls.get(j);
+                    CollisionManager.handleBallBallCollision(ball1, ball2);
+                }
+            }
+        }
+
+        // Env collision
+        for (Ball ball : balls) {
+            CollisionManager.handleBallBoundaryCollision(ball);
+            CollisionManager.handleBallPaddleCollision(ball, paddle);
+            Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
+
+            if (hitBrick != null && hitBrick.gethitPoints() == 0) {
+                EffectItem newEffectItem = null;
+                if (mapIndex == 1) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+                } else if  (mapIndex == 2) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
+                        0.04, 0.05, 0.05, 0.05, 0.07, 0.10, 0.12, 0.14, 0.16, 0.18);
+                } else if (mapIndex == 3) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
+                        0.03, 0.05, 0.05, 0.05, 0.06, 0.08, 0.10, 0.12, 0.14, 0.15);
+                } else if (mapIndex == 4) {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
+                        0.03, 0.05, 0.05, 0.05, 0.05, 0.07, 0.08, 0.09, 0.10, 0.12);
+                } else {
+                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle, ball,
+                        0.02, 0.05, 0.05, 0.05, 0.04, 0.05, 0.06, 0.07, 0.08, 0.10);
+                }
+
+                if (newEffectItem != null) {
+                    EffectItem.addEffectItem(newEffectItem);
+                }
+
+                scoreManager.comboScore(hitBrick);
+                if (hitBrick.getExplosion()) {
+                    hitBrick.startExplosion();
+                } else {
+                    hitBrick.setDestroyed(true);
                 }
             }
         }
