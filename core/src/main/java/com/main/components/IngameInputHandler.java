@@ -7,7 +7,7 @@ import entity.object.Paddle;
 
 public class IngameInputHandler extends InputAdapter {
 
-    private GameMode currentMode;
+    private final GameMode currentMode;
 
     //Paddles Movements
     private boolean paddle1Left = false;

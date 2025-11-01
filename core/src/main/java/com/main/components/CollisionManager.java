@@ -112,19 +112,19 @@ public class CollisionManager {
 
     /**
      * Handle Ball and Paddle bounce collision.
-     * @param ball the ball that touched the paddle.
+     *
+     * @param ball   the ball that touched the paddle.
      * @param paddle the paddle that was touched.
-     * @return if there was a collision handled or not.
      */
-    public static boolean handleBallPaddleCollision(Ball ball, Paddle paddle) {
+    public static void handleBallPaddleCollision(Ball ball, Paddle paddle) {
         if (!checkCircleRect(ball, paddle)) {
-            return false;
+            return;
         }
 
         //Respond
         if (paddle.isFlipped()) {
+            float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
             if (ball.getDy() > 0) {
-                float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
                 float ballCenter = ball.getX() + ball.getWidth() / 2f;
                 float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
                 impactPoint = Math.max(-1.0f, Math.min(1.0f, impactPoint));
@@ -133,7 +133,6 @@ public class CollisionManager {
                 ball.updateVelocity();
                 ball.setY(paddle.getY() - ball.getHeight());
                 Game.playSfx(Game.sfx_touchpaddle, 1.2f);
-                return true;
             }
         } else {
             if (ball.getDy() < 0) {
@@ -146,10 +145,8 @@ public class CollisionManager {
                 ball.updateVelocity();
                 ball.setY(paddle.getY() + paddle.getHeight());
                 Game.playSfx(Game.sfx_touchpaddle, 1.2f);
-                return true;
             }
         }
-        return false;
     }
 
 
@@ -200,14 +197,14 @@ public class CollisionManager {
 
     /**
      * Handle Ball-ball collision.
+     *
      * @param ball1 ball 1 entity
      * @param ball2 ball 2 entity
-     * @return true if there was handled collision, false if not
      */
-    public static boolean handleBallBallCollision(Ball ball1, Ball ball2) {
+    public static void handleBallBallCollision(Ball ball1, Ball ball2) {
         // detection
         if (!checkCircleCircle(ball1, ball2)) {
-            return false;
+            return;
         }
 
         // Respond
@@ -217,18 +214,17 @@ public class CollisionManager {
         float dy = ball2.getCenterY() - ball1.getCenterY();
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
-        float normalX = dx / distance;
+        float tangentY = dx / distance;
         float normalY = dy / distance;
         float tangentX = -normalY;
-        float tangentY = normalX;
 
         float relVelX = ball1.getDx() - ball2.getDx();
         float relVelY = ball1.getDy() - ball2.getDy();
-        float dotProduct = relVelX * normalX + relVelY * normalY;
+        float dotProduct = relVelX * tangentY + relVelY * normalY;
 
         // Out of collision
         if (dotProduct < 0) {
-            return false;
+            return;
         }
 
         // Store speed for recover
@@ -236,18 +232,15 @@ public class CollisionManager {
         float speed2 = ball2.getSpeed();
 
         // Bounce calculation
-        float v1_normal_scalar = ball1.getDx() * normalX + ball1.getDy() * normalY;
+        float v1_normal_scalar = ball1.getDx() * tangentY + ball1.getDy() * normalY;
         float v1_tangent_scalar = ball1.getDx() * tangentX + ball1.getDy() * tangentY;
-        float v2_normal_scalar = ball2.getDx() * normalX + ball2.getDy() * normalY;
+        float v2_normal_scalar = ball2.getDx() * tangentY + ball2.getDy() * normalY;
         float v2_tangent_scalar = ball2.getDx() * tangentX + ball2.getDy() * tangentY;
 
-        float new_v1_normal_scalar = v2_normal_scalar;
-        float new_v2_normal_scalar = v1_normal_scalar;
-
-        float new_v1_dx = (new_v1_normal_scalar * normalX) + (v1_tangent_scalar * tangentX);
-        float new_v1_dy = (new_v1_normal_scalar * normalY) + (v1_tangent_scalar * tangentY);
-        float new_v2_dx = (new_v2_normal_scalar * normalX) + (v2_tangent_scalar * tangentX);
-        float new_v2_dy = (new_v2_normal_scalar * normalY) + (v2_tangent_scalar * tangentY);
+        float new_v1_dx = (v2_normal_scalar * tangentY) + (v1_tangent_scalar * tangentX);
+        float new_v1_dy = (v2_normal_scalar * normalY) + (v1_tangent_scalar * tangentY);
+        float new_v2_dx = (v1_normal_scalar * tangentY) + (v2_tangent_scalar * tangentX);
+        float new_v2_dy = (v1_normal_scalar * normalY) + (v2_tangent_scalar * tangentY);
 
         // Apply velocity
         ball1.setVelocityAndUpdateAngle(new_v1_dx, new_v1_dy);
@@ -264,11 +257,10 @@ public class CollisionManager {
         float overlap = sumRadii - distance;
         float push = overlap * 0.5f + 0.1f;
 
-        ball1.setX(ball1.getX() - push * normalX);
+        ball1.setX(ball1.getX() - push * tangentY);
         ball1.setY(ball1.getY() - push * normalY);
-        ball2.setX(ball2.getX() + push * normalX);
+        ball2.setX(ball2.getX() + push * tangentY);
         ball2.setY(ball2.getY() + push * normalY);
 
-        return true;
     }
 }
