@@ -1,6 +1,7 @@
 package table;
 
 import com.badlogic.gdx.Gdx;
+import java.io.File;
 
 
 /**
@@ -8,14 +9,10 @@ import com.badlogic.gdx.Gdx;
  * This class ensures that the driver is loaded only once.
  */
 public class DataHandler {
-//    private static final String URL_DATABASE = "jdbc:sqlite:leaderBoard/level_scores.db";
-
     /**
      * Flag to track whether the SQLite JDBC driver has been successfully loaded.
      */
     private static boolean isLoaded = false;
-
-
     /**
      * Checks if the SQLite JDBC driver is loaded.
      *
@@ -50,6 +47,8 @@ public class DataHandler {
                 // Attempts to load the SQLite JDBC driver class
                 Class.forName("org.sqlite.JDBC");
                 setLoaded(true);
+
+                new File("leaderBoard").mkdirs();
             } catch (ClassNotFoundException e) {
                 // Logs an error if the driver is not found in the classpath
                 Gdx.app.error("Database", "Not find SQLite JDBC Driver! Check build.gradle.", e);
