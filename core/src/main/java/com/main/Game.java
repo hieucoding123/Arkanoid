@@ -86,7 +86,7 @@ public class Game {
     public static float musicVolumePercent = 1.0f;
     public static float sfxVolumePercent = 1.0f;
 
-    public static final float MAX_MUSIC_VOLUME = 0.3f;
+    public static final float MAX_MUSIC_VOLUME = 0.05f;
     public static final float MAX_SFX_VOLUME = 1.5f;
 
     private GameServer gameServer;
@@ -129,6 +129,9 @@ public class Game {
         this.setGameState(GameState.MAIN_MENU);
     }
 
+    /**
+     * Loads audio assets.
+     */
     private void loadAudio() {
         //BGM
         bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm2.mp3"));
@@ -152,7 +155,7 @@ public class Game {
         sfx_click = Gdx.audio.newSound(Gdx.files.internal("sound/click.mp3"));
         sfx_back = Gdx.audio.newSound(Gdx.files.internal("sound/back.mp3"));
 
-        //Unimplemented
+        //Game state sfx
         sfx_win = Gdx.audio.newSound(Gdx.files.internal("sound/win.mp3"));
         sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
     }
@@ -163,10 +166,19 @@ public class Game {
         }
     }
 
+    /**
+     * Plays a sound effect at the default global volume.
+     * @param sfx The Sound object to be played.
+     */
     public static void playSfx(Sound sfx) {
         sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
     }
 
+    /**
+     * Plays a sound effect with a volume relative to the default global volume.
+     * @param sfx The Sound object to be played.
+     * @param relativeVolume A multiplier for the global volume
+     */
     public static void playSfx(Sound sfx, float relativeVolume) {
         float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
         sfx.play(finalVolume);
@@ -177,6 +189,14 @@ public class Game {
 //        gameScreen.resize(width, height);
         if (ui != null) {
             ui.resize(width, height);
+        }
+
+        if (pauseUI != null) {
+            pauseUI.resize(width, height);
+        }
+
+        if (gameMode != null) {
+            gameMode.resize(width, height);
         }
     }
 
@@ -239,7 +259,6 @@ public class Game {
                 }
                 break;
             case INFI_MODE:
-            case VS_MODE:
             case NETWORK_VS:
             case LEVEL1:
             case LEVEL2:
@@ -337,11 +356,6 @@ public class Game {
                     setGameState(GameState.LEVELS_SELECTION);
                 }
                 break;
-            case VS_MODE:
-                gameMode.update(this.delta);
-                if (gameMode.isEnd()) {
-                    setGameState(GameState.SELECT_MODE);
-                }
             case LEADER_BOARD:
                 ui.update();
                 break;
@@ -537,9 +551,6 @@ public class Game {
                     gameMode = new LevelMode(this.player, scoreManager, 5);
                 }
                 break;
-            case VS_MODE:
-                gameMode = new VsMode(this.player, this.player2, this.scoreManager, this.scoreManagerP2);
-                break;
             case NETWORK_VS:
                 playNetworkGame();
                 break;
@@ -561,8 +572,7 @@ public class Game {
             player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
-            VsMode severGameMode = new  VsMode(player, player2,
-                scoreManager, scoreManagerP2);
+            VsMode severGameMode = new  VsMode(scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);
         }
 
@@ -679,7 +689,7 @@ public class Game {
         }
         EffectItem.clear();
         GameState state;
-        if (gameState == GameState.INFI_MODE || gameState == GameState.VS_MODE) {
+        if (gameState == GameState.INFI_MODE) {
             state = GameState.SELECT_MODE;
         } else if (GameSaveManager.isSaveableGameMode(gameState)) {
             state = GameState.LEVELS_SELECTION;
@@ -687,5 +697,13 @@ public class Game {
             state = GameState.SELECT_MODE;
         }
         setGameState(state);
+    }
+
+    public Main getMain() {
+        return this.main;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }

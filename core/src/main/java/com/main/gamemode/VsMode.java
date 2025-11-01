@@ -2,10 +2,6 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import entity.Effect.EffectFactory;
-import entity.Effect.EffectItem;
-import entity.GameScreen;
-import entity.Player;
 import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
@@ -18,13 +14,9 @@ import java.util.ArrayList;
 public class VsMode extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
-    //private static final double VS_POINT_VALUE = 100.0;
 
-    private Player player1;
-    private Player player2;
     private Paddle paddle1;
     private Paddle paddle2;
-    private EffectFactory effectFactory;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
     private ArrayList<Ball> balls;
@@ -41,17 +33,13 @@ public class VsMode extends GameMode {
     private ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    public VsMode(Player p1, Player p2,
-                  ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    public VsMode(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
-        this.player1 = p1;
-        this.player2 = p2;
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
 
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
-        this.effectFactory  = new EffectFactory();
         balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();

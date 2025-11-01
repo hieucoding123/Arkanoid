@@ -216,6 +216,7 @@ public class LevelMode extends GameMode {
     public Object getLevelNumber() {
         return  this.levelNumber;
     }
+
     @Override
     public double getTimePlayed() {
         return this.timePlayed;
@@ -224,12 +225,21 @@ public class LevelMode extends GameMode {
     public int getLives() {
         return this.lives;
     }
+
     @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
+
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = time;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 }
