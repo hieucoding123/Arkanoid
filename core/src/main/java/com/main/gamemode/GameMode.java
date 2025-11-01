@@ -23,12 +23,21 @@ public abstract class GameMode {
     protected ArrayList<Ball> balls;
     protected boolean followPaddle = true;
 
+    protected boolean isWin = false;
 
     /**
      * Initialize a game mode.
      */
     public GameMode() {
         balls = new ArrayList<>();
+    }
+
+    /**
+     * Checks if the game ended in a win.
+     * @return true if the player won, false otherwise.
+     */
+    public boolean isWin() {
+        return this.isWin;
     }
 
     /**
@@ -171,5 +180,8 @@ public abstract class GameMode {
 
     public void resize (int width, int height) {
 
+    }
+
+    public void dispose() {
     }
 }

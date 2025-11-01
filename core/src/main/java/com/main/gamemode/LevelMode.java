@@ -159,6 +159,9 @@ public class LevelMode extends GameMode {
             if (total_score < 0) total_score = 0;
 
             boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
+
+            this.isWin = playerWon;
+
             if (playerWon) {
                 LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
             } else {
@@ -240,6 +243,13 @@ public class LevelMode extends GameMode {
     public void resize(int width, int height) {
         if (gameScreen != null) {
             gameScreen.resize(width, height);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (gameScreen != null) {
+            gameScreen.dispose();
         }
     }
 }

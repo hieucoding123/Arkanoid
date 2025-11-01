@@ -110,6 +110,7 @@ public class InfiniteMode extends GameMode {
         }
 
         if (this.isEnd()) {
+            this.isWin = false;
             EffectItem.clear();
             this.getPlayer().setScore(this.scoreManager.getScore());
             this.getPlayer().setTimePlayed(this.timePlayed);
@@ -297,6 +298,13 @@ public class InfiniteMode extends GameMode {
     public void resize(int width, int height) {
         if (gameScreen != null) {
             gameScreen.resize(width, height);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (gameScreen != null) {
+            gameScreen.dispose();
         }
     }
 }
