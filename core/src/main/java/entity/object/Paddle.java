@@ -74,9 +74,6 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public long getTimeExpandEffect() {
-        return expandEnd -  System.currentTimeMillis();
-    }
 
     public void clearEffects() {
         this.expandEnd = 0;
@@ -132,12 +129,6 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public long getTimeStunEffect() {
-        if (System.currentTimeMillis() < StunEnd) {
-            return StunEnd - System.currentTimeMillis();
-        }
-        return 0;
-    }
 
     public long getExpandEnd() {
         return expandEnd;

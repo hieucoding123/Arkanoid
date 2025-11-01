@@ -15,12 +15,6 @@ public class ScoreManager {
         lastHitTime = 0;
     }
 
-//    public ScoreManager(double score, int comboCount, long lastHitTime) {
-//        this.score = score;
-//        this.comboCount = comboCount;
-//        this.lastHitTime = lastHitTime;
-//    }
-
     public double getScore() {
         return this.score;
     }
@@ -38,11 +32,7 @@ public class ScoreManager {
     }
 
     public void comboScore(Brick brick) {
-        if (brick.getColor() == 1 || brick.getColor() == 2 || brick.getColor() == 31 ||  brick.getColor() == 41) {
-            score += 100.0d;
-        } else if (brick.getColor() == 0 ||  brick.getColor() == 32 || brick.getColor() == 33 ||  brick.getColor() == 42) {
-            score += 200.0d;
-        }
+        addScore(brick);
 
         long now = System.currentTimeMillis();
         if (now - lastHitTime < COMBO_TIMEOUT_MS) {
@@ -63,10 +53,6 @@ public class ScoreManager {
 
     public void resetScore() {
         score = 0;
-    }
-
-    public void clearedLevel() {
-        score += 1000.0d;
     }
 
     public int getComboCount() {
