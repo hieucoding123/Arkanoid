@@ -13,11 +13,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The GameServer is where clients connect,
+ * where clients communicate through packages.
+ */
 public class GameServer {
     private Server server;
-    private GameMode mode;
+    private GameMode mode;      // Game mode
     private Map<Connection, Integer> playerConnections; // connection -> player number
-    private boolean[] playersReady;
+    private boolean[] playersReady;         // Ready state of players
     private boolean gameStarted;
     private float updateInterval = 1/60f;
     private float timeSinceLastUpdate = 0;
@@ -27,6 +31,9 @@ public class GameServer {
     private boolean p2Connected = false;
     private String hostName = "Server";
 
+    /**
+     * Initialize game server.
+     */
     public GameServer() {
         server = new Server(131072, 65536);
         playerConnections = new HashMap<>();
@@ -34,7 +41,10 @@ public class GameServer {
         NetworkProtocol.register(server);
     }
 
-    // Start server
+    /**
+     * Start game server, listening request and response from clients.
+     * @throws IOException if server can bind to port.
+     */
     public void start() throws IOException {
         server.bind(NetworkProtocol.TCP_PORT, NetworkProtocol.UDP_PORT);
         server.start();
@@ -52,10 +62,14 @@ public class GameServer {
         System.out.println("Server started on port " + NetworkProtocol.TCP_PORT);
     }
 
+    /**
+     * Stop game server.
+     */
     public void stop() {
         server.stop();
     }
 
+    //
     public void update(float delta) {
         if (!gameStarted || mode == null)
             return;
@@ -70,6 +84,9 @@ public class GameServer {
         }
     }
 
+    /**
+     * Send packages contain game state to clients.
+     */
     private void broadcastGameState() {
         if (!(mode instanceof NetworkVsModeLogic))  return;
         NetworkVsModeLogic networkVsModeLogic =  (NetworkVsModeLogic)mode;
@@ -128,6 +145,11 @@ public class GameServer {
         server.sendToAllTCP(update);
     }
 
+    /**
+     * Handle message from clients.
+     * @param connection connection of clients
+     * @param obj a protocol between clients and server
+     */
     private void handleMessage(Connection connection, Object obj) {
         if (obj instanceof NetworkProtocol.DiscoverServerRequest) {
             // When server is not full
@@ -151,6 +173,11 @@ public class GameServer {
         }
     }
 
+    /**
+     * Handle client disconnect with server
+     * Send message to clients and disconnect.
+     * @param connection connection of clients
+     */
     private void handleDisconnect(Connection connection) {
         Integer pNumber = playerConnections.remove(connection);
         if (pNumber != null) {
@@ -173,6 +200,9 @@ public class GameServer {
         }
     }
 
+    /**
+     * Send package from game lobby to clients.
+     */
     private void broadcastLobbyUpdate() {
         NetworkProtocol.LobbyUpdate update = new NetworkProtocol.LobbyUpdate(
             p1Connected,
@@ -186,6 +216,11 @@ public class GameServer {
         }
     }
 
+    /**
+     * Update ready state of client. Send update message to clients.
+     * @param connection connection of client
+     * @param request request from client
+     */
     private void handleStartRequest(Connection connection, NetworkProtocol.StartGameRequest request) {
         int pNumber = playerConnections.get(connection);
         playersReady[pNumber - 1] = true;
@@ -207,6 +242,11 @@ public class GameServer {
             startGame();
     }
 
+    /**
+     * Start game.
+     * Update game started state.
+     * Send game start message to clients.
+     */
     private void startGame() {
         gameStarted = true;
         System.out.println("Game started");
@@ -216,6 +256,11 @@ public class GameServer {
         }
     }
 
+    /**
+     * Handle keyboard input from clients.
+     * @param connection connection of client
+     * @param input keyboard input
+     */
     private void handlePlayerInput(Connection connection, NetworkProtocol.PlayerInput input) {
         if (!gameStarted || mode == null)
             return;
@@ -242,6 +287,14 @@ public class GameServer {
         }
     }
 
+    /**
+     * Handle login request of client.
+     * Check match version first.
+     * Then check server limit .
+     * If accept login, send message and update game lobby to clients.
+     * @param connection connection request from client
+     * @param request request from client
+     */
     private void handleLoginRequest(Connection connection, NetworkProtocol.LoginRequest request) {
         if (!NetworkProtocol.PROTOCOL_VERSION.equals(request.protocolVersion)) {
             NetworkProtocol.LoginResponse response = new NetworkProtocol.LoginResponse(
@@ -282,12 +335,20 @@ public class GameServer {
         broadcastLobbyUpdate();
     }
 
+    /**
+     * Send message to clients.
+     * @param message message from server
+     */
     private void broadcastMessage(String message) {
         for  (Connection conn : playerConnections.keySet()) {
             conn.sendTCP(message);
         }
     }
 
+    /**
+     * Set game mode the server runs in.
+     * @param mode game mode
+     */
     public void setGameMode(GameMode mode) {
         this.mode = mode;
     }

@@ -1,17 +1,24 @@
 package com.main.network;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 import java.util.ArrayList;
 
+/**
+ * Client-Server protocol.
+ * Contains packages exchanged between client and server.
+ */
 public class NetworkProtocol {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54777;
 
     public static final String PROTOCOL_VERSION = "1.0.0";
 
+    /**
+     * Register type of packages.
+     * @param endPoint local end point.
+     */
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
@@ -41,12 +48,18 @@ public class NetworkProtocol {
     }
 
     // MESSAGE CLASSES
-        public static class LoginRequest {
+
+    /**
+     * Login request contains protocolVersion.
+     * And login information.
+     */
+    public static class LoginRequest {
         public String protocolVersion;
         public String playerName;
         public GameMode gameMode;
 
-        public LoginRequest() {}
+        public LoginRequest() {
+        }
 
         public LoginRequest(String pName, GameMode mode) {
             protocolVersion = PROTOCOL_VERSION;
@@ -54,6 +67,10 @@ public class NetworkProtocol {
             this.gameMode = mode;
         }
     }
+
+    /**
+     * Response package to client from a login request.
+     */
     public static class LoginResponse {
         public boolean success;
         public int pNumber;
@@ -67,7 +84,10 @@ public class NetworkProtocol {
 
         }
     }
-    // Clients send player input
+
+    /**
+     * Keyboard input to control object in game.
+     */
     public static class PlayerInput {
         public int pNumber;
         public InputType inputType;
@@ -80,7 +100,10 @@ public class NetworkProtocol {
             this.timestamp = System.currentTimeMillis();
         }
     }
-    // Sever sends game state to all clients
+
+    /**
+     * Contains all game current state update.
+     */
     public static class GameStateUpdate {
         public ArrayList<PaddleState> paddles;
         public ArrayList<BallState> balls;
@@ -127,9 +150,14 @@ public class NetworkProtocol {
             this.p2Ready = p2Ready;
         }
     }
+
     public static class DiscoverServerRequest {
         public DiscoverServerRequest() {}
     }
+
+    /**
+     * To server response information of server.
+     */
     public static class ServerInfoResponse {
         public String hostName;
         public int currentPlayers;
@@ -138,6 +166,9 @@ public class NetworkProtocol {
     }
     // STATE CLASSES
 
+    /**
+     * State of game paddle.
+     */
     public static class PaddleState {
         public int pNumber;
         public float x;
@@ -154,6 +185,10 @@ public class NetworkProtocol {
             this.height = h;
         }
     }
+
+    /**
+     * State of ball.
+     */
     public static class BallState {
         public float x;
         public float y;
@@ -164,6 +199,10 @@ public class NetworkProtocol {
 
         public BallState() {}
     }
+
+    /**
+     * State of brick.
+     */
     public static class BrickState {
         public float x;
         public float y;

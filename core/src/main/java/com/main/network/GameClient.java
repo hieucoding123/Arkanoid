@@ -6,6 +6,10 @@ import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 
+/**
+ * Client receives packages from server.
+ * Send information back to server via protocol.
+ */
 public class GameClient {
     private Client client;
     private int myPNumber;
@@ -13,10 +17,32 @@ public class GameClient {
     private NetworkProtocol.GameStateUpdate lastGameState;
     private GameClientListener listener;
 
+    /**
+     * A type of client can receive packages from server.
+     * And handle them.
+     */
     public interface GameClientListener {
+        /**
+         * Receive connected information.
+         * @param pNumber connected player's number
+         */
         void onConnected(int pNumber);
+
+        /**
+         * Receive game update information.
+         * @param state game update state.
+         */
         void onGameStateUpdated(NetworkProtocol.GameStateUpdate state);
+
+        /**
+         * Receive game started information.
+         */
         void onGameStarted();
+
+        /**
+         * Get disconnected information.
+         * @param reason reason for diconnected
+         */
         void onDisconnected(String reason);
         void onMessage(String message);
         void onLobbyUpdate(NetworkProtocol.LobbyUpdate update);
