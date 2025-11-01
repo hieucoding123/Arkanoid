@@ -86,7 +86,7 @@ public class Game {
     public static float musicVolumePercent = 1.0f;
     public static float sfxVolumePercent = 1.0f;
 
-    public static final float MAX_MUSIC_VOLUME = 0.3f;
+    public static final float MAX_MUSIC_VOLUME = 0.08f;
     public static final float MAX_SFX_VOLUME = 1.5f;
 
     private GameServer gameServer;

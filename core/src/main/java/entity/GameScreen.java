@@ -133,7 +133,7 @@ public class GameScreen {
     }
 
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     public void dispose() {
@@ -148,4 +148,5 @@ public class GameScreen {
     public Stage getStage() {
         return stage;
     }
+
 }
