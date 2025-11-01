@@ -20,6 +20,7 @@ public class GameData {
     public ArrayList<BrickData> bricks;
     public ArrayList<EffectItemData> effectItems;
     public Object levelNumber;
+    public int infiMapIndex;
 
     public GameData() {
         balls = new ArrayList<>();

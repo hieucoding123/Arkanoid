@@ -15,6 +15,7 @@ import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import Menu.CoopPlayerLevelSelectionMenu;
+import entity.Effect.EffectItem;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
@@ -181,7 +182,7 @@ public class Game {
 
     private boolean isCurrentModeSaveable() {
         if (gameMode == null) return false;
-        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode);
+        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode || gameMode instanceof InfiniteMode);
     }
 
     private void updateTimeLive() {
@@ -284,7 +285,6 @@ public class Game {
         }
         switch (gameState) {
             case INFI_MODE:
-            case VS_MODE:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
@@ -389,6 +389,7 @@ public class Game {
         if (pauseUI != null) {
             pauseUI.dispose();
         }
+        EffectItem.clear();
         bgm.dispose();
         sfx_bigball.dispose();
         sfx_bigpaddle.dispose();
@@ -490,6 +491,7 @@ public class Game {
     }
 
     private void playGame() {
+        EffectItem.clear();
         viewport.apply();
         if (GameSaveManager.isSaveableGameMode(gameState)) {
             isResumingFromSave = GameSaveManager.HaveToSave(this.player, gameState, isCoopSelection);
@@ -672,12 +674,10 @@ public class Game {
         } else if (ui != null) {
             Gdx.input.setInputProcessor(ui.getStage());
         }
-
         if (isCurrentModeSaveable()) {
-            GameSaveManager.deleteSave(player, gameState, isCoopSelection);
             isResumingFromSave = false;
         }
-        entity.Effect.EffectItem.clear();
+        EffectItem.clear();
         GameState state;
         if (gameState == GameState.INFI_MODE || gameState == GameState.VS_MODE) {
             state = GameState.SELECT_MODE;
