@@ -167,4 +167,24 @@ public class GameScreen {
         return stage;
     }
 
+    /**
+     * Disposes of all resources managed by this screen, such as the
+     * Stage, Skin, Font, and Textures.
+     */
+    public void dispose() {
+        if (stage != null) {
+            stage.dispose();
+        }
+        if (skin != null) {
+            skin.dispose();
+        }
+
+        if (heartTexture != null) {
+            heartTexture.dispose();
+        }
+        if (clockTexture != null) {
+            clockTexture.dispose();
+        }
+    }
+
 }

@@ -18,6 +18,7 @@ import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import table.CoopDataHandler;
+import table.LevelDataHandler;
 
 import java.util.ArrayList;
 
@@ -29,10 +30,10 @@ public class CoopMode extends GameMode {
     private Paddle paddle1;
     private Paddle paddle2;
     private BricksMap currentMap;
-    private final ScoreManager scoreManager;
+    private ScoreManager scoreManager;
     GameScreen gameScreen;
-    private final EffectFactory effectFactory;
-    private final int levelNumber;
+    private EffectFactory effectFactory;
+    private int levelNumber;
     private int mapIndex;
     private int lives;
     private double timePlayed;
@@ -148,7 +149,7 @@ public class CoopMode extends GameMode {
             Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
 
             if (hitBrick != null && hitBrick.gethitPoints() == 0) {
-                EffectItem newEffectItem;
+                EffectItem newEffectItem = null;
                 if (mapIndex == 1) {
                     newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 1);
@@ -184,13 +185,20 @@ public class CoopMode extends GameMode {
         if (((currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && !this.isEnd()) || (this.lives == 0)) {
             this.setEnd(true);
             double levelscore = this.scoreManager.getScore();
-            double bonusscore = (300.0 - this.timePlayed) * (levelscore / 300.0);
+            double bonusscore = (300.0 - (double)this.timePlayed) * (levelscore / 300.0);
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
 
             boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
-            CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (int)(total_score), playerWon);
+
+            this.isWin = playerWon;
+
+            if (playerWon) {
+                CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            } else {
+                CoopDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            }
         }
     }
 
@@ -313,6 +321,13 @@ public class CoopMode extends GameMode {
     public void resize(int width, int height) {
         if (gameScreen != null) {
             gameScreen.resize(width, height);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (gameScreen != null) {
+            gameScreen.dispose();
         }
     }
 }

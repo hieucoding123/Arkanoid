@@ -94,6 +94,11 @@ public class Game {
     private boolean isNetworkHost;
     private GameClient networkClient;
 
+    private String gameSummaryTitle;
+    private String gameSummaryScore;
+    private GameState gameSummaryNextState;
+    private boolean isWin;
+
     public Game(Main main) {
         this.main = main;
         this.init();
@@ -253,6 +258,9 @@ public class Game {
             case SELECT_MODE:
                 ui.render();
                 break;
+            case GAME_SUMMARY:
+                ui.render();
+                break;
             case LEVELS_SELECTION:
                 if (ui != null) {
                     ui.render();
@@ -341,7 +349,11 @@ public class Game {
                 gameMode.update(this.delta);
                 updateTimeLive();
                 if (gameMode.isEnd()) {
-                    setGameState(GameState.SELECT_MODE);
+                    this.gameSummaryTitle = "Game Over";
+                    this.gameSummaryScore = "Final Score: " + (int)scoreManager.getScore();
+                    this.gameSummaryNextState = GameState.SELECT_MODE;
+                    this.isWin = false;
+                    setGameState(GameState.GAME_SUMMARY);
                 }
                 break;
             case LEVEL1:
@@ -353,7 +365,17 @@ public class Game {
                 updateTimeLive();
                 if (gameMode.isEnd()) {
                     GameSaveManager.deleteSave(player, gameState, isCoopSelection);
-                    setGameState(GameState.LEVELS_SELECTION);
+                    GameSaveManager.deleteSave(player, gameState, isCoopSelection);
+
+                    // --- MODIFIED LOGIC ---
+                    boolean playerWon = gameMode.isWin();
+
+                    this.isWin = playerWon;
+                    this.gameSummaryTitle = playerWon ? "Level Complete!" : "Game Over";
+                    this.gameSummaryScore = "Final Score: " + (int)scoreManager.getScore();
+                    this.gameSummaryNextState = GameState.LEVELS_SELECTION;
+
+                    setGameState(GameState.GAME_SUMMARY);
                 }
                 break;
             case LEADER_BOARD:
@@ -431,6 +453,7 @@ public class Game {
 
     public void setGameState(GameState newGameState) {
         if (this.gameMode != null) {
+            this.gameMode.dispose();
             this.gameMode = null;
         }
         isPaused = false;
@@ -496,6 +519,17 @@ public class Game {
                 ui = new GameOver(
                     main, player, (int)player.getScore(), (int)player2.getScore(),
                     networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case GAME_SUMMARY:
+                if (isWin) {
+                    playSfx(sfx_win);
+                }
+                ui = new GameSummaryScreen(main, this.player,
+                    gameSummaryTitle,
+                    gameSummaryScore,
+                    gameSummaryNextState);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
