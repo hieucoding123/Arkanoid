@@ -15,6 +15,7 @@ import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import Menu.CoopPlayerLevelSelectionMenu;
+import entity.Effect.EffectItem;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.brick.BricksMap;
@@ -193,7 +194,7 @@ public class Game {
 
     private boolean isCurrentModeSaveable() {
         if (gameMode == null) return false;
-        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode);
+        return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode || gameMode instanceof InfiniteMode);
     }
 
     private void updateTimeLive() {
@@ -240,6 +241,7 @@ public class Game {
             case SETTINGS:
             case NETWORK_CONNECTION_MENU:
             case NETWORK_LOBBY:
+            case GAME_OVER:
             case SELECT_MODE:
                 ui.render();
                 break;
@@ -262,9 +264,6 @@ public class Game {
                     spriteBatch.begin();
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
-//                    gameScreen.setLives(currentLives);
-//                    gameScreen.setTime(currentTimePlayed);
-//                    gameScreen.render();
                     if (isPaused) {
                         Gdx.gl.glEnable(GL20.GL_BLEND);
                         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -298,7 +297,6 @@ public class Game {
         }
         switch (gameState) {
             case INFI_MODE:
-            case VS_MODE:
             case LEVEL1:
             case LEVEL2:
             case LEVEL3:
@@ -367,9 +365,10 @@ public class Game {
                     gameServer.update(this.delta);
                 }
                 if (gameMode != null && gameMode.isEnd()) {
-                    stopNetworkGame();
-                    setGameState(GameState.NETWORK_CONNECTION_MENU);
+                    setGameState(GameState.GAME_OVER);
                 }
+                break;
+            case GAME_OVER:
                 break;
             case NETWORK_LOBBY:
                 break;
@@ -402,6 +401,7 @@ public class Game {
         if (pauseUI != null) {
             pauseUI.dispose();
         }
+        EffectItem.clear();
         bgm.dispose();
         sfx_bigball.dispose();
         sfx_bigpaddle.dispose();
@@ -463,6 +463,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case SELECT_MODE:
+                if (gameServer != null) stopNetworkGame();
                 ui = new ModeMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
@@ -479,6 +480,7 @@ public class Game {
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
             case NETWORK_CONNECTION_MENU:
+                if (gameServer != null) stopNetworkGame();
                 ui = new NetworkConnectionMenu(main, this.player);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
@@ -488,12 +490,20 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case GAME_OVER:
+                ui = new GameOver(
+                    main, player, (int)player.getScore(), (int)player2.getScore(),
+                    networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             default:
                 playGame();
         }
     }
 
     private void playGame() {
+        EffectItem.clear();
         viewport.apply();
         if (GameSaveManager.isSaveableGameMode(gameState)) {
             isResumingFromSave = GameSaveManager.HaveToSave(this.player, gameState, isCoopSelection);
@@ -560,7 +570,7 @@ public class Game {
 
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, networkServerIP, isNetworkHost, networkClient
+            player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
             VsMode severGameMode = new  VsMode(player, player2,
@@ -676,12 +686,10 @@ public class Game {
         } else if (ui != null) {
             Gdx.input.setInputProcessor(ui.getStage());
         }
-
         if (isCurrentModeSaveable()) {
-            GameSaveManager.deleteSave(player, gameState, isCoopSelection);
             isResumingFromSave = false;
         }
-        entity.Effect.EffectItem.clear();
+        EffectItem.clear();
         GameState state;
         if (gameState == GameState.INFI_MODE || gameState == GameState.VS_MODE) {
             state = GameState.SELECT_MODE;

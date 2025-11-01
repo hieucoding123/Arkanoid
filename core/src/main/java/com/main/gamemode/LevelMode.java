@@ -83,6 +83,7 @@ public class LevelMode extends GameMode {
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle, null, balls);
             this.reset();
             this.lives--;
         }
@@ -210,7 +211,6 @@ public class LevelMode extends GameMode {
     public Object getLevelNumber() {
         return  this.levelNumber;
     }
-
     @Override
     public double getTimePlayed() {
         return this.timePlayed;

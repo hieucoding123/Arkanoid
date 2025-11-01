@@ -2,6 +2,7 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
@@ -22,15 +23,18 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
     private ArrayList<Brick> localBricks;
+    private Player player2;
 
-    public NetworkVsMode(Player player,
+    public NetworkVsMode(Player player1, Player player2,
                          String serverIP, boolean isHost, GameClient existingClient) {
         super();
-        this.setPlayer(player);
+        this.setPlayer(player1);
+        this.player2 = player2;
         this.gameScreen = new VsGameScreen();
         this.isHost = isHost;
         client = existingClient;
         client.setListener(this);
+        mPNumber = client.getMyPNumber();
         localBricks =  new ArrayList<>();
         create();
     }
@@ -77,10 +81,13 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
             return;
         }
         for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
-            if (paddle.pNumber == 1)
-                sp.draw(TextureManager.paddleTexture, paddle.x,  paddle.y, paddle.width, paddle.height);
-            else
-                sp.draw(TextureManager.flippedpaddleTexture, paddle.x,  paddle.y, paddle.width, paddle.height);
+            if (mPNumber == 1) {
+                Texture paddleTexture = paddle.pNumber == 1 ? TextureManager.paddleTexture : TextureManager.flippedpaddleTexture;
+                sp.draw(paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
+            } else if (mPNumber == 2) {
+                Texture paddleTexture = paddle.pNumber == 1 ? TextureManager.flippedpaddleTexture : TextureManager.paddleTexture;
+                sp.draw(paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
+            }
         }
 
         for (NetworkProtocol.BallState ball : currentState.balls) {
@@ -101,6 +108,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void onGameStateUpdated(NetworkProtocol.GameStateUpdate state) {
+        if (mPNumber == 2) flip(state);
         Gdx.app.postRunnable(() -> {
             this.currentState = state;
             localBricks.clear();
@@ -114,11 +122,22 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
             }
             gameScreen.setTime(state.roundTimer);
             gameScreen.setScores(state.p1Score, state.p1Wins, state.p2Score, state.p2Wins);
+            getPlayer().setScore(state.p1Score);
+            player2.setScore(state.p2Score);
 
             if (state.isGameOver) {
                 this.setEnd(true);
             }
         });
+    }
+
+    private void flip(NetworkProtocol.GameStateUpdate state) {
+        for (NetworkProtocol.BrickState b : state.bricks)
+            b.y = 890 - b.y - b.height;
+        for (NetworkProtocol.PaddleState p : state.paddles)
+            p.y = 890 - p.y - p.height;
+        for (NetworkProtocol.BallState b : state.balls)
+            b.y = 890 - b.y - b.height;
     }
 
     @Override

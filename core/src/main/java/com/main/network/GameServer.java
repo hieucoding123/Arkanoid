@@ -164,7 +164,7 @@ public class GameServer {
             }
             gameStarted = false;
             for (Connection c : playerConnections.keySet()) {
-                c.sendTCP("PLAYER_DISCONNECT:" + pNumber);
+                c.sendTCP("PLAYER_DISCONNECTED:" + pNumber);
                 c.close();
             }
             playerConnections.clear();
