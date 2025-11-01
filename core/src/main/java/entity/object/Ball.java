@@ -17,6 +17,9 @@ public class Ball extends MovableObject {
 
     private float baseScale;
 
+    // Offset
+    private static final float HITBOX_SHRINK_PIXELS = 1.0f;
+
     private boolean in1v1 = false;
     /**
      * Constructor for ball.
@@ -369,5 +372,59 @@ public class Ball extends MovableObject {
 
     public void setFastEnd(long fastEnd) {
         this.FastEnd = fastEnd;
+    }
+
+    /**
+     * @return The x-coordinate of the ball's center.
+     */
+    public float getCenterX() {
+        return getX() + getWidth() / 2f;
+    }
+
+    /**
+     * @return The y-coordinate of the ball's center.
+     */
+    public float getCenterY() {
+        return getY() + getHeight() / 2f;
+    }
+
+    /**
+     * @return The radius of the ball.
+     */
+    public float getRadius() {
+        return Math.max(1.0f, (getWidth() / 2f) - HITBOX_SHRINK_PIXELS);
+    }
+
+    /**
+     * Gets the ball's current horizontal velocity.
+     * @return dx
+     */
+    public float getDx() {
+        return this.dx;
+    }
+
+    /**
+     * Gets the ball's current vertical velocity.
+     * @return dy
+     */
+    public float getDy() {
+        return this.dy;
+    }
+
+    /**
+     * Sets the velocity and updates the internal angle and speed fields to match.
+     */
+    public void setVelocityAndUpdateAngle(float dx, float dy) {
+        this.dx = dx;
+        this.dy = dy;
+        this.angle = (float) Math.atan2(dy, dx);
+        this.speed = (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    /**
+     * @return The ball's current speed (pixels per second).
+     */
+    public float getSpeed() {
+        return this.speed;
     }
 }
