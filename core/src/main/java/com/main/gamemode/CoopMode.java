@@ -98,6 +98,7 @@ public class CoopMode extends GameMode {
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle1, paddle2, balls);
             this.lives--;
             this.reset();
         }

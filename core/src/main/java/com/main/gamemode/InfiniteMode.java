@@ -81,6 +81,7 @@ public class InfiniteMode extends GameMode {
 
         if (balls.isEmpty()) {
             scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle, null, balls);
             this.reset();
             this.lives--;
             this.setEnd(lives == 0);
@@ -226,5 +227,9 @@ public class InfiniteMode extends GameMode {
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = (float)time;
+    }
+
+    public Object getLevelNumber() {
+        return this.currentIdx;
     }
 }
