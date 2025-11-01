@@ -1,4 +1,4 @@
-package com.main.input;
+package com.main.components;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;

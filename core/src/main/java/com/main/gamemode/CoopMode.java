@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import com.main.input.IngameInputHandler;
+import com.main.components.IngameInputHandler;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
 import entity.Effect.ShieldEffect;

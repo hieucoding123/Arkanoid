@@ -1,12 +1,10 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dongbat.jbump.Collisions;
-import com.main.input.IngameInputHandler;
+import com.main.components.IngameInputHandler;
 import entity.Player;
 import entity.object.Ball;
 import entity.object.Paddle;
-import entity.Effect.ShieldEffect;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
