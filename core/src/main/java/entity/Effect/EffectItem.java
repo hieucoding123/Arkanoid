@@ -3,7 +3,6 @@ package entity.Effect;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.components.CollisionManager;
-import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Ball;
 import entity.object.Paddle;

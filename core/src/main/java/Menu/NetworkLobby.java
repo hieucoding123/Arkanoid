@@ -22,17 +22,15 @@ import com.main.network.NetworkProtocol;
 import entity.Player;
 
 public class NetworkLobby extends UserInterface implements GameClient.GameClientListener {
-    private GameClient client;
+    private final GameClient client;
     private int myPNumber;
-    private boolean isHost;
+    private final boolean isHost;
 
-    private Label titleLabel;
     private Label player1StatusLabel;
     private Label player2StatusLabel;
     private Label player1ReadyLabel;
     private Label player2ReadyLabel;
     private TextButton myReadyButton;
-    private TextButton myQuitButton;
     private Label waitingLabel;
 
     private boolean player1Connected = false;
@@ -101,7 +99,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             new TextureRegionDrawable(new TextureRegion(this.getBGTexture()))
         );
 
-        titleLabel = new Label("GAME LOBBY", this.getSkin());
+        Label titleLabel = new Label("GAME LOBBY", this.getSkin());
         titleLabel.setFontScale(1.25f);
         titleLabel.setColor(Color.CYAN);
         mainTable.add(titleLabel).colspan(2).padTop(70).row();
@@ -127,6 +125,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
 
         player1ReadyLabel = new Label("Not Ready", notReadyStyle);
         player1Table.add(player1ReadyLabel).colspan(1).pad(5).row();
+        TextButton myQuitButton;
         if (myPNumber == 1) {
             myReadyButton = createReadyButton();
             myQuitButton = createQuitButton();
@@ -250,13 +249,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             boolean allPlayersConnected = player1Connected && player2Connected;
 
             // Kích hoạt nút NẾU: Cả 2 đã kết nối VÀ client này chưa nhấn Ready
-            if (allPlayersConnected && !myReady) {
-                myReadyButton.setDisabled(false);
-            }
             // Vô hiệu hóa nút NẾU: Một trong hai chưa kết nối HOẶC client này đã nhấn Ready rồi
-            else {
-                myReadyButton.setDisabled(true);
-            }
+            myReadyButton.setDisabled(!allPlayersConnected || myReady);
         }
         updateWaittingMessage();
     }
@@ -316,7 +310,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Gdx.app.error("NetworkLobby", e.getMessage(), e);
                 }
                 Gdx.app.postRunnable(() -> {
                     getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
@@ -333,8 +327,6 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         player2Ready =  update.p2Ready;
 
         // Update players and lobby interface status
-        Gdx.app.postRunnable(() -> {
-            updatePlayerStatus();
-        });
+        Gdx.app.postRunnable(this::updatePlayerStatus);
     }
 }

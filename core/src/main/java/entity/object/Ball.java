@@ -15,10 +15,10 @@ public class Ball extends MovableObject {
     private long BigEnd = 0;
     private long SlowEnd = 0;
     private long FastEnd = 0;
-    private float originalspeed;
+    private final float originalspeed;
     private int lastHitBy = 0;
 
-    private float baseScale;
+    private final float baseScale;
 
     // Offset
     private static final float HITBOX_SHRINK_PIXELS = 1.0f;
@@ -63,6 +63,14 @@ public class Ball extends MovableObject {
         if (other.SlowEnd > System.currentTimeMillis()) {
             this.SlowEnd = other.SlowEnd;
         }
+
+        if (other.FastEnd > System.currentTimeMillis()) {
+            this.FastEnd = other.FastEnd;
+        }
+
+        this.lastHitBy = other.lastHitBy;
+
+        this.in1v1 = other.in1v1;
     }
 
     /**
@@ -307,11 +315,7 @@ public class Ball extends MovableObject {
     }
 
     public boolean isBig() {
-        if (System.currentTimeMillis() <= BigEnd) {
-            return true;
-        } else {
-            return false;
-        }
+        return System.currentTimeMillis() <= BigEnd;
     }
 
     public float getAngle() { return this.angle; }
@@ -322,13 +326,6 @@ public class Ball extends MovableObject {
 
     public int getLastHitBy() {
         return this.lastHitBy;
-    }
-
-    public long getTimeFastEffect() {
-        if (FastEnd > 0 && System.currentTimeMillis() <= FastEnd) {
-            return FastEnd - System.currentTimeMillis();
-        }
-        return 0;
     }
 
     public float getOriginalSpeed() {

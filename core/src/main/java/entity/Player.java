@@ -44,24 +44,6 @@ public class Player {
     }
 
     /**
-     * Compare with another player.
-     * @param other other Player
-     * @return true if have more score than another Player
-     */
-    public boolean less(Player other) {
-        if (this.score != other.score) {
-            return this.score < other.score;
-        }
-        if (this.timePlayed != other.timePlayed) {
-            return this.timePlayed > other.timePlayed;
-        }
-        if (!this.name.equals(other.name)) {
-            return this.name.compareTo(other.name) < 0;
-        }
-        return true;
-    }
-
-    /**
      * Replace by another player.
      * @param player other player
      */

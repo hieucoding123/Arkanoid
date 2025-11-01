@@ -1,5 +1,6 @@
 package entity.object.brick;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import entity.ScoreManager;
 import entity.TextureManager;
@@ -23,12 +24,12 @@ public class BricksMap {
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
     private DSU dsu;
-    private Map<Brick, Integer> brick_to_dsu;
-    private Map<Integer, Brick> dsu_to_birck;
-    private ArrayList<Brick> brick_dsu;
-    private Brick[][] brickdsu;
-    private Map<Integer, float[]> dsuVelocities = new HashMap<>();
-    private Random rand = new Random();
+    private final Map<Brick, Integer> brick_to_dsu;
+    private final Map<Integer, Brick> dsu_to_birck;
+    private final ArrayList<Brick> brick_dsu;
+    private final Brick[][] brickdsu;
+    private final Map<Integer, float[]> dsuVelocities = new HashMap<>();
+    private final Random rand = new Random();
     private static final float DSU_MOVE_SPEED = 1.5f * 60f;
     public final ArrayList<Brick> bricks;
     public boolean check_dsu = false;
@@ -45,6 +46,7 @@ public class BricksMap {
         brickdsu = new Brick[rows][cols];
         try {
             InputStream is = getClass().getResourceAsStream(path);
+            assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             for (int i = 0; i < rows; i++) {
@@ -129,7 +131,7 @@ public class BricksMap {
             }
             br.close();
         } catch(IOException e) {
-            e.printStackTrace();
+            Gdx.app.error("Bricks", e.getMessage(), e);
         }
         if (check_dsu) {
             buildDsu();
@@ -276,15 +278,6 @@ public class BricksMap {
                 dsuVelocities.put(i, RandomVelocity(checkRight(i), checkLeft(i), checkTop(i), checkBottom(i)));
             }
         }
-    }
-
-    /**
-     * Rebuilds the DSU when a brick is destroyed.
-     * @param brick the brick that was destroyed
-     */
-    public void onBrickDestroyed(Brick brick) {
-        brickdsu[brick.getRow()][brick.getCol()] = null;
-        buildDsu();
     }
 
     /**

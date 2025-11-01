@@ -6,22 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implements the Disjoint Set Union (DSU) data structure, also known as Union-Find.
- * This structure tracks a collection of disjoint sets, allowing for efficient
- * operations to find which set an element belongs to and to merge two sets.
+ * Disjoint Set
  */
 public class DSU {
-    /**
-     * An array where parent[i] stores the parent of element i.
-     * If parent[i] == i, then i is the representative (root) of its set.
-     */
-    private int[] parent;
-
-    /**
-     * The current number of distinct disjoint sets.
-     */
-    private int NumberOfDSU;
-
+    private final int[] parent;
     /**
      * Constructs a DSU structure with a specified number of elements.
      * Initializes each element as its own separate set.
@@ -30,7 +18,6 @@ public class DSU {
      */
     public DSU(int n) {
         parent = new int[n];
-        NumberOfDSU = n;
         for (int i = 0; i < n; i++) {
             make(i);
         }
@@ -57,14 +44,13 @@ public class DSU {
         if (parent[i] == i) {
             return i;
         }
-        // Path compression: set parent directly to the root
         return parent[i] = find(parent[i]);
     }
 
     /**
      * Merges the sets containing elements i and j.
      * If i and j are already in the same set, this operation does nothing.
-     * The root of j's set is pointed to the root of i's set.
+     * The root of second's set is pointed to the root of first's set.
      *
      * @param i An element in the first set.
      * @param j An element in the second set.
@@ -75,11 +61,7 @@ public class DSU {
         if (find(i) == find(j)) {
             return false;
         } else {
-            // Simple union: make i's root the parent of j's root
-            // Note: This implementation unions j to i, not j's root to i's root.
-            // A more standard union would be: parent[find(j)] = find(i);
-            parent[j] = i; // This implementation might lead to suboptimal tree structures.
-            NumberOfDSU--;
+            parent[j] = i;
             return true;
         }
     }
@@ -88,7 +70,7 @@ public class DSU {
      * Gets all unique root elements.
      * Each root represents a distinct disjoint set.
      *
-     * @return A {@link Set} containing the integer indices of all root elements.
+     * @return a set
      */
     public Set<Integer> get_roots() {
         Set<Integer> set = new HashSet<>();
@@ -104,7 +86,7 @@ public class DSU {
      * Retrieves all elements that belong to the set represented by the given root.
      *
      * @param root The representative element of the set.
-     * @return A {@link List} of all integer elements belonging to the specified set.
+     * @return array root
      */
     public List<Integer> get_elements(int root) {
         List<Integer> set = new ArrayList<>();

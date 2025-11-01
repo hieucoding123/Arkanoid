@@ -1,7 +1,6 @@
 package entity.Effect;
 
 import com.main.Game;
-import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
 import entity.object.Paddle;
@@ -27,30 +26,29 @@ public class ThreeBallsEffect extends EffectItem {
         if (this.isDestroyed() || balls.isEmpty()) {
             return;
         }
-        Ball originalBall = null;
-        if (this.triggeringBall != null || balls.contains(this.triggeringBall)) {
+        Ball originalBall;
+        if (this.triggeringBall != null || balls.contains(null)) {
             originalBall = this.triggeringBall;
         } else {
             originalBall = balls.get(0);
         }
+        assert originalBall != null;
         float originalBallAngle = originalBall.getAngle();
 
         if (originalBallAngle < 0) {
             originalBallAngle = -originalBallAngle;
         }
 
-        if (originalBall != null) {
-            Ball ball1 = new Ball(originalBall);
-            ball1.setAngle(originalBallAngle + 0.5f);
-            ball1.updateVelocity();
+        Ball ball1 = new Ball(originalBall);
+        ball1.setAngle(originalBallAngle + 0.5f);
+        ball1.updateVelocity();
 
-            Ball ball2 = new Ball(originalBall);
-            ball2.setAngle(originalBallAngle - 0.5f);
-            ball2.updateVelocity();
+        Ball ball2 = new Ball(originalBall);
+        ball2.setAngle(originalBallAngle - 0.5f);
+        ball2.updateVelocity();
 
-            balls.add(ball1);
-            balls.add(ball2);
-        }
+        balls.add(ball1);
+        balls.add(ball2);
         this.setDestroyed(true);
     }
 }

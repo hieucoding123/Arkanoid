@@ -16,7 +16,6 @@ import com.main.Game;
 
 
 public class PauseUI extends UserInterface {
-    private Table table;
 
     public PauseUI(SpriteBatch batch, final Game game) {
         super(game.getMain(), game.getPlayer());
@@ -28,35 +27,14 @@ public class PauseUI extends UserInterface {
         BitmapFont font = new BitmapFont(Gdx.files.internal("ui/F_Retro.fnt"));
         setFont(font);
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
 
-        Label resumeLabel = createClickableLabel("RESUME", new Runnable() {
-            @Override
-            public void run() {
-                if (game != null) {
-                    game.ContinueGame();
-                }
-            }
-        });
+        Label resumeLabel = createClickableLabel("RESUME", game::ContinueGame);
 
-        Label newGameLabel = createClickableLabel("NEW GAME", new Runnable() {
-            @Override
-            public void run() {
-                if (game != null) {
-                    game.NewGame();
-                }
-            }
-        });
+        Label newGameLabel = createClickableLabel("NEW GAME", game::NewGame);
 
-        Label returnLabel = createClickableLabel("RETURN TO MENU", new Runnable() {
-            @Override
-            public void run() {
-                if (game != null) {
-                    game.ReturnMenu();
-                }
-            }
-        });
+        Label returnLabel = createClickableLabel("RETURN TO MENU", game::ReturnMenu);
 
 
         Label.LabelStyle redStyle = new Label.LabelStyle(font, Color.RED);

@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class UnbreakBrickEffect extends EffectItem {
     /** Random number generator used to select a brick. */
-    private Random random = new Random();
+    private final Random random = new Random();
 
     /**
      * Constructs an UnbreakBrickEffect instance.

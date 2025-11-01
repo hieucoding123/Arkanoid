@@ -10,7 +10,7 @@ import java.util.Random;
  * Class to generate different effects.
  */
 public class EffectFactory {
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     /**
      * Randomly generate different effects.

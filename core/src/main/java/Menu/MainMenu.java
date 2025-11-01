@@ -1,8 +1,6 @@
 package Menu;
 
-import Menu.UserInterface;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-//import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.Game;
@@ -20,19 +17,12 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
-import static com.badlogic.gdx.Gdx.gl;
-
 public class MainMenu extends UserInterface {
     private TextField textField;
     private Skin textFieldSkin;
 
-    //Button skins
-    private Skin playButtonSkin;
     private Skin settingsButtonSkin;
     private Skin quitButtonSkin;
-
-    //Texture
-    private Texture Leaderboard;
 
     public MainMenu(Main main, Player player) {
         super(main, player);
@@ -43,13 +33,14 @@ public class MainMenu extends UserInterface {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
 
         //Load all skins
-        this.playButtonSkin = new Skin(Gdx.files.internal("ui/playButton.json"));
+        //Button skins
+        Skin playButtonSkin = new Skin(Gdx.files.internal("ui/playButton.json"));
         this.settingsButtonSkin = new Skin(Gdx.files.internal("ui/settingbutton.json"));
         this.quitButtonSkin = new Skin(Gdx.files.internal("ui/quitButton.json"));
         this.textFieldSkin = new Skin(Gdx.files.internal("ui-skin/ui-skin.json"));
 
         //Image Button
-        this.Leaderboard = new Texture(Gdx.files.internal("images/trophy.png"));
+        Texture leaderboard = new Texture(Gdx.files.internal("images/trophy.png"));
 
         //Set def skin
         this.setSkin(playButtonSkin);
@@ -86,7 +77,7 @@ public class MainMenu extends UserInterface {
         Main main = this.getMain();
 
         //Play Button
-        Button playButton = new Button(this.playButtonSkin);
+        Button playButton = new Button(playButtonSkin);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -122,7 +113,7 @@ public class MainMenu extends UserInterface {
         });
 
         // LeaderBoard Button
-        Image lbButton = new Image(this.Leaderboard);
+        Image lbButton = new Image(leaderboard);
         lbButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

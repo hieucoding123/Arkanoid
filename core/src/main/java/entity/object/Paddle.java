@@ -1,7 +1,6 @@
 package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
-import entity.Effect.EffectItem;
 import entity.MovableObject;
 
 public class Paddle extends MovableObject {
@@ -13,10 +12,6 @@ public class Paddle extends MovableObject {
     private boolean shieldActive = false;
     private float shieldTimer = 0;
     private static final float SHIELD_DURATION = 10.0f;
-
-    public void setFlipped(boolean flipped) {
-        this.isFlipped = flipped;
-    }
 
     public boolean isFlipped() {
         return isFlipped;

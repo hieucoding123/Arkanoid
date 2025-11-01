@@ -20,9 +20,9 @@ import entity.Player;
  */
 public class GameSummaryScreen extends UserInterface {
 
-    private String title;
-    private String scoreText;
-    private GameState nextState;
+    private final String title;
+    private final String scoreText;
+    private final GameState nextState;
 
     /**
      * Constructor for the game summary screen.
@@ -72,12 +72,7 @@ public class GameSummaryScreen extends UserInterface {
         mainTable.add(scoreLabel).padBottom(100).row();
 
         // Continue Button
-        Label continueButton = createClickableLabel("Continue", new Runnable() {
-            @Override
-            public void run() {
-                getMain().setGameState(nextState);
-            }
-        });
+        Label continueButton = createClickableLabel("Continue", () -> getMain().setGameState(nextState));
         mainTable.add(continueButton).row();
     }
 }

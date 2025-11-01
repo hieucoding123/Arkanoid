@@ -7,15 +7,11 @@ import entity.TextureManager;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Removes all active effects from balls, paddle, and bricks when collected.
  */
 public class RemoveEffect extends EffectItem {
-
-    private static final Random rand = new Random();
-
     /**
      * Constructs a RemoveEffect instance.
      * @param x  the x-coordinate of the effect item

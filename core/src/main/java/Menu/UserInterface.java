@@ -19,21 +19,16 @@ import entity.Player;
 
 public class UserInterface extends ApplicationAdapter {
     private Stage stage;
-    private Main main;
+    private final Main main;
     private Skin skin;
     private Texture bg;
     private BitmapFont font;
-    private Player player;
+    private final Player player;
 
 
     public UserInterface(Main main, Player player) {
         this.main = main;
         this.player = player;
-    }
-
-    @Override
-    public void create() {
-
     }
 
     @Override

@@ -6,13 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-//import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.Game;
 import com.main.GameState;
@@ -173,9 +171,9 @@ public class LeaderBoard extends UserInterface {
 
             if (i == 0) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.GOLD); // Top 1
-            } else if (data.size() > 1 && i == 1) {
+            } else if (i == 1) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.LIGHT_GRAY); // Top 2
-            } else if (data.size() > 2 && i == 2) {
+            } else if (i == 2) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.ORANGE); // Top 3
             } else {
                 textStyle = whiteText;
@@ -217,9 +215,9 @@ public class LeaderBoard extends UserInterface {
 
             if (i == 0) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.GOLD);
-            } else if (data.size() > 1 && i == 1) {
+            } else if (i == 1) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.LIGHT_GRAY);
-            } else if (data.size() > 2 && i == 2) {
+            } else if (i == 2) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.ORANGE);
             } else {
                 textStyle = whiteText;
@@ -264,9 +262,9 @@ public class LeaderBoard extends UserInterface {
 
             if (i == 0) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.GOLD);
-            } else if (data.size() > 1 && i == 1) {
+            } else if (i == 1) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.LIGHT_GRAY);
-            } else if (data.size() > 2 && i == 2) {
+            } else if (i == 2) {
                 textStyle = new Label.LabelStyle(this.getFont(), Color.ORANGE);
             } else {
                 textStyle = whiteText;

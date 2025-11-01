@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,11 +18,8 @@ import entity.Player;
 
 public class ModeMenu extends UserInterface {
 
-    private Skin infiniteSkin;
     private Skin levelsSkin;
     private Skin coopSkin;
-    private Skin vsModeSkin;
-    private Skin ui_skin;
 
     public ModeMenu(Main main, Player player) {
         super(main, player);
@@ -34,13 +30,13 @@ public class ModeMenu extends UserInterface {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
 
         //Load skin
-        this.infiniteSkin = new Skin(Gdx.files.internal("ui/infbutton.json"));
+        Skin infiniteSkin = new Skin(Gdx.files.internal("ui/infbutton.json"));
         this.levelsSkin = new Skin(Gdx.files.internal("ui/Singleplayerbutton.json"));
         this.coopSkin = new Skin(Gdx.files.internal("ui/CoopButton.json"));
-        this.vsModeSkin = new Skin(Gdx.files.internal("ui/vsmodebutton.json"));
-        this.ui_skin = new Skin(Gdx.files.internal("ui-skin/ui-skin.json"));
+        Skin vsModeSkin = new Skin(Gdx.files.internal("ui/vsmodebutton.json"));
+
         //Set def skin
-        this.setSkin(this.infiniteSkin);
+        this.setSkin(infiniteSkin);
 
         this.setStage(new Stage(new FitViewport(800, 1000)));
 
@@ -64,7 +60,6 @@ public class ModeMenu extends UserInterface {
 
         //Label Styles
         Label.LabelStyle whiteText = new Label.LabelStyle(this.getFont(), Color.WHITE);
-        Label.LabelStyle LBStyle = new Label.LabelStyle(this.getFont(), Color.YELLOW);
 
         //Title Label
         Label titleLabel = new Label("Select your mode", whiteText);
@@ -78,7 +73,7 @@ public class ModeMenu extends UserInterface {
         Main main = this.getMain();
 
         //InfiniteMode Button
-        Button infiModeButton = new Button(this.infiniteSkin);
+        Button infiModeButton = new Button(infiniteSkin);
         infiModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -108,7 +103,7 @@ public class ModeMenu extends UserInterface {
         });
 
         //Vs button
-        Button vsModeButton = new Button(this.vsModeSkin);
+        Button vsModeButton = new Button(vsModeSkin);
         vsModeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

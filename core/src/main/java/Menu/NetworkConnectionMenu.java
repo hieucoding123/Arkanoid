@@ -6,10 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent; // Keep this import
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField; // <-- IMPORT ADDED
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
@@ -25,12 +24,10 @@ import java.util.HashMap;
 
 public class NetworkConnectionMenu extends  UserInterface{
     private List<String> serversList;
-    private ScrollPane serversListScrollPane;
-    private HashMap<String, InetAddress> foundServers;
+    private final HashMap<String, InetAddress> foundServers;
     private TextField ipAddressField; // <-- VARIABLE ADDED
 
     private Label statusLabel;
-    private boolean isHosting;
 
     public NetworkConnectionMenu(Main main, Player player) {
         super(main, player);
@@ -77,13 +74,13 @@ public class NetworkConnectionMenu extends  UserInterface{
             null,
             0f,
             true,
-            () -> hostGame()
+            this::hostGame
         );
         hostButton.pack();
 
         // SERVER LIST
         serversList = new List<>(this.getSkin());
-        serversListScrollPane = new ScrollPane(serversList, this.getSkin());
+        ScrollPane serversListScrollPane = new ScrollPane(serversList, this.getSkin());
         serversListScrollPane.setFadeScrollBars(false);
         serversListScrollPane.setSize(270, 130);
         serversListScrollPane.setDebug(true);
@@ -94,7 +91,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             null,
             0f,
             true,
-            () -> discoverServers()
+            this::discoverServers
         );
         refreshButton.pack();
 
@@ -109,7 +106,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             null,
             0f,
             true,
-            () -> joinGame()
+            this::joinGame
         );
         joinButton.pack();
 
@@ -212,7 +209,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             tempClient.close();
 
             Gdx.app.postRunnable(() -> {
-                String text = "";
+                String text;
                 if (hosts.isEmpty()) {
                     text = "No servers found. Host one!";
                 }else {
@@ -244,7 +241,7 @@ public class NetworkConnectionMenu extends  UserInterface{
     private void joinGame() {
         String enteredIP = ipAddressField.getText();
         String selectedDisplayName = serversList.getSelected();
-        String text = "";
+        String text;
 
         if (enteredIP != null && !enteredIP.isEmpty()) {
             // Priority 1: Use the text field IP
@@ -266,14 +263,12 @@ public class NetworkConnectionMenu extends  UserInterface{
             text = "Please Select Server or Enter IP!";
         }
 
-        if (!text.isEmpty()) {
-            statusLabel.setText(text);
-            statusLabel.pack();
-            statusLabel.setPosition(
-                (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
-                statusLabel.getY()
-            );
-        }
+        statusLabel.setText(text);
+        statusLabel.pack();
+        statusLabel.setPosition(
+            (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
+            statusLabel.getY()
+        );
     }
 
     // --- NEW: Helper method to handle connection logic ---
@@ -312,7 +307,6 @@ public class NetworkConnectionMenu extends  UserInterface{
             (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
             statusLabel.getY()
         );
-        isHosting = true;
         ipAddressField.setText(""); // <-- Clear text field when hosting
 
         new Thread(() -> {

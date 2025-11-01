@@ -16,7 +16,7 @@ public class Brick extends MovableObject {
     private boolean unbreak = false;
     private int row;
     private int col;
-    private int color;
+    private final int color;
     private boolean isExploding = false;
     private boolean explosiontimes = false;
     private float explosionTimer = 0f;
@@ -24,7 +24,7 @@ public class Brick extends MovableObject {
     private static Texture explosionTexture;
     private boolean isMove = false;
     private float moveSpeed = 0;
-    private float originalX;
+    private final float originalX;
     private float moveRange;
 
     /**
@@ -47,7 +47,7 @@ public class Brick extends MovableObject {
         this.col = col;
         this.color = color;
         this.setDestroyed(this.hitPoints <= 0);
-        this.explosionTexture = TextureManager.ExplosionTexture;
+        explosionTexture = TextureManager.ExplosionTexture;
     }
 
     /**

@@ -2,8 +2,6 @@ package entity;
 
 import com.badlogic.gdx.graphics.Texture;
 
-import java.util.ArrayList;
-
 public class TextureManager {
     public static Texture bgTexture;
     public static Texture bgTexture1vs1;

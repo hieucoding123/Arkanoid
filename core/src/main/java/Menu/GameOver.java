@@ -21,16 +21,11 @@ import com.main.network.NetworkProtocol;
 import entity.Player;
 
 public class GameOver extends UserInterface implements GameClient.GameClientListener {
-    private GameClient client;
+    private final GameClient client;
     private int myPNumber;
-    private boolean isHost;
-    private int p1Score;
-    private int p2Score;
-    private Label nameP1;
-    private Label p1Result;
+    private final int p1Score;
+    private final int p2Score;
     private Label p1Status;
-    private Label nameP2;
-    private Label p2Result;
     private Label p2Status;
     private TextButton myQuitButton;
     private TextButton.TextButtonStyle textOnlyButtonStyle;
@@ -41,7 +36,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         super(main, player);
         this.p1Score = p1Score;
         this.p2Score = p2Score;
-        this.isHost = isHost;
         this.client = client;
         client.setListener(this);
         this.myPNumber = client.getMyPNumber();
@@ -96,12 +90,12 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         Table player1Table = new Table();
         player1Table.defaults().pad(10);
 
-        nameP1 = new Label("PLAYER 1", this.getSkin());
+        Label nameP1 = new Label("PLAYER 1", this.getSkin());
         nameP1.setFontScale(1.2f);
         nameP1.setColor(Color.GREEN);
         player1Table.add(nameP1).colspan(1).row();
 
-        p1Result = new Label(p1String, this.getSkin());
+        Label p1Result = new Label(p1String, this.getSkin());
         p1Result.setColor(Color.YELLOW);
         player1Table.add(p1Result).colspan(1).row();
 
@@ -120,12 +114,12 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         Table player2Table = new Table();
         player2Table.defaults().pad(10);
 
-        nameP2 = new Label("PLAYER 2", this.getSkin());
+        Label nameP2 = new Label("PLAYER 2", this.getSkin());
         nameP2.setFontScale(1.2f);
         nameP2.setColor(Color.BLUE);
         player2Table.add(nameP2).colspan(1).row();
 
-        p2Result = new Label(p2String, this.getSkin());
+        Label p2Result = new Label(p2String, this.getSkin());
         p2Result.setColor(Color.YELLOW);
         player2Table.add(p2Result).colspan(1).row();
 
@@ -168,17 +162,11 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
     }
 
-    /**
-     * @param pNumber
-     */
     @Override
     public void onConnected(int pNumber) {
         this.myPNumber = pNumber;
     }
 
-    /**
-     * @param state
-     */
     @Override
     public void onGameStateUpdated(NetworkProtocol.GameStateUpdate state) {
 
@@ -192,9 +180,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
 
     }
 
-    /**
-     * @param reason
-     */
     @Override
     public void onDisconnected(String reason) {
         if (hasQuit)
@@ -205,9 +190,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         });
     }
 
-    /**
-     * @param message
-     */
     @Override
     public void onMessage(String message) {
         if (message.equals("PLAYER_DISCONNECTED: ")) {
@@ -224,9 +206,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         }
     }
 
-    /**
-     * @param update
-     */
     @Override
     public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
 

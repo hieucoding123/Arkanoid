@@ -1,11 +1,9 @@
 package entity.Effect;
 
 import com.main.Game;
-import com.main.gamemode.GameMode;
 import entity.object.Ball;
 import entity.TextureManager;
 import entity.object.Paddle;
-import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;

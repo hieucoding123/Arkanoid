@@ -21,20 +21,6 @@ public abstract class MovableObject extends GameObject {
     }
 
     /**
-     * Constructor for MoveableObject.
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param scaleWidth object's scaleWidth
-     * @param scaleHeight object's scaleHeight
-     * @param texture object texture
-     */
-    public MovableObject(float x, float y, float scaleWidth, float scaleHeight, Texture texture) {
-        super(x, y, scaleWidth, scaleHeight, texture);
-        this.dx = 0;
-        this.dy = 0;
-    }
-
-    /**
      * Set object's velocity
      * @param dx velocity in x-axis
      * @param dy velocity in y-axis
