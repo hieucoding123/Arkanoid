@@ -46,7 +46,7 @@ public class Game {
     float delta;
     private ScoreManager scoreManager;
     private ScoreManager scoreManagerP2;
-    private GameScreen gameScreen;
+//    private GameScreen gameScreen;
     private PauseUI pauseUI;
     private ShapeRenderer shapeRenderer;
     private com.badlogic.gdx.InputProcessor previous;
@@ -105,8 +105,8 @@ public class Game {
         player2 = new Player();
         scoreManager = new ScoreManager();
         scoreManagerP2 = new ScoreManager();
-        gameScreen = new GameScreen(scoreManager);
-        gameScreen.create();
+//        gameScreen = new GameScreen(scoreManager);
+//        gameScreen.create();
 
         camera = new OrthographicCamera();
         // Tạo viewport với kích thước ảo là 800x1000 và liên kết nó với camera
@@ -175,7 +175,7 @@ public class Game {
 
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        gameScreen.resize(width, height);
+//        gameScreen.resize(width, height);
         if (ui != null) {
             ui.resize(width, height);
         }
@@ -252,9 +252,9 @@ public class Game {
                     spriteBatch.begin();
                     gameMode.render(spriteBatch, this.delta);
                     spriteBatch.end();
-                    gameScreen.setLives(currentLives);
-                    gameScreen.setTime(currentTimePlayed);
-                    gameScreen.render();
+//                    gameScreen.setLives(currentLives);
+//                    gameScreen.setTime(currentTimePlayed);
+//                    gameScreen.render();
                     if (isPaused) {
                         Gdx.gl.glEnable(GL20.GL_BLEND);
                         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -384,7 +384,7 @@ public class Game {
         stopNetworkGame();
         spriteBatch.dispose();
         ui.dispose();
-        gameScreen.dispose();
+//        gameScreen.dispose();
         TextureManager.dispose();
         if (shapeRenderer != null) {
             shapeRenderer.dispose();
@@ -492,45 +492,45 @@ public class Game {
         }
         switch (gameState) {
             case INFI_MODE:
-                gameMode = new InfiniteMode(this.player, scoreManager, gameScreen);
+                gameMode = new InfiniteMode(this.player, scoreManager);
                 break;
             case LEVEL1:
                 if (isCoopSelection) {
-                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 1);
+                    gameMode = new CoopMode(this.player, scoreManager, 1);
                 } else {
-                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 1);
+                    gameMode = new LevelMode(this.player, scoreManager,  1);
                 }
                 break;
             case LEVEL2:
                 if (isCoopSelection) {
-                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 2);
+                    gameMode = new CoopMode(this.player, scoreManager, 2);
                 } else {
-                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 2);
+                    gameMode = new LevelMode(this.player, scoreManager,2);
                 }
                 break;
             case LEVEL3:
                 if (isCoopSelection) {
-                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 3);
+                    gameMode = new CoopMode(this.player, scoreManager, 3);
                 } else {
-                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 3);
+                    gameMode = new LevelMode(this.player, scoreManager, 3);
                 }
                 break;
             case LEVEL4:
                 if (isCoopSelection) {
-                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 4);
+                    gameMode = new CoopMode(this.player, scoreManager, 4);
                 } else {
-                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 4);
+                    gameMode = new LevelMode(this.player, scoreManager, 4);
                 }
                 break;
             case LEVEL5:
                 if (isCoopSelection) {
-                    gameMode = new CoopMode(this.player, scoreManager, gameScreen, 5);
+                    gameMode = new CoopMode(this.player, scoreManager, 5);
                 } else {
-                    gameMode = new LevelMode(this.player, scoreManager, gameScreen, 5);
+                    gameMode = new LevelMode(this.player, scoreManager, 5);
                 }
                 break;
             case VS_MODE:
-                gameMode = new VsMode(this.player, this.player2, gameScreen, this.scoreManager, this.scoreManagerP2);
+                gameMode = new VsMode(this.player, this.player2, this.scoreManager, this.scoreManagerP2);
                 break;
             case NETWORK_VS:
                 playNetworkGame();
@@ -550,11 +550,10 @@ public class Game {
 
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, scoreManager, gameScreen,
-            networkServerIP, isNetworkHost, networkClient
+            player, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
-            VsMode severGameMode = new  VsMode(player, player2, gameScreen,
+            VsMode severGameMode = new  VsMode(player, player2,
                 scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);
         }

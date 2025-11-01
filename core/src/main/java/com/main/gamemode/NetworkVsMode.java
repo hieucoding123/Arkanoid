@@ -5,10 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
-import entity.GameScreen;
-import entity.Player;
-import entity.ScoreManager;
-import entity.TextureManager;
+import entity.*;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
@@ -19,28 +16,28 @@ import java.util.HashMap;
 
 public class NetworkVsMode extends GameMode implements GameClient.GameClientListener {
     private GameClient client;
-    private GameScreen gameScreen;
+    private VsGameScreen gameScreen;
     private ScoreManager scoreManager;
     private int mPNumber;
     private boolean isHost;
     private NetworkProtocol.GameStateUpdate currentState;
     private ArrayList<Brick> localBricks;
 
-    public NetworkVsMode(Player player, ScoreManager scoreManager, GameScreen gameScreen,
+    public NetworkVsMode(Player player,
                          String serverIP, boolean isHost, GameClient existingClient) {
         super();
         this.setPlayer(player);
-        this.scoreManager = scoreManager;
-        this.gameScreen = gameScreen;
+        this.gameScreen = new VsGameScreen();
         this.isHost = isHost;
         client = existingClient;
         client.setListener(this);
-        gameScreen.create();
         localBricks =  new ArrayList<>();
+        create();
     }
 
     @Override
     public void create() {
+        gameScreen.create();
     }
 
     @Override
@@ -52,6 +49,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         handleInput();
         update(delta);
         draw(sp);
+        gameScreen.render();
     }
 
     @Override
@@ -114,6 +112,9 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
                 );
                 localBricks.add(brick);
             }
+
+            gameScreen.setTime(state.roundTimer);
+            gameScreen.setScores(state.p1Score, state.p2Score);
 
             if (state.isGameOver) {
                 this.setEnd(true);

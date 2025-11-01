@@ -31,12 +31,12 @@ public class LevelMode extends GameMode {
     private int lives;
     private double timePlayed;
 
-    public LevelMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
+    public LevelMode(Player player, ScoreManager scoreManager, int levelNumber) {
         super();
         bricksMaps = new ArrayList<>();
         this.setPlayer(player);
         this.scoreManager = scoreManager;
-        this.gameScreen = gameScreen;
+        this.gameScreen = new GameScreen(this.scoreManager);
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
         this.lives = 3;
@@ -167,6 +167,7 @@ public class LevelMode extends GameMode {
         this.draw(sp);
         gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
+        gameScreen.render();
     }
 
     @Override

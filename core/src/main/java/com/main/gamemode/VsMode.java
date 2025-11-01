@@ -25,7 +25,6 @@ public class VsMode extends GameMode {
     private Paddle paddle1;
     private Paddle paddle2;
     private EffectFactory effectFactory;
-    private GameScreen gameScreen;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
     private ArrayList<Ball> balls;
@@ -42,7 +41,7 @@ public class VsMode extends GameMode {
     private ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    public VsMode(Player p1, Player p2, GameScreen gameScreen,
+    public VsMode(Player p1, Player p2,
                   ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
         this.player1 = p1;
@@ -50,7 +49,6 @@ public class VsMode extends GameMode {
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
 
-        this.gameScreen = gameScreen;
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
         this.effectFactory  = new EffectFactory();
@@ -61,7 +59,6 @@ public class VsMode extends GameMode {
 
     @Override
     public void create() {
-        gameScreen.create();
 
         for (int i = 1; i <= 3; i++) {
             String mapPath = "/maps/map_vs" + i + ".txt";

@@ -33,13 +33,13 @@ public class InfiniteMode extends GameMode {
     private final double minItemChance = 0.001;
     private final double decayPerLevel = 0.007;
 
-    public InfiniteMode(Player player, ScoreManager scoreManager, GameScreen gameScreen) {
+    public InfiniteMode(Player player, ScoreManager scoreManager) {
         super();
         maps = new ArrayList<>();
         this.setPlayer(player);
         this.setEnd(false);
         this.scoreManager = scoreManager;
-        this.gameScreen = gameScreen;
+        this.gameScreen = new GameScreen(this.scoreManager);
         this.effectFactory = new EffectFactory();
         this.timePlayed = 0.0f;
         lives = 3;
@@ -163,6 +163,7 @@ public class InfiniteMode extends GameMode {
         this.draw(sp);
         gameScreen.setTime(this.timePlayed);
         gameScreen.setLives(this.lives);
+        gameScreen.render();
     }
 
     @Override

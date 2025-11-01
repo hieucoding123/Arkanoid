@@ -34,14 +34,14 @@ public class CoopMode extends GameMode {
     private int lives;
     private double timePlayed;
 
-    public CoopMode(Player player, ScoreManager scoreManager, GameScreen gameScreen, int levelNumber) {
+    public CoopMode(Player player, ScoreManager scoreManager, int levelNumber) {
         super();
         bricksMaps = new ArrayList<>();
 
         this.setPlayer(player);
         this.setEnd(false);
         this.scoreManager = scoreManager;
-        this.gameScreen = gameScreen;
+        this.gameScreen = new GameScreen(this.scoreManager);
         this.effectFactory = new EffectFactory();
         this.levelNumber = levelNumber;
         this.timePlayed = 0.0f;
@@ -184,6 +184,7 @@ public class CoopMode extends GameMode {
         this.draw(sp);
         gameScreen.setLives(this.lives);
         gameScreen.setTime(this.timePlayed);
+        gameScreen.render();
     }
 
     @Override
