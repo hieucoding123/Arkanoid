@@ -34,6 +34,9 @@ import com.main.GameSaveManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
+/**
+ * Main game class that handles rendering, updating, and managing game modes, menus, and network logic.
+ */
 public class Game {
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -95,11 +98,16 @@ public class Game {
     private boolean isNetworkHost;
     private GameClient networkClient;
 
+    /**
+     * Creates a new Game instance.
+     * @param main the main application reference
+     */
     public Game(Main main) {
         this.main = main;
         this.init();
     }
 
+    /** Initializes the game components and loads assets. */
     public void init() {
         player = new Player();
         player2 = new Player();
@@ -130,6 +138,7 @@ public class Game {
         this.setGameState(GameState.MAIN_MENU);
     }
 
+    /** Loads background music and sound effects. */
     private void loadAudio() {
         //BGM
         bgm = Gdx.audio.newMusic(Gdx.files.internal("sound/bgm2.mp3"));
@@ -158,21 +167,36 @@ public class Game {
         sfx_paused = Gdx.audio.newSound(Gdx.files.internal("sound/paused.mp3"));
     }
 
+    /** Updates the global music volume. */
     public static void updateMusicVolume() {
         if (bgm != null) {
             bgm.setVolume(MAX_MUSIC_VOLUME * musicVolumePercent);
         }
     }
 
+    /**
+     * Plays a sound effect at full SFX volume.
+     * @param sfx the sound to play
+     */
     public static void playSfx(Sound sfx) {
         sfx.play(MAX_SFX_VOLUME * sfxVolumePercent);
     }
 
+    /**
+     * Plays a sound effect with relative volume.
+     * @param sfx the sound to play
+     * @param relativeVolume the volume multiplier (0.0–1.0)
+     */
     public static void playSfx(Sound sfx, float relativeVolume) {
         float finalVolume = (MAX_SFX_VOLUME * sfxVolumePercent) * relativeVolume;
         sfx.play(finalVolume);
     }
 
+    /**
+     * Adjusts the game viewport on window resize.
+     * @param width new window width
+     * @param height new window height
+     */
     public void resize(int width, int height) {
         viewport.update(width, height, true);
 //        gameScreen.resize(width, height);
@@ -181,11 +205,16 @@ public class Game {
         }
     }
 
+    /**
+     * Checks if the current game mode can be saved.
+     * @return true if the mode supports saving, false otherwise
+     */
     private boolean isCurrentModeSaveable() {
         if (gameMode == null) return false;
         return (gameMode instanceof LevelMode) || (gameMode instanceof CoopMode);
     }
 
+    /** Updates the stored number of lives and time played. */
     private void updateTimeLive() {
         if (gameMode == null) return;
 
@@ -201,6 +230,7 @@ public class Game {
         }
     }
 
+    /** Toggles between pause and resume states, saving progress if applicable. */
     public void ContinueGame() {
         isPaused = !isPaused;
         if (isPaused) {
@@ -221,6 +251,7 @@ public class Game {
         }
     }
 
+    /** Renders the current game state or UI to the screen. */
     public void render() {
         this.delta = Gdx.graphics.getDeltaTime();
 
@@ -273,6 +304,7 @@ public class Game {
         }
     }
 
+    /** Handles global input, pause, and debug controls. */
     public void handleInput() {
         if (gameMode != null && !isPaused) {
             gameMode.handleInput();
@@ -316,6 +348,7 @@ public class Game {
         }
     }
 
+    /** Updates the logic of the current game state. */
     public void update() {
         if (isPaused) {
             pauseUI.act(this.delta);
@@ -366,6 +399,7 @@ public class Game {
         }
     }
 
+    /** Stops and cleans up the network game server and client. */
     private void stopNetworkGame() {
         if (gameServer != null) {
             gameServer.stop();
@@ -376,6 +410,7 @@ public class Game {
         }
     }
 
+    /** Disposes all resources and saves game state if needed. */
     public void dispose() {
         if (gameMode != null && !gameMode.isEnd() && !isPaused && isCurrentModeSaveable()) {
             updateTimeLive();
@@ -412,11 +447,19 @@ public class Game {
         sfx_touchpaddle.dispose();
     }
 
+    /**
+     * Sets the game to level selection mode.
+     * @param isCoop true if in co-op selection, false for single-player
+     */
     public void setLevelSelectionMode(boolean isCoop) {
         this.isCoopSelection = isCoop;
         setGameState(GameState.LEVELS_SELECTION);
     }
 
+    /**
+     * Changes the active game state and loads corresponding UI or mode.
+     * @param newGameState the target game state
+     */
     public void setGameState(GameState newGameState) {
         if (this.gameMode != null) {
             this.gameMode = null;
@@ -483,6 +526,7 @@ public class Game {
         }
     }
 
+    /** Starts gameplay for the current game mode. */
     private void playGame() {
         viewport.apply();
         if (GameSaveManager.isSaveableGameMode(gameState)) {
@@ -548,6 +592,7 @@ public class Game {
         }
     }
 
+    /** Initializes the client-side network versus mode. */
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
             player, networkServerIP, isNetworkHost, networkClient
@@ -560,6 +605,11 @@ public class Game {
 
     }
 
+    /**
+     * Starts a new network game as host or client.
+     * @param severIP the server IP address
+     * @param isHost true if starting as host, false if connecting as client
+     */
     public void startNetworkGame(String severIP, boolean isHost) {
         this.networkServerIP = severIP;
         this.isNetworkHost = isHost;
@@ -620,6 +670,7 @@ public class Game {
         }
     }
 
+    /** Starts the local game server for hosting a network match. */
     private void startGameServer() {
         try {
             gameServer = new GameServer();
@@ -644,6 +695,7 @@ public class Game {
         }
     }
 
+    /** Resets and starts a new game, clearing effects and scores. */
     public void NewGame() {
         if (isCurrentModeSaveable()) {
             GameSaveManager.deleteSave(player, gameState, isCoopSelection);

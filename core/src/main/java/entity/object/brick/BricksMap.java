@@ -217,6 +217,10 @@ public class BricksMap {
         bricks.removeIf(Brick::isDestroyed);
     }
 
+    /**
+     * Updates the positions and states of all bricks without scoring logic.
+     * @param delta time delta for frame-rate balance
+     */
     public void update(float delta) {
         for (Brick brick : bricks) {
             brick.update(delta);
@@ -224,6 +228,10 @@ public class BricksMap {
 
         bricks.removeIf(Brick::isDestroyed);
     }
+
+    /**
+     * Builds and initializes the DSU (Disjoint Set Union) structure for connected bricks.
+     */
 
     public void buildDsu() {
         brick_dsu.removeIf(Brick::isDestroyed);
@@ -270,11 +278,21 @@ public class BricksMap {
         }
     }
 
+    /**
+     * Rebuilds the DSU when a brick is destroyed.
+     * @param brick the brick that was destroyed
+     */
     public void onBrickDestroyed(Brick brick) {
         brickdsu[brick.getRow()][brick.getCol()] = null;
         buildDsu();
     }
 
+    /**
+     * Returns the brick at the specified DSU grid coordinates.
+     * @param row the brick's row index
+     * @param col the brick's column index
+     * @return the brick at the specified position, or null if invalid or destroyed
+     */
     public Brick getbrickdsu(int row, int col) {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             return null;
@@ -286,7 +304,14 @@ public class BricksMap {
         return brick;
     }
 
-
+    /**
+     * Generates a random velocity for a DSU group.
+     * @param isRightBlocked whether movement to the right is blocked
+     * @param isLeftBlocked whether movement to the left is blocked
+     * @param isTopBlocked whether upward movement is blocked
+     * @param isBottomBlocked whether downward movement is blocked
+     * @return a random 2D velocity vector
+     */
     public float[] RandomVelocity(boolean isRightBlocked, boolean isLeftBlocked, boolean isTopBlocked, boolean isBottomBlocked) {
         ArrayList<float[]> radom = new ArrayList<>();
 
@@ -302,7 +327,12 @@ public class BricksMap {
         return radom.get(rand.nextInt(radom.size()));
     }
 
-
+    /**
+     * Checks if the DSU group touches the right boundary.
+     *
+     * @param root_id the DSU root identifier
+     * @return true if the right edge is blocked, false otherwise
+     */
     public boolean checkRight(int root_id) {
         List<Integer> elementIds = dsu.get_elements(root_id);
         if (elementIds == null || elementIds.isEmpty()) {
@@ -320,6 +350,11 @@ public class BricksMap {
         return false;
     }
 
+    /**
+     * Checks if the DSU group touches the left boundary.
+     * @param root_id the DSU root identifier
+     * @return true if the left edge is blocked, false otherwise
+     */
     public boolean checkLeft(int root_id) {
         List<Integer> elementIds = dsu.get_elements(root_id);
         if (elementIds == null || elementIds.isEmpty()) {
@@ -337,6 +372,11 @@ public class BricksMap {
         return false;
     }
 
+    /**
+     * Checks if the DSU group touches the top boundary.
+     * @param root_id the DSU root identifier
+     * @return true if the top edge is blocked, false otherwise
+     */
     public boolean checkTop(int root_id) {
         List<Integer> elementIds = dsu.get_elements(root_id);
         if (elementIds == null || elementIds.isEmpty()) {
@@ -354,6 +394,11 @@ public class BricksMap {
         return false;
     }
 
+    /**
+     * Checks if the DSU group touches the bottom boundary.
+     * @param root_id the DSU root identifier
+     * @return true if the bottom edge is blocked, false otherwise
+     */
     public boolean checkBottom(int root_id) {
         List<Integer> elementIds = dsu.get_elements(root_id);
         if (elementIds == null || elementIds.isEmpty()) {
@@ -371,6 +416,14 @@ public class BricksMap {
         return false;
     }
 
+    /**
+     * Determines if a DSU group will collide with walls or other bricks after movement.
+     * @param rootId the DSU root ID
+     * @param dx horizontal velocity
+     * @param dy vertical velocity
+     * @param delta frame time delta
+     * @return true if a collision would occur, false otherwise
+     */
     private boolean willDsuCollide(int rootId, float dx, float dy, float delta) {
         List<Integer> elementIds = dsu.get_elements(rootId);
 
@@ -409,6 +462,7 @@ public class BricksMap {
         }
         return false;
     }
+
     /**
      * Draw bricks on game screen.
      * @param batch game drawing programming
@@ -421,14 +475,27 @@ public class BricksMap {
         }
     }
 
+    /**
+     * Gets the list of all bricks in the map.
+     * @return the list of bricks
+     */
     public ArrayList<Brick> getBricks() {
         return this.bricks;
     }
 
+    /**
+     * Gets the number of remaining bricks.
+     * @return total brick count
+     */
     public int getSize() {
         return bricks.size();
     }
 
+    /**
+     * Counts the number of breakable bricks.
+
+     * @return number of breakable bricks
+     */
     public int getNumberBreakBrick() {
         int cnt = 0;
         for (Brick brick : bricks) {

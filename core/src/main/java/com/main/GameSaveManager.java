@@ -16,11 +16,18 @@ import entity.TextureManager;
 import entity.Effect.*;
 
 import java.util.ArrayList;
-
+/**
+ * Manages saving and loading game progress for both solo and cooperative modes.
+ */
 public class GameSaveManager {
 
     private static Json json = new Json();
 
+    /**
+     * Checks whether the given game state supports saving.
+     * @param state the current {@link GameState}
+     * @return {@code true} if the state is saveable, {@code false} otherwise
+     */
     static boolean isSaveableGameMode(GameState state) {
         if (state == GameState.LEVEL1 ||  state == GameState.LEVEL2 || state == GameState.LEVEL3
             || state == GameState.LEVEL4 || state == GameState.LEVEL5) {
@@ -30,6 +37,13 @@ public class GameSaveManager {
         }
     }
 
+    /**
+     * Returns the save file handle for a given player and game state.
+     * @param player the player whose save is being accessed
+     * @param state  the current {@link GameState}
+     * @param isCoop whether the game is in cooperative mode
+     * @return a {@link FileHandle} for the save file
+     */
     private static FileHandle getSaveFile(Player player, GameState state, boolean isCoop) {
         String playerName = player.getName();
         if (playerName == null || playerName.isEmpty() || playerName.equals("Enter name")) {
@@ -51,6 +65,14 @@ public class GameSaveManager {
         return Gdx.files.local("saves/" + fileName);
     }
 
+    /**
+     * Checks if a save file exists and contains data for the given player and state.
+     *
+     * @param player the player
+     * @param state  the current game state
+     * @param isCoop whether cooperative mode is active
+     * @return {@code true} if a valid save exists, {@code false} otherwise
+     */
     public static boolean HaveToSave(Player player, GameState state, boolean isCoop) {
         if (player == null || state == null || !isSaveableGameMode(state)) {
             return false;
@@ -59,6 +81,13 @@ public class GameSaveManager {
         return file.exists() && file.length() > 0;
     }
 
+    /**
+     * Deletes the save file associated with the specified player and game state.
+     *
+     * @param player the player
+     * @param state  the current game state
+     * @param isCoop whether cooperative mode is active
+     */
     public static void deleteSave(Player player, GameState state, boolean isCoop) {
         if (player == null || state == null || !isSaveableGameMode(state)) {
             return;
@@ -69,6 +98,16 @@ public class GameSaveManager {
         }
     }
 
+    /**
+     * Saves the current game state to a local JSON file.
+     * @param player the current player
+     * @param gameMode the current {@link GameMode}
+     * @param state the {@link GameState} being saved
+     * @param scoreManager the {@link ScoreManager} for tracking scores
+     * @param lives the remaining lives
+     * @param timePlayed the elapsed playtime
+     * @param isCoop whether the game is in cooperative mode
+     */
     public static void saveGame(Player player, GameMode gameMode, GameState state, ScoreManager scoreManager, int lives, double timePlayed, boolean isCoop) {
         if (player == null || gameMode == null || state == null || scoreManager == null || !isSaveableGameMode(state)) {
             return;
@@ -159,6 +198,15 @@ public class GameSaveManager {
         }
     }
 
+    /**
+     * Loads the saved game state from a local JSON file and restores all gameplay objects.
+     *
+     * @param player       the player whose game is being loaded
+     * @param gameMode     the {@link GameMode} instance to populate
+     * @param state        the {@link GameState} being loaded
+     * @param scoreManager the {@link ScoreManager} to restore
+     * @param isCoop       whether the game is in cooperative mode
+     */
     public static void loadGame(Player player, GameMode gameMode, GameState state, ScoreManager scoreManager, boolean isCoop) {
         FileHandle file = getSaveFile(player, state, isCoop);
         if (!file.exists()) {

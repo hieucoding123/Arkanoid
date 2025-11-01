@@ -16,9 +16,6 @@ public class ThreeBallsEffect extends EffectItem {
         this.triggeringBall = null;
     }
 
-//    public ThreeBallsEffect(float x, float y, float dy, float scale) {
-//        super(x, y, dy, scale, TextureManager.threeBallsTextures);
-//    }
     public ThreeBallsEffect(float x, float y, float dy, Ball triggeringBall) {
         super(x, y, dy, TextureManager.threeBallsTextures);
         this.triggeringBall = triggeringBall;

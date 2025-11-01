@@ -21,6 +21,9 @@ import table.CoopDataHandler;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the cooperative game mode where two paddles work together to clear brick maps.
+ */
 public class CoopMode extends GameMode {
     private final ArrayList<BricksMap> bricksMaps;
     private Paddle paddle1;
@@ -34,6 +37,13 @@ public class CoopMode extends GameMode {
     private int lives;
     private double timePlayed;
 
+    /**
+     * Constructs a cooperative mode instance.
+     *
+     * @param player the player participating in coop mode
+     * @param scoreManager the score manager for tracking points
+     * @param levelNumber the level number to start from
+     */
     public CoopMode(Player player, ScoreManager scoreManager, int levelNumber) {
         super();
         bricksMaps = new ArrayList<>();
@@ -49,6 +59,7 @@ public class CoopMode extends GameMode {
         create();
     }
 
+    /** Initializes the cooperative mode, including maps, paddles, and input handling. */
     @Override
     public void create() {
         gameScreen.create();
@@ -80,6 +91,11 @@ public class CoopMode extends GameMode {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    /**
+     * Updates the game state each frame.
+     *
+     * @param delta the time elapsed since the last frame
+     */
     @Override
     public void update(float delta) {
         if (this.isEnd()) {
@@ -179,6 +195,12 @@ public class CoopMode extends GameMode {
         }
     }
 
+    /**
+     * Renders all visual elements for the cooperative mode.
+     *
+     * @param sp the sprite batch used for rendering
+     * @param delta time since the last frame
+     */
     @Override
     public void render(SpriteBatch sp, float delta) {
         this.draw(sp);
@@ -187,11 +209,17 @@ public class CoopMode extends GameMode {
         gameScreen.render();
     }
 
+    /** Handles player input for paddle movement. */
     @Override
     public void handleInput() {
         inputHandler.processMovement();
     }
 
+    /**
+     * Draws the paddles, balls, bricks, and background.
+     *
+     * @param sp the sprite batch used to draw elements
+     */
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
@@ -210,6 +238,7 @@ public class CoopMode extends GameMode {
         paddle2.draw(sp);
     }
 
+    /** Resets ball and paddle positions after losing a life. */
     public void reset() {
         balls.clear();
         balls.add(new Ball(paddle1.getX() + (paddle1.getWidth() / 2f) - 12,
@@ -222,33 +251,60 @@ public class CoopMode extends GameMode {
         followPaddle = true;
     }
 
+    /**
+     * @return the first paddle
+     */
     @Override
     public Paddle getPaddle1() {
         return this.paddle1;
     }
 
+    /**
+     * @return the second paddle
+     */
     @Override
     public Paddle getPaddle2() {
         return this.paddle2;
     }
 
+    /**
+     * @return the current level number
+     */
     public Object getLevelNumber() {
         return this.levelNumber;
     }
 
+    /**
+     * @return the number of remaining lives
+     */
     public int getLives() {
         return this.lives;
     }
 
+    /**
+     * Sets the number of lives.
+     *
+     * @param lives number of lives remaining
+     */
     @Override
     public void setLives(int lives) {
         this.lives = lives;
     }
+
+    /**
+     * Sets the total time played.
+     *
+     * @param time the time in seconds
+     */
+
     @Override
     public void setTimePlayed(double time) {
         this.timePlayed = time;
     }
 
+    /**
+     * @return the total time played in seconds
+     */
     @Override
     public double getTimePlayed() {
         return this.timePlayed;

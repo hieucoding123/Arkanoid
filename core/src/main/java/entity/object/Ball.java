@@ -6,6 +6,9 @@ import entity.Effect.ShieldEffect;
 import entity.MovableObject;
 import entity.object.brick.Brick;
 
+/**
+ * Represents a ball in the game, responsible for movement.
+ */
 public class Ball extends MovableObject {
     private float speed;
     private float angle;
@@ -21,6 +24,7 @@ public class Ball extends MovableObject {
     private static final float HITBOX_SHRINK_PIXELS = 1.0f;
 
     private boolean in1v1 = false;
+
     /**
      * Constructor for ball.
      * @param x x coordinate of ball
@@ -39,6 +43,10 @@ public class Ball extends MovableObject {
         this.setScale(this.baseScale, this.baseScale);
     }
 
+    /**
+     * Constructor for ball with another ball.
+     * @param other another ball
+     */
     public Ball(Ball other) {
         super(other.x, other.y, other.texture);
         this.originalspeed = other.originalspeed;
@@ -57,14 +65,25 @@ public class Ball extends MovableObject {
         }
     }
 
+    /**
+     * Check 1v1 status.
+     * @return 1v1 status
+     */
     public boolean isIn1v1() {
         return this.in1v1;
     }
 
+    /**
+     * Set 1v1 status
+     * @param in1v1 status to be set
+     */
     public void setIn1v1(boolean in1v1) {
         this.in1v1 = in1v1;
     }
 
+    /**
+     * Set random angle for ball.
+     */
     private void setRandomAngle() {
         this.angle = (float) (Math.random() * (Math.PI / 2) + (Math.PI / 4));
     }
@@ -162,6 +181,8 @@ public class Ball extends MovableObject {
             FastEnd = 0;
         }
     }
+
+
     public void handleWallCollision() {
         boolean collided = false;
         // Va chạm tường trái hoặc phải

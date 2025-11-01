@@ -2,6 +2,9 @@ package entity;
 
 import entity.object.brick.Brick;
 
+/**
+ * Scoring system for the game.
+ */
 public class ScoreManager {
     private double score;
     private int comboCount;
@@ -9,6 +12,9 @@ public class ScoreManager {
 
     private static final int COMBO_TIMEOUT_MS = 2000;
 
+    /**
+     * Default constructor.
+     */
     public ScoreManager() {
         score = 0;
         comboCount = 0;
@@ -21,14 +27,26 @@ public class ScoreManager {
 //        this.lastHitTime = lastHitTime;
 //    }
 
+    /**
+     * Get current score.
+     * @return current score
+     */
     public double getScore() {
         return this.score;
     }
 
+    /**
+     * Set score with new value.
+     * @param score new score instance
+     */
     public void setScore(double score) {
         this.score = score;
     }
 
+    /**
+     * Scoring logic for explosion effect.
+     * @param brick brick got exploded
+     */
     public void addScore(Brick brick) {
         if (brick.getColor() == 1 || brick.getColor() == 2 || brick.getColor() == 31 ||  brick.getColor() == 41) {
             score += 100.0d;
@@ -37,6 +55,10 @@ public class ScoreManager {
         }
     }
 
+    /**
+     * Scoring logic for ball collision.
+     * @param brick brick collided with ball
+     */
     public void comboScore(Brick brick) {
         if (brick.getColor() == 1 || brick.getColor() == 2 || brick.getColor() == 31 ||  brick.getColor() == 41) {
             score += 100.0d;
@@ -57,30 +79,48 @@ public class ScoreManager {
         }
     }
 
+    /**
+     * Score deduction when ball fell out of screen.
+     */
     public void deduction() {
         score = Math.max(0, score - 500);
     }
 
+    /**
+     * Reset score to 0.
+     */
     public void resetScore() {
         score = 0;
     }
 
-    public void clearedLevel() {
-        score += 1000.0d;
-    }
-
+    /**
+     * Get current combo count.
+     * @return current combo count
+     */
     public int getComboCount() {
         return comboCount;
     }
 
+    /**
+     * Get last time ball hit brick.
+     * @return last hit time in milliseconds
+     */
     public long getLastHitTime() {
         return lastHitTime;
     }
 
+    /**
+     * Set current combo count.
+     * @param cntCombo new combo count
+     */
     public void setComboCount(int cntCombo) {
         this.comboCount = cntCombo;
     }
 
+    /**
+     * Set current last hit time.
+     * @param timeLastHit new last hit time
+     */
     public void setLastHitTime(long timeLastHit) {
         this.lastHitTime = timeLastHit;
     }

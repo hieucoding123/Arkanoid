@@ -4,6 +4,10 @@ import entity.object.Paddle;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the complete game state including score, player data,
+ * paddles, balls, bricks, and active effects.
+ */
 public class GameData {
     public double score;
     public int lives;
@@ -21,12 +25,14 @@ public class GameData {
     public ArrayList<EffectItemData> effectItems;
     public Object levelNumber;
 
+    /** Default constructor initializing empty lists for game objects. */
     public GameData() {
         balls = new ArrayList<>();
         bricks = new ArrayList<>();
         effectItems = new ArrayList<>();
     }
 
+    /** Holds paddle state data used for saving or synchronization. */
     public static class PaddleData {
         public float x;
         public float y;
@@ -36,6 +42,7 @@ public class GameData {
         public PaddleData() {}
     }
 
+    /** Holds ball state data used for saving or synchronization. */
     public static class BallData {
         public float x;
         public float y;
@@ -50,6 +57,7 @@ public class GameData {
         public BallData() {}
     }
 
+    /** Holds brick state data used for saving or synchronization. */
     public static class BrickData {
         public float x;
         public float y;
@@ -68,6 +76,7 @@ public class GameData {
         public BrickData() {}
     }
 
+    /** Holds effect item data used for saving or synchronization. */
     public static class EffectItemData {
         public float x;
         public float y;
