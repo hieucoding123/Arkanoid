@@ -23,7 +23,6 @@ public class VsMode extends GameMode {
     private Paddle paddle1;
     private Paddle paddle2;
     private EffectFactory effectFactory;
-    private GameScreen gameScreen;
     private ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
     private ArrayList<Ball> balls;
@@ -32,21 +31,19 @@ public class VsMode extends GameMode {
     private int currentRound;
     private boolean isPaused;
     private float roundTimer;
-    private boolean flowPaddle1;
-    private boolean flowPaddle2;
+    private boolean followPaddle1;
+    private boolean followPaddle2;
     private int roundsWonP1;
     private int roundsWonP2;
     private ScoreManager scoreManagerP1;
     private ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    public VsMode (GameScreen gameScreen,
-                  ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    public VsMode (ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
 
-        this.gameScreen = gameScreen;
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
         this.effectFactory  = new EffectFactory();
@@ -57,27 +54,12 @@ public class VsMode extends GameMode {
 
     @Override
     public void create() {
-        gameScreen.create();
-
         for (int i = 1; i <= 3; i++) {
             String mapPath = "/maps/map_vs" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
         }
-//        currentMap = brickMap.get(0);
-//        currentRound = 1;
         paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture, false);
         paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 800, TextureManager.flippedpaddleTexture, true);
-//        balls.add(new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
-//            paddle1.getY() + paddle1.getHeight(),
-//            TextureManager.ballTexture,
-//            10.0f)
-//        );
-//        balls.add(new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
-//            paddle2.getY() + paddle2.getHeight(),
-//            TextureManager.ballTexture,
-//            10.0f)
-//        );
-
         startRound(1);
     }
 
@@ -107,8 +89,8 @@ public class VsMode extends GameMode {
     public void resetBalls() {
         balls.clear();
 
-        flowPaddle1 = true;
-        flowPaddle2 = true;
+        followPaddle1 = true;
+        followPaddle2 = true;
 
         ballP1 = new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
             paddle1.getY() + paddle1.getHeight(),
@@ -162,13 +144,13 @@ public class VsMode extends GameMode {
     public void update(float delta) {
         handleInput();
 
-        if (flowPaddle1) {
+        if (followPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
             ballP1.setY(paddle1.getY() + paddle1.getHeight());
             ballP1.setAngle((float)Math.PI / 2f);
         }
 
-        if (flowPaddle2) {
+        if (followPaddle2) {
             ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP2.getWidth() / 2f);
             ballP2.setY(paddle2.getY() - ballP2.getHeight());
             ballP2.setAngle(-(float)Math.PI / 2f);
@@ -178,7 +160,7 @@ public class VsMode extends GameMode {
             return;
         }
 
-        if (!flowPaddle1 || !flowPaddle2) {
+        if (!followPaddle1 || !followPaddle2) {
             roundTimer -= delta;
         }
 
@@ -190,8 +172,6 @@ public class VsMode extends GameMode {
         paddle1.update(delta);
         paddle2.update(delta);
 
-//        EffectItem.updateEffectItems(paddle1, this.balls, delta);
-//        EffectItem.updateEffectItems(paddle2, this.balls, delta);
         currentMap.update(delta);
         EffectItem.moveItems(delta);
         EffectItem.effectCollision(paddle1, this.balls, currentMap);
@@ -244,13 +224,12 @@ public class VsMode extends GameMode {
             }
 
             for (Brick brick : currentMap.getBricks()) {
-                if (ball.checkCollision(brick)) {
+                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
                     if (ball.isBig()) {
                         brick.setHitPoints(0);
                     }
                     if (brick.gethitPoints() == 0) {
-                        //Paddle relevantPaddle = (ball.getLastHitBy() == 1) ? paddle1 : paddle2;
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
@@ -271,42 +250,30 @@ public class VsMode extends GameMode {
                             EffectItem.addEffectItem(newEffectItem);
                         }
 
-//                        if (newEffectItem instanceof ShieldEffect) {
-//                            if (ball.getLastHitBy() == 1) {
-//                                paddle1.activateShield(newEffectItem);
-//                            } else if (ball.getLastHitBy() == 2) {
-//                                paddle2.activateShield(newEffectItem);
-//                            }
-//                        }
-
                         if (ball.getLastHitBy() == 1) {
                             scoreManagerP1.comboScore(brick);
                         } else {
                             scoreManagerP2.comboScore(brick);
                         }
 
-//                        if (brick.getExplosion()) {
-//                            brick.startExplosion();
-//                        } else {
                         brick.setDestroyed(true);
-//                        }
                     }
 
-                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-                    //Bottom and top collision
-                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-                        ball.reverseY();
-                    }
-                    //Left and right collision
-                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-                        ball.reverseX();
-                    }
-                    //Corner collision
-                    else {
-                        ball.reverseY();
-                        ball.reverseX();
-                    }
+//                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
+//                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
+//                    //Bottom and top collision
+//                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
+//                        ball.reverseY();
+//                    }
+//                    //Left and right collision
+//                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
+//                        ball.reverseX();
+//                    }
+//                    //Corner collision
+//                    else {
+//                        ball.reverseY();
+//                        ball.reverseX();
+//                    }
 
                     break;
                 }
@@ -366,12 +333,12 @@ public class VsMode extends GameMode {
             paddle2.setVelocity(0, 0);
         }
 
-        if (flowPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
-            flowPaddle1 = false;
+        if (followPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
+            followPaddle1 = false;
         }
 
-        if (flowPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
-            flowPaddle2 = false;
+        if (followPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
+            followPaddle2 = false;
         }
     }
 
@@ -393,11 +360,11 @@ public class VsMode extends GameMode {
                 Game.SCREEN_WIDTH - 2 * Game.padding_left_right,
                 5);
         }
-        if (flowPaddle1) {
+        if (followPaddle1) {
             ballP1.draw(sp);
         }
 
-        if (flowPaddle2) {
+        if (followPaddle2) {
             ballP2.draw(sp);
         }
 
