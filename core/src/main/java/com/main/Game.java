@@ -62,7 +62,6 @@ public class Game {
     private Player player2;
 
     private boolean isCoopSelection = false;
-    private boolean isVsOffline = false;
 
     public static Music bgm;
     public static Sound sfx_bigball;
@@ -586,11 +585,7 @@ public class Game {
                 }
                 break;
             case NETWORK_VS:
-                if (isVsOffline) {
-                    gameMode = new VsMode(scoreManager, scoreManagerP2);
-                } else {
-                    playNetworkGame();
-                }
+                playNetworkGame();
                 break;
 
         }
