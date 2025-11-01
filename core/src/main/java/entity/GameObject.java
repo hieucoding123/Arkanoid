@@ -11,7 +11,6 @@ public abstract class GameObject {
     protected float scaleHeight;
     protected float orgWidth;       // original width
     protected float orgHeight;      // original height
-    protected float scale;
     private boolean isDestroyed;
 
     protected Texture texture;

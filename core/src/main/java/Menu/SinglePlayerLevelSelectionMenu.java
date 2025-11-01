@@ -18,7 +18,7 @@ public class SinglePlayerLevelSelectionMenu extends LevelSelectionMenu {
     public void create() {
         super.create();
 
-        //Get infor from database
+        //Get info from database
         String playerName = this.getPlayer().getName();
         if (playerName == null || playerName.isEmpty() || playerName.equals("Enter name")) {
             playerName = "Guest";

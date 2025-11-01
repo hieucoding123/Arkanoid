@@ -1,23 +1,23 @@
 {
-score: 100
-lives: 2
-timePlayed: 13.938029289245605
+score: 200
+lives: 3
+timePlayed: 5.0960211753845215
 cnt_combo: 1
-TimeLastHit: 1762006317903
+TimeLastHit: 1762009883560
 paddle1: {
-	x: 437.5
+	x: 102.5
 	y: 50
+	StunEnd: 1762009146677
 }
 balls: [
 	{
-		x: 456.12067
-		y: 349.7306
-		dx: 128.17584
-		dy: 126.37623
-		angle: 0.77832854
-		speed: 180
+		x: 144.83017
+		y: 350.31378
+		dx: -125.088104
+		dy: -272.6774
+		angle: 4.2822905
+		speed: 300
 		originalspeed: 5
-		SlowEnd: 1762006341686
 	}
 ]
 levelNumber: {

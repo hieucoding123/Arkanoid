@@ -24,7 +24,7 @@ import Menu.ModeMenu;
 import Menu.SinglePlayerLevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
-import com.main.gamemode.VsMode;
+import com.main.gamemode.NetworkVsModeLogic;
 import com.main.gamemode.CoopMode;
 import Menu.PauseUI;
 import Menu.SettingsUI;
@@ -572,7 +572,7 @@ public class Game {
             player, player2, networkServerIP, isNetworkHost, networkClient
         );
         if (isNetworkHost && gameServer != null) {
-            VsMode severGameMode = new  VsMode(scoreManager, scoreManagerP2);
+            NetworkVsModeLogic severGameMode = new NetworkVsModeLogic(scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);
         }
 
@@ -699,10 +699,18 @@ public class Game {
         setGameState(state);
     }
 
+    /**
+     * Main getter.
+     * @return main
+     */
     public Main getMain() {
         return this.main;
     }
 
+    /**
+     * Player getter.
+     * @return player
+     */
     public Player getPlayer() {
         return this.player;
     }

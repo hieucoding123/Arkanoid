@@ -2,6 +2,7 @@ package com.main.gamemode;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.components.CollisionManager;
 import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
@@ -11,7 +12,7 @@ import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
-public class VsMode extends GameMode {
+public class NetworkVsModeLogic extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
 
@@ -33,7 +34,7 @@ public class VsMode extends GameMode {
     private ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    public VsMode(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    public NetworkVsModeLogic(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
@@ -162,12 +163,26 @@ public class VsMode extends GameMode {
         paddle2.update(delta);
 
         currentMap.update(delta);
+        for (Ball ball : balls)
+            ball.update(delta);
 
 
         for (Ball ball : balls) {
             ball.setIn1v1(true);
-            ball.update(delta);
-            ball.handleWallCollision();
+            CollisionManager.handleBallBoundaryCollision(ball);
+            CollisionManager.handleBallPaddleCollision(ball, this.paddle1);
+            CollisionManager.handleBallPaddleCollision(ball, this.paddle2);
+
+            Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
+
+            if (hitBrick != null && hitBrick.gethitPoints() == 0) {
+                if (ball.getLastHitBy() == 1) {
+                    scoreManagerP1.comboScore(hitBrick);
+                } else {
+                    scoreManagerP2.comboScore(hitBrick);
+                }
+                hitBrick.setDestroyed(true);
+            }
 
             if (ball == ballP1 && ball.isDestroyed()) {
                 ball.setDestroyed(false);
@@ -189,32 +204,32 @@ public class VsMode extends GameMode {
                 return;
             }
 
-            if (ball.checkCollision(paddle1)) {
-                ball.collisionWith(paddle1);
-                ball.setLastHitBy(1);
-            }
-            else if (ball.checkCollision(paddle2)) {
-                ball.collisionWith(paddle2);
-                ball.setLastHitBy(2);
-            }
+//            if (ball.checkCollision(paddle1)) {
+//                ball.collisionWith(paddle1);
+//                ball.setLastHitBy(1);
+//            }
+//            else if (ball.checkCollision(paddle2)) {
+//                ball.collisionWith(paddle2);
+//                ball.setLastHitBy(2);
+//            }
 
-            for (Brick brick : currentMap.getBricks()) {
-                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
-                    brick.takeHit();
-                    if (ball.isBig()) {
-                        brick.setHitPoints(0);
-                    }
-                    if (brick.gethitPoints() == 0) {
-                        if (ball.getLastHitBy() == 1) {
-                            scoreManagerP1.comboScore(brick);
-                        } else {
-                            scoreManagerP2.comboScore(brick);
-                        }
-                        brick.setDestroyed(true);
-                    }
-                    break;
-                }
-            }
+//            for (Brick brick : currentMap.getBricks()) {
+//                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
+//                    brick.takeHit();
+//                    if (ball.isBig()) {
+//                        brick.setHitPoints(0);
+//                    }
+//                    if (brick.gethitPoints() == 0) {
+//                        if (ball.getLastHitBy() == 1) {
+//                            scoreManagerP1.comboScore(brick);
+//                        } else {
+//                            scoreManagerP2.comboScore(brick);
+//                        }
+//                        brick.setDestroyed(true);
+//                    }
+//                    break;
+//                }
+//            }
 
         }
         balls.removeIf(Ball::isDestroyed);

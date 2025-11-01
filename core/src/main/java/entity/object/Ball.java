@@ -139,34 +139,6 @@ public class Ball extends MovableObject {
 
     public void update(float delta) {
         super.update(delta);
-//        if (this.getX() <= Game.padding_left_right
-//            || this.getX() + this.getWidth() >= Game.SCREEN_WIDTH - Game.padding_left_right) {
-//            this.reverseX();
-//            Game.playSfx(Game.sfx_touchpaddle,1.2f);
-//        }
-//        if (this.getY() + this.getHeight() >= Game.padding_top) {
-//            if (isIn1v1()) {
-//                if (ShieldEffect.isShield()) {
-//                    ShieldEffect.setShield();
-//                    this.reverseY();
-//                    Game.playSfx(Game.sfx_touchpaddle,1.2f);
-//                } else {
-//                    this.setDestroyed(true);
-//                }
-//            } else {
-//                this.reverseY();
-//                Game.playSfx(Game.sfx_touchpaddle,1.2f);
-//            }
-//        }
-//        if (this.getY() <= 0) {
-//            if (ShieldEffect.isShield()) {
-//                ShieldEffect.setShield();
-//                this.reverseY();
-//                Game.playSfx(Game.sfx_touchpaddle,1.2f);
-//            } else {
-//                this.setDestroyed(true); // drop out of screen
-//            }
-//        }
         if (BigEnd > 0 && System.currentTimeMillis() > BigEnd) {
 //            this.setScale(1.0f, 1.0f);
             this.setScale(this.baseScale, this.baseScale);
@@ -340,14 +312,6 @@ public class Ball extends MovableObject {
         } else {
             return false;
         }
-    }
-
-    public long getTimeBigWEffect() {
-        return BigEnd - System.currentTimeMillis();
-    }
-
-    public long getTimeSlowEffect() {
-        return SlowEnd - System.currentTimeMillis();
     }
 
     public float getAngle() { return this.angle; }
