@@ -57,10 +57,9 @@ public class Game {
     GameMode gameMode;
 
     public static GameState gameState;
-    private Main main;
+    private final Main main;
     private Player player;
     private Player player2;
-    private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
     private boolean isVsOffline = false;
@@ -94,6 +93,11 @@ public class Game {
     private String networkServerIP;
     private boolean isNetworkHost;
     private GameClient networkClient;
+
+    private String gameSummaryTitle;
+    private String gameSummaryScore;
+    private GameState gameSummaryNextState;
+    private boolean isWin;
 
     public Game(Main main) {
         this.main = main;
@@ -211,13 +215,13 @@ public class Game {
 
         if (gameMode instanceof LevelMode) {
             currentLives = ((LevelMode) gameMode).getLives();
-            currentTimePlayed = ((LevelMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         } else if (gameMode instanceof CoopMode) {
             currentLives = ((CoopMode) gameMode).getLives();
-            currentTimePlayed = ((CoopMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         } else if (gameMode instanceof InfiniteMode) {
             currentLives = ((InfiniteMode) gameMode).getLives();
-            currentTimePlayed = ((InfiniteMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         }
     }
 
@@ -252,6 +256,9 @@ public class Game {
             case NETWORK_LOBBY:
             case GAME_OVER:
             case SELECT_MODE:
+                ui.render();
+                break;
+            case GAME_SUMMARY:
                 ui.render();
                 break;
             case LEVELS_SELECTION:
@@ -342,7 +349,11 @@ public class Game {
                 gameMode.update(this.delta);
                 updateTimeLive();
                 if (gameMode.isEnd()) {
-                    setGameState(GameState.SELECT_MODE);
+                    this.gameSummaryTitle = "Game Over";
+                    this.gameSummaryScore = "Final Score: " + (int)scoreManager.getScore();
+                    this.gameSummaryNextState = GameState.SELECT_MODE;
+                    this.isWin = false;
+                    setGameState(GameState.GAME_SUMMARY);
                 }
                 break;
             case LEVEL1:
@@ -354,7 +365,17 @@ public class Game {
                 updateTimeLive();
                 if (gameMode.isEnd()) {
                     GameSaveManager.deleteSave(player, gameState, isCoopSelection);
-                    setGameState(GameState.LEVELS_SELECTION);
+                    GameSaveManager.deleteSave(player, gameState, isCoopSelection);
+
+                    // --- MODIFIED LOGIC ---
+                    boolean playerWon = gameMode.isWin();
+
+                    this.isWin = playerWon;
+                    this.gameSummaryTitle = playerWon ? "Level Complete!" : "Game Over";
+                    this.gameSummaryScore = "Final Score: " + (int)scoreManager.getScore();
+                    this.gameSummaryNextState = GameState.LEVELS_SELECTION;
+
+                    setGameState(GameState.GAME_SUMMARY);
                 }
                 break;
             case LEADER_BOARD:
@@ -384,7 +405,7 @@ public class Game {
             gameServer = null;
         }
         if (gameMode instanceof NetworkVsMode) {
-            ((NetworkVsMode) gameMode).dispose();
+            gameMode.dispose();
         }
     }
 
@@ -432,6 +453,7 @@ public class Game {
 
     public void setGameState(GameState newGameState) {
         if (this.gameMode != null) {
+            this.gameMode.dispose();
             this.gameMode = null;
         }
         isPaused = false;
@@ -497,6 +519,17 @@ public class Game {
                 ui = new GameOver(
                     main, player, (int)player.getScore(), (int)player2.getScore(),
                     networkClient, isNetworkHost);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
+            case GAME_SUMMARY:
+                if (isWin) {
+                    playSfx(sfx_win);
+                }
+                ui = new GameSummaryScreen(main, this.player,
+                    gameSummaryTitle,
+                    gameSummaryScore,
+                    gameSummaryNextState);
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
@@ -631,15 +664,14 @@ public class Game {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Gdx.app.error("Network", e.getMessage(), e);
                 }
                 Gdx.app.postRunnable(() -> {
                     setGameState(GameState.NETWORK_LOBBY);
                 });
             }).start();
         } catch (Exception e) {
-            System.err.println("Failed to connect: " + e.getMessage());
-            e.printStackTrace();
+            Gdx.app.error("Network", "Failed to connect: " + e.getMessage(), e);
         }
     }
 
@@ -663,7 +695,7 @@ public class Game {
             System.out.println("Game server started successfully");
         } catch (Exception e) {
             System.err.println("Failed to connect: " + e.getMessage());
-            e.printStackTrace();
+            Gdx.app.error("Network", e.getMessage(), e);
         }
     }
 

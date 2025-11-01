@@ -28,15 +28,12 @@ public class InfiniteMode extends GameMode {
     private final ArrayList<String> maps;
     private Paddle paddle;
     private BricksMap currentMap;
-    private ScoreManager scoreManager;
+    private final ScoreManager scoreManager;
     GameScreen gameScreen;
-    private EffectFactory effectFactory;
+    private final EffectFactory effectFactory;
     private int currentIdx;
     private float timePlayed;
     private int lives;
-    private final double baseItemChance = 0.07;
-    private final double minItemChance = 0.001;
-    private final double decayPerLevel = 0.007;
 
     /**
      * Creates a new InfiniteMode instance.
@@ -110,6 +107,7 @@ public class InfiniteMode extends GameMode {
         }
 
         if (this.isEnd()) {
+            this.isWin = false;
             EffectItem.clear();
             this.getPlayer().setScore(this.scoreManager.getScore());
             this.getPlayer().setTimePlayed(this.timePlayed);
@@ -250,7 +248,10 @@ public class InfiniteMode extends GameMode {
      * @return the generated chance value.
      */
     private double generateChance() {
+        double baseItemChance = 0.07;
+        double decayPerLevel = 0.007;
         double chance = baseItemChance - decayPerLevel * currentIdx;
+        double minItemChance = 0.001;
         return Math.max(chance, minItemChance);
     }
 
@@ -297,6 +298,13 @@ public class InfiniteMode extends GameMode {
     public void resize(int width, int height) {
         if (gameScreen != null) {
             gameScreen.resize(width, height);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (gameScreen != null) {
+            gameScreen.dispose();
         }
     }
 }

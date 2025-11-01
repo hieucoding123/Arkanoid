@@ -18,5 +18,7 @@ public enum GameState {
     NETWORK_CONNECTION_MENU,
     NETWORK_LOBBY,
     NETWORK_VS,
-    GAME_OVER
+    GAME_OVER,
+
+    GAME_SUMMARY
 }

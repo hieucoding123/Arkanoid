@@ -1,7 +1,5 @@
 package com.main;
 
-import entity.object.Paddle;
-
 import java.util.ArrayList;
 
 /**
@@ -13,9 +11,7 @@ public class GameData {
     public int lives;
     public double timePlayed;
     public boolean followPaddle;
-    public int levelnumber;
     public boolean isCoop;
-    public boolean isLevelMode;
     public int cnt_combo;
     public long TimeLastHit;
     public PaddleData paddle1;
@@ -24,7 +20,6 @@ public class GameData {
     public ArrayList<BrickData> bricks;
     public ArrayList<EffectItemData> effectItems;
     public Object levelNumber;
-    public int infiMapIndex;
 
     /** Default constructor initializing empty lists for game objects. */
     public GameData() {
@@ -68,10 +63,6 @@ public class GameData {
         public int row;
         public int col;
         public int color;
-        public boolean isMove;
-        public float moveSpeed;
-        public float originalX;
-        public float moveRange;
         public float dx;
         public float dy;
         public BrickData() {}
