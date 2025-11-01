@@ -14,7 +14,6 @@ import com.main.gamemode.*;
 import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
-import entity.GameScreen;
 import Menu.CoopPlayerLevelSelectionMenu;
 import entity.Player;
 import entity.ScoreManager;
@@ -29,7 +28,6 @@ import com.main.gamemode.CoopMode;
 import Menu.PauseUI;
 import Menu.SettingsUI;
 import Menu.MainMenu;
-import com.main.GameSaveManager;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -294,7 +292,7 @@ public class Game {
             case LEVEL3:
             case LEVEL4:
             case LEVEL5:
-                if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                     ContinueGame();
                 }
                 break;
@@ -307,7 +305,7 @@ public class Game {
             int y_from_bottom = Gdx.graphics.getHeight() - Gdx.input.getY();
             System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
         }
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.P)) {
             if (gameServer != null) {
                 gameServer.stop();
             }
@@ -656,5 +654,30 @@ public class Game {
         playGame();
         isPaused = false;
         previous = null;
+    }
+
+    public void ReturnMenu() {
+        isPaused = false;
+        if (previous != null) {
+            Gdx.input.setInputProcessor(previous);
+            previous = null;
+        } else if (ui != null) {
+            Gdx.input.setInputProcessor(ui.getStage());
+        }
+
+        if (isCurrentModeSaveable()) {
+            GameSaveManager.deleteSave(player, gameState, isCoopSelection);
+            isResumingFromSave = false;
+        }
+        entity.Effect.EffectItem.clear();
+        GameState state;
+        if (gameState == GameState.INFI_MODE || gameState == GameState.VS_MODE) {
+            state = GameState.SELECT_MODE;
+        } else if (GameSaveManager.isSaveableGameMode(gameState)) {
+            state = GameState.LEVELS_SELECTION;
+        } else {
+            state = GameState.SELECT_MODE;
+        }
+        setGameState(state);
     }
 }
