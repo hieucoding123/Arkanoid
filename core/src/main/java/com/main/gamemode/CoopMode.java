@@ -254,4 +254,11 @@ public class CoopMode extends GameMode {
     public double getTimePlayed() {
         return this.timePlayed;
     }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
+    }
 }

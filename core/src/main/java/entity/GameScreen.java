@@ -49,6 +49,9 @@ public class GameScreen {
     private final float ICON_LABEL_PADDING = 5f; // Padding between icon and label
     private final float ICON_SIZE = 25f; // New constant for icon size
 
+    //Gamescreen
+    private GameScreen gameScreen;
+
     //Constructor
     public GameScreen(ScoreManager scoreManager) {
         this.scoreManager = scoreManager;
@@ -132,8 +135,12 @@ public class GameScreen {
         this.times = timeInSeconds;
     }
 
+
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        // This updates the UI's viewport
+        if (viewport != null) {
+            viewport.update(width, height, true);
+        }
     }
 
     public void dispose() {

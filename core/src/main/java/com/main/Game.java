@@ -86,7 +86,7 @@ public class Game {
     public static float musicVolumePercent = 1.0f;
     public static float sfxVolumePercent = 1.0f;
 
-    public static final float MAX_MUSIC_VOLUME = 0.08f;
+    public static final float MAX_MUSIC_VOLUME = 0.05f;
     public static final float MAX_SFX_VOLUME = 1.5f;
 
     private GameServer gameServer;
@@ -189,6 +189,14 @@ public class Game {
 //        gameScreen.resize(width, height);
         if (ui != null) {
             ui.resize(width, height);
+        }
+
+        if (pauseUI != null) {
+            pauseUI.resize(width, height);
+        }
+
+        if (gameMode != null) {
+            gameMode.resize(width, height);
         }
     }
 
@@ -689,5 +697,13 @@ public class Game {
             state = GameState.SELECT_MODE;
         }
         setGameState(state);
+    }
+
+    public Main getMain() {
+        return this.main;
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }

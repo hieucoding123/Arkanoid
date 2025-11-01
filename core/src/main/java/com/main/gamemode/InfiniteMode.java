@@ -232,4 +232,11 @@ public class InfiniteMode extends GameMode {
     public Object getLevelNumber() {
         return this.currentIdx;
     }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
+    }
 }
