@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
+import com.main.components.CollisionManager;
 import com.main.components.IngameInputHandler;
 import entity.Effect.*;
 import entity.GameScreen;
@@ -98,43 +99,55 @@ public class InfiniteMode extends GameMode {
             balls.get(0).setY(paddle.getY() + paddle.getHeight());
             balls.get(0).setAngle((float)Math.PI / 2f);
         }
+
         for (Ball ball : balls) {
             ball.update(delta);
-            ball.collisionWith(paddle);
-            ball.handleWallCollision();
-            for (Brick brick : currentMap.getBricks()) {
-                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
-                    brick.takeHit();
-                    if (ball.isBig() && !brick.isUnbreak()) brick.setHitPoints(0);
-                    if (brick.gethitPoints() == 0) {
-                        double chance = generateChance();
-                        EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
-                            brick, paddle, ball,
-                            chance * 1,
-                            chance * 4,
-                            chance * 5,
-                            chance * 2,
-                            chance * 3,
-                            chance * 6,
-                            chance * 7,
-                            chance * 8,
-                            chance * 9,
-                            chance * 10
-                        );
-                        if (newEffectItem != null) {
-                            EffectItem.addEffectItem(newEffectItem);
-                        }
-                        scoreManager.comboScore(brick);
-                        if (brick.getExplosion()) {
-                            brick.startExplosion();
-                        } else {
-                            brick.setDestroyed(true);
-                        }
-                    }
-                    break;
+        }
+
+        final int SOLVER_ITERATIONS = 5;
+        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
+            for (int i = 0; i < balls.size(); i++) {
+                Ball ball1 = balls.get(i);
+                for (int j = i + 1; j < balls.size(); j++) {
+                    Ball ball2 = balls.get(j);
+                    CollisionManager.handleBallBallCollision(ball1, ball2);
                 }
             }
         }
+
+        for (Ball ball : balls) {
+            CollisionManager.handleBallBoundaryCollision(ball);
+            CollisionManager.handleBallPaddleCollision(ball, paddle);
+
+            Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
+
+            if (hitBrick != null && hitBrick.gethitPoints() == 0) {
+                double chance = generateChance();
+                EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
+                    hitBrick, paddle, ball, // Was 'brick', now 'hitBrick'
+                    chance * 1,
+                    chance * 4,
+                    chance * 5,
+                    chance * 2,
+                    chance * 3,
+                    chance * 6,
+                    chance * 7,
+                    chance * 8,
+                    chance * 9,
+                    chance * 10
+                );
+                if (newEffectItem != null) {
+                    EffectItem.addEffectItem(newEffectItem);
+                }
+                scoreManager.comboScore(hitBrick);
+                if (hitBrick.getExplosion()) {
+                    hitBrick.startExplosion();
+                } else {
+                    hitBrick.setDestroyed(true);
+                }
+            }
+        }
+
         balls.removeIf(Ball::isDestroyed);
         if (currentMap.getBricks().isEmpty()) {
             lives = Math.min(lives + 1, 3);
