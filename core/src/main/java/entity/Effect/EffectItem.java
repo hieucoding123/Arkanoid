@@ -2,6 +2,7 @@ package entity.Effect;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.components.CollisionManager;
 import com.main.gamemode.GameMode;
 import entity.MovableObject;
 import entity.object.Ball;
@@ -54,7 +55,7 @@ public abstract class EffectItem extends MovableObject {
         ArrayList<EffectItem> items_fake = new ArrayList<EffectItem>(items);
         for (EffectItem effectItem : items_fake) {
             effectItem.update(delta);
-            if (paddle.checkCollision(effectItem)) {
+            if (CollisionManager.checkRectRect(paddle, effectItem)) {
                 effectItem.applyEffect(paddle, balls, bricksMap);
             }
         }
