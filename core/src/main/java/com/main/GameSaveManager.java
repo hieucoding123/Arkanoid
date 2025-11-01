@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class GameSaveManager {
 
-    private static Json json = new Json();
+    private static final Json json = new Json();
 
     /**
      * Checks whether the given game state supports saving.
@@ -30,12 +30,8 @@ public class GameSaveManager {
      * @return {@code true} if the state is saveable, {@code false} otherwise
      */
     static boolean isSaveableGameMode(GameState state) {
-        if (state == GameState.LEVEL1 ||  state == GameState.LEVEL2 || state == GameState.LEVEL3
-            || state == GameState.LEVEL4 || state == GameState.LEVEL5 || state == GameState.INFI_MODE) {
-            return true;
-        } else {
-            return false;
-        }
+        return state == GameState.LEVEL1 || state == GameState.LEVEL2 || state == GameState.LEVEL3
+            || state == GameState.LEVEL4 || state == GameState.LEVEL5 || state == GameState.INFI_MODE;
     }
 
     /**

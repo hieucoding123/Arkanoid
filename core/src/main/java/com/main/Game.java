@@ -57,10 +57,9 @@ public class Game {
     GameMode gameMode;
 
     public static GameState gameState;
-    private Main main;
+    private final Main main;
     private Player player;
     private Player player2;
-    private int selectedLevelNumber;
 
     private boolean isCoopSelection = false;
 
@@ -215,13 +214,13 @@ public class Game {
 
         if (gameMode instanceof LevelMode) {
             currentLives = ((LevelMode) gameMode).getLives();
-            currentTimePlayed = ((LevelMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         } else if (gameMode instanceof CoopMode) {
             currentLives = ((CoopMode) gameMode).getLives();
-            currentTimePlayed = ((CoopMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         } else if (gameMode instanceof InfiniteMode) {
             currentLives = ((InfiniteMode) gameMode).getLives();
-            currentTimePlayed = ((InfiniteMode) gameMode).getTimePlayed();
+            currentTimePlayed = gameMode.getTimePlayed();
         }
     }
 
@@ -405,7 +404,7 @@ public class Game {
             gameServer = null;
         }
         if (gameMode instanceof NetworkVsMode) {
-            ((NetworkVsMode) gameMode).dispose();
+            gameMode.dispose();
         }
     }
 
@@ -660,15 +659,14 @@ public class Game {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Gdx.app.error("Network", e.getMessage(), e);
                 }
                 Gdx.app.postRunnable(() -> {
                     setGameState(GameState.NETWORK_LOBBY);
                 });
             }).start();
         } catch (Exception e) {
-            System.err.println("Failed to connect: " + e.getMessage());
-            e.printStackTrace();
+            Gdx.app.error("Network", "Failed to connect: " + e.getMessage(), e);
         }
     }
 
@@ -692,7 +690,7 @@ public class Game {
             System.out.println("Game server started successfully");
         } catch (Exception e) {
             System.err.println("Failed to connect: " + e.getMessage());
-            e.printStackTrace();
+            Gdx.app.error("Network", e.getMessage(), e);
         }
     }
 
