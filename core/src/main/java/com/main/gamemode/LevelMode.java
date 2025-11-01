@@ -165,7 +165,7 @@ public class LevelMode extends GameMode {
                 LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
             }
         }
-        printActiveEffects(delta);
+//        printActiveEffects(delta);
     }
 
     @Override

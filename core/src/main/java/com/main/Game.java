@@ -699,10 +699,18 @@ public class Game {
         setGameState(state);
     }
 
+    /**
+     * Main getter.
+     * @return main
+     */
     public Main getMain() {
         return this.main;
     }
 
+    /**
+     * Player getter.
+     * @return player
+     */
     public Player getPlayer() {
         return this.player;
     }

@@ -49,8 +49,6 @@ public class GameScreen {
     private final float ICON_LABEL_PADDING = 5f; // Padding between icon and label
     private final float ICON_SIZE = 25f; // New constant for icon size
 
-    //Gamescreen
-    private GameScreen gameScreen;
 
     //Constructor
     public GameScreen(ScoreManager scoreManager) {
@@ -108,7 +106,7 @@ public class GameScreen {
     public void render() {
         // Update Text
         scoreLabel.setText(String.valueOf(scoreManager.getScore()));
-        scoreLabel.pack(); // Recalc size
+        scoreLabel.pack();
         scoreLabel.setPosition(RSCORE_X - scoreLabel.getPrefWidth(), SCORE_Y - scoreLabel.getPrefHeight());
 
         // Later
@@ -121,37 +119,50 @@ public class GameScreen {
         stage.draw();
     }
 
+    /**
+     * Formats the class member 'times' (total seconds) into a "MM:SS" string.
+     * <p>
+     * Note: This method currently ignores the 'time' parameter and uses the
+     * class instance variable 'times' for the calculation.
+     *
+     * @param time The input time in seconds (currently unused).
+     * @return A {@link String} representing the formatted time in "MM:SS" format,
+     * based on the 'times' class member.
+     */
     private String formatTime(double time) {
         int minutes = (int) (times / 60);
         int seconds = (int) (times % 60);
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    /**
+     * Sets the number of lives remaining.
+     *
+     * @param lives The new number of lives.
+     */
     public void setLives(int lives) {
         this.lives = lives;
     }
 
+    /**
+     * Sets the total elapsed time.
+     *
+     * @param timeInSeconds The new total time in seconds.
+     */
     public void setTime(double timeInSeconds) {
         this.times = timeInSeconds;
     }
 
-
     public void resize(int width, int height) {
-        // This updates the UI's viewport
         if (viewport != null) {
             viewport.update(width, height, true);
         }
     }
 
-    public void dispose() {
-        if (stage != null) stage.dispose();
-        if (skin != null) skin.dispose();
-        if (font != null) font.dispose();
-        if (heartTexture != null) heartTexture.dispose();
-        if (clockTexture != null) clockTexture.dispose();
-    }
-
-    // Getter
+    /**
+     * Stage getter.
+     * @return stage
+     */
     public Stage getStage() {
         return stage;
     }

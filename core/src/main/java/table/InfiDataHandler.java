@@ -14,17 +14,6 @@ public class InfiDataHandler extends DataHandler {
         + " time REAL DEFAULT 0"
         + ");";
 
-    private static void loadDriverIfNeeded() {
-        if (isLoaded()) return;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            setLoaded(true);
-        } catch (ClassNotFoundException e) {
-            Gdx.app.error("Database", "Not find SQLite JDBC Driver! Check build.gradle.", e);
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void addScore(String pName, double score, double time) {
         if (pName == null || pName.isEmpty() || pName.equals("Enter name")) {

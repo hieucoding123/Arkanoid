@@ -25,20 +25,6 @@ public class CoopDataHandler extends DataHandler {
         + ");";
 
 
-    private static void loadDriverIfNeeded() {
-        if (isLoaded()) {
-            return;
-        }
-        else {
-            try {
-                Class.forName("org.sqlite.JDBC");
-                setLoaded(true);
-            } catch (ClassNotFoundException e) {
-                Gdx.app.error("Database", "Not find SQLite JDBC Driver! Check build.gradle.", e);
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     public static int getPlayerMaxLevel(String playerName) {
         if (playerName == null || playerName.isEmpty() || playerName.equals("Enter name")) {
