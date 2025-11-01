@@ -136,22 +136,12 @@ public class LeaderBoard extends UserInterface {
         mainTable.row();
 
         //Back Button
-        Label backButton = new Label("Return", whiteText);
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                com.main.Game.sfx_back.play(1.0f);
-                main.setGameState(GameState.MAIN_MENU);
-            }
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                backButton.setColor(Color.YELLOW);
-            }
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                backButton.setColor(Color.WHITE);
-            }
-        });
+        Label backButton = createClickableLabel(
+            "Return",        // text
+            Game.sfx_back,   // clickSound
+            1.0f,            // soundVolume
+            () -> main.setGameState(GameState.MAIN_MENU) // clickAction
+        );
 
         backButton.setPosition(10, 0);
         backButton.setFontScale(0.6f);

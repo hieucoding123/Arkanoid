@@ -104,7 +104,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         titleLabel = new Label("GAME LOBBY", this.getSkin());
         titleLabel.setFontScale(1.25f);
         titleLabel.setColor(Color.CYAN);
-        mainTable.add(titleLabel).colspan(2).padBottom(40).row();
+        mainTable.add(titleLabel).colspan(2).padTop(70).row();
 
         if (isHost) {
             Label hostLabel = new Label("You are hosting the game", this.getSkin());

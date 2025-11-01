@@ -119,35 +119,21 @@ public class ModeMenu extends UserInterface {
         });
 
         //Arrange the Buttons in the buttonTable
-        buttonTable.add(levelsModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
+        buttonTable.add(levelsModeButton).width(220).height(72).padBottom(20).row();
 
-        buttonTable.add(coopModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
+        buttonTable.add(coopModeButton).width(220).height(72).padBottom(20).row();
 
-        buttonTable.add(infiModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
+        buttonTable.add(infiModeButton).width(220).height(72).padBottom(20).row();
 
-        buttonTable.add(vsModeButton).width(220).height(72).padBottom(20);
-        buttonTable.row();
+        buttonTable.add(vsModeButton).width(220).height(72).padBottom(20).row();
 
         //Back Button
-        Label backButton = new Label("Return", whiteText);
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Game.playSfx(Game.sfx_back,1.0f);
-                main.setGameState(GameState.MAIN_MENU);
-            }
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                backButton.setColor(Color.YELLOW);
-            }
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                backButton.setColor(Color.WHITE);
-            }
-        });
+        Label backButton = createClickableLabel(
+            "Return",
+            Game.sfx_back,
+            1.0f,
+            () -> main.setGameState(GameState.MAIN_MENU)
+        );
 
         backButton.setPosition(10, 0);
         backButton.setFontScale(0.6f);

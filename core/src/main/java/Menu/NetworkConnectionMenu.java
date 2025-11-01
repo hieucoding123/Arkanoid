@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputEvent; // Keep this import
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+// import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle; // No longer needed
+// import com.badlogic.gdx.scenes.scene2d.utils.ClickListener; // No longer needed
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
@@ -71,23 +71,14 @@ public class NetworkConnectionMenu extends  UserInterface{
         statusLabel.setColor(Color.YELLOW);
         statusLabel.pack();
 
-        // BUTTON STYLE
-        TextButtonStyle textOnlyButtonStyle = new TextButtonStyle(this.getSkin().get(TextButtonStyle.class));
-        textOnlyButtonStyle.up = null;
-        textOnlyButtonStyle.down = null;
-        textOnlyButtonStyle.over = null;
-        textOnlyButtonStyle.checked = null;
-        textOnlyButtonStyle.overFontColor = Color.YELLOW;
-        textOnlyButtonStyle.downFontColor = Color.YELLOW;
-
-        // HOST BUTTON
-        TextButton hostButton = new TextButton("Host Game", textOnlyButtonStyle);
-        hostButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                hostGame();
-            }
-        });
+        // Host button
+        Label hostButton = createClickableLabel(
+            "Host Game",
+            null,
+            0f,
+            true,
+            () -> hostGame()
+        );
         hostButton.pack();
 
         // SERVER LIST
@@ -97,34 +88,36 @@ public class NetworkConnectionMenu extends  UserInterface{
         serversListScrollPane.setSize(270, 130);
         serversListScrollPane.setDebug(true);
 
-        // REFRESH BUTTON
-        TextButton refreshButton = new TextButton("Refresh List", textOnlyButtonStyle);
-        refreshButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                discoverServers();
-            }
-        });
+        // Refresh button
+        Label refreshButton = createClickableLabel(
+            "Refresh List",
+            null,
+            0f,
+            true,
+            () -> discoverServers()
+        );
         refreshButton.pack();
 
-        // JOIN BUTTON
-        TextButton joinButton = new TextButton("Join Game", textOnlyButtonStyle);
-        joinButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                joinGame();
-            }
-        });
+        // Join button
+        Label joinButton = createClickableLabel(
+            "Join Game",
+            null,
+            0f,
+            true,
+            () -> joinGame()
+        );
         joinButton.pack();
 
         Main main = this.getMain();
-        TextButton backButton = new TextButton("Back", textOnlyButtonStyle);
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                main.setGameState(GameState.SELECT_MODE);
-            }
-        });
+
+        // Back button
+        Label backButton = createClickableLabel(
+            "Back",
+            null,
+            0f,
+            true,
+            () -> main.setGameState(GameState.SELECT_MODE)
+        );
         backButton.pack();
 
         //Set up position
@@ -180,6 +173,7 @@ public class NetworkConnectionMenu extends  UserInterface{
         );
         this.getStage().addActor(statusLabel);
     }
+
     // Discovering servers by send UDP
     private void discoverServers() {
         statusLabel.setText("Discovering Servers...");

@@ -160,7 +160,7 @@ public class MainMenu extends UserInterface {
     // Clean up all loaded skins
     @Override
     public void dispose() {
-        super.dispose(); // Disposes the main skin (playButtonSkin)
+        super.dispose();
         if (textFieldSkin != null) {
             textFieldSkin.dispose();
         }

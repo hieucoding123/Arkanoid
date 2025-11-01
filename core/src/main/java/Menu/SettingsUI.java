@@ -148,15 +148,14 @@ public class SettingsUI extends UserInterface {
         // Main
         Main main = this.getMain();
 
-        // Back Button
-        TextButton backButton = new TextButton("Back", this.getSkin());
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Game.playSfx(Game.sfx_back,1.0f);
-                main.setGameState(GameState.MAIN_MENU);
-            }
-        });
+        //Back Button
+        Label backButton = createClickableLabel(
+            "Back",
+            Game.sfx_back,
+            1.0f,
+            () -> main.setGameState(GameState.MAIN_MENU)
+        );
+
         table.add(backButton).colspan(2).padTop(15).padBottom(15).padLeft(50).padRight(50);
     }
 }
