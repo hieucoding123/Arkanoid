@@ -157,8 +157,13 @@ public class LevelMode extends GameMode {
 
             double total_score = levelscore + bonusscore;
             if (total_score < 0) total_score = 0;
-            if (currentMap.getBricks().isEmpty() && !this.isEnd()) LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
-            else LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+
+            boolean playerWon = (currentMap.getBricks().isEmpty() || currentMap.getNumberBreakBrick() == 0) && this.lives > 0;
+            if (playerWon) {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), true);
+            } else {
+                LevelDataHandler.updatePlayerScore(this.getPlayer().getName(), this.levelNumber, (double)((int)(total_score)), false);
+            }
         }
         printActiveEffects(delta);
     }
