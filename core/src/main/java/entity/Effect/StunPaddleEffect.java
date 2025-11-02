@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * When activated, it disables paddle control for a short duration.
  */
 public class StunPaddleEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 5.0f;
+    private static final float EFFECT_DURATION = 1.0f;
 
     /**
      * Constructs a StunPaddleEffect instance.

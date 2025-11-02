@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Represents an effect that slows down one or more balls for a limited duration.
  */
 public class SlowBallEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 20.0f;
+    private static final float EFFECT_DURATION = 5.0f;
 
     /**
      * Constructs a SlowBallEffect instance without a specific triggering ball.
@@ -40,13 +40,13 @@ public class SlowBallEffect extends EffectItem {
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         Game.playSfx(Game.sfx_slowball,0.8f);
-        if (this.triggeringBall != null) {
-            this.triggeringBall.activateSlow(EFFECT_DURATION);
-        } else {
+//        if (this.triggeringBall != null) {
+//            this.triggeringBall.activateSlow(EFFECT_DURATION);
+//        } else {
             for (Ball ball : balls) {
                 ball.activateSlow(EFFECT_DURATION);
             }
-        }
+//        }
         this.setDestroyed(true);
     }
 
