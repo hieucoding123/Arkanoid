@@ -3,7 +3,7 @@ package entity.object.brick;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import entity.MovableObject;
+import entity.object.MovableObject;
 import entity.TextureManager;
 
 /**

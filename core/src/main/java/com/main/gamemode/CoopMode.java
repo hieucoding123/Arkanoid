@@ -9,7 +9,7 @@ import com.main.components.IngameInputHandler;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
 import entity.Effect.ShieldEffect;
-import entity.GameScreen;
+import com.main.gamescreen.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
 import entity.TextureManager;
@@ -17,7 +17,7 @@ import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
-import table.CoopDataHandler;
+import datahandler.CoopDataHandler;
 
 import java.util.ArrayList;
 

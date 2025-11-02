@@ -7,7 +7,7 @@ import com.main.Game;
 import com.main.components.CollisionManager;
 import com.main.components.IngameInputHandler;
 import entity.Effect.*;
-import entity.GameScreen;
+import com.main.gamescreen.GameScreen;
 import entity.Player;
 import entity.ScoreManager;
 import entity.object.Ball;
@@ -15,7 +15,7 @@ import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
 import entity.object.Paddle;
 import entity.TextureManager;
-import table.InfiDataHandler;
+import datahandler.InfiDataHandler;
 
 import java.util.ArrayList;
 

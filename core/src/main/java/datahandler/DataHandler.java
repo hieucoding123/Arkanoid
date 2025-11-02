@@ -1,4 +1,4 @@
-package table;
+package datahandler;
 
 import com.badlogic.gdx.Gdx;
 import java.io.File;

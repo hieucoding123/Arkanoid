@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.gamescreen.VsGameScreen;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
 import entity.*;
@@ -48,6 +49,13 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         update(delta);
         draw(sp);
         gameScreen.render();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if (gameScreen != null) {
+            gameScreen.resize(width, height);
+        }
     }
 
     @Override

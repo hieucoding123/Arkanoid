@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.main.Main;
 import entity.Player;
-import table.CoopDataHandler;
+import datahandler.CoopDataHandler;
 
 public class CoopPlayerLevelSelectionMenu extends LevelSelectionMenu {
 

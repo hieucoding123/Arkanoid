@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
-import entity.GameScreen;
 import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;

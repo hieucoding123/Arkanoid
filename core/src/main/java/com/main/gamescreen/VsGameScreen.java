@@ -1,4 +1,4 @@
-package entity;
+package com.main.gamescreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -98,6 +98,12 @@ public class VsGameScreen {
         viewport.apply(true);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    public void resize(int width, int height) {
+        if (viewport != null) {
+            viewport.update(width, height, true);
+        }
     }
 
     private String formatTime(double times) {

@@ -16,9 +16,9 @@ import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
-import table.CoopDataHandler;
-import table.InfiDataHandler;
-import table.LevelDataHandler;
+import datahandler.CoopDataHandler;
+import datahandler.InfiDataHandler;
+import datahandler.LevelDataHandler;
 
 import java.util.ArrayList;
 

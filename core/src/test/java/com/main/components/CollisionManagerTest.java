@@ -2,7 +2,7 @@ package com.main.components;
 
 import com.main.Game;
 import entity.Effect.ShieldEffect;
-import entity.GameObject;
+import entity.object.GameObject;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;

@@ -1,7 +1,6 @@
 package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
-import entity.MovableObject;
 
 public class Paddle extends MovableObject {
     private boolean isFlipped;

@@ -1,11 +1,11 @@
-package table;
+package datahandler;
 
 import jdk.internal.vm.annotation.Hidden;
 import java.util.ArrayList;
 
-public class CoopDataHandler extends BaseLevelDataHandler {
+public class LevelDataHandler extends BaseLevelDataHandler {
 
-    private static final String TABLE_NAME = "coop_scores";
+    private static final String TABLE_NAME = "level_scores";
     private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
         + " playerName TEXT PRIMARY KEY NOT NULL,"
         + " level1 REAL DEFAULT 0,"
@@ -19,7 +19,7 @@ public class CoopDataHandler extends BaseLevelDataHandler {
 
     @Hidden
     public static String getUrlDatabase() {
-        return "jdbc:sqlite:leaderBoard/coop_scores.db";
+        return "jdbc:sqlite:leaderBoard/level_scores.db";
     }
 
     public static int getPlayerMaxLevel(String playerName) {
