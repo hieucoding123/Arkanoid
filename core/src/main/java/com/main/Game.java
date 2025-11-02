@@ -332,13 +332,6 @@ public class Game {
             int y_from_bottom = Gdx.graphics.getHeight() - Gdx.input.getY();
             System.out.println("Mouse Location: x = " + x + ", y = " + y_from_bottom);
         }
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.P)) {
-            if (gameServer != null) {
-                gameServer.stop();
-            }
-            networkClient.disconnect();
-            setGameState(GameState.MAIN_MENU);
-        }
     }
 
     public void update() {

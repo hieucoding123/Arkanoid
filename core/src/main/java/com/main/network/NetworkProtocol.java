@@ -6,9 +6,103 @@ import com.esotericsoftware.kryonet.EndPoint;
 import java.util.ArrayList;
 
 /**
- * Client-Server protocol.
- * Contains packages exchanged between client and server.
+ * Network protocol definitions for Arkanoid multiplayer.
+ *
+ * <p>This class defines the message format, data structures, and serialization
+ * configuration for client-server communication. It uses the Kryo serialization
+ * library (part of Kryonet) for efficient binary encoding.</p>
+ *
+ * <h2>Protocol Components:</h2>
+ * <ul>
+ *   <li><b>Message Classes:</b> Request/response objects for game actions</li>
+ *   <li><b>State Classes:</b> Data structures for game entity states</li>
+ *   <li><b>Enums:</b> Type-safe constants for game modes and input types</li>
+ *   <li><b>Serialization:</b> Kryo registration for network transmission</li>
+ * </ul>
+ *
+ * <h2>Message Types:</h2>
+ * <table border="1">
+ *   <tr>
+ *     <th>Message</th>
+ *     <th>Direction</th>
+ *     <th>Purpose</th>
+ *   </tr>
+ *   <tr>
+ *     <td>LoginRequest</td>
+ *     <td>Client → Server</td>
+ *     <td>Join game with player name</td>
+ *   </tr>
+ *   <tr>
+ *     <td>LoginResponse</td>
+ *     <td>Server → Client</td>
+ *     <td>Connection result + player number</td>
+ *   </tr>
+ *   <tr>
+ *     <td>PlayerInput</td>
+ *     <td>Client → Server</td>
+ *     <td>Send movement/action input</td>
+ *   </tr>
+ *   <tr>
+ *     <td>GameStateUpdate</td>
+ *     <td>Server → Clients</td>
+ *     <td>Current game state (60 FPS)</td>
+ *   </tr>
+ *   <tr>
+ *     <td>LobbyUpdate</td>
+ *     <td>Server → Clients</td>
+ *     <td>Lobby status (connections, ready)</td>
+ *   </tr>
+ * </table>
+ *
+ * <h2>Serialization Strategy:</h2>
+ * <p>All message and state classes are registered with fixed IDs to ensure
+ * compatibility between client and server:</p>
+ * <ul>
+ *   <li><b>Enums:</b> IDs 50-59</li>
+ *   <li><b>Messages:</b> IDs 60-69</li>
+ *   <li><b>State Objects:</b> IDs 70-79</li>
+ * </ul>
+ *
+ * <h2>Version Compatibility:</h2>
+ * <p>The protocol includes a version string ({@code PROTOCOL_VERSION = "1.0.0"})
+ * to prevent mismatched clients from connecting. Server rejects clients with
+ * different versions.</p>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>
+ * // Server-side registration
+ * Server server = new Server();
+ * NetworkProtocol.register(server);  // Register all types
+ *
+ * // Client-side registration
+ * Client client = new Client();
+ * NetworkProtocol.register(client);  // Must match server
+ *
+ * // Sending a message
+ * LoginRequest request = new LoginRequest("PlayerName", GameMode.VS);
+ * connection.sendTCP(request);
+ *
+ * // Receiving a message
+ * if (object instanceof LoginResponse) {
+ *     LoginResponse response = (LoginResponse) object;
+ *     System.out.println("Joined as Player " + response.pNumber);
+ * }
+ * </pre>
+ *
+ * <h2>Adding New Message Types:</h2>
+ * <ol>
+ *   <li>Define the message class with public fields (Kryo requirement)</li>
+ *   <li>Add no-arg constructor (required by Kryo)</li>
+ *   <li>Register in {@link #register(EndPoint)} with a unique ID</li>
+ *   <li>Update both client and server with matching registrations</li>
+ *   <li>Increment {@code PROTOCOL_VERSION} to prevent mismatches</li>
+ * </ol>
+ *
+ * @see GameServer Server using this protocol
+ * @see GameClient Client using this protocol
+ * @see <a href="https://github.com/EsotericSoftware/kryo">Kryo Documentation</a>
  */
+
 public class NetworkProtocol {
     public static final int TCP_PORT = 54555;
     public static final int UDP_PORT = 54777;

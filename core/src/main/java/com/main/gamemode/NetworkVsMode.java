@@ -60,7 +60,6 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void handleInput() {
-//        Paddle myPaddle = (mPNumber == 1) ? paddle1 : paddle2;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             client.sendInput(NetworkProtocol.InputType.MOVE_LEFT);
@@ -76,13 +75,19 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         }
     }
 
+    /**
+     * Draw game object in current state.
+     * @param sp the {@link SpriteBatch} used for drawing.
+     */
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
         if (currentState == null) {
             return;
         }
+        // Draw paddles in current state
         for (NetworkProtocol.PaddleState paddle : currentState.paddles) {
+            // Flip texture if paddle is not controlled by this player
             if (mPNumber == 1) {
                 Texture paddleTexture = paddle.pNumber == 1 ? TextureManager.paddleTexture : TextureManager.flippedpaddleTexture;
                 sp.draw(paddleTexture, paddle.x, paddle.y, paddle.width, paddle.height);
@@ -92,11 +97,13 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
             }
         }
 
+        // Draw balls in current state
         for (NetworkProtocol.BallState ball : currentState.balls) {
             if (!ball.isDestroyed) {
                 sp.draw(TextureManager.ballTexture, ball.x, ball.y, ball.width, ball.height);
             }
         }
+        // Draw bricks in current state.
         for (Brick brick : localBricks) {
             brick.draw(sp);
         }
@@ -113,15 +120,9 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         if (mPNumber == 2) flip(state);
         Gdx.app.postRunnable(() -> {
             this.currentState = state;
-            localBricks.clear();
-            for (NetworkProtocol.BrickState brickState : currentState.bricks) {
-                Brick brick = new Brick(
-                    brickState.x, brickState.y,
-                    brickState.hitPoints, brickState.isExploding,
-                    0, 0, 0, TextureManager.brick1HIT
-                );
-                localBricks.add(brick);
-            }
+            updateLocalBrickmap();
+
+            // Update scores and times.
             gameScreen.setTime(state.roundTimer);
             gameScreen.setScores(state.p1Score, state.p1Wins, state.p2Score, state.p2Wins);
             getPlayer().setScore(state.p1Score);
@@ -133,6 +134,25 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
         });
     }
 
+    /**
+     * Update brickMap in current state.
+     */
+    private void updateLocalBrickmap() {
+        localBricks.clear();
+        for (NetworkProtocol.BrickState brickState : currentState.bricks) {
+            Brick brick = new Brick(
+                brickState.x, brickState.y,
+                brickState.hitPoints, brickState.isExploding,
+                0, 0, 0, TextureManager.brick1HIT
+            );
+            localBricks.add(brick);
+        }
+    }
+
+    /**
+     * Flip position in y-axis of game object in state.
+     * @param state state of game mode
+     */
     private void flip(NetworkProtocol.GameStateUpdate state) {
         for (NetworkProtocol.BrickState b : state.bricks)
             b.y = 890 - b.y - b.height;

@@ -14,8 +14,71 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The GameServer is where clients connect,
- * where clients communicate through packages.
+ * Game server for multiplayer Arkanoid matches.
+ *
+ * <p>This class implements the authoritative server for networked multiplayer games.
+ * It manages all game logic, processes player inputs, and broadcasts game state updates
+ * to connected clients. The server uses the Kryonet networking library for efficient
+ * TCP/UDP communication.</p>
+ *
+ * <h2>Server Responsibilities:</h2>
+ * <ul>
+ *   <li><b>Connection Management:</b> Accept and manage up to 2 player connections</li>
+ *   <li><b>Lobby Management:</b> Track player readiness and initiate games</li>
+ *   <li><b>Game Logic:</b> Run authoritative game simulation (physics, collisions, scoring)</li>
+ *   <li><b>State Broadcasting:</b> Send game state updates to all clients at 60 FPS</li>
+ *   <li><b>Input Processing:</b> Receive and apply player inputs to game entities</li>
+ *   <li><b>Disconnect Handling:</b> Clean up disconnected players and notify remaining clients</li>
+ * </ul>
+ *
+ * <h2>Network Architecture:</h2>
+ * <pre>
+ * Client 1 ←──[TCP/UDP]──→ GameServer ←──[TCP/UDP]──→ Client 2
+ *                              ↓
+ *                         Game Logic
+ *                        (VsMode logic)
+ * </pre>
+ *
+ * <h2>Communication Protocol:</h2>
+ * <ul>
+ *   <li><b>TCP (Port 54555):</b> Reliable messages (login, lobby updates, game start)</li>
+ *   <li><b>UDP (Port 54777):</b> Fast messages (game state updates, player inputs)</li>
+ * </ul>
+ *
+ * <h2>Server Lifecycle:</h2>
+ * <ol>
+ *   <li><b>Start:</b> {@code server.start()} - Bind to ports and start listening</li>
+ *   <li><b>Accept Connections:</b> Players send LoginRequest, server assigns player numbers</li>
+ *   <li><b>Lobby Phase:</b> Wait for both players to ready up</li>
+ *   <li><b>Game Phase:</b> Run game logic, broadcast state updates at 60 FPS</li>
+ *   <li><b>Game End:</b> Return to lobby or shut down</li>
+ * </ol>
+ *
+ * <h2>Usage Example:</h2>
+ * <pre>
+ * GameServer server = new GameServer();
+ * server.start();  // Start listening on ports
+ *
+ * // Set the game mode to run
+ * VsMode gameMode = new VsMode(...);
+ * server.setGameMode(gameMode);
+ *
+ * // Update loop (typically in separate thread)
+ * while (running) {
+ *     server.update(deltaTime);  // Updates game logic and broadcasts state
+ *     Thread.sleep(16);  // ~60 FPS
+ * }
+ *
+ * server.stop();  // Cleanup
+ * </pre>
+ *
+ * <h2>Thread Safety:</h2>
+ * <p>Kryonet handles network I/O in separate threads. All message handling callbacks
+ * are synchronized internally. Game logic updates should be called from a single thread.</p>
+ *
+ * @see GameClient Client-side network handler
+ * @see NetworkProtocol Message format definitions
+ * @see GameMode Server-side game logic interface
  */
 public class GameServer {
     private Server server;
