@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
+import com.main.gamescreen.VsGameScreen;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
 import entity.ScoreManager;
@@ -25,6 +26,7 @@ public class VsMode extends GameMode {
     private final ArrayList<BricksMap> brickMap;
     private BricksMap currentMap;
     private final ArrayList<Ball> balls;
+    private final VsGameScreen gameScreen;
     private Ball ballP1;
     private Ball ballP2;
     private int currentRound;
@@ -46,6 +48,7 @@ public class VsMode extends GameMode {
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
         this.effectFactory  = new EffectFactory();
+        this.gameScreen = new VsGameScreen();
         balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();
@@ -53,8 +56,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void create() {
-        //gameScreen.create();
-
+        gameScreen.create();
         for (int i = 1; i <= 3; i++) {
             String mapPath = "/maps/map_vs" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
@@ -118,20 +120,13 @@ public class VsMode extends GameMode {
         return isGameEnded;
     }
 
-    public void endRound(int winner) {
+    public void endRound() {
         isPaused = true;
-        if (winner == 1) {
+        if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
             roundsWonP1++;
-        } else if (winner == 2) {
+        } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
             roundsWonP2++;
-        } else if (winner == 0) {
-            if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
-                roundsWonP1++;
-            } else if (scoreManagerP1.getScore() < scoreManagerP2.getScore()) {
-                roundsWonP2++;
-            }
         }
-
         System.out.println("p1: " + roundsWonP1);
         System.out.println("p2: " + roundsWonP2);
 
@@ -158,7 +153,7 @@ public class VsMode extends GameMode {
         }
 
         if (isPaused) {
-            return;
+           return;
         }
 
         if (!followPaddle1 || !followPaddle2) {
@@ -166,7 +161,7 @@ public class VsMode extends GameMode {
         }
 
         if (roundTimer <= 0) {
-            endRound(0);
+            endRound();
             return;
         }
 
@@ -203,16 +198,6 @@ public class VsMode extends GameMode {
                 } else {
                     ball.setDestroyed(true);
                 }
-            }
-
-            if (ball == ballP1 && ball.isDestroyed()) {
-                endRound(2);
-                return;
-            }
-
-            if (ball == ballP2 && ball.isDestroyed()) {
-                endRound(1);
-                return;
             }
 
             if (ball.checkCollision(paddle1)) {
@@ -259,23 +244,6 @@ public class VsMode extends GameMode {
 
                         brick.setDestroyed(true);
                     }
-
-//                    float ballCenterX = ball.getX() + ball.getWidth() / 2f;
-//                    float ballCenterY = ball.getY() + ball.getHeight() / 2f;
-//                    //Bottom and top collision
-//                    if (ballCenterX > brick.getX() && ballCenterX < brick.getX() + brick.getWidth()) {
-//                        ball.reverseY();
-//                    }
-//                    //Left and right collision
-//                    else if (ballCenterY > brick.getY() && ballCenterY < brick.getY() + brick.getHeight()) {
-//                        ball.reverseX();
-//                    }
-//                    //Corner collision
-//                    else {
-//                        ball.reverseY();
-//                        ball.reverseX();
-//                    }
-
                     break;
                 }
             }
@@ -284,7 +252,7 @@ public class VsMode extends GameMode {
         balls.removeIf(Ball::isDestroyed);
 
         if (currentMap.getSize() == 0 || balls.isEmpty()) {
-            endRound(0);
+            endRound();
         }
     }
 
@@ -292,19 +260,23 @@ public class VsMode extends GameMode {
     public void render(SpriteBatch sp, float delta) {
         this.handleInput();
         this.update(delta);
+        gameScreen.setTime(roundTimer);
+        gameScreen.setScores(scoreManagerP1.getScore(), roundsWonP1,
+            scoreManagerP2.getScore(), roundsWonP2);
         this.draw(sp);
+        gameScreen.render();
     }
 
     @Override
     public void handleInput() {
-        if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            isPaused = false;
-            return;
-        }
+//        if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+//            isPaused = false;
+//            return;
+//        }
 
-        if (isPaused) {
-            return;
-        }
+//        if (isPaused) {
+//            return;
+//        }
 
         //Press LEFT paddle1
         if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
@@ -336,10 +308,12 @@ public class VsMode extends GameMode {
 
         if (followPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
             followPaddle1 = false;
+            isPaused = false;
         }
 
         if (followPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
             followPaddle2 = false;
+            isPaused = false;
         }
     }
 

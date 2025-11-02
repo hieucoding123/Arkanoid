@@ -26,7 +26,7 @@ public class VsGameScreen {
     private int p2Wins;
     private String result;
     private Label timeLabel;
-
+    private Label resultLabel;
     // Textures and Images for icons
     private Texture clockTexture;
 
@@ -57,8 +57,11 @@ public class VsGameScreen {
         scoreLabel2 = new Label("0.0", skin);
         scoreLabel2.setColor(Color.BLUE);
         result = p1Wins + " - " + p2Wins;
-        Label resultLabel1 = new Label(result, skin);
-        resultLabel1.setColor(Color.GOLD);
+        resultLabel = new Label(result, skin);
+        resultLabel.setColor(Color.GOLD);
+//        float RESULT_X = 105f;
+//        float RESULT_Y = 900f;
+//        resultLabel.setPosition(RESULT_X - resultLabel.getPrefWidth() / 2, RESULT_Y);
         timeLabel = new Label(String.valueOf(this.times), skin);
 
         clockTexture = new Texture(Gdx.files.internal("images/clock.png"));
@@ -79,20 +82,27 @@ public class VsGameScreen {
         stage.addActor(scoreLabel2);
         stage.addActor(clockImage);
         stage.addActor(timeLabel);
+        stage.addActor(resultLabel);
     }
 
     public void render() {
         scoreLabel1.setText(String.valueOf(p1Score));
         scoreLabel1.pack(); // Recalc size
-        float RSCORE1_X = 300f;
+        float RSCORE1_X = 175f;
         float SCORE1_Y = 970f;
         scoreLabel1.setPosition(RSCORE1_X - scoreLabel1.getPrefWidth(), SCORE1_Y - scoreLabel1.getPrefHeight());
 
         scoreLabel2.setText(String.valueOf(p2Score));
         scoreLabel2.pack(); // Recalc size
-        float RSCORE2_X = 400f;
+        float RSCORE2_X = 250f;
         float SCORE2_Y = 970f;
         scoreLabel2.setPosition(RSCORE2_X, SCORE2_Y - scoreLabel2.getPrefHeight());
+        resultLabel.setText(p1Wins + " - " + p2Wins);
+
+        resultLabel.pack();
+        float RESULT_X = 105f;
+        float RESULT_Y = 900f;
+        resultLabel.setPosition(RESULT_X - resultLabel.getPrefWidth() / 2, RESULT_Y);
 
         timeLabel.setText(formatTime(times));
         viewport.apply(true);
