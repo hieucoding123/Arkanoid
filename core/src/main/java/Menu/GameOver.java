@@ -89,7 +89,7 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         );
         Label titleLabel = new Label("GAME OVER", this.getSkin());
         titleLabel.setFontScale(1.25f);
-        titleLabel.setColor(Color.DARK_GRAY);
+        titleLabel.setColor(Color.LIGHT_GRAY);
         mainTable.add(titleLabel).colspan(2).padTop(70).row();
 
         // PLAYER 1

@@ -295,7 +295,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
         EffectItem.drawEffectItems(sp);
         if (paddle1.hasShield()) {

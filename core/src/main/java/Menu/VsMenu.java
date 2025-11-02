@@ -59,9 +59,9 @@ public class VsMenu extends UserInterface{
         );
 
         Label title = new Label("1 VS 1", this.getSkin());
-        title.setScale(1.5f);
+        title.setFontScale(1.25f);
         title.setColor(Color.PURPLE);
-        mainTable.add(title).padTop(10).row();
+        mainTable.add(title).padTop(10).padBottom(5).row();
 
         TextButton offlineButton = new TextButton("OFFLINE", textOnlyButtonStyle);
         offlineButton.setColor(Color.FIREBRICK);
@@ -80,8 +80,8 @@ public class VsMenu extends UserInterface{
                 getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
             }
         });
-        mainTable.add(offlineButton).padTop(10).row();
-        mainTable.add(onlineButton).padTop(10);
+        mainTable.add(offlineButton).padTop(10).padBottom(5).row();
+        mainTable.add(onlineButton).padTop(10).padBottom(5);
 
         Label backButton = createClickableLabel(
             "Return",
