@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
+import com.main.components.CollisionManager;
 import com.main.components.IngameInputHandler;
 import com.main.gamescreen.VsGameScreen;
 import entity.Effect.EffectFactory;
@@ -181,6 +182,17 @@ public class VsMode extends GameMode {
         EffectItem.effectCollision(paddle1, this.balls, currentMap);
         EffectItem.effectCollision(paddle2, this.balls, currentMap);
 
+        final int SOLVER_ITERATIONS = 5;
+        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
+            for (int i = 0; i < balls.size(); i++) {
+                Ball ball1 = balls.get(i);
+                for (int j = i + 1; j < balls.size(); j++) {
+                    Ball ball2 = balls.get(j);
+                    CollisionManager.handleBallBallCollision(ball1, ball2);
+                }
+            }
+        }
+
         for (Ball ball : balls) {
             ball.setIn1v1(true);
             ball.update(delta);
@@ -283,7 +295,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
+        sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
         currentMap.draw(sp);
         EffectItem.drawEffectItems(sp);
         if (paddle1.hasShield()) {
