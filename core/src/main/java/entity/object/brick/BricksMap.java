@@ -39,6 +39,7 @@ public class BricksMap {
      * @param path map file path
      */
     public BricksMap(String path) {
+        boolean checkmap1Vs1 = path.equals("/maps/map_vs1.txt") || path.equals("/maps/map_vs2.txt") || path.equals("/maps/map_vs3.txt");
         bricks = new ArrayList<>();
         brick_to_dsu = new HashMap<>();
         dsu_to_birck = new HashMap<>();
@@ -54,7 +55,7 @@ public class BricksMap {
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
                     int radom = (int)(Math.random() * 10);
-                    if (radom == 1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42) {
+                    if (radom == 1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42 && !checkmap1Vs1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
