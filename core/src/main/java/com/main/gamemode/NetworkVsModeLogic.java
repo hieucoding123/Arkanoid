@@ -63,7 +63,7 @@ import java.util.ArrayList;
  */
 
 public class NetworkVsModeLogic extends GameMode {
-    private static final float ROUND_DURATION = 60.0f;
+    private static final float ROUND_DURATION = 10.0f;
     private static final int MAX_ROUNDS = 3;
 
     private Paddle paddle1;
@@ -101,7 +101,7 @@ public class NetworkVsModeLogic extends GameMode {
 
         // Create brickMaps
         for (int i = 1; i <= MAX_ROUNDS; i++) {
-            String mapPath = "/maps/vs_onl_maps/map" + i + ".txt";
+            String mapPath = "/maps/map_vs" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
         }
 
@@ -241,8 +241,8 @@ public class NetworkVsModeLogic extends GameMode {
                 ball.setDestroyed(false);
                 ball.setX(paddle2.getX() + paddle2.getWidth() / 2f - 12);
                 ball.setY(paddle2.getY() - ball.getHeight());
-                paddle1.setX(Game.SCREEN_WIDTH / 2f - paddle1.getWidth() / 2f);
-                paddle1.setY(800);
+                paddle2.setX(Game.SCREEN_WIDTH / 2f - paddle2.getWidth() / 2f);
+                paddle2.setY(800);
                 flowPaddle2 = true;
                 return;
             }
