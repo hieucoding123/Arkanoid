@@ -1,36 +1,40 @@
 {
-score: 100
+score: 1225
 lives: 3
-timePlayed: 1.7150692981667817
-cnt_combo: 1
-TimeLastHit: 1762018224889
+timePlayed: 8.75111709756311
+cnt_combo: 3
+TimeLastHit: 1762077869079
 paddle1: {
-	x: 352
+	x: 148
 	y: 50
 }
 balls: [
 	{
-		x: 390
-		y: 177.07304
-		dx: -1.3113417E-5
-		dy: 300
-		angle: 1.5707964
+		x: 241.2934
+		y: 323.43967
+		dx: 259.8076
+		dy: 150.00003
+		angle: 0.5235989
 		speed: 300
 		originalspeed: 5
 	}
-]
-effectItems: [
 	{
-		x: 398
-		y: 180.9195
-		dy: -60
-		EffectType: ThreeBallsEffect
+		x: 99.758766
+		y: 455.21902
+		dx: 259.80765
+		dy: 149.99997
+		angle: 0.5235987
+		speed: 300
+		originalspeed: 5
 	}
 	{
-		x: 398
-		y: 180.9195
-		dy: -60
-		EffectType: ThreeBallsEffect
+		x: 99.758766
+		y: 455.21902
+		dx: 259.80765
+		dy: 149.99997
+		angle: 0.5235987
+		speed: 300
+		originalspeed: 5
 	}
 ]
 levelNumber: {

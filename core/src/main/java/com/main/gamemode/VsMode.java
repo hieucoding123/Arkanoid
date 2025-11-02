@@ -107,15 +107,15 @@ public class VsMode extends GameMode {
         ballP1 = new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
-            5.0f);
-        ballP1.setVelocity(0, 5.0f);
+            5f);
+        ballP1.setVelocity(0, 2.5f);
         balls.add(ballP1);
 
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
             paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
-            5.0f);
-        ballP2.setVelocity(0, -5.0f);
+            5f);
+        ballP2.setVelocity(0, -2.5f);
         balls.add(ballP2);
     }
 
@@ -239,13 +239,13 @@ public class VsMode extends GameMode {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
-                                0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
+                                0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.5, 0.08, 0.09);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2){
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
-                                0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
+                                0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.5, 0.08, 0.09);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }

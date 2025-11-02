@@ -23,9 +23,14 @@ public class FastBallEffect extends EffectItem {
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         Game.playSfx(Game.sfx_fastball,0.8f);
-        for (Ball ball : balls) {
-            ball.activateFast(EFFECT_DURATION);
+        if (triggeringBall != null) {
+            this.triggeringBall.activateFast(EFFECT_DURATION);
+        } else {
+            for (Ball ball : balls) {
+                ball.activateFast(EFFECT_DURATION);
+            }
         }
+
         this.setDestroyed(true);
     }
 
