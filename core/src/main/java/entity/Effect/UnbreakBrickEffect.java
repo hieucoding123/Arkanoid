@@ -5,6 +5,7 @@ import entity.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
+import entity.object.brick.BrickType;
 import entity.object.brick.BricksMap;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class UnbreakBrickEffect extends EffectItem {
      * @param dy the vertical velocity of the effect
      */
     public UnbreakBrickEffect(float x, float y, float dy) {
-        super(x, y, dy, TextureManager.UnbreakBrickTexture);
+        super(x, y, dy, TextureManager.brickTextures.get(BrickType.UNBREAK));
     }
 
     /**

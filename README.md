@@ -1,25 +1,35 @@
 # Arkanoid
 *OOP UET-VNU course project*
-## Version: Week7
 
-**Demo**
+## Structure
 
-*Main menu*
-<img src="assets/version/demo1.png" alt="DEMO" width="350">
-*Select mode*
-<img src="assets/version/demo2.png" alt="DEMO" width="350">
+### [Structure Title 1 - e.g., Class Diagram]
+### [Structure Title 2 - e.g., Game Flow]
+---
 
-**Structure**
+## Demo
 
-<img src="assets/version/versionWeek7.png" alt="DEMO" width="600">
+---
 
-**Improve**
-- Add 4 game mode: `Infinite Mode`, `Co-op Mode`, `SinglePlayer Mode(Levels)`, `1vs1 Mode`.
-- Enter player name, calculate time played
-- Add `DataHandler` and use `SQL lite` to save and query player achievement
-- Display player achievement
+## Improvements
+
+* Added new brick types: **Explosive Brick** and **Moving Brick**.
+* Added 5 new effects: `RemoveEffect`, `StunPaddleEffect`, `FastBallEffect`, `RandomEffect`, and `UnbreakBrickEffect`.
+* Implemented game state saving (on exit) using `GameSaveManager` and `GameData`.
+* Refactored collision handling with a new `CollisionManager`.
+* Centralized in-game input processing into `IngameInputHandler`.
+* Developed a network multiplayer mode (based on `VsMode` logic) using the **Kryo** library.
+* Added sound effects and music to the game.
+* Implemented player achievement saving using `CoopDataHandler` and `LevelDataHandler`.
+* Added pause functionality (`PauseUI`), a post-game summary screen (`GameSummaryScreen`), and game over flows (`GameOver`).
+
+---
+
 ## Contributors
-- `Nguyen Quang Linh`: implements `SinglePlayer Mode(Levels)`, use `SQL lite`
-- `Nguyen Tuan Huy`: implements `Co-op Mode` and edit user interfaces
-- `Duong Hai Khoi`: implements `1vs1 Mode`
-- `Pham Tran Hieu`: implements `Infinite Mode` and display player achievement.
+
+(Dưới đây là 4 mục bạn yêu cầu, dựa trên file README cũ. Bạn hãy điền phần tổng hợp cuối cùng vào nhé.)
+
+* **Nguyen Quang Linh**: [Add final summary of contributions here]
+* **Nguyen Tuan Huy**: [Add final summary of contributions here]
+* **Duong Hai Khoi**: [Add final summary of contributions here]
+* **Pham Tran Hieu**: [Add final summary of contributions here]

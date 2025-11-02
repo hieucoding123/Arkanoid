@@ -1,8 +1,13 @@
 package entity;
 
 import com.badlogic.gdx.graphics.Texture;
+import entity.object.brick.Brick;
+import entity.object.brick.BrickType;
+
+import java.util.HashMap;
 
 public class TextureManager {
+    public static HashMap<BrickType, Texture> brickTextures;
     public static Texture bgTexture;
     public static Texture bgTexture1vs1;
     public static Texture brick1HIT;
@@ -30,6 +35,15 @@ public class TextureManager {
      * Load textures.
      */
     public static void loadTextures() {
+        brickTextures = new HashMap<>();
+        brickTextures.put(BrickType.T1HIT, new Texture("images/brick_bronze.png"));
+        brickTextures.put(BrickType.T2HIT, new Texture("images/brick_iron.png"));
+        brickTextures.put(BrickType.T3HIT, new Texture("images/brick_gold.png"));
+        brickTextures.put(BrickType.T4HIT, new Texture("images/brick_diamond.png"));
+        brickTextures.put(BrickType.EXPLO, new Texture("images/brick_red.png"));
+        brickTextures.put(BrickType.NOHIT, new Texture("images/brick_black.png"));
+        brickTextures.put(BrickType.UNBREAK, new Texture("images/e_bricked.png"));
+
         bgTexture = new Texture("images/background.png");
         bgTexture1vs1 = new Texture("images/vsmodebg.png");
         brick1HIT = new Texture("images/brick_bronze.png");
@@ -59,6 +73,10 @@ public class TextureManager {
      * Free texture memory.
      */
     public static void dispose() {
+        for (Texture texture : brickTextures.values()) {
+            texture.dispose();
+        }
+        brickTextures.clear();
         bgTexture.dispose();
         bgTexture1vs1.dispose();
         brick1HIT.dispose();

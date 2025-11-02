@@ -26,6 +26,7 @@ public class Brick extends MovableObject {
     private float moveSpeed = 0;
     private final float originalX;
     private float moveRange;
+    private BrickType brickType;
 
     /**
      * Constructs a brick instance with specified properties.
@@ -36,16 +37,17 @@ public class Brick extends MovableObject {
      * @param row        the row position in the brick grid
      * @param col        the column position in the brick grid
      * @param color      color identifier
-     * @param texture    texture representing the brick
+     * @param type       type of the brick
      */
-    public Brick(float x, float y, int hitPoints, boolean explosion, int row, int col, int color, Texture texture) {
-        super(x, y, texture);
+    public Brick(float x, float y, int hitPoints, boolean explosion, int row, int col, int color, BrickType type) {
+        super(x, y, TextureManager.brickTextures.get(type));
         originalX = x;
         this.hitPoints = hitPoints;
         this.explosion = explosion;
         this.row = row;
         this.col = col;
         this.color = color;
+        this.brickType = type;
         this.setDestroyed(this.hitPoints <= 0);
         explosionTexture = TextureManager.ExplosionTexture;
     }
@@ -114,7 +116,7 @@ public class Brick extends MovableObject {
         com.main.Game.sfx_pop.play();
         this.hitPoints--;
         if (this.hitPoints == 1) {
-            this.texture = TextureManager.brick1HIT;
+            this.texture = TextureManager.brickTextures.get(BrickType.T1HIT);
         }
     }
 
@@ -174,7 +176,7 @@ public class Brick extends MovableObject {
     /** Sets the brick as unbreakable and updates its texture. */
     public void setUnbreak() {
         this.unbreak = true;
-        this.texture = TextureManager.brickNOHIT;
+        this.texture = TextureManager.brickTextures.get(BrickType.NOHIT);
         this.explosion = false;
     }
 
@@ -189,9 +191,9 @@ public class Brick extends MovableObject {
             this.unbreak = false;
 
             if (this.hitPoints >= 2) {
-                this.texture = TextureManager.brick2HIT;
+                this.texture = TextureManager.brickTextures.get(BrickType.T2HIT);
             } else {
-                this.texture = TextureManager.brick1HIT;
+                this.texture = TextureManager.brickTextures.get(BrickType.T1HIT);
             }
         }
     }
@@ -215,5 +217,9 @@ public class Brick extends MovableObject {
     /** @return true if the brick is currently exploding */
     public boolean isExploding() {
         return this.isExploding;
+    }
+
+    public BrickType getType() {
+        return this.brickType;
     }
 }

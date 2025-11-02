@@ -49,7 +49,7 @@ public class LevelMode extends GameMode {
     public void create() {
         gameScreen.create();
 
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 3; i <= 5; i++) {
             String mapPath = "/maps_for_levelmode/map" + i + ".txt";
             bricksMaps.add(new BricksMap(mapPath));
         }
