@@ -16,9 +16,12 @@ import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
-
 import java.util.ArrayList;
 
+/**
+ * Represents the versus (PvP) game mode where two players compete
+ * against each other in multiple rounds.
+ */
 public class VsMode extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
@@ -43,20 +46,28 @@ public class VsMode extends GameMode {
     private final ScoreManager scoreManagerP2;
     private boolean isGameEnded = false;
 
-    public VsMode (ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    /**
+     * Constructs a new versus mode with two score managers.
+     *
+     * @param scoreManagerP1 score manager for player 1
+     * @param scoreManagerP2 score manager for player 2
+     */
+    public VsMode(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
-
         this.scoreManagerP1 = scoreManagerP1;
         this.scoreManagerP2 = scoreManagerP2;
-        this.effectFactory  = new EffectFactory();
+        this.effectFactory = new EffectFactory();
         this.gameScreen = new VsGameScreen();
         balls = new ArrayList<>();
         brickMap = new ArrayList<>();
         create();
     }
 
+    /**
+     * Initializes game resources, input handlers, paddles, and maps.
+     */
     @Override
     public void create() {
         gameScreen.create();
@@ -75,32 +86,33 @@ public class VsMode extends GameMode {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    /**
+     * Starts a specific round of the versus game.
+     *
+     * @param roundNum the round number to start
+     */
     public void startRound(int roundNum) {
         this.currentRound = roundNum;
         this.currentMap = brickMap.get(currentRound - 1);
-
         this.roundTimer = ROUND_DURATION;
         this.isPaused = true;
-
         this.scoreManagerP1.setScore(0.0d);
         this.scoreManagerP2.setScore(0.0d);
-
         paddle1.clearEffects();
         paddle2.clearEffects();
-
         paddle1.setX(Game.SCREEN_WIDTH / 2f - 48);
         paddle1.setY(50);
-
         paddle2.setX(Game.SCREEN_WIDTH / 2f - 48);
         paddle2.setY(800);
-
         EffectItem.clear();
         resetBalls();
     }
 
+    /**
+     * Resets both players' balls at the start of a round.
+     */
     public void resetBalls() {
         balls.clear();
-
         followPaddle1 = true;
         followPaddle2 = true;
 
@@ -119,16 +131,27 @@ public class VsMode extends GameMode {
         balls.add(ballP2);
     }
 
+    /**
+     * Ends the game and pauses gameplay.
+     */
     private void gameOver() {
         isPaused = true;
         isGameEnded = true;
     }
 
+    /**
+     * Checks whether the versus game has ended.
+     *
+     * @return true if the game has ended, false otherwise
+     */
     @Override
     public boolean isEnd() {
         return isGameEnded;
     }
 
+    /**
+     * Ends the current round and determines the winner.
+     */
     public void endRound() {
         isPaused = true;
         if (scoreManagerP1.getScore() > scoreManagerP2.getScore()) {
@@ -145,38 +168,35 @@ public class VsMode extends GameMode {
             startRound(currentRound + 1);
         }
     }
+
+    /**
+     * Updates the game logic for versus mode.
+     *
+     * @param delta time elapsed since the last frame
+     */
     @Override
     public void update(float delta) {
         handleInput();
-
         if (followPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
             ballP1.setY(paddle1.getY() + paddle1.getHeight());
-            ballP1.setAngle((float)Math.PI / 2f);
+            ballP1.setAngle((float) Math.PI / 2f);
         }
-
         if (followPaddle2) {
             ballP2.setX(paddle2.getX() + (paddle2.getWidth() / 2f) - ballP2.getWidth() / 2f);
             ballP2.setY(paddle2.getY() - ballP2.getHeight());
-            ballP2.setAngle(-(float)Math.PI / 2f);
+            ballP2.setAngle(-(float) Math.PI / 2f);
         }
-
-        if (isPaused) {
-           return;
-        }
-
+        if (isPaused) return;
         if (!followPaddle1 || !followPaddle2) {
             roundTimer -= delta;
         }
-
         if (roundTimer <= 0) {
             endRound();
             return;
         }
-
         paddle1.update(delta);
         paddle2.update(delta);
-
         currentMap.update(delta);
         EffectItem.moveItems(delta);
         EffectItem.effectCollision(paddle1, this.balls, currentMap);
@@ -197,7 +217,6 @@ public class VsMode extends GameMode {
             ball.setIn1v1(true);
             ball.update(delta);
             ball.handleWallCollision();
-
             if (ball.getY() <= 0) {
                 if (paddle1.hasShield()) {
                     ball.setY(0);
@@ -219,16 +238,13 @@ public class VsMode extends GameMode {
                     ball.setDestroyed(true);
                 }
             }
-
             if (ball.checkCollision(paddle1)) {
                 ball.collisionWith(paddle1);
                 ball.setLastHitBy(1);
-            }
-            else if (ball.checkCollision(paddle2)) {
+            } else if (ball.checkCollision(paddle2)) {
                 ball.collisionWith(paddle2);
                 ball.setLastHitBy(2);
             }
-
             for (Brick brick : currentMap.getBricks()) {
                 if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
                     brick.takeHit();
@@ -243,39 +259,39 @@ public class VsMode extends GameMode {
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
-                        } else if (ball.getLastHitBy() == 2){
+                        } else if (ball.getLastHitBy() == 2) {
                             newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
                                 0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
                             }
-
                         }
-
                         if (newEffectItem != null) {
                             EffectItem.addEffectItem(newEffectItem);
                         }
-
                         if (ball.getLastHitBy() == 1) {
                             scoreManagerP1.comboScore(brick);
                         } else {
                             scoreManagerP2.comboScore(brick);
                         }
-
                         brick.setDestroyed(true);
                     }
                     break;
                 }
             }
-
         }
         balls.removeIf(Ball::isDestroyed);
-
         if (currentMap.getSize() == 0 || balls.isEmpty()) {
             endRound();
         }
     }
 
+    /**
+     * Renders the versus game mode.
+     *
+     * @param sp the SpriteBatch for rendering
+     * @param delta time elapsed since the last frame
+     */
     @Override
     public void render(SpriteBatch sp, float delta) {
         this.update(delta);
@@ -286,6 +302,9 @@ public class VsMode extends GameMode {
         gameScreen.render();
     }
 
+    /**
+     * Processes user input for both players.
+     */
     @Override
     public void handleInput() {
         if (inputHandler != null) {
@@ -293,6 +312,11 @@ public class VsMode extends GameMode {
         }
     }
 
+    /**
+     * Draws all entities for the versus mode.
+     *
+     * @param sp the SpriteBatch used for drawing
+     */
     @Override
     public void draw(SpriteBatch sp) {
         sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
@@ -304,7 +328,6 @@ public class VsMode extends GameMode {
                 Game.SCREEN_WIDTH - 2 * Game.padding_left_right,
                 5);
         }
-
         if (paddle2.hasShield()) {
             sp.draw(TextureManager.lineTexture,
                 Game.padding_left_right, Game.padding_top - 5,
@@ -314,11 +337,9 @@ public class VsMode extends GameMode {
         if (followPaddle1) {
             ballP1.draw(sp);
         }
-
         if (followPaddle2) {
             ballP2.draw(sp);
         }
-
         for (Ball ball : balls) {
             ball.draw(sp);
         }
@@ -326,24 +347,39 @@ public class VsMode extends GameMode {
         paddle2.draw(sp);
     }
 
-
-
+    /**
+     * Indicates that this mode is a PvP (versus) mode.
+     *
+     * @return true always
+     */
     @Override
     public boolean isPvP() {
         return true;
     }
 
+    /**
+     * Gets player one's paddle.
+     *
+     * @return paddle of player 1
+     */
     @Override
     public Paddle getPaddle1() {
         return this.paddle1;
     }
 
+    /**
+     * Gets player two's paddle.
+     *
+     * @return paddle of player 2
+     */
     @Override
     public Paddle getPaddle2() {
         return this.paddle2;
     }
 
-
+    /**
+     * Launches player one's ball.
+     */
     @Override
     public void launchBall() {
         if (followPaddle1) {
@@ -352,6 +388,9 @@ public class VsMode extends GameMode {
         }
     }
 
+    /**
+     * Launches player two's ball.
+     */
     @Override
     public void launchBallP2() {
         if (followPaddle2) {
