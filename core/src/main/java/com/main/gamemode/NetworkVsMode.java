@@ -10,7 +10,6 @@ import com.main.network.NetworkProtocol;
 import entity.*;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
-import entity.object.brick.BrickType;
 
 import java.util.ArrayList;
 

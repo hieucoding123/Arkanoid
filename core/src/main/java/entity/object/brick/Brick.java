@@ -116,7 +116,8 @@ public class Brick extends MovableObject {
         com.main.Game.sfx_pop.play();
         this.hitPoints--;
         if (this.hitPoints == 1) {
-            this.texture = TextureManager.brickTextures.get(BrickType.T1HIT);
+            this.brickType = BrickType.T1HIT;
+            this.texture = TextureManager.brickTextures.get(brickType);
         }
     }
 
