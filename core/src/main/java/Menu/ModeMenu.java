@@ -16,6 +16,13 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
+/**
+ * <li>Represents the menu that allows the player to select a game mode (Mode Menu).</li>
+ * <li>Modes include
+ * {@link SinglePlayerLevelSelectionMenu},
+ * {@link CoopPlayerLevelSelectionMenu},
+ * {@link com.main.gamemode.InfiniteMode} and {@link VsMenu}.</li>
+ */
 public class ModeMenu extends UserInterface {
 
     private Skin levelsSkin;

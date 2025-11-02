@@ -165,6 +165,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         updatePlayerStatus();
     }
 
+    /**
+     * Create a quit button,
+     * If it is clicked, quit lobby
+     * @return quit button
+     */
     private TextButton createQuitButton() {
         TextButton button = new TextButton("QUIT", textOnlyButtonStyle);
         button.addListener(new ClickListener() {
@@ -176,6 +181,11 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         return button;
     }
 
+    /**
+     * Create ready button,
+     * if it is clicked, ready to play game
+     * @return ready button
+     */
     private TextButton createReadyButton() {
         TextButton button = new TextButton("READY", textOnlyButtonStyle);
         button.setDisabled(true);
@@ -203,11 +213,17 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         }
     }
 
+    /**
+     * Quit lobby, client disconnect with server
+     */
     private void quitLobby() {
         client.disconnect();
         getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
     }
 
+    /**
+     * Update players status in lobby (label, button)
+     */
     private void updatePlayerStatus() {
         if (player1Connected) {
             player1StatusLabel.setText("Connected!");
@@ -224,6 +240,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         } else {
             player1StatusLabel.setText("Waiting...");
             player1StatusLabel.setColor(Color.GRAY);
+            // visible label "READY!"
             player1ReadyLabel.setVisible(false);
         }
 
@@ -242,15 +259,8 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         } else {
             player2StatusLabel.setText("Waiting...");
             player2StatusLabel.setColor(Color.GRAY);
+            // visible label "READY!"
             player2ReadyLabel.setVisible(false);
-        }
-
-        if (myReadyButton != null) {
-            boolean allPlayersConnected = player1Connected && player2Connected;
-
-            // Kích hoạt nút NẾU: Cả 2 đã kết nối VÀ client này chưa nhấn Ready
-            // Vô hiệu hóa nút NẾU: Một trong hai chưa kết nối HOẶC client này đã nhấn Ready rồi
-            myReadyButton.setDisabled(!allPlayersConnected || myReady);
         }
         updateWaittingMessage();
     }
@@ -298,6 +308,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onMessage(String message) {
         System.out.println("Lobby message: " + message);
 
+        // message format: PLAYER_DISCONNECTED: 1
         if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");
