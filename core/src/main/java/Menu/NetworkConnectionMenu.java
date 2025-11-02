@@ -22,6 +22,76 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * UI menu for establishing network multiplayer connections.
+ *
+ * <p>This class provides the user interface for hosting or joining multiplayer
+ * games. It handles connection setup for both hosts and clients.</p>
+ *
+ * <h2>Menu Features:</h2>
+ * <ul>
+ *   <li><b>Host Game:</b> Start a local server and display connection info</li>
+ *   <li><b>Refresh List:</b> Discover opening servers and display room name in scroll bar</li>
+ *   <li><b>Join Game:</b> Connect to a remote server by IP address</li>
+ *   <li><b>Copy to Clipboard:</b> One-click IP copying for sharing with friends</li>
+ *   <li><b>Connection Status:</b> Real-time feedback on connection attempts</li>
+ * </ul>
+ *
+ * <h2>User Flows:</h2>
+ *
+ * <h3>Host Flow:</h3>
+ * <ol>
+ *   <li>User clicks "Host Game"</li>
+ *   <li>Server starts in background thread</li>
+ *   <li>User clicks "Refresh List" to discover all opening servers and click to choose</li>
+ *   <li>Or user clicks to textbox to enter IP Address of server</li>
+ *   <li>Click to "Join game" to join in server</li>
+ *   <li>When ready, automatically transitions to lobby</li>
+ * </ol>
+ *
+ * <h3>Join Flow:</h3>
+ * <ol>
+ *   <li>User receives IP from host</li>
+ *   <li>User clicks "Refresh List" and choose opening room</li>
+ *   <li>User enters IP in text field</li>
+ *   <li>User clicks "Join Game"</li>
+ *   <li>Client attempts connection (shows "Connecting...")</li>
+ *   <li>On success, transitions to lobby</li>
+ *   <li>On failure, shows error message</li>
+ * </ol>
+ *
+ * <h2>Network Setup Guidance:</h2>
+ * <p>The menu provides context-aware information:</p>
+ * <ul>
+ *   <li><b>LAN Play:</b> Displays local IP (192.168.x.x) for same-network players</li>
+ *   <li><b>Internet Play:</b> Displays public IP but warns about port forwarding requirements</li>
+ *   <li><b>Troubleshooting:</b> Links to network configuration help (optional)</li>
+ * </ul>
+ * <h2>Error Handling:</h2>
+ * <p>The menu provides user-friendly error messages for common issues:</p>
+ * <ul>
+ *   <li>"Server is full" - 2 players already connected</li>
+ *   <li>"Connection timeout" - Server unreachable</li>
+ *   <li>"Invalid IP address" - Malformed IP input</li>
+ *   <li>"Version mismatch" - Client/server protocol mismatch</li>
+ * </ul>
+ *
+ * <h2>Integration Example:</h2>
+ * <pre>
+ * // In Game.java state management
+ * case NETWORK_CONNECTION_MENU:
+ *     ui = new NetworkConnectionMenu(main, player);
+ *     ui.create();
+ *     Gdx.input.setInputProcessor(ui.getStage());
+ *     break;
+ * </pre>
+ *
+ * @see NetworkUtils Utility for retrieving IP addresses
+ * @see com.main.network.GameServer Server started by "Host Game"
+ * @see com.main.network.GameClient Client created by "Join Game"
+ * @see NetworkLobby Next screen after successful connection
+ */
+
 public class NetworkConnectionMenu extends  UserInterface{
     private List<String> serversList;
     private final HashMap<String, InetAddress> foundServers;

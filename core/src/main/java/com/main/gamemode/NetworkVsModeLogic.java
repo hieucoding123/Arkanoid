@@ -11,6 +11,57 @@ import entity.object.brick.BricksMap;
 
 import java.util.ArrayList;
 
+/**
+ * Network Versus Mode game logic for 1v1 multiplayer Arkanoid battles.
+ *
+ * <p>This class implements a competitive two-player game mode where players compete
+ * head-to-head to break bricks and score points. Each player controls their own paddle
+ * and ball in a shared arena.</p>
+ *
+ * <h2>Game Rules:</h2>
+ * <ul>
+ *   <li><b>Players:</b> 2 players competing against each other</li>
+ *   <li><b>Setup:</b> Each player has their own paddle and ball on opposite sides of the screen</li>
+ *   <li><b>Ball Respawn:</b> When a player's ball falls off their side, it respawns at their paddle
+ *       (no lives lost - continuous play)</li>
+ *   <li><b>Scoring:</b> Players earn points by breaking bricks. Bricks broken by your ball add to your score</li>
+ *   <li><b>Round End Conditions:</b>
+ *     <ul>
+ *       <li>Time runs out (60 seconds per round)</li>
+ *       <li>All bricks are destroyed</li>
+ *     </ul>
+ *   </li>
+ *   <li><b>Round Winner:</b> Player with the highest score at the end of the round wins that round</li>
+ * </ul>
+ *
+ * <h2>Match Structure:</h2>
+ * <ul>
+ *   <li><b>Total Rounds:</b> Best of 3 (maximum 3 rounds)</li>
+ *   <li><b>Victory Condition:</b> First player to win 2 rounds wins the match</li>
+ *   <li><b>Tie-breaker:</b> If tied 1-1, the third round determines the winner</li>
+ * </ul>
+ *
+ * <h2>Network Architecture:</h2>
+ * <p>This class handles the server-side game logic. It runs on the host machine and:</p>
+ * <ul>
+ *   <li>Processes input from both players (received via network)</li>
+ *   <li>Updates game physics and collision detection</li>
+ *   <li>Manages round progression and scoring</li>
+ *   <li>Broadcasts game state to all connected clients for rendering</li>
+ * </ul>
+ *
+ * <h2>Example Flow:</h2>
+ * <pre>
+ * Round 1: Player 1 scores 1500, Player 2 scores 1200 → Player 1 wins (1-0)
+ * Round 2: Player 1 scores 1000, Player 2 scores 1800 → Player 2 wins (1-1)
+ * Round 3: Player 1 scores 2000, Player 2 scores 1500 → Player 1 wins match (2-1)
+ * </pre>
+ *
+ * @see NetworkVsMode Client-side rendering counterpart
+ * @see com.main.network.GameServer Network server that uses this logic
+ * @see VsMode Local version of this game mode
+ */
+
 public class NetworkVsModeLogic extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
@@ -48,7 +99,8 @@ public class NetworkVsModeLogic extends GameMode {
     @Override
     public void create() {
 
-        for (int i = 1; i <= 3; i++) {
+        // Create brickMaps
+        for (int i = 1; i <= MAX_ROUNDS; i++) {
             String mapPath = "/maps/map_vs" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
         }
@@ -59,6 +111,10 @@ public class NetworkVsModeLogic extends GameMode {
         startRound(1);
     }
 
+    /**
+     * Start new round.
+     * @param roundNum round want to start
+     */
     public void startRound(int roundNum) {
         this.currentRound = roundNum;
         this.currentMap = brickMap.get(currentRound - 1);
@@ -102,6 +158,9 @@ public class NetworkVsModeLogic extends GameMode {
         balls.add(ballP2);
     }
 
+    /**
+     * Pause game, set game ended.
+     */
     private void gameOver() {
         isPaused = true;
         isGameEnded = true;
@@ -131,8 +190,6 @@ public class NetworkVsModeLogic extends GameMode {
     }
     @Override
     public void update(float delta) {
-//        handleInput();
-
         if (flowPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
             ballP1.setY(paddle1.getY() + paddle1.getHeight());
@@ -169,6 +226,7 @@ public class NetworkVsModeLogic extends GameMode {
             ball.update(delta);
             ball.handleWallCollision();
 
+            // Ball is ballP1
             if (ball == ballP1 && ball.isDestroyed()) {
                 ball.setDestroyed(false);
                 ball.setX(paddle1.getX() + paddle1.getWidth() / 2f - 12);

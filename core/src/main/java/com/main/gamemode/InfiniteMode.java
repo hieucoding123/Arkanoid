@@ -166,6 +166,7 @@ public class InfiniteMode extends GameMode {
 
         // Proceed to next map
         if (currentMap.getBricks().isEmpty()) {
+            // Bonus 1 live when win a round, total lives <= 3
             lives = Math.min(lives + 1, 3);
             currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
             currentMap = new BricksMap(maps.get(currentIdx));
@@ -206,6 +207,7 @@ public class InfiniteMode extends GameMode {
         EffectItem.drawEffectItems(sp);
 
         if (ShieldEffect.isShield()) {
+            // Draw shield if shield is activating
             sp.draw(
                 TextureManager.lineTexture, Game.padding_left_right,
                 0,
@@ -223,6 +225,7 @@ public class InfiniteMode extends GameMode {
      */
     public void reset() {
         balls.clear();
+        // Add new ball and put it on paddle
         balls.add(new Ball(
             paddle.getX() + (paddle.getWidth() / 2f) - 12,
             paddle.getY() + paddle.getHeight(),
