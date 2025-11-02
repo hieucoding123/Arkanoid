@@ -2,9 +2,10 @@
 *OOP UET-VNU course project*
 
 ## Structure
-
-### [Structure Title 1 - e.g., Class Diagram]
-### [Structure Title 2 - e.g., Game Flow]
+### InheritanceScheme
+![ArkanoidInheritanceScheme.png](assets/version/ArkanoidInheritanceScheme.png)
+### InnerClasses
+![ArkanoidInnerClass.png](assets/version/ArkanoidInnerClass.png)
 ---
 
 ## Demo
@@ -18,7 +19,7 @@
 * Implemented game state saving (on exit) using `GameSaveManager` and `GameData`.
 * Refactored collision handling with a new `CollisionManager`.
 * Centralized in-game input processing into `IngameInputHandler`.
-* Developed a network multiplayer mode (based on `VsMode` logic) using the **Kryo** library.
+* Developed a network multiplayer mode (based on `VsMode` logic) using the **Kryonet** library.
 * Added sound effects and music to the game.
 * Implemented player achievement saving using `CoopDataHandler` and `LevelDataHandler`.
 * Added pause functionality (`PauseUI`), a post-game summary screen (`GameSummaryScreen`), and game over flows (`GameOver`).
@@ -27,9 +28,39 @@
 
 ## Contributors
 
-(Dưới đây là 4 mục bạn yêu cầu, dựa trên file README cũ. Bạn hãy điền phần tổng hợp cuối cùng vào nhé.)
+* **Nguyen Quang Linh**
+    * Implemented **LevelMode** and related menus (`LevelSelectionMenu`, `SinglePlayerLevelSelectionMenu`).
+    * Handled game **pause** and **resume** functionality.
+    * Implemented the game **saving** feature (`GameSaver`).
+    * Laid the foundation for saving player achievements (`DataHandler`, `BaseLevelDataHandler`).
+    * Created and managed effects: `FastBall`, `Random`, `Remove`, `Shield`, `SlowBall`, `StunPaddle`, `UnbreakBrick`.
+    * Developed the **Pause UI** (`PauseUI`).
+    * Implemented **Moving Bricks** (using DSU for logic).
+    * Handled **Explosive Bricks** logic.
 
-* **Nguyen Quang Linh**: [Add final summary of contributions here]
-* **Nguyen Tuan Huy**: [Add final summary of contributions here]
-* **Duong Hai Khoi**: [Add final summary of contributions here]
-* **Pham Tran Hieu**: [Add final summary of contributions here]
+* **Nguyen Tuan Huy**
+    * Developed the **Game UI**: Created stages for menus and settings (`MainMenu`, `Settings`, `ModeSelection`, `UserInterface`, `GameScreen`, `GameSummaryScreen`, etc.).
+    * Sourced and managed **visual assets**: skins/images for buttons, bricks, paddles, game icons, effect icons, and bitmap fonts.
+    * Sourced and managed **audio assets**: all SFX and background music.
+    * Implemented **collision handling**: Developed the `CollisionManager` and integrated it into all game modes.
+    * Managed **player input**: Developed the `IngameInputHandler` and applied it across game modes.
+    * Implemented the **Co-op Mode** (`CoopMode`).
+
+* **Duong Hai Khoi**
+    * Implemented **VsMode** and `NetworkVsModeLogic`.
+    * Modified ball and shield effects to be player-specific (for multiplayer).
+    * Implemented the `ScoreManager`.
+    * Created and managed `BigBallEffect` and `ExpandEffect`.
+    * Implemented the `TextureManager` class.
+    * Laid the foundation for core classes: `MovableObject`, `Ball`, and `Paddle`.
+
+* **Pham Tran Hieu**
+    * Implemented the **InfiniteMode**.
+    * Implemented achievement saving for Infinite Mode (`InfiDataHandler`).
+    * Implemented `LeaderBoard` and `Player` classes.
+    * Created and managed the `ThreeBallEffect`.
+    * Implemented the `ModeMenu`.
+    * Laid the foundation for base classes: `GameObject`, `BrickMap`, `Brick`, `EffectItem`, `EffectFactory`, `GameMode`, and `Main`.
+    * Implemented the main `Game` class to manage game states.
+    * Implemented **NetworkVsMode** and the core **networking system** (`NetworkProtocol`, `GameServer`, `GameClient`, `GameClientListener`, `NetworkConnectionMenu`, `NetworkLobby`, `NetworkUtils`).
+    * Set up **Unit Tests** using JUnit.
