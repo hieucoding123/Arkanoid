@@ -8,6 +8,7 @@ import entity.object.Paddle;
 public class IngameInputHandler extends InputAdapter {
 
     private final GameMode currentMode;
+    private final boolean isPvP;
 
     //Paddles Movements
     private boolean paddle1Left = false;
@@ -24,6 +25,7 @@ public class IngameInputHandler extends InputAdapter {
      */
     public IngameInputHandler(GameMode currentMode) {
         this.currentMode = currentMode;
+        this.isPvP = currentMode.isPvP();
     }
 
     /**
@@ -62,11 +64,23 @@ public class IngameInputHandler extends InputAdapter {
     @Override
     public boolean keyDown(int keycode) {
 
-        if(keycode == Input.Keys.SPACE) {
-            currentMode.launchBall();
-            currentMode.isStart(true);
-            return true;
+        if (isPvP) {
+            if (keycode == Input.Keys.W) {
+                currentMode.launchBall();
+                return true;
+            }
+            if (keycode == Input.Keys.UP) {
+                currentMode.launchBallP2();
+                return true;
+            }
+        } else {
+            if(keycode == Input.Keys.SPACE) {
+                currentMode.launchBall();
+                currentMode.isStart(true);
+                return true;
+            }
         }
+
 
         switch (keycode) {
             case Input.Keys.A:

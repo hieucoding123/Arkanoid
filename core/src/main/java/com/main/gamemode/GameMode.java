@@ -184,4 +184,12 @@ public abstract class GameMode {
 
     public void dispose() {
     }
+
+    /**
+     * Checks if the current game mode is Player-vs-Player (offline).
+     * @return true if PvP, false otherwise.
+     */
+    public boolean isPvP() { return false; }
+
+    public void launchBallP2() {}
 }

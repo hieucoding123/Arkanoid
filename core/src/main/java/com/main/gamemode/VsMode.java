@@ -1,9 +1,11 @@
 package com.main.gamemode;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Input.Keys;
 import com.main.Game;
+import com.main.components.IngameInputHandler;
 import com.main.gamescreen.VsGameScreen;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
@@ -64,6 +66,12 @@ public class VsMode extends GameMode {
         paddle1 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 50, TextureManager.paddleTexture, false);
         paddle2 = new Paddle(Game.SCREEN_WIDTH / 2f - 48, 800, TextureManager.flippedpaddleTexture, true);
         startRound(1);
+
+        this.inputHandler = new IngameInputHandler(this);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(gameScreen.getStage());
+        multiplexer.addProcessor(this.inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     public void startRound(int roundNum) {
@@ -258,7 +266,6 @@ public class VsMode extends GameMode {
 
     @Override
     public void render(SpriteBatch sp, float delta) {
-        this.handleInput();
         this.update(delta);
         gameScreen.setTime(roundTimer);
         gameScreen.setScores(scoreManagerP1.getScore(), roundsWonP1,
@@ -269,51 +276,8 @@ public class VsMode extends GameMode {
 
     @Override
     public void handleInput() {
-//        if (isPaused && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-//            isPaused = false;
-//            return;
-//        }
-
-//        if (isPaused) {
-//            return;
-//        }
-
-        //Press LEFT paddle1
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A)) {
-            paddle1.moveLeft();
-        }
-
-        //Press RIGHT paddle1
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D)) {
-            paddle1.moveRight();
-        }
-
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle1.setVelocity(0, 0);
-        }
-
-        //Press LEFT paddle 2
-        if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) {
-            paddle2.moveLeft();
-        }
-        //Press RIGHT paddle 2
-        else if (Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) {
-            paddle2.moveRight();
-        }
-        //IF NO PRESS KEEP IT STAND
-        else {
-            paddle2.setVelocity(0, 0);
-        }
-
-        if (followPaddle1 && Gdx.input.isKeyJustPressed(Keys.W)) {
-            followPaddle1 = false;
-            isPaused = false;
-        }
-
-        if (followPaddle2 && Gdx.input.isKeyJustPressed(Keys.UP)) {
-            followPaddle2 = false;
-            isPaused = false;
+        if (inputHandler != null) {
+            inputHandler.processMovement();
         }
     }
 
@@ -350,14 +314,37 @@ public class VsMode extends GameMode {
         paddle2.draw(sp);
     }
 
+
+
+    @Override
+    public boolean isPvP() {
+        return true;
+    }
+
     @Override
     public Paddle getPaddle1() {
         return this.paddle1;
     }
 
     @Override
-    public void launchBall() {
-        // DO NOTHING.
+    public Paddle getPaddle2() {
+        return this.paddle2;
     }
 
+
+    @Override
+    public void launchBall() {
+        if (followPaddle1) {
+            followPaddle1 = false;
+            isPaused = false;
+        }
+    }
+
+    @Override
+    public void launchBallP2() {
+        if (followPaddle2) {
+            followPaddle2 = false;
+            isPaused = false;
+        }
+    }
 }
