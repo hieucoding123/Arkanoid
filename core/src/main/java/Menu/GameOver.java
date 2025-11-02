@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import com.main.network.GameClient;
-import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import entity.Player;
 
@@ -31,8 +30,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
     private int myPNumber;
     private final int p1Score;
     private final int p2Score;
-    private Label p1Status;
-    private Label p2Status;
     private TextButton myQuitButton;
     private TextButton.TextButtonStyle textOnlyButtonStyle;
     private boolean hasQuit = false;
@@ -109,10 +106,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
             myQuitButton = createQuitButton();
             player1Table.add(myQuitButton).width(120).height(40).padTop(10).row();
         }
-        p1Status = new Label("QUIT", this.getSkin());
-        p1Status.setColor(Color.GRAY);
-        p1Status.setVisible(false);
-        player1Table.add(p1Status).colspan(1).row();
 
         mainTable.add(player1Table).width(250).padRight(20);
 
@@ -133,10 +126,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
             myQuitButton = createQuitButton();
             player2Table.add(myQuitButton).width(120).height(40).padTop(10).row();
         }
-        p2Status = new Label("QUIT", this.getSkin());
-        p2Status.setColor(Color.GRAY);
-        p2Status.setVisible(false);
-        player2Table.add(p2Status).colspan(1).row();
 
         mainTable.add(player2Table).width(250).padRight(20).row();
 
@@ -159,11 +148,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
             return;
         hasQuit = true;
         myQuitButton.setDisabled(true);
-        if (myPNumber == 1) {
-            p1Status.setVisible(true);
-        } else if (myPNumber == 2) {
-            p2Status.setVisible(true);
-        }
         client.disconnect();
         getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
     }
@@ -188,25 +172,31 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         if (hasQuit)
             return;
         System.out.println("Disconnected from game over: " + reason);
-        Gdx.app.postRunnable(() -> {
-            getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
-        });
+        handleRemoteDisconnect();
     }
 
     @Override
     public void onMessage(String message) {
-        if (message.equals("PLAYER_DISCONNECTED: ")) {
-            new Thread(() -> {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Gdx.app.postRunnable(() -> {
-                    getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
-                });
-            }).start();
+        if (hasQuit) return;
+
+        if (message.startsWith("PLAYER_DISCONNECTED:")) {
+            handleRemoteDisconnect();
         }
+    }
+
+    /**
+     * Handle disconnect with Server
+     */
+    private void handleRemoteDisconnect() {
+        if (hasQuit) return;
+
+        hasQuit = true;
+        Gdx.app.postRunnable(() -> {
+            if (client.isConnected()) {
+                client.disconnect();
+            }
+            getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
+        });
     }
 
     @Override

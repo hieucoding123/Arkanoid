@@ -191,8 +191,5 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     }
 
     public void dispose() {
-        if (client != null) {
-            client.disconnect();
-        }
     }
 }
