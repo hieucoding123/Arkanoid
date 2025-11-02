@@ -396,6 +396,9 @@ public class Game {
                 break;
             case VS_MODE:
                 gameMode.update(this.delta);
+                if (gameMode != null && gameMode.isEnd()) {
+                    setGameState(GameState.VS_MENU);
+                }
                 break;
             case GAME_OVER:
                 break;
