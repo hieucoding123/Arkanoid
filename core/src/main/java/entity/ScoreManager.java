@@ -79,7 +79,7 @@ public class ScoreManager {
      * Score deduction when ball fell out of screen.
      */
     public void deduction() {
-        score = Math.max(0, score - 500);
+        score = 0.8 * score;
     }
 
     /**
