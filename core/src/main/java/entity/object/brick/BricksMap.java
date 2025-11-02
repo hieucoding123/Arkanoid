@@ -55,7 +55,7 @@ public class BricksMap {
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
                     int radom = (int)(Math.random() * 10);
-                    if (radom == 1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42 && !checkmap1Vs1) {
+                    if (radom == -1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42 && !checkmap1Vs1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,

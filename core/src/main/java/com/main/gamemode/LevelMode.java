@@ -243,6 +243,11 @@ public class LevelMode extends GameMode {
     }
 
     @Override
+    public BricksMap getCurrentMap() {
+        return this.currentMap;
+    }
+
+    @Override
     public void dispose() {
         if (gameScreen != null) {
             gameScreen.dispose();

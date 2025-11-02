@@ -1,0 +1,633 @@
+{
+score: 300
+lives: 3
+timePlayed: 3.6050541400909424
+cnt_combo: 2
+TimeLastHit: 1762088293945
+paddle1: {
+	x: 267
+	y: 50
+}
+balls: [
+	{
+		x: 305
+		y: 124.52094
+		dx: -7.86805E-6
+		dy: -180
+		angle: -1.5707964
+		speed: 180
+		originalspeed: 5
+		SlowEnd: 1762088314700
+	}
+]
+bricks: [
+	{
+		x: 95
+		y: 737
+		hitPoints: 1
+		row: 2
+		color: 1
+	}
+	{
+		x: 170
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 1
+		color: 1
+	}
+	{
+		x: 245
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 7
+		color: 1
+	}
+	{
+		x: 95
+		y: 702
+		hitPoints: 1
+		row: 3
+		color: 1
+	}
+	{
+		x: 170
+		y: 702
+		hitPoints: 2
+		row: 3
+		col: 1
+	}
+	{
+		x: 245
+		y: 702
+		hitPoints: 1
+		row: 3
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 702
+		hitPoints: 2
+		row: 3
+		col: 3
+	}
+	{
+		x: 395
+		y: 702
+		hitPoints: 1
+		row: 3
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 702
+		hitPoints: 2
+		row: 3
+		col: 5
+	}
+	{
+		x: 545
+		y: 702
+		hitPoints: 1
+		row: 3
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 702
+		hitPoints: 2
+		row: 3
+		col: 7
+	}
+	{
+		x: 95
+		y: 667
+		hitPoints: 1
+		row: 4
+		color: 1
+	}
+	{
+		x: 170
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 1
+		color: 1
+	}
+	{
+		x: 245
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 7
+		color: 1
+	}
+	{
+		x: 95
+		y: 632
+		hitPoints: 2
+		row: 5
+	}
+	{
+		x: 170
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 1
+	}
+	{
+		x: 245
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 2
+	}
+	{
+		x: 320
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 3
+	}
+	{
+		x: 395
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 4
+	}
+	{
+		x: 470
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 5
+	}
+	{
+		x: 545
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 6
+	}
+	{
+		x: 620
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 7
+	}
+	{
+		x: 95
+		y: 562
+		hitPoints: 1
+		row: 7
+		color: 1
+	}
+	{
+		x: 170
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 1
+		color: 1
+	}
+	{
+		x: 245
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 7
+		color: 1
+	}
+	{
+		x: 95
+		y: 527
+		hitPoints: 1
+		row: 8
+		color: 1
+	}
+	{
+		x: 170
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 1
+	}
+	{
+		x: 245
+		y: 527
+		hitPoints: 1
+		row: 8
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 3
+	}
+	{
+		x: 395
+		y: 527
+		hitPoints: 1
+		row: 8
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 5
+	}
+	{
+		x: 545
+		y: 527
+		hitPoints: 1
+		row: 8
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 7
+	}
+	{
+		x: 95
+		y: 492
+		hitPoints: 1
+		row: 9
+		color: 1
+	}
+	{
+		x: 170
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 1
+		color: 1
+	}
+	{
+		x: 245
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 492
+		hitPoints: 1
+		row: 9
+		col: 7
+		color: 1
+	}
+	{
+		x: 95
+		y: 457
+		hitPoints: 2
+		row: 10
+	}
+	{
+		x: 170
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 1
+	}
+	{
+		x: 245
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 2
+	}
+	{
+		x: 320
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 3
+	}
+	{
+		x: 395
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 4
+	}
+	{
+		x: 470
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 5
+	}
+	{
+		x: 545
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 6
+	}
+	{
+		x: 620
+		y: 457
+		hitPoints: 2
+		row: 10
+		col: 7
+	}
+	{
+		x: 95
+		y: 422
+		hitPoints: 1
+		row: 11
+		color: 1
+	}
+	{
+		x: 170
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 1
+		color: 1
+	}
+	{
+		x: 245
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 2
+		color: 1
+	}
+	{
+		x: 320
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 7
+		color: 1
+	}
+	{
+		x: 95
+		y: 387
+		hitPoints: 1
+		row: 12
+		color: 1
+	}
+	{
+		x: 170
+		y: 387
+		hitPoints: 1
+		row: 12
+		col: 1
+		color: 1
+	}
+	{
+		x: 395
+		y: 387
+		hitPoints: 1
+		row: 12
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 387
+		hitPoints: 1
+		row: 12
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 387
+		hitPoints: 1
+		row: 12
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 387
+		hitPoints: 1
+		row: 12
+		col: 7
+		color: 1
+	}
+]
+effectItems: [
+	{
+		x: 320
+		y: 296.04156
+		dy: -60
+		EffectType: ShieldEffect
+	}
+	{
+		x: 320
+		y: 296.04156
+		dy: -60
+		EffectType: ShieldEffect
+	}
+]
+levelNumber: {
+	class: java.lang.Integer
+	value: 0
+}
+}
