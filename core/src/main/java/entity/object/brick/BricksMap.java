@@ -54,7 +54,7 @@ public class BricksMap {
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
                     int radom = (int)(Math.random() * 10);
-                    if (radom == -1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42 && !checkmap1Vs1) {
+                    if (radom == 1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42 && !checkmap1Vs1) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,
@@ -202,7 +202,7 @@ public class BricksMap {
                     if (new_row >= 0 && new_row < rows && new_col >= 0 && new_col < cols) {
                         Brick new_brick = grid[new_row][new_col];
                         Random rand = new Random();
-                        int radom = rand.nextInt(4) + 1;
+                        int radom = rand.nextInt(2) + 1;
                         if (new_brick != null && new_brick.getExplosion() && !new_brick.isDestroyed()) {
                             save_brick.get(new_row * cols + new_col).setHitPoints(0);
                             new_brick.startExplosion();
