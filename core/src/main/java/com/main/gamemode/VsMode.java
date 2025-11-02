@@ -119,15 +119,13 @@ public class VsMode extends GameMode {
         ballP1 = new Ball(paddle1.getX() + paddle1.getWidth() / 2f - 12,
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
-            5f);
-        ballP1.setVelocity(0, 5f);
+            2.5f);
         balls.add(ballP1);
 
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
             paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
-            5f);
-        ballP2.setVelocity(0, -5f);
+            2.5f);
         balls.add(ballP2);
     }
 
@@ -176,7 +174,6 @@ public class VsMode extends GameMode {
      */
     @Override
     public void update(float delta) {
-        handleInput();
         if (followPaddle1) {
             ballP1.setX(paddle1.getX() + (paddle1.getWidth() / 2f) - ballP1.getWidth() / 2f);
             ballP1.setY(paddle1.getY() + paddle1.getHeight());

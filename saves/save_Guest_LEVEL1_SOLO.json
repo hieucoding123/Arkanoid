@@ -1,38 +1,20 @@
 {
-score: 1225
+score: 200
 lives: 3
-timePlayed: 8.75111709756311
-cnt_combo: 3
-TimeLastHit: 1762077869079
+timePlayed: 11.096463206456974
+cnt_combo: 1
+TimeLastHit: 1762097217392
 paddle1: {
-	x: 148
+	x: 95
 	y: 50
 }
 balls: [
 	{
-		x: 241.2934
-		y: 323.43967
-		dx: 259.8076
-		dy: 150.00003
-		angle: 0.5235989
-		speed: 300
-		originalspeed: 5
-	}
-	{
-		x: 99.758766
-		y: 455.21902
-		dx: 259.80765
-		dy: 149.99997
-		angle: 0.5235987
-		speed: 300
-		originalspeed: 5
-	}
-	{
-		x: 99.758766
-		y: 455.21902
-		dx: 259.80765
-		dy: 149.99997
-		angle: 0.5235987
+		x: 129.05074
+		y: 100.914154
+		dx: -259.8076
+		dy: -150.00006
+		angle: 3.6651917
 		speed: 300
 		originalspeed: 5
 	}
