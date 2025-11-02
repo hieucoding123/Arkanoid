@@ -9,7 +9,7 @@ import entity.object.brick.BricksMap;
 import java.util.ArrayList;
 
 public class FastBallEffect extends EffectItem {
-    private static final float EFFECT_DURATION = 20.0f;
+    private static final float EFFECT_DURATION = 1.0f;
 
     public FastBallEffect(float x, float y, float dy) {
         super(x, y, dy, TextureManager.FastBallTexture);
@@ -23,13 +23,13 @@ public class FastBallEffect extends EffectItem {
     @Override
     public void applyEffect(Paddle paddle, ArrayList<Ball> balls, BricksMap bricksMap) {
         Game.playSfx(Game.sfx_fastball,0.8f);
-        if (triggeringBall != null) {
-            this.triggeringBall.activateFast(EFFECT_DURATION);
-        } else {
+//        if (triggeringBall != null) {
+//            this.triggeringBall.activateFast(EFFECT_DURATION);
+//        } else {
             for (Ball ball : balls) {
                 ball.activateFast(EFFECT_DURATION);
             }
-        }
+//        }
 
         this.setDestroyed(true);
     }
