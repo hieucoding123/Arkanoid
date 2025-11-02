@@ -81,6 +81,7 @@ public class Game {
     public static Sound sfx_click;
     public static Sound sfx_back;
     public static Sound sfx_touchpaddle;
+    public static Sound sfx_hitbricked;
 
     public static float musicVolumePercent = 1.0f;
     public static float sfxVolumePercent = 1.0f;
@@ -155,6 +156,7 @@ public class Game {
         sfx_pop = Gdx.audio.newSound(Gdx.files.internal("sound/pop.mp3"));
         sfx_explode = Gdx.audio.newSound(Gdx.files.internal("sound/explode.mp3"));
         sfx_touchpaddle = Gdx.audio.newSound(Gdx.files.internal("sound/touchpaddle.mp3"));
+        sfx_hitbricked = Gdx.audio.newSound(Gdx.files.internal("sound/brickedhit.mp3"));
 
         sfx_click = Gdx.audio.newSound(Gdx.files.internal("sound/click.mp3"));
         sfx_back = Gdx.audio.newSound(Gdx.files.internal("sound/back.mp3"));
@@ -362,7 +364,6 @@ public class Game {
                     GameSaveManager.deleteSave(player, gameState, isCoopSelection);
                     GameSaveManager.deleteSave(player, gameState, isCoopSelection);
 
-                    // --- MODIFIED LOGIC ---
                     boolean playerWon = gameMode.isWin();
 
                     this.isWin = playerWon;

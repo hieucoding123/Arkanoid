@@ -111,9 +111,10 @@ public class Brick extends MovableObject {
     /** Reduces hit points when hit, and changes texture if needed. */
     public void takeHit() {
         if (unbreak) {
+            Game.playSfx(Game.sfx_hitbricked, 0.8f);
             return;
         }
-        com.main.Game.sfx_pop.play();
+        Game.playSfx(Game.sfx_pop, 0.8f);
         this.hitPoints--;
         if (this.hitPoints == 1) {
             this.brickType = BrickType.T1HIT;
