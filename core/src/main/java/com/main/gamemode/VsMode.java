@@ -108,14 +108,14 @@ public class VsMode extends GameMode {
             paddle1.getY() + paddle1.getHeight(),
             TextureManager.ballTexture,
             5f);
-        ballP1.setVelocity(0, 2.5f);
+        ballP1.setVelocity(0, 5f);
         balls.add(ballP1);
 
         ballP2 = new Ball(paddle2.getX() + paddle2.getWidth() / 2f - 12,
             paddle2.getY() - ballP1.getHeight(),
             TextureManager.ballTexture,
             5f);
-        ballP2.setVelocity(0, -2.5f);
+        ballP2.setVelocity(0, -5f);
         balls.add(ballP2);
     }
 
@@ -295,7 +295,7 @@ public class VsMode extends GameMode {
 
     @Override
     public void draw(SpriteBatch sp) {
-        sp.draw(TextureManager.bgTexture1vs1, 0, 0, 800, 1000);
+        sp.draw(TextureManager.bgTexture, 0, 0, 800, 1000);
         currentMap.draw(sp);
         EffectItem.drawEffectItems(sp);
         if (paddle1.hasShield()) {

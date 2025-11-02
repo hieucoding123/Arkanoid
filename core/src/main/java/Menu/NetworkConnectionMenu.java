@@ -93,7 +93,7 @@ import java.util.HashMap;
  */
 
 public class NetworkConnectionMenu extends  UserInterface{
-    private List<String> serversList;
+    private List<String> serversList;   // List of room code
     private final HashMap<String, InetAddress> foundServers;
     private TextField ipAddressField; // <-- VARIABLE ADDED
 
@@ -152,7 +152,7 @@ public class NetworkConnectionMenu extends  UserInterface{
         serversList = new List<>(this.getSkin());
         ScrollPane serversListScrollPane = new ScrollPane(serversList, this.getSkin());
         serversListScrollPane.setFadeScrollBars(false);
-        serversListScrollPane.setSize(270, 130);
+        serversListScrollPane.setSize(400, 130);
         serversListScrollPane.setDebug(true);
 
         // Refresh button
@@ -288,6 +288,7 @@ public class NetworkConnectionMenu extends  UserInterface{
                     for (InetAddress host : hosts) {
                         String IP = host.getHostAddress();
 
+                        // Encoder IP Address -> Room Code
                         int roomCode = Math.abs(IP.hashCode() % 10000);
                         String displayName = String.format("Room #%04d", roomCode); // last 4 chars
                         foundServers.put(displayName, host);
