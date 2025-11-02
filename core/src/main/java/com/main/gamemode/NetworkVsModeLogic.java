@@ -63,7 +63,7 @@ import java.util.ArrayList;
  */
 
 public class NetworkVsModeLogic extends GameMode {
-    private static final float ROUND_DURATION = 10.0f;
+    private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
 
     private Paddle paddle1;
