@@ -17,6 +17,11 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
+/**
+ * <li>Represents the game's Main Menu.</li>
+ * <li>It allows the player to enter a name, select a game, go to settings, view rankings
+ * and exit the game.</li>
+ */
 public class MainMenu extends UserInterface {
     private TextField textField;
     private Skin textFieldSkin;

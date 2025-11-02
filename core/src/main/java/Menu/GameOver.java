@@ -17,9 +17,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.main.GameState;
 import com.main.Main;
 import com.main.network.GameClient;
+import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import entity.Player;
 
+/**
+ * <li>Represents the 'GAME OVER' screen in a network game.</li>
+ * <li>It displays the result (win/lose/draw) of a game between two players,
+ * allows players to exit, and handles network events like disconnections.</li>
+ */
 public class GameOver extends UserInterface implements GameClient.GameClientListener {
     private final GameClient client;
     private int myPNumber;
@@ -172,9 +178,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
 
     }
 
-    /**
-     *
-     */
     @Override
     public void onGameStarted() {
 

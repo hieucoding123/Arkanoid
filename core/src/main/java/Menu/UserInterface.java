@@ -17,6 +17,13 @@ import com.main.Game;
 import com.main.Main;
 import entity.Player;
 
+/**
+ * Abstract base class for all User Interfaces and Menus.
+ * <li>This class extends {@link ApplicationAdapter} and provides common methods<li>
+ * for managing Stage, Skin, Font, and background display.
+ * <li>It also provides utility methods for creating clickable labels
+ * that act like buttons.<li>
+ */
 public class UserInterface extends ApplicationAdapter {
     private Stage stage;
     private final Main main;
