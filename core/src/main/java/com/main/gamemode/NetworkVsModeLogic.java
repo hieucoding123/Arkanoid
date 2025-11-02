@@ -101,7 +101,7 @@ public class NetworkVsModeLogic extends GameMode {
 
         // Create brickMaps
         for (int i = 1; i <= MAX_ROUNDS; i++) {
-            String mapPath = "/maps/map_vs" + i + ".txt";
+            String mapPath = "/maps/vs_onl_maps/map" + i + ".txt";
             brickMap.add(new BricksMap(mapPath));
         }
 

@@ -143,7 +143,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
             Brick brick = new Brick(
                 brickState.x, brickState.y,
                 brickState.hitPoints, brickState.isExploding,
-                0, 0, 0, TextureManager.brick1HIT
+                0, 0, 0, brickState.type
             );
             localBricks.add(brick);
         }

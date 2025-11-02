@@ -2,6 +2,7 @@ package com.main.network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import entity.object.brick.BrickType;
 
 import java.util.ArrayList;
 
@@ -136,6 +137,7 @@ public class NetworkProtocol {
         kryo.register(BallState.class, 70);
         kryo.register(PaddleState.class, 71);
         kryo.register(BrickState.class, 72);
+        kryo.register(BrickType.class, 73);
         // Java collections: 80-89
         kryo.register(ArrayList.class, 80);
         kryo.register(java.util.HashMap.class, 81);
@@ -305,6 +307,7 @@ public class NetworkProtocol {
         public int hitPoints;
         public boolean isDestroyed;
         public boolean isExploding;
+        public BrickType type;
 
         public BrickState() {}
     }

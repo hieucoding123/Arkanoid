@@ -191,7 +191,7 @@ public class GameServer {
                 brickState.height = brick.getHeight();
                 brickState.isDestroyed = brick.isDestroyed();
                 brickState.hitPoints = brick.gethitPoints();
-//                brickState.texture = brick.getTexture();
+                brickState.type = brick.getType();
                 brickState.isExploding = brick.isExploding();
                 update.bricks.add(brickState);
             }

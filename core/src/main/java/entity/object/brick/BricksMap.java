@@ -63,7 +63,7 @@ public class BricksMap {
                             true,
                             i, j,
                             color,
-                            TextureManager.brickexplo));
+                            BrickType.EXPLO));
                     }
                     else if (color == 1) {
                         bricks.add(new Brick(
@@ -73,7 +73,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick1HIT));
+                            BrickType.T1HIT));
                     } else if (color == 0) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
@@ -82,7 +82,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick2HIT));
+                            BrickType.T2HIT));
                     } else if (color == 31) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
@@ -91,7 +91,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick1HIT));
+                            BrickType.T1HIT));
                         bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
                     } else if (color == 32) {
                         bricks.add(new Brick(
@@ -101,7 +101,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick2HIT));
+                            BrickType.T2HIT));
                         bricks.get(bricks.size() - 1).setMovement(1.5f, BricksMap.brickW);
                     } else if (color == 41) {
                         check_dsu = true;
@@ -112,7 +112,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick1HIT));
+                            BrickType.T1HIT));
                         brick_dsu.add(bricks.get(bricks.size() - 1));
                         brickdsu[i][j] = bricks.get(bricks.size() - 1);
                     } else if (color == 42) {
@@ -124,7 +124,7 @@ public class BricksMap {
                             false,
                             i, j,
                             color,
-                            TextureManager.brick2HIT));
+                            BrickType.T2HIT));
                         brick_dsu.add(bricks.get(bricks.size() - 1));
                         brickdsu[i][j] = bricks.get(bricks.size() - 1);
                     }
