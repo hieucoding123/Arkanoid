@@ -17,10 +17,10 @@ import java.util.*;
 public class BricksMap {
     public final int rows = 15;
     public final int cols = 8;
-    public static final int xBeginCoord = 90;
-    public static final int yBeginCoord = 810;
-    public static final int brickW = 77;
-    public static final int brickH = 36;
+    public static final int xBeginCoord = 95;
+    public static final int yBeginCoord = 807;
+    public static final int brickW = 75;
+    public static final int brickH = 35;
     private final int[] r = {-1, 1, 0, 0};
     private final int[] c = {0, 0, -1, 1};
     private DSU dsu;
@@ -54,7 +54,7 @@ public class BricksMap {
                 for (int j = 0; j < cols; j++) {
                     int color = Integer.parseInt(line[j]);
                     int radom = (int)(Math.random() * 10);
-                    if (radom == -1 && color != -1) {
+                    if (radom == 1 && color != -1 && color != 31 && color != 32 && color != 41 && color != 42) {
                         bricks.add(new Brick(
                             xBeginCoord + j * brickW,
                             yBeginCoord - i * brickH,

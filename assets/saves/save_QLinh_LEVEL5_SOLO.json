@@ -1,0 +1,27 @@
+{
+score: 160
+lives: 2
+timePlayed: 4.806555501418188
+followPaddle: true
+cnt_combo: 1
+TimeLastHit: 1762068935008
+paddle1: {
+	x: 344
+	y: 50
+}
+balls: [
+	{
+		x: 382
+		y: 70.31837
+		dx: -1.3113417E-5
+		dy: 300
+		angle: 1.5707964
+		speed: 300
+		originalspeed: 5
+	}
+]
+levelNumber: {
+	class: java.lang.Integer
+	value: 5
+}
+}
