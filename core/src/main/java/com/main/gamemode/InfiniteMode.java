@@ -152,7 +152,7 @@ public class InfiniteMode extends GameMode {
                 // Chance generate effect item
                 double chance = generateChance();
                 EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
-                    hitBrick, paddle, ball,
+                    false, hitBrick, paddle, ball,
                     chance * 1, chance * 4, chance * 5, chance * 2, chance * 3,
                     chance * 6, chance * 7, chance * 8, chance * 9, chance * 10
                 );
