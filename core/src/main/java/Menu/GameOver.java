@@ -81,6 +81,7 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         mainTable.setFillParent(true);
         this.getStage().addActor(mainTable);
 
+        // Background
         mainTable.setBackground(
             new TextureRegionDrawable(new TextureRegion(this.getBGTexture()))
         );
@@ -128,8 +129,6 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
         }
 
         mainTable.add(player2Table).width(250).padRight(20).row();
-
-
     }
 
     private TextButton createQuitButton() {
@@ -148,6 +147,7 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
             return;
         hasQuit = true;
         myQuitButton.setDisabled(true);
+        // Disconnect server
         client.disconnect();
         getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
     }
@@ -185,7 +185,7 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
     }
 
     /**
-     * Handle disconnect with Server
+     * Handle disconnect with Server.
      */
     private void handleRemoteDisconnect() {
         if (hasQuit) return;
@@ -195,6 +195,7 @@ public class GameOver extends UserInterface implements GameClient.GameClientList
             if (client.isConnected()) {
                 client.disconnect();
             }
+            // Go back to NetworkConnectionMenu
             getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
         });
     }

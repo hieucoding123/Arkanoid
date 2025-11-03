@@ -24,23 +24,6 @@ public class Paddle extends MovableObject {
     private float shieldTimer = 0;
     private static final float SHIELD_DURATION = 10.0f;
 
-    public boolean isFlipped() {
-        return isFlipped;
-    }
-
-    public void activateShield() {
-        this.shieldActive = true;
-        this.shieldTimer = SHIELD_DURATION;
-    }
-
-    public void setShieldActive(boolean shieldActive) {
-        this.shieldActive = shieldActive;
-    }
-
-    public boolean hasShield() {
-        return this.shieldActive;
-    }
-
     public Paddle(float x, float y, Texture texture) {
         super(x, y, texture);
         this.speed = 2.5f;
@@ -51,6 +34,35 @@ public class Paddle extends MovableObject {
         this.speed = 2.5f;
         this.isFlipped = isFlipped;
     }
+
+    public boolean isFlipped() {
+        return isFlipped;
+    }
+
+    /**
+     * Active shield.
+     */
+    public void activateShield() {
+        this.shieldActive = true;
+        this.shieldTimer = SHIELD_DURATION;
+    }
+
+    /**
+     * Set activate shield.
+     * @param shieldActive true if activate shield
+     */
+    public void setShieldActive(boolean shieldActive) {
+        this.shieldActive = shieldActive;
+    }
+
+    /**
+     * Return activate shield or not.
+     * @return true if shield is activating
+     */
+    public boolean hasShield() {
+        return this.shieldActive;
+    }
+
 
     public void activateExpand(float duration) {
         this.expandEnd = System.currentTimeMillis() + (long)(duration * 1000);
@@ -79,7 +91,6 @@ public class Paddle extends MovableObject {
             }
         }
     }
-
 
     public void clearEffects() {
         this.expandEnd = 0;
