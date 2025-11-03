@@ -10,6 +10,7 @@ import com.main.components.IngameInputHandler;
 import com.main.gamescreen.VsGameScreen;
 import entity.Effect.EffectFactory;
 import entity.Effect.EffectItem;
+import entity.Player;
 import entity.ScoreManager;
 import entity.TextureManager;
 import entity.object.Ball;
@@ -26,6 +27,7 @@ public class VsMode extends GameMode {
     private static final float ROUND_DURATION = 60.0f;
     private static final int MAX_ROUNDS = 3;
 
+    private final Player player2;
     private Paddle paddle1;
     private Paddle paddle2;
     private final EffectFactory effectFactory;
@@ -52,8 +54,10 @@ public class VsMode extends GameMode {
      * @param scoreManagerP1 score manager for player 1
      * @param scoreManagerP2 score manager for player 2
      */
-    public VsMode(ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
+    public VsMode(Player player1, Player player2, ScoreManager scoreManagerP1, ScoreManager scoreManagerP2) {
         super();
+        this.setPlayer(player1);
+        this.player2 = player2;
         this.roundsWonP1 = 0;
         this.roundsWonP2 = 0;
         this.scoreManagerP1 = scoreManagerP1;
@@ -394,5 +398,29 @@ public class VsMode extends GameMode {
             followPaddle2 = false;
             isPaused = false;
         }
+    }
+
+    public Player getPlayer1() {
+        return this.player;
+    }
+
+    public Player getPlayer2() {
+        return this.player2;
+    }
+
+    public int getRoundsWonP1() {
+        return this.roundsWonP1;
+    }
+
+    public int getRoundsWonP2() {
+        return this.roundsWonP2;
+    }
+
+    public ScoreManager getScoreManagerP1() {
+        return this.scoreManagerP1;
+    }
+
+    public ScoreManager getScoreManagerP2() {
+        return this.scoreManagerP2;
     }
 }

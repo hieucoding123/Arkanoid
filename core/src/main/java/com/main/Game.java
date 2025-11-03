@@ -99,6 +99,9 @@ public class Game {
     private GameState gameSummaryNextState;
     private boolean isWin;
 
+    private int vs_p1Wins;
+    private int vs_p2Wins;
+
     public Game(Main main) {
         this.main = main;
         this.init();
@@ -263,6 +266,9 @@ public class Game {
             case GAME_SUMMARY:
                 ui.render();
                 break;
+            case OFFLINE_GAME_OVER:
+                ui.render();
+                break;
             case LEVELS_SELECTION:
                 if (ui != null) {
                     ui.render();
@@ -391,7 +397,15 @@ public class Game {
             case VS_MODE:
                 gameMode.update(this.delta);
                 if (gameMode != null && gameMode.isEnd()) {
-                    setGameState(GameState.VS_MENU);
+                    VsMode vsMode = (VsMode) gameMode;
+
+                    int p1Wins = vsMode.getRoundsWonP1();
+                    int p2Wins = vsMode.getRoundsWonP2();
+
+                    player.setScore(vsMode.getScoreManagerP1().getScore());
+                    player2.setScore(vsMode.getScoreManagerP2().getScore());
+
+                    setGameState(GameState.OFFLINE_GAME_OVER, p1Wins, p2Wins);
                 }
                 break;
             case GAME_OVER:
@@ -529,6 +543,11 @@ public class Game {
                 ui.create();
                 Gdx.input.setInputProcessor(ui.getStage());
                 break;
+            case OFFLINE_GAME_OVER:
+                ui = new OfflineGameOver(main, player, player2, vs_p1Wins, vs_p2Wins);
+                ui.create();
+                Gdx.input.setInputProcessor(ui.getStage());
+                break;
             case GAME_SUMMARY:
                 if (isWin) {
                     playSfx(sfx_win);
@@ -593,7 +612,7 @@ public class Game {
                 }
                 break;
             case VS_MODE:
-                gameMode = new VsMode(scoreManager, scoreManagerP2);
+                gameMode = new VsMode(player, player2, scoreManager, scoreManagerP2);
                 break;
             case NETWORK_VS:
                 playNetworkGame();
@@ -755,5 +774,11 @@ public class Game {
      */
     public Player getPlayer() {
         return this.player;
+    }
+
+    public void setGameState(GameState newGameState, int p1Wins, int p2Wins) {
+        this.vs_p1Wins = p1Wins;
+        this.vs_p2Wins = p2Wins;
+        setGameState(newGameState);
     }
 }

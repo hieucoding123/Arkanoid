@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Handles core gameplay logic shared across different modes.
  */
 public abstract class GameMode {
-    private Player player;
+    protected Player player;
     private boolean isEnd;
 
     protected IngameInputHandler inputHandler;
