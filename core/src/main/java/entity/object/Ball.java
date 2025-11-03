@@ -179,9 +179,12 @@ public class Ball extends MovableObject {
     }
 
 
+    /**
+     * Handle collision with wall
+     */
     public void handleWallCollision() {
         boolean collided = false;
-        // Va chạm tường trái hoặc phải
+        // Collision with right wall or left wall
         if (this.getX() <= Game.padding_left_right) {
             this.setX(Game.padding_left_right); // Đẩy bóng ra
             this.reverseX();
@@ -197,28 +200,30 @@ public class Ball extends MovableObject {
         if (this.isIn1v1()) {
 
         } else {
-            // Va chạm tường trên
+            // Collision with upper wall
             if (this.getY() + this.getHeight() >= Game.padding_top) {
                 this.setY(Game.padding_top - this.getHeight()); // Đẩy bóng ra
                 this.reverseY();
                 collided = true;
                 angleSpeedAdjustment("HORIZONTAL");
             if (this.isIn1v1Online())
+                // Destroy ball in online mode
                 this.setDestroyed(true);
             }
 
-            // Va chạm đáy màn hình
+            // Collision with bottom wall
             if (this.getY() <= 0) {
                 if (ShieldEffect.isShield()) {
                     ShieldEffect.setShield();
-                    this.setY(0); // Đẩy bóng ra
+                    this.setY(0);
                     this.reverseY();
                     collided = true;
                     angleSpeedAdjustment("HORIZONTAL");
                 } else {
-                    this.setDestroyed(true); // Rớt ra ngoài
+                    this.setDestroyed(true);
                 }
             if (isIn1v1Online())
+                // Destroy in online mode
                 this.setDestroyed(true);
             }
         }
@@ -228,12 +233,16 @@ public class Ball extends MovableObject {
         }
     }
 
+    /**
+     * Collision with paddle.
+     * @param paddle game paddle
+     */
     public void collisionWith(Paddle paddle) {
         if (!this.checkCollision(paddle)) {
             return;
         }
         if (paddle.isFlipped()) {
-            if (this.getDy() > 0) {
+            if (this.getDy() > 0) {     // Go up
                 float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
                 float ballCenter = this.getX() + this.getWidth() / 2f;
                 float impactPoint = (ballCenter - paddleCenter) / (paddle.getWidth() / 2f);
@@ -249,6 +258,7 @@ public class Ball extends MovableObject {
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
                 angleSpeedAdjustment("HORIZONTAL");
             }
+            // Go down, no handle with flipped paddle (paddle above)
         } else {
             if (this.getDy() < 0) {
                 float paddleCenter = paddle.getX() + paddle.getWidth() / 2f;
@@ -264,9 +274,15 @@ public class Ball extends MovableObject {
                 Game.playSfx(Game.sfx_touchpaddle,1.2f);
                 angleSpeedAdjustment("HORIZONTAL");
             }
+            // Go up, no handle with normal paddle (paddle below)
         }
     }
 
+    /**
+     * Handle collision with brick.
+     * @param brick brick
+     * @return true if collision
+     */
     public boolean handleBrickCollision(Brick brick) {
         if (brick.isDestroyed() || !this.checkCollision(brick)) {
             return false;
@@ -281,6 +297,7 @@ public class Ball extends MovableObject {
         float overlapX = combinedHalfWidths - Math.abs(vecX);
         float overlapY = combinedHalfHeights - Math.abs(vecY);
 
+        // overlap less, collision first
         if (overlapX < overlapY) {
             this.reverseX();
             if (vecX > 0) {
@@ -302,6 +319,10 @@ public class Ball extends MovableObject {
         return true;
     }
 
+    /**
+     * Adjust speed with angle collision
+     * @param surface horizontal or vertical
+     */
     public void angleSpeedAdjustment(String surface) {
         if (SlowEnd > 0 || FastEnd > 0) {
             return;
@@ -309,16 +330,16 @@ public class Ball extends MovableObject {
 
         float component = 1.0f;
         if (surface.equals("VERTICAL")) {
-            component = Math.abs((float)Math.cos(this.angle));
+            component = Math.abs((float)Math.cos(this.angle));  // Adjust in vertical component
         }else if (surface.equals("HORIZONTAL")) {
-            component = Math.abs((float)Math.sin(this.angle));
+            component = Math.abs((float)Math.sin(this.angle));  // Adjust in horizontal component
         }
         float speedMultiplier = 1.0f + (1.0f - 0.5f) * (1.0f - component);
 
         float maxSpeed = (originalspeed * 60f) * 2.0f;
         float newSpeed = (originalspeed * 60f) * speedMultiplier;
 
-
+        // Only make ball move faster
         if (newSpeed > this.speed && newSpeed <= maxSpeed) {
             this.setSpeed(newSpeed);
         } else if (newSpeed < this.speed) {

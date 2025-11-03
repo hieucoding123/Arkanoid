@@ -215,6 +215,7 @@ public class NetworkConnectionMenu extends  UserInterface{
             Client tempClient = new Client();
             tempClient.start();
 
+            // Discover ip
             java.util.List<InetAddress> hosts = tempClient.discoverHosts(NetworkProtocol.UDP_PORT, 3000);
 
             tempClient.stop();
