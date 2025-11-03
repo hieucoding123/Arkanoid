@@ -237,6 +237,7 @@ public class NetworkVsModeLogic extends GameMode {
                 return;
             }
 
+            // Ball is ballP2
             if (ball == ballP2 && ball.isDestroyed()) {
                 ball.setDestroyed(false);
                 ball.setX(paddle2.getX() + paddle2.getWidth() / 2f - 12);
@@ -247,38 +248,46 @@ public class NetworkVsModeLogic extends GameMode {
                 return;
             }
 
-            if (ball.checkCollision(paddle1)) {
-                ball.collisionWith(paddle1);
-                ball.setLastHitBy(1);
-            }
-            else if (ball.checkCollision(paddle2)) {
-                ball.collisionWith(paddle2);
-                ball.setLastHitBy(2);
-            }
+            checkCollisionWithPaddle(ball);
 
-            for (Brick brick : currentMap.getBricks()) {
-                if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
-                    brick.takeHit();
-                    if (ball.isBig()) {
-                        brick.setHitPoints(0);
-                    }
-                    if (brick.gethitPoints() == 0) {
-                        if (ball.getLastHitBy() == 1) {
-                            scoreManagerP1.comboScore(brick);
-                        } else {
-                            scoreManagerP2.comboScore(brick);
-                        }
-                        brick.setDestroyed(true);
-                    }
-                    break;
-                }
-            }
+            checkCollisionWithBricks(ball);
 
         }
         balls.removeIf(Ball::isDestroyed);
 
         if (currentMap.getSize() == 0) {
             endRound();
+        }
+    }
+
+    private void checkCollisionWithPaddle(Ball ball) {
+        if (ball.checkCollision(paddle1)) {
+            ball.collisionWith(paddle1);
+            ball.setLastHitBy(1);
+        }
+        else if (ball.checkCollision(paddle2)) {
+            ball.collisionWith(paddle2);
+            ball.setLastHitBy(2);
+        }
+    }
+
+    private void checkCollisionWithBricks(Ball ball) {
+        for (Brick brick : currentMap.getBricks()) {
+            if (!brick.isDestroyed() && ball.handleBrickCollision(brick)) {
+                brick.takeHit();
+                if (ball.isBig()) {
+                    brick.setHitPoints(0);
+                }
+                if (brick.gethitPoints() == 0) {
+                    if (ball.getLastHitBy() == 1) {
+                        scoreManagerP1.comboScore(brick);
+                    } else {
+                        scoreManagerP2.comboScore(brick);
+                    }
+                    brick.setDestroyed(true);
+                }
+                break;
+            }
         }
     }
 
