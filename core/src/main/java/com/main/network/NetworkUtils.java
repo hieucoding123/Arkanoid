@@ -15,18 +15,6 @@ public class NetworkUtils {
     /**
      * Retrieves the local IP address of the machine.
      * Prioritizes IPv4 addresses and filters out loopback addresses (127.0.0.1).
-     *
-     * <p>This method scans all active network interfaces and selects the most
-     * appropriate IP address for LAN connections. It prioritizes addresses in
-     * common private IP ranges (192.168.x.x, 10.x.x.x, 172.16-31.x.x).</p>
-     *
-     * <p><b>Use cases:</b></p>
-     * <ul>
-     *   <li>Displaying server IP to players in the same network</li>
-     *   <li>Setting up local multiplayer sessions</li>
-     *   <li>Testing network features on LAN</li>
-     * </ul>
-     *
      * @return the local IP address as a String (e.g., "192.168.1.100"),
      *         or "Unable to get IP" if retrieval fails
      */
@@ -61,13 +49,6 @@ public class NetworkUtils {
 
     /**
      * Checks if an IP address belongs to a Local Area Network (LAN).
-     *
-     * <p>LAN addresses are private IP ranges defined by RFC 1918:</p>
-     * <ul>
-     *   <li>192.168.0.0 - 192.168.255.255 (192.168.0.0/16)</li>
-     *   <li>10.0.0.0 - 10.255.255.255 (10.0.0.0/8)</li>
-     *   <li>172.16.0.0 - 172.31.255.255 (172.16.0.0/12)</li>
-     * </ul>
      *
      * @param ip the IP address to check (e.g., "192.168.1.100")
      * @return true if the IP is a LAN address, false otherwise
