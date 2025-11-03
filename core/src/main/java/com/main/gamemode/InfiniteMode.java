@@ -90,6 +90,7 @@ public class InfiniteMode extends GameMode {
      */
     @Override
     public void update(float delta) {
+        // Add time played
         if (!followPaddle)
             this.timePlayed += delta;
 
@@ -97,24 +98,7 @@ public class InfiniteMode extends GameMode {
         paddle.update(delta);
         EffectItem.updateEffectItems(paddle, this.balls, currentMap, delta);
 
-        // Handle ball loss and game over
-        if (balls.isEmpty()) {
-            scoreManager.deduction();
-            EffectItem.ClearAllEffect(paddle, null, balls);
-            this.reset();
-            this.lives--;
-            this.setEnd(lives == 0);
-        }
-
-        if (this.isEnd()) {
-            this.isWin = false;
-            EffectItem.clear();
-            this.getPlayer().setScore(this.scoreManager.getScore());
-            this.getPlayer().setTimePlayed(this.timePlayed);
-            InfiDataHandler.addScore(
-                getPlayer().getName(), getPlayer().getScore(), getPlayer().getTimePlayed()
-            );
-        }
+        checkEndGame();
 
         // Keep ball attached to paddle before launch
         if (followPaddle) {
@@ -126,25 +110,40 @@ public class InfiniteMode extends GameMode {
         for (Ball ball : balls)
             ball.update(delta);
 
-        // Resolve ball-ball collisions
-        final int SOLVER_ITERATIONS = 5;
-        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
-            for (int i = 0; i < balls.size(); i++) {
-                Ball ball1 = balls.get(i);
-                for (int j = i + 1; j < balls.size(); j++) {
-                    Ball ball2 = balls.get(j);
-                    CollisionManager.handleBallBallCollision(ball1, ball2);
-                }
+        checkBallBallCollision();
+        checkPaddleBricksCollision();
+        balls.removeIf(Ball::isDestroyed);
+        proceedToNextMap();
+    }
+
+    private void proceedToNextMap() {
+        boolean isFullUnbreak = true;
+        for (Brick brick : currentMap.getBricks()) {
+            if (!brick.isUnbreak()) {
+                isFullUnbreak = false;
+                // Has can break brick
+                break;
             }
         }
 
-        // Handle collisions with paddle and bricks
+        if (currentMap.getBricks().isEmpty()  || isFullUnbreak) {
+            // Bonus 1 live when win a round, total lives <= 3
+            lives = Math.min(lives + 1, 3);
+            currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
+            currentMap = new BricksMap(maps.get(currentIdx));
+            EffectItem.clear();
+            reset();
+        }
+    }
+
+    private void checkPaddleBricksCollision() {
         for (Ball ball : balls) {
             CollisionManager.handleBallBoundaryCollision(ball);
             CollisionManager.handleBallPaddleCollision(ball, paddle);
 
             Brick hitBrick = CollisionManager.handleBallBrickHit(ball, currentMap);
             if (hitBrick != null && hitBrick.gethitPoints() == 0) {
+                // Chance generate effect item
                 double chance = generateChance();
                 EffectItem newEffectItem = effectFactory.tryCreateEffectItem(
                     hitBrick, paddle, ball,
@@ -161,17 +160,38 @@ public class InfiniteMode extends GameMode {
                     hitBrick.setDestroyed(true);
             }
         }
+    }
 
-        balls.removeIf(Ball::isDestroyed);
+    private void checkBallBallCollision() {
+        final int SOLVER_ITERATIONS = 5;
+        for (int k = 0; k < SOLVER_ITERATIONS; k++) {
+            for (int i = 0; i < balls.size(); i++) {
+                Ball ball1 = balls.get(i);
+                for (int j = i + 1; j < balls.size(); j++) {
+                    Ball ball2 = balls.get(j);
+                    CollisionManager.handleBallBallCollision(ball1, ball2);
+                }
+            }
+        }
+    }
 
-        // Proceed to next map
-        if (currentMap.getBricks().isEmpty()) {
-            // Bonus 1 live when win a round, total lives <= 3
-            lives = Math.min(lives + 1, 3);
-            currentIdx = currentIdx < maps.size() - 1 ? currentIdx + 1 : currentIdx;
-            currentMap = new BricksMap(maps.get(currentIdx));
+    private void checkEndGame() {
+        // Handle ball loss and game over
+        if (balls.isEmpty()) {
+            scoreManager.deduction();
+            EffectItem.ClearAllEffect(paddle, null, balls);
+            this.reset();
+            this.lives--;
+            this.setEnd(lives == 0);
+        }
+        if (this.isEnd()) {
+            this.isWin = false;
             EffectItem.clear();
-            reset();
+            this.getPlayer().setScore(this.scoreManager.getScore());
+            this.getPlayer().setTimePlayed(this.timePlayed);
+            InfiDataHandler.addScore(
+                getPlayer().getName(), getPlayer().getScore(), getPlayer().getTimePlayed()
+            );
         }
     }
 
