@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.main.Game;
 import com.main.GameState;
 import com.main.Main;
 import entity.Player;
@@ -33,7 +34,6 @@ public class OfflineGameOver extends UserInterface {
     @Override
     public void create() {
         this.setBackground(new Texture(Gdx.files.internal("ui/bg.png")));
-        this.setSkin(new Skin(Gdx.files.internal("ui-skin/ui-skin.json")));
         this.setStage(new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
         this.setFont(new com.badlogic.gdx.graphics.g2d.BitmapFont(Gdx.files.internal("ui/F_Retro.fnt")));
         this.getFont().getData().setScale(1);
@@ -75,24 +75,22 @@ public class OfflineGameOver extends UserInterface {
         mainTable.add(scoreLabel).padBottom(80);
         mainTable.row();
 
-        TextButton playAgainButton = new TextButton("PLAY AGAIN", this.getSkin());
-        playAgainButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                getMain().setGameState(GameState.VS_MODE);
-            }
-        });
-        mainTable.add(playAgainButton).width(200).height(60).padBottom(20);
+        Label playAgainButton = createClickableLabel(
+            "Play Again",
+            Game.sfx_click,
+            1.0f,
+            () -> getMain().setGameState(GameState.VS_MODE)
+        );
+        mainTable.add(playAgainButton).width(200).height(60).padBottom(20).padRight(30);
         mainTable.row();
 
-        TextButton mainMenuButton = new TextButton("MAIN MENU", this.getSkin());
-        mainMenuButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                getMain().setGameState(GameState.MAIN_MENU);
-            }
-        });
-        mainTable.add(mainMenuButton).width(200).height(60).padBottom(20);
+        Label mainMenuButton  = createClickableLabel(
+            "Main Menu  ",
+            Game.sfx_back,
+            1.0f,
+            () -> getMain().setGameState(GameState.MAIN_MENU)
+        );
+        mainTable.add(mainMenuButton).width(200).height(60).padBottom(20).padRight(60);
         mainTable.row();
     }
 }
