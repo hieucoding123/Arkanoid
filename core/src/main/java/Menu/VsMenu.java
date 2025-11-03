@@ -16,6 +16,17 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
+/**
+ * Versus mode selection menu for choosing between offline and online 1v1 gameplay.
+ *
+ * <p>This menu provides two options for competitive two-player matches:
+ * local offline versus (same device) and online versus (network multiplayer).
+ * Players are directed to the appropriate game mode based on their selection.</p>
+ *
+ * @see GameState#VS_MODE Local versus mode
+ * @see GameState#NETWORK_CONNECTION_MENU Network multiplayer setup
+ * @see UserInterface Base menu class
+ */
 public class VsMenu extends UserInterface{
     private TextButton.TextButtonStyle textOnlyButtonStyle;
     public VsMenu(Main main, Player player) {

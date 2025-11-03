@@ -116,6 +116,9 @@ public class InfiniteMode extends GameMode {
         proceedToNextMap();
     }
 
+    /**
+     * Check condition to go to next map
+     */
     private void proceedToNextMap() {
         boolean isFullUnbreak = true;
         for (Brick brick : currentMap.getBricks()) {
@@ -136,6 +139,9 @@ public class InfiniteMode extends GameMode {
         }
     }
 
+    /**
+     * Check collision with paddles anf bricks
+     */
     private void checkPaddleBricksCollision() {
         for (Ball ball : balls) {
             CollisionManager.handleBallBoundaryCollision(ball);
@@ -162,6 +168,9 @@ public class InfiniteMode extends GameMode {
         }
     }
 
+    /**
+     * Check ball collision with ball
+     */
     private void checkBallBallCollision() {
         final int SOLVER_ITERATIONS = 5;
         for (int k = 0; k < SOLVER_ITERATIONS; k++) {
@@ -175,6 +184,9 @@ public class InfiniteMode extends GameMode {
         }
     }
 
+    /**
+     * Check end game conditions
+     */
     private void checkEndGame() {
         // Handle ball loss and game over
         if (balls.isEmpty()) {

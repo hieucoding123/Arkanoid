@@ -12,73 +12,6 @@ import java.io.IOException;
  * <p>This class handles all client-side networking, including connecting to servers,
  * sending player inputs, and receiving game state updates. It acts as the communication
  * layer between the local game and the remote server.</p>
- *
- * <h2>Client Responsibilities:</h2>
- * <ul>
- *   <li><b>Connection:</b> Establish TCP/UDP connections to game servers</li>
- *   <li><b>Authentication:</b> Send login credentials and receive player assignment</li>
- *   <li><b>Input Transmission:</b> Send player inputs (movement, actions) to server</li>
- *   <li><b>State Reception:</b> Receive and forward game state updates to listeners</li>
- *   <li><b>Event Notification:</b> Notify game logic of connection events via callbacks</li>
- * </ul>
- *
- * <h2>Event-Driven Architecture:</h2>
- * <p>The client uses the observer pattern through {@link GameClientListener}.
- * Game logic implements this interface to receive network events:</p>
- * <pre>
- * class MyGameMode implements GameClientListener {
- *     public void onConnected(int playerNumber) {
- *         // Server assigned us a player number
- *     }
- *
- *     public void onGameStateUpdated(GameStateUpdate state) {
- *         // Server sent new game state - update rendering
- *     }
- * }
- * </pre>
- *
- * <h2>Connection Flow:</h2>
- * <ol>
- *   <li><b>Create:</b> {@code new GameClient(listener)} - Initialize with event listener</li>
- *   <li><b>Connect:</b> {@code client.connect(serverIP, playerName, gameMode)} - Establish connection</li>
- *   <li><b>Login:</b> Client sends LoginRequest → Server assigns player number</li>
- *   <li><b>Lobby:</b> Client receives LobbyUpdates → Shows lobby UI</li>
- *   <li><b>Ready:</b> {@code client.sendReady()} - Signal ready to play</li>
- *   <li><b>Game:</b> Client sends inputs, receives state updates</li>
- *   <li><b>Disconnect:</b> {@code client.disconnect()} - Clean disconnect</li>
- * </ol>
- *
- * <h2>Usage Example:</h2>
- * <pre>
- * GameClient client = new GameClient(new GameClientListener() {
- *     public void onConnected(int playerNumber) {
- *         System.out.println("Connected as Player " + playerNumber);
- *     }
- *
- *     public void onGameStateUpdated(GameStateUpdate state) {
- *         // Update local game rendering
- *         updatePaddles(state.paddles);
- *         updateBalls(state.balls);
- *     }
- * });
- *
- * // Connect to server
- * client.connect("192.168.1.100", "PlayerName", GameMode.VS);
- *
- * // Send input (e.g., in game loop)
- * if (keyPressed(LEFT)) {
- *     client.sendInput(InputType.MOVE_LEFT);
- * }
- *
- * // Disconnect when done
- * client.disconnect();
- * </pre>
- *
- * <h2>Thread Safety:</h2>
- * <p>Network events are received on Kryonet's network thread. Listener callbacks
- * should update game state thread-safely (e.g., using {@code Gdx.app.postRunnable()}
- * for libGDX rendering updates).</p>
- *
  * @see GameClientListener Event callback interface
  * @see GameServer Server-side network handler
  * @see NetworkProtocol Message format definitions
@@ -92,8 +25,15 @@ public class GameClient {
     private GameClientListener listener;
 
     /**
-     * A type of client can receive packages from {@link GameServer}.
-     * And handle them.
+     * Callback interface for receiving game client network events.
+     *
+     * <p>This interface defines the contract for handling various network events
+     * from a {@link GameClient}. Implementations receive notifications about
+     * connections, disconnections, game state updates, and server messages.</p>
+     *
+     * @see GameClient The client that triggers these callbacks
+     * @see NetworkProtocol.GameStateUpdate Game state data structure
+     * @see NetworkProtocol.LobbyUpdate Lobby state data structure
      */
     public interface GameClientListener {
         /**

@@ -14,7 +14,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.main.Game;
 
-
+/**
+ * Pause menu overlay displayed when the game is paused during active gameplay.
+ *
+ * <p>This UI provides options to resume the game, start a new game, return to
+ * the main menu, or quit the application entirely. It renders as an overlay on
+ * top of the paused game screen without clearing the background.</p>
+ *
+ * @see Game Game controller that manages pause state
+ * @see UserInterface Base menu class
+ */
 public class PauseUI extends UserInterface {
 
     public PauseUI(SpriteBatch batch, final Game game) {

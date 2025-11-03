@@ -3,6 +3,17 @@ package entity.object;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Abstract base class for game objects with velocity and movement physics.
+ *
+ * <p>Extends {@link GameObject} to add velocity (dx, dy) and speed properties.
+ * Provides movement update logic based on delta time. Extended by dynamic
+ * game entities like paddles, balls, and power-up items.</p>
+ *
+ * @see GameObject Base game object class
+ * @see Paddle Player-controlled paddle
+ * @see Ball Game ball with physics
+ */
 public abstract class MovableObject extends GameObject {
     protected float dx;
     protected float dy;

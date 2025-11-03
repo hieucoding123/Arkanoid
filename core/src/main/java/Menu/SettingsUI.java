@@ -16,7 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import entity.Player;
 
-
+/**
+ * Settings menu for configuring game audio and preferences.
+ *
+ * <p>This menu allows players to adjust music volume and sound effects (SFX)
+ * volume using interactive sliders. Changes are applied immediately and
+ * persisted throughout the game session.</p>
+ *
+ * @see Game Static game configuration (volume settings)
+ * @see UserInterface Base menu class
+ * @see GameState#SETTINGS Settings menu state
+ */
 public class SettingsUI extends UserInterface {
     public SettingsUI(Main main, Player player) {
         super(main, player);

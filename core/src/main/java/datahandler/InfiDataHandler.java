@@ -5,6 +5,9 @@ import jdk.internal.vm.annotation.Hidden;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Handle data from Infinite Mode.
+ */
 public class InfiDataHandler extends DataHandler {
     private static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS infinite_scores ("
         + " playerName TEXT PRIMARY KEY NOT NULL,"
@@ -20,6 +23,7 @@ public class InfiDataHandler extends DataHandler {
 
         loadDriverIfNeeded();
 
+        // Insert new row to table
         String sqlUpsert = "INSERT INTO infinite_scores (playerName, score, time) VALUES (?, ?, ?) "
             + "ON CONFLICT(playerName) DO UPDATE SET "
             + "  score = excluded.score, "
@@ -49,11 +53,17 @@ public class InfiDataHandler extends DataHandler {
         }
     }
 
+    /**
+     * Get data from table in database.
+     * Query table to get data.
+     * @return data
+     */
     public static ArrayList<String> getLeaderboardData() {
         ArrayList<String> leaderboard = new ArrayList<>();
 
         loadDriverIfNeeded();
 
+        // Select top20 highest of table
         String sqlSelect = "SELECT playerName, score, time FROM infinite_scores "
             + "ORDER BY score DESC, time ASC LIMIT 20";
 

@@ -21,6 +21,20 @@ import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;
 import entity.Player;
 
+/**
+ * Network multiplayer lobby where players wait and ready up before matches.
+ *
+ * <p>This screen displays connection status for both players, allows each
+ * player to signal readiness, and automatically transitions to the game when
+ * both players are ready. It implements {@link com.main.network.GameClient.GameClientListener} to receive
+ * real-time lobby updates from the server.</p>
+ *
+ * @see GameClient Network client for server communication
+ * @see com.main.network.GameClient.GameClientListener Event callbacks for network updates
+ * @see NetworkProtocol.LobbyUpdate Lobby state data structure
+ * @see GameState#NETWORK_LOBBY Lobby state
+ * @see GameState#NETWORK_VS Network game state after ready
+ */
 public class NetworkLobby extends UserInterface implements GameClient.GameClientListener {
     private final GameClient client;
     private int myPNumber;

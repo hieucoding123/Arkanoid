@@ -8,6 +8,17 @@ import com.main.Main;
 import entity.Player;
 import datahandler.LevelDataHandler;
 
+/**
+ * Level selection menu for single-player campaign mode.
+ *
+ * <p>This menu displays available campaign levels and player statistics
+ * including highest unlocked level, individual level scores, and total score.
+ * Level buttons are enabled based on player progression (unlocked levels only).</p>
+ *
+ * @see LevelSelectionMenu Base level selection menu
+ * @see LevelDataHandler Database handler for player progress
+ * @see com.main.GameState#LEVEL1 through {@link com.main.GameState#LEVEL5} Campaign levels
+ */
 public class SinglePlayerLevelSelectionMenu extends LevelSelectionMenu {
 
     public SinglePlayerLevelSelectionMenu(Main main, Player player) {
