@@ -15,6 +15,19 @@ import com.main.Main;
 import entity.Player;
 import datahandler.LevelDataHandler;
 
+/**
+ * Base level selection menu providing common level selection UI functionality.
+ *
+ * <p>This class provides the core level selection interface with buttons for
+ * each campaign level. Levels are locked/unlocked based on player progression.
+ * Extended by single-player and co-op specific implementations that add
+ * mode-specific statistics and data handling.</p>
+ *
+ * @see SinglePlayerLevelSelectionMenu Single-player implementation
+ * @see CoopPlayerLevelSelectionMenu Co-op implementation
+ * @see LevelDataHandler Player progression data
+ * @see UserInterface Base menu class
+ */
 public class LevelSelectionMenu extends UserInterface {
 
     public LevelSelectionMenu(Main main, Player player) {

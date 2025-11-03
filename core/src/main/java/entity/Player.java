@@ -1,5 +1,15 @@
 package entity;
 
+/**
+ * Player data model containing player identity, score, and playtime information.
+ *
+ * <p>This class represents a player's session data including their name,
+ * current score, and total time played. Used throughout the game to track
+ * player progress and display statistics.</p>
+ *
+ * @see ScoreManager Score calculation and management
+ * @see datahandler.LevelDataHandler Player data persistence
+ */
 public class Player {
     String name;
     double score;

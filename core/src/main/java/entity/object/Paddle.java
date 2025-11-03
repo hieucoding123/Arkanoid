@@ -2,6 +2,18 @@ package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
 
+/**
+ * Player-controlled paddle for deflecting the ball and catching power-ups.
+ *
+ * <p>The paddle can move left/right, apply various power-up effects (expand,
+ * shield, stun), and handles collision with balls. Supports both normal and
+ * flipped orientations for versus modes where players face each other.</p>
+ *
+ * @see MovableObject Base movable object class
+ * @see Ball Ball collision and deflection
+ * @see entity.Effect.EffectItem Power-ups that modify paddle
+ * @see com.main.gamemode.VsMode Versus mode using flipped paddles
+ */
 public class Paddle extends MovableObject {
     private boolean isFlipped;
     private long expandEnd = 0;

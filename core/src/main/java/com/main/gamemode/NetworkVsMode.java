@@ -21,8 +21,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
     private final ArrayList<Brick> localBricks;
     private final Player player2;
 
-    public NetworkVsMode(Player player1, Player player2,
-                         String serverIP, boolean isHost, GameClient existingClient) {
+    public NetworkVsMode(Player player1, Player player2, GameClient existingClient) {
         super();
         this.setPlayer(player1);
         this.player2 = player2;
@@ -182,7 +181,7 @@ public class NetworkVsMode extends GameMode implements GameClient.GameClientList
 
     @Override
     public void onLobbyUpdate(NetworkProtocol.LobbyUpdate update) {
-        //
+
     }
 
     @Override

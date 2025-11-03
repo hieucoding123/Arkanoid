@@ -8,6 +8,17 @@ import com.main.Main;
 import entity.Player;
 import datahandler.CoopDataHandler;
 
+/**
+ * Level selection menu for cooperative multiplayer campaign mode.
+ *
+ * <p>Similar to single-player level selection but displays progress and
+ * statistics for cooperative gameplay. Players can select unlocked co-op
+ * levels and view their cooperative scores and achievements.</p>
+ *
+ * @see LevelSelectionMenu Base level selection menu
+ * @see CoopDataHandler Database handler for co-op progress
+ * @see com.main.GameState#LEVEL1 through {@link com.main.GameState#LEVEL5} Co-op levels
+ */
 public class CoopPlayerLevelSelectionMenu extends LevelSelectionMenu {
 
     public CoopPlayerLevelSelectionMenu(Main main, Player player) {

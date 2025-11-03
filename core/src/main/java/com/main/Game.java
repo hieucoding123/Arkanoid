@@ -613,8 +613,7 @@ public class Game {
 
     private void playNetworkGame() {
         gameMode = new NetworkVsMode(
-            player, player2, networkServerIP, isNetworkHost, networkClient
-        );
+            player, player2, networkClient);
         if (isNetworkHost && gameServer != null) {
             NetworkVsModeLogic severGameMode = new NetworkVsModeLogic(scoreManager, scoreManagerP2);
             gameServer.setGameMode(severGameMode);

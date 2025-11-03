@@ -31,6 +31,12 @@ public class LevelMode extends GameMode {
     private int lives;
     private double timePlayed;
 
+    /**
+     * Initialize LevelMode components.
+     * @param player name of Player
+     * @param scoreManager score manager
+     * @param levelNumber game level
+     */
     public LevelMode(Player player, ScoreManager scoreManager, int levelNumber) {
         super();
         bricksMaps = new ArrayList<>();
@@ -45,6 +51,9 @@ public class LevelMode extends GameMode {
         create();
     }
 
+    /**
+     * Initializes the level mode, including maps, paddles, and input handling.
+     */
     @Override
     public void create() {
         gameScreen.create();
@@ -73,6 +82,11 @@ public class LevelMode extends GameMode {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    /**
+     * Updates the game state each frame.
+     *
+     * @param delta the time elapsed since the last frame
+     */
     @Override
     public void update(float delta) {
         if (this.isEnd()) return;
@@ -197,6 +211,9 @@ public class LevelMode extends GameMode {
         paddle.draw(sp);
     }
 
+    /**
+     * Reset paddle position, put ball on paddle.
+     */
     public void reset() {
         balls.clear();
         balls.add(new Ball(paddle.getX() + (paddle.getWidth() / 2f) - 12,

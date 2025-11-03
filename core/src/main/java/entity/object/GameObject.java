@@ -4,6 +4,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * Abstract base class for all game entities with position, texture, and collision.
+ *
+ * <p>Provides fundamental properties and methods for game objects including
+ * position (x, y), texture rendering, bounding box collision detection, and
+ * scale/size management. Extended by all visible game entities.</p>
+ *
+ * @see MovableObject Base class for moving objects
+ * @see entity.object.brick.Brick Static game bricks
+ * @see Paddle Player paddle
+ * @see Ball Game ball
+ */
 public abstract class GameObject {
     protected float x;
     protected float y;
