@@ -1,7 +1,7 @@
 package com.main;
 
 import Menu.*;
-import Menu.leaderboard.LeaderBoard;
+import Menu.LeaderBoard;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,20 +11,22 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.main.gamemode.*;
+import com.main.gamemode.networkgame.NetworkVsMode;
 import com.main.network.GameClient;
 import com.main.network.GameServer;
 import com.main.network.NetworkProtocol;
 import Menu.CoopPlayerLevelSelectionMenu;
-import entity.Effect.EffectItem;
+import datahandler.GameSaveManager;
+import entity.object.effect.EffectItem;
 import entity.Player;
-import entity.ScoreManager;
+import com.main.components.ScoreManager;
 import entity.object.brick.BricksMap;
-import entity.TextureManager;
+import com.main.components.TextureManager;
 import Menu.ModeMenu;
 import Menu.SinglePlayerLevelSelectionMenu;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
-import com.main.gamemode.NetworkVsModeLogic;
+import com.main.gamemode.networkgame.NetworkVsModeLogic;
 import com.main.gamemode.CoopMode;
 import Menu.PauseUI;
 import Menu.SettingsUI;
@@ -728,7 +730,7 @@ public class Game {
             GameSaveManager.deleteSave(player, gameState, isCoopSelection);
         }
         if (gameMode != null) {
-            entity.Effect.EffectItem.clear();
+            EffectItem.clear();
         }
         gameMode = null;
         scoreManager.resetScore();

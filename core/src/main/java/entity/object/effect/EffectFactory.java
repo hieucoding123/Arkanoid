@@ -1,4 +1,4 @@
-package entity.Effect;
+package entity.object.effect;
 
 import entity.object.Ball;
 import entity.object.Paddle;

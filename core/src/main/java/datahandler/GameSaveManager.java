@@ -1,20 +1,21 @@
-package com.main;
+package datahandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.main.GameState;
 import com.main.gamemode.CoopMode;
 import com.main.gamemode.GameMode;
 import com.main.gamemode.InfiniteMode;
 import com.main.gamemode.LevelMode;
 import entity.Player;
 import entity.object.Ball;
+import entity.object.effect.*;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
-import entity.ScoreManager;
-import entity.TextureManager;
-import entity.Effect.*;
+import com.main.components.ScoreManager;
+import com.main.components.TextureManager;
 
 import java.util.ArrayList;
 /**
@@ -29,7 +30,7 @@ public class GameSaveManager {
      * @param state the current {@link GameState}
      * @return {@code true} if the state is saveable, {@code false} otherwise
      */
-    static boolean isSaveableGameMode(GameState state) {
+    public static boolean isSaveableGameMode(GameState state) {
         return state == GameState.LEVEL1 || state == GameState.LEVEL2 || state == GameState.LEVEL3
             || state == GameState.LEVEL4 || state == GameState.LEVEL5 || state == GameState.INFI_MODE;
     }

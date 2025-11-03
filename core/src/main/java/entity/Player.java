@@ -1,5 +1,7 @@
 package entity;
 
+import com.main.components.ScoreManager;
+
 /**
  * Player data model containing player identity, score, and playtime information.
  *

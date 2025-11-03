@@ -236,6 +236,7 @@ public class NetworkConnectionMenu extends  UserInterface{
                         foundServers.put(displayName, host);
                         displayItems.add(displayName);
                     }
+                    // Update list
                     serversList.setItems(displayItems.toArray(new String[0]));
                 }
 
@@ -332,6 +333,7 @@ public class NetworkConnectionMenu extends  UserInterface{
                         (getStage().getWidth() / 2f) - (statusLabel.getWidth() / 2f),
                         statusLabel.getY()
                     );
+                    // Start Network game
                     this.getMain().startNetworkGame(localIP, true);
                 });
             } catch (Exception e) {

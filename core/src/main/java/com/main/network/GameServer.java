@@ -4,7 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.main.gamemode.GameMode;
-import com.main.gamemode.NetworkVsModeLogic;
+import com.main.gamemode.networkgame.NetworkVsModeLogic;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;

@@ -1,7 +1,6 @@
-package entity;
+package com.main.components;
 
 import com.badlogic.gdx.graphics.Texture;
-import entity.object.brick.Brick;
 import entity.object.brick.BrickType;
 
 import java.util.HashMap;

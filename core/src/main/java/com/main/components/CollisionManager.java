@@ -1,12 +1,12 @@
 package com.main.components;
 
 import com.main.Game;
-import entity.Effect.ShieldEffect;
 import entity.object.GameObject; // Make sure to import the base GameObject
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
+import entity.object.effect.ShieldEffect;
 
 public class CollisionManager {
 
@@ -202,65 +202,67 @@ public class CollisionManager {
      * @param ball2 ball 2 entity
      */
     public static void handleBallBallCollision(Ball ball1, Ball ball2) {
-        // detection
         if (!checkCircleCircle(ball1, ball2)) {
             return;
         }
 
-        // Respond
+        float REPOSITION_OFFSET = 0.1f;
+        // Store speed to re-apply later (conserves kinetic energy)
+        float speed1 = ball1.getSpeed();
+        float speed2 = ball2.getSpeed();
 
-        // calc physics vars
+        // Calc Collision axis
         float dx = ball2.getCenterX() - ball1.getCenterX();
         float dy = ball2.getCenterY() - ball1.getCenterY();
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
-        float tangentY = dx / distance;
+        // Unit Normal Vector
+        float normalX = dx / distance;
         float normalY = dy / distance;
-        float tangentX = -normalY;
 
+        // Unit Tangent Vector
+        float tangentX = -normalY;
+        float tangentY = normalX;
+
+        // Separation check
         float relVelX = ball1.getDx() - ball2.getDx();
         float relVelY = ball1.getDy() - ball2.getDy();
-        float dotProduct = relVelX * tangentY + relVelY * normalY;
-
-        // Out of collision
+        float dotProduct = relVelX * normalX + relVelY * normalY;
         if (dotProduct < 0) {
             return;
         }
 
-        // Store speed for recover
-        float speed1 = ball1.getSpeed();
-        float speed2 = ball2.getSpeed();
-
-        // Bounce calculation
-        float v1_normal_scalar = ball1.getDx() * tangentY + ball1.getDy() * normalY;
+        // Velocity projection
+        float v1_normal_scalar = ball1.getDx() * normalX + ball1.getDy() * normalY;
         float v1_tangent_scalar = ball1.getDx() * tangentX + ball1.getDy() * tangentY;
-        float v2_normal_scalar = ball2.getDx() * tangentY + ball2.getDy() * normalY;
+        float v2_normal_scalar = ball2.getDx() * normalX + ball2.getDy() * normalY;
         float v2_tangent_scalar = ball2.getDx() * tangentX + ball2.getDy() * tangentY;
 
-        float new_v1_dx = (v2_normal_scalar * tangentY) + (v1_tangent_scalar * tangentX);
+
+        float new_v1_dx = (v2_normal_scalar * normalX) + (v1_tangent_scalar * tangentX);
         float new_v1_dy = (v2_normal_scalar * normalY) + (v1_tangent_scalar * tangentY);
-        float new_v2_dx = (v1_normal_scalar * tangentY) + (v2_tangent_scalar * tangentX);
+
+        float new_v2_dx = (v1_normal_scalar * normalX) + (v2_tangent_scalar * tangentX);
         float new_v2_dy = (v1_normal_scalar * normalY) + (v2_tangent_scalar * tangentY);
 
-        // Apply velocity
+        // Apply Velocity
         ball1.setVelocityAndUpdateAngle(new_v1_dx, new_v1_dy);
         ball2.setVelocityAndUpdateAngle(new_v2_dx, new_v2_dy);
 
-        // Apply original speed
+        // Speed Restore
         ball1.setSpeed(speed1);
         ball1.updateVelocity();
         ball2.setSpeed(speed2);
         ball2.updateVelocity();
 
-        // Don't stick please
+        // Don't stick
         float sumRadii = ball1.getRadius() + ball2.getRadius();
         float overlap = sumRadii - distance;
-        float push = overlap * 0.5f + 0.1f;
+        float push = overlap * 0.5f + REPOSITION_OFFSET;
 
-        ball1.setX(ball1.getX() - push * tangentY);
+        ball1.setX(ball1.getX() - push * normalX);
         ball1.setY(ball1.getY() - push * normalY);
-        ball2.setX(ball2.getX() + push * tangentY);
+        ball2.setX(ball2.getX() + push * normalX);
         ball2.setY(ball2.getY() + push * normalY);
-
     }
 }

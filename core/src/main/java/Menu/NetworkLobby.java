@@ -171,6 +171,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
         }
         mainTable.add(player2Table).width(250).pad(20).row();
 
+        // Waiting label
         waitingLabel = new Label("Waiting for players...", this.getSkin());
         waitingLabel.setScale(1.2f);
         waitingLabel.setColor(Color.YELLOW);
@@ -202,6 +203,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
      */
     private TextButton createReadyButton() {
         TextButton button = new TextButton("READY", textOnlyButtonStyle);
+        // Disable it first
         button.setDisabled(true);
 
         button.addListener(new ClickListener() {
@@ -221,9 +223,9 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
             myReady = true;
             client.sendReady();
             if (myReadyButton != null) {
+                // Disable when click ready, can't click it anymore.
                 myReadyButton.setDisabled(true);
             }
-//            updateWaittingMessage();
         }
     }
 
@@ -306,6 +308,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onGameStarted() {
         System.out.println("Game starting");
         Gdx.app.postRunnable(() -> {
+            // Run NetworkVsMode
             getMain().setGameState(GameState.NETWORK_VS);
         });
     }
@@ -314,6 +317,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onDisconnected(String reason) {
         System.out.println("Disconnected from lobby: " + reason);
         Gdx.app.postRunnable(() -> {
+            // Go back to Network Connection Menu
             getMain().setGameState(GameState.NETWORK_CONNECTION_MENU);
         });
     }
@@ -322,7 +326,7 @@ public class NetworkLobby extends UserInterface implements GameClient.GameClient
     public void onMessage(String message) {
         System.out.println("Lobby message: " + message);
 
-        // message format: PLAYER_DISCONNECTED: 1
+        // message format: PLAYER_DISCONNECTED:1
         if (message.startsWith("PLAYER_DISCONNECTED:")) {
             int playerNum = Integer.parseInt(message.split(":")[1]);
             System.out.println("Player " +  playerNum + " left the lobby");
