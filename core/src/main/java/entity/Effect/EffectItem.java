@@ -18,6 +18,7 @@ public abstract class EffectItem extends MovableObject {
     static ArrayList<EffectItem> items = new ArrayList<>();
 
     protected Ball triggeringBall = null;
+    protected boolean check1vs1 = false;
 
     /**
      * Constructs a new effect item with the specified position, velocity, and texture.
@@ -144,5 +145,12 @@ public abstract class EffectItem extends MovableObject {
         }
 
         ShieldEffect.setShield();
+    }
+
+    /**
+     * Check is 1vs1 mode.
+     */
+    public void set1v1Effect(boolean is1v1) {
+        this.check1vs1 = is1v1;
     }
 }

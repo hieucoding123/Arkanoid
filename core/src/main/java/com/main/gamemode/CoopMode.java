@@ -150,19 +150,19 @@ public class CoopMode extends GameMode {
             if (hitBrick != null && hitBrick.gethitPoints() == 0) {
                 EffectItem newEffectItem;
                 if (mapIndex == 1) {
-                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                    newEffectItem = effectFactory.tryCreateEffectItem(false, hitBrick, paddle1, ball,
                         0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
                 } else if  (mapIndex == 2) {
-                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                    newEffectItem = effectFactory.tryCreateEffectItem(false, hitBrick, paddle1, ball,
                         0.03, 0.03, 0.03, 0.03, 0.04, 0.06, 0.08, 0.09, 0.10, 0.11);
                 } else if (mapIndex == 3) {
-                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                    newEffectItem = effectFactory.tryCreateEffectItem(false,hitBrick, paddle1, ball,
                         0.03, 0.04, 0.04, 0.04, 0.05, 0.07, 0.09, 0.10, 0.12, 0.13);
                 } else if (mapIndex == 4) {
-                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                    newEffectItem = effectFactory.tryCreateEffectItem(false, hitBrick, paddle1, ball,
                         0.03, 0.04, 0.04, 0.04, 0.06, 0.08, 0.10, 0.12, 0.13, 0.15);
                 } else {
-                    newEffectItem = effectFactory.tryCreateEffectItem(hitBrick, paddle1, ball,
+                    newEffectItem = effectFactory.tryCreateEffectItem(false, hitBrick, paddle1, ball,
                         0.04, 0.05, 0.05, 0.05, 0.07, 0.09, 0.11, 0.13, 0.15, 0.17);
                 }
 

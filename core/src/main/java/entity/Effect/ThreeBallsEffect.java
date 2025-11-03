@@ -27,11 +27,7 @@ public class ThreeBallsEffect extends EffectItem {
             return;
         }
         Ball originalBall;
-//        if (this.triggeringBall != null || balls.contains(null)) {
-//            originalBall = this.triggeringBall;
-//        } else {
         originalBall = balls.get(0);
-//        }
         assert originalBall != null;
         float originalBallAngle = originalBall.getAngle();
 

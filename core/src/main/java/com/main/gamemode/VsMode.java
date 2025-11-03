@@ -251,13 +251,13 @@ public class VsMode extends GameMode {
                     if (brick.gethitPoints() == 0) {
                         EffectItem newEffectItem = null;
                         if (ball.getLastHitBy() == 1) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle1, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(true, brick, paddle1, ball,
                                 0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, -60f);
                             }
                         } else if (ball.getLastHitBy() == 2) {
-                            newEffectItem = effectFactory.tryCreateEffectItem(brick, paddle2, ball,
+                            newEffectItem = effectFactory.tryCreateEffectItem(true, brick, paddle2, ball,
                                 0.02, 0.03, 0.03, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09);
                             if (newEffectItem != null) {
                                 newEffectItem.setVelocity(0, 60f);
