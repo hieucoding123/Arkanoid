@@ -2,7 +2,7 @@ package entity.object.brick;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import entity.ScoreManager;
+import com.main.components.ScoreManager;
 import entity.object.DSU;
 import com.main.Game;
 import com.badlogic.gdx.math.Rectangle;

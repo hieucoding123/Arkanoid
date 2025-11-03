@@ -1,9 +1,11 @@
-package com.main.gamemode;
+package com.main.gamemode.networkgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.main.components.TextureManager;
+import com.main.gamemode.GameMode;
 import com.main.gamescreen.VsGameScreen;
 import com.main.network.GameClient;
 import com.main.network.NetworkProtocol;

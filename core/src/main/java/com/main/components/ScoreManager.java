@@ -1,4 +1,4 @@
-package entity;
+package com.main.components;
 
 import entity.object.brick.Brick;
 

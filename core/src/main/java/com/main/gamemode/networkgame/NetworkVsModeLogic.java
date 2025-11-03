@@ -1,9 +1,11 @@
-package com.main.gamemode;
+package com.main.gamemode.networkgame;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
-import entity.ScoreManager;
-import entity.TextureManager;
+import com.main.components.ScoreManager;
+import com.main.components.TextureManager;
+import com.main.gamemode.GameMode;
+import com.main.gamemode.VsMode;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;

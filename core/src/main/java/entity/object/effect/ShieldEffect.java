@@ -1,7 +1,7 @@
-package entity.Effect;
+package entity.object.effect;
 
 import com.main.Game;
-import entity.TextureManager;
+import com.main.components.TextureManager;
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.BricksMap;

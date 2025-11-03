@@ -1,6 +1,7 @@
 package entity.object;
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
+import entity.object.effect.EffectItem;
 
 /**
  * Player-controlled paddle for deflecting the ball and catching power-ups.
@@ -11,7 +12,7 @@ import com.main.Game;
  *
  * @see MovableObject Base movable object class
  * @see Ball Ball collision and deflection
- * @see entity.Effect.EffectItem Power-ups that modify paddle
+ * @see EffectItem Power-ups that modify paddle
  * @see com.main.gamemode.VsMode Versus mode using flipped paddles
  */
 public class Paddle extends MovableObject {

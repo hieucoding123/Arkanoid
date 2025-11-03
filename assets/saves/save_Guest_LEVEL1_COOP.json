@@ -3,17 +3,17 @@ lives: 3
 followPaddle: true
 isCoop: true
 paddle1: {
-	x: 352
+	x: 277
 	y: 100
 }
 paddle2: {
-	x: 352
+	x: 484.5
 	y: 20
 }
 balls: [
 	{
-		x: 390
-		y: 119.30041
+		x: 315
+		y: 120.0715
 		dx: -1.3113417E-5
 		dy: 300
 		angle: 1.5707964

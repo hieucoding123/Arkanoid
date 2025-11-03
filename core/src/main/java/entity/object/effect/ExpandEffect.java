@@ -1,9 +1,9 @@
-package entity.Effect;
+package entity.object.effect;
 
 import com.main.Game;
 import entity.object.Ball;
 import entity.object.Paddle;
-import entity.TextureManager;
+import com.main.components.TextureManager;
 import entity.object.brick.BricksMap;
 import com.badlogic.gdx.Gdx;
 

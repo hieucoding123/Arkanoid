@@ -1,12 +1,12 @@
 package com.main.components;
 
 import com.main.Game;
-import entity.Effect.ShieldEffect;
 import entity.object.GameObject; // Make sure to import the base GameObject
 import entity.object.Ball;
 import entity.object.Paddle;
 import entity.object.brick.Brick;
 import entity.object.brick.BricksMap;
+import entity.object.effect.ShieldEffect;
 
 public class CollisionManager {
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.main.Game;
 import entity.object.MovableObject;
-import entity.TextureManager;
+import com.main.components.TextureManager;
 
 /**
  * Represents a single brick object in the game.

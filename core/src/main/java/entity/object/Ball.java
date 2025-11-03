@@ -2,7 +2,7 @@ package entity.object;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.main.Game;
-import entity.Effect.ShieldEffect;
+import entity.object.effect.ShieldEffect;
 import entity.object.brick.Brick;
 
 /**
