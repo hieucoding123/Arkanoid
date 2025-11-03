@@ -12,6 +12,32 @@
 
 ---
 
+## Key Features
+### Five Game Modes: LevelMode, CoopMode, InfiniteMode, VsMode, and NetworkVsMode
+![5modes.png](assets/version/5modes.png)
+### Sequential Level Unlocks (LevelMode)
+* Players must complete levels in order to unlock new ones.
+![LevelMode.png](assets/version/LevelMode.png)
+### Local Co-op (CoopMode)
+* Two players play together on the same machine and level unlocks.
+![CoopMode.png](assets/version/CoopMode.png)
+### Local Versus (VsMode)
+* Two players compete against each other on the same machine.
+![VsMode.png](assets/version/VsMode.png)
+### Endless Challenge (InfiniteMode)
+* Play through unlimited levels with gradually increasing difficulty.
+### Network Versus (NetworkVsMode)
+* Two players compete on separate machines over a network connection.
+![NetworkVersus.png](assets/version/NetworkVersus.png)
+### SQL-based Achievement Saving
+* Uses SQL to save and manage player high scores and achievements.
+### Resume on Relaunch
+* Saves the game state when the player exits, allowing them to continue later.
+![ResumeRelaunch.png](assets/version/ResumeRelaunch.png)
+### Dynamic Bricks
+* Features **Moving Bricks** that traverse the map and **Explosive Bricks** that detonate adjacent bricks.
+---
+
 ## Improvements
 
 * Added new brick types: **Explosive Brick** and **Moving Brick**.
