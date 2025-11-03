@@ -72,6 +72,8 @@ public enum GameState {
     /** Game over screen - displayed when player loses */
     GAME_OVER,
 
+    OFFLINE_GAME_OVER,
+
     /** Game summary screen - post-game statistics and results */
     GAME_SUMMARY
 }
