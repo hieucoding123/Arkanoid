@@ -1,0 +1,206 @@
+{
+score: 1200
+lives: 3
+timePlayed: 15.762716196943074
+cnt_combo: 1
+TimeLastHit: 1762128036198
+paddle1: {
+	x: 575.5
+	y: 50
+}
+balls: [
+	{
+		x: 450.81836
+		y: 481.1659
+		dx: -145.52756
+		dy: 262.33896
+		angle: 2.0772645
+		speed: 300
+		originalspeed: 5
+	}
+]
+bricks: [
+	{
+		x: 95
+		y: 667
+		hitPoints: 2
+		row: 4
+	}
+	{
+		x: 170
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 1
+	}
+	{
+		x: 245
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 2
+	}
+	{
+		x: 320
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 3
+	}
+	{
+		x: 395
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 4
+	}
+	{
+		x: 470
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 5
+	}
+	{
+		x: 545
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 6
+	}
+	{
+		x: 620
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 7
+	}
+	{
+		x: 95
+		y: 632
+		hitPoints: 1
+		row: 5
+	}
+	{
+		x: 170
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 1
+	}
+	{
+		x: 245
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 2
+	}
+	{
+		x: 320
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 3
+	}
+	{
+		x: 395
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 4
+	}
+	{
+		x: 470
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 5
+	}
+	{
+		x: 545
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 6
+	}
+	{
+		x: 620
+		y: 632
+		hitPoints: 2
+		row: 5
+		col: 7
+	}
+	{
+		x: 320
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 3
+		color: 1
+	}
+	{
+		x: 395
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 4
+		color: 1
+	}
+	{
+		x: 470
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 5
+		color: 1
+	}
+	{
+		x: 545
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 6
+		color: 1
+	}
+	{
+		x: 620
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 7
+		color: 1
+	}
+	{
+		x: 395
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 4
+	}
+	{
+		x: 470
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 5
+	}
+	{
+		x: 545
+		y: 527
+		hitPoints: 1
+		row: 8
+		col: 6
+	}
+	{
+		x: 620
+		y: 527
+		hitPoints: 1
+		row: 8
+		col: 7
+	}
+]
+levelNumber: {
+	class: java.lang.Integer
+	value: 1
+}
+}
