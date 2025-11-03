@@ -18,17 +18,28 @@ import com.main.GameState;
 import com.main.Main;
 import entity.Player;
 
+/**
+ * Display game over screen for VsMode.
+ */
 public class OfflineGameOver extends UserInterface {
 
     private final int roundsWonP1;
     private final int roundsWonP2;
     private final Player player2;
 
+    /**
+     * Constructor.
+     * @param main this main
+     * @param player1 player1
+     * @param player2 player2
+     * @param roundsWonP1 player1's round won
+     * @param roundsWonP2 player2's round won
+     */
     public OfflineGameOver(Main main, Player player1, Player player2, int roundsWonP1, int roundsWonP2) {
         super(main, player1);
         this.roundsWonP1 = roundsWonP1;
         this.roundsWonP2 = roundsWonP2;
-        this.player2 = player2; // Lưu trữ Player 2
+        this.player2 = player2;
     }
 
     @Override

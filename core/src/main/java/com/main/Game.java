@@ -778,6 +778,12 @@ public class Game {
         return this.player;
     }
 
+    /**
+     * Set OfflineGameOver state.
+     * @param newGameState new game state
+     * @param p1Wins score for player1
+     * @param p2Wins score for player2
+     */
     public void setGameState(GameState newGameState, int p1Wins, int p2Wins) {
         this.vs_p1Wins = p1Wins;
         this.vs_p2Wins = p2Wins;

@@ -399,26 +399,34 @@ public class VsMode extends GameMode {
         }
     }
 
-    public Player getPlayer1() {
-        return this.player;
-    }
-
-    public Player getPlayer2() {
-        return this.player2;
-    }
-
+    /**
+     * Getter for player1's round won.
+     * @return player1's round won
+     */
     public int getRoundsWonP1() {
         return this.roundsWonP1;
     }
 
+    /**
+     * Getter for player2's round won.
+     * @return player2's round won
+     */
     public int getRoundsWonP2() {
         return this.roundsWonP2;
     }
 
+    /**
+     * Getter for player1's scoreManager.
+     * @return player1's scoreManager
+     */
     public ScoreManager getScoreManagerP1() {
         return this.scoreManagerP1;
     }
 
+    /**
+     * Getter for player2's scoreManager.
+     * @return player2's scoreManager
+     */
     public ScoreManager getScoreManagerP2() {
         return this.scoreManagerP2;
     }
