@@ -1,0 +1,288 @@
+{
+lives: 3
+timePlayed: 4.747697830200195
+cnt_combo: 1
+TimeLastHit: 1762148110914
+paddle1: {
+	x: 314.5
+	y: 50
+}
+balls: [
+	{
+		x: 352.5
+		y: 215.93062
+		dx: -1.3113417E-5
+		dy: 300
+		angle: 1.5707964
+		speed: 300
+		originalspeed: 5
+	}
+]
+bricks: [
+	{
+		x: 320
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 3
+		color: 5
+	}
+	{
+		x: 395
+		y: 737
+		hitPoints: 1
+		row: 2
+		col: 4
+		color: 5
+	}
+	{
+		x: 245
+		y: 702
+		hitPoints: 1
+		row: 3
+		col: 2
+		color: 5
+	}
+	{
+		x: 470
+		y: 702
+		hitPoints: 2
+		row: 3
+		col: 5
+	}
+	{
+		x: 170
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 1
+	}
+	{
+		x: 260.0282
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 3
+		color: 31
+		dx: -90
+	}
+	{
+		x: 335.0282
+		y: 667
+		hitPoints: 1
+		row: 4
+		col: 4
+		color: 31
+		dx: -90
+	}
+	{
+		x: 545
+		y: 667
+		hitPoints: 2
+		row: 4
+		col: 6
+	}
+	{
+		x: 95
+		y: 632
+		hitPoints: 2
+		row: 5
+	}
+	{
+		x: 185.02826
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 2
+		color: 31
+		dx: -90
+	}
+	{
+		x: 260.0282
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 3
+		color: 31
+		dx: -90
+	}
+	{
+		x: 335.0282
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 4
+		color: 31
+		dx: -90
+	}
+	{
+		x: 410.02777
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 5
+		color: 31
+		dx: -90
+	}
+	{
+		x: 620
+		y: 632
+		hitPoints: 1
+		row: 5
+		col: 7
+		color: 5
+	}
+	{
+		x: 95
+		y: 597
+		hitPoints: 2
+		row: 6
+	}
+	{
+		x: 185.02826
+		y: 597
+		hitPoints: 1
+		row: 6
+		col: 2
+		color: 31
+		dx: -90
+	}
+	{
+		x: 260.0282
+		y: 597
+		hitPoints: 1
+		row: 6
+		col: 3
+		color: 31
+		dx: -90
+	}
+	{
+		x: 335.0282
+		y: 597
+		hitPoints: 1
+		row: 6
+		col: 4
+		color: 31
+		dx: -90
+	}
+	{
+		x: 410.02777
+		y: 597
+		hitPoints: 1
+		row: 6
+		col: 5
+		color: 31
+		dx: -90
+	}
+	{
+		x: 620
+		y: 597
+		hitPoints: 1
+		row: 6
+		col: 7
+		color: 5
+	}
+	{
+		x: 170
+		y: 562
+		hitPoints: 2
+		row: 7
+		col: 1
+	}
+	{
+		x: 260.0282
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 3
+		color: 31
+		dx: -90
+	}
+	{
+		x: 335.0282
+		y: 562
+		hitPoints: 1
+		row: 7
+		col: 4
+		color: 31
+		dx: -90
+	}
+	{
+		x: 545
+		y: 562
+		hitPoints: 2
+		row: 7
+		col: 6
+	}
+	{
+		x: 245
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 2
+	}
+	{
+		x: 470
+		y: 527
+		hitPoints: 2
+		row: 8
+		col: 5
+	}
+	{
+		x: 95
+		y: 422
+		hitPoints: 1
+		row: 11
+		color: 1
+	}
+	{
+		x: 245
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 2
+		color: 1
+	}
+	{
+		x: 395
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 4
+		color: 1
+	}
+	{
+		x: 545
+		y: 422
+		hitPoints: 1
+		row: 11
+		col: 6
+		color: 1
+	}
+	{
+		x: 170
+		y: 352
+		hitPoints: 2
+		row: 13
+		col: 1
+	}
+	{
+		x: 470
+		y: 352
+		hitPoints: 2
+		row: 13
+		col: 5
+	}
+	{
+		x: 620
+		y: 352
+		hitPoints: 2
+		row: 13
+		col: 7
+	}
+]
+levelNumber: {
+	class: java.lang.Integer
+	value: 0
+}
+}
